@@ -1,0 +1,149 @@
+openapi: 3.1.0
+
+info:
+  version: 0.0.0
+  title: Couplet API
+  description: Log in and connect with other users through shared interests and local events
+
+paths:
+  /health-check:
+    get:
+      summary: Check if the server is running and servicing requests
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Server is healthy!
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /users:
+    post:
+      summary: Register a new user
+      operationId: createUser
+      responses:
+        '200':
+          description: Successfully registered user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      # TODO: Paginate this
+      summary: Get all users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successfully retrieved all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/users/{userId}':
+    get:
+      summary: Get a user by their user ID
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+
+components:
+  responses:
+    UnexpectedError:
+      description: Unexpected error occurred
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    User:
+      type: object
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - firstName
+        - lastName
+        - age
+      properties:
+        # TODO: Determine properties worth storing
+        id:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+          x-oapi-codegen-extra-tags:
+            gorm: primaryKey, default:gen_random_uuid()
+        createdAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        age:
+          type: integer
+          format: uint32
+          minimum: 18
+          example: 22

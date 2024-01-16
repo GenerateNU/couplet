@@ -1,0 +1,10 @@
+backend:
+  host: 127.0.0.1
+  port: 8080
+database:
+  host: "127.0.0.1"
+  port: 5432
+  username: "postgres"
+  password: "password"
+  databaseName: "couplet"
+  requireSsl: false

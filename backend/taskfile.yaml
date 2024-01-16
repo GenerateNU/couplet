@@ -1,0 +1,56 @@
+version: '3'
+
+tasks:
+  run:
+    deps: [build, db-up]
+    summary: Runs the backend server
+    cmds:
+      - ./couplet
+  build:
+    deps: [generate]
+    summary: Build the backend executable
+    sources:
+      - ./**/*.go
+    generates:
+      - couplet
+    cmds:
+      - go get .
+      - go build -o couplet
+  generate:
+    aliases: [gen]
+    summary: Generate server code from OpenAPI spec
+    sources:
+      - openapi.yaml
+    generates:
+      - api/**
+    cmds:
+      - go generate
+  clean:
+    deps: [db-down]
+    summary: Delete build files
+    cmds:
+      - rm -f couplet
+      - rm -rf api
+
+  db-up:
+    summary: Start the database
+    cmds:
+      - sudo docker-compose up -d
+  db-down:
+    summary: Shut down the database
+    cmds:
+      - sudo docker-compose down
+
+  test:
+    deps: [generate]
+    summary: Run backend tests
+    cmds:
+      - go test
+  check:
+    deps: [generate]
+    summary: Run static analysis checks
+    cmds:
+      - golangci-lint run
+      - go mod tidy
+      - go fmt
+      - go vet

@@ -1,0 +1,6 @@
+version: '3'
+
+includes:
+  backend:
+    taskfile: ./backend/taskfile.yaml
+    dir: ./backend

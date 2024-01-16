@@ -1,0 +1,84 @@
+name: backend-ci
+
+on:
+  push:
+    branches:
+      - "*"
+    paths: 
+      - "backend/**"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.21.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Run backend linter
+        uses: golangci/golangci-lint-action@v3.7.0
+
+      - name: Lint YAML files
+        uses: karancode/yamllint-github-action@v2.1.1
+        with:
+          yamllint_strict: true
+          yamllint_comment: true
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Check backend
+        run: go-task backend:check
+
+      - name: Build backend
+        run: go-task backend:build
+
+  test:
+    name: Run backend tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.21.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v2.0.2
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests
+        run: go-task backend:test
