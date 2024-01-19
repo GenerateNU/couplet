@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER:?database username not specified}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?database password not specified}
+      POSTGRES_DB: couplet
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  backend:
+    build:
+      dockerfile: backend.dockerfile
+    depends_on:
+      - database
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${DB_USER:?database username not specified}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?database password not specified}
+      POSTGRES_DB: couplet
+    ports:
+      - ${PORT:-8080}:${PORT:-8080}
+volumes:
+  postgres-data:

@@ -1,0 +1,19 @@
+version: '3'
+
+tasks:
+  run:
+    summary: Runs the frontend mobile app
+    cmds:
+      - npm run start
+  run-android:
+    summary: Runs the frontend mobile app for Android
+    cmds:
+      - npm run android
+  run-ios:
+    summary: Runs the frontend mobile app for iOS
+    cmds:
+      - npm run ios
+  run-web:
+    summary: Runs the frontend mobile app in a web view
+    cmds:
+      - npm run web

@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   run:
-    deps: [build, db-up]
+    deps: [build]
     summary: Runs the backend server
     cmds:
       - ./couplet
@@ -14,7 +14,7 @@ tasks:
     generates:
       - couplet
     cmds:
-      - go get .
+      - go mod download
       - go build -o couplet
   generate:
     aliases: [gen]
@@ -26,20 +26,10 @@ tasks:
     cmds:
       - go generate
   clean:
-    deps: [db-down]
     summary: Delete build files
     cmds:
       - rm -f couplet
       - rm -rf api
-
-  db-up:
-    summary: Start the database
-    cmds:
-      - sudo docker-compose up -d
-  db-down:
-    summary: Shut down the database
-    cmds:
-      - sudo docker-compose down
 
   test:
     deps: [generate]

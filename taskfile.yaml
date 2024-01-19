@@ -4,3 +4,6 @@ includes:
   backend:
     taskfile: ./backend/taskfile.yaml
     dir: ./backend
+  frontend:
+    taskfile: ./frontend/taskfile.yaml
+    dir: ./frontend

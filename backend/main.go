@@ -1,6 +1,6 @@
 package main
 
-//go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --clean openapi.yaml
+//go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --clean ../openapi.yaml
 
 import (
 	"couplet/config"
@@ -15,13 +15,13 @@ import (
 
 func main() {
 	// Load config
-	config, err := config.GetConfig()
-	if err != nil {
-		log.Fatalln(err)
-	}
+	//config, err := config.GetConfig()
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
 
 	// Connect to database
-	db, err := database.ConfigureDB(config)
+	db, err := database.ConfigureDB(config.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
