@@ -2,15 +2,18 @@ package database
 
 import (
 	"couplet/api"
-	"couplet/config"
+	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-func ConfigureDB(config config.Config) (*gorm.DB, error) {
-	db, err := gorm.Open(postgres.Open(config.Database.String()), &gorm.Config{
+func ConfigureDB(host string, port string, username string, password string, databaseName string) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+		host, port, username, password, databaseName)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger:                 logger.Default.LogMode(logger.Info),
 		SkipDefaultTransaction: true,
 	})

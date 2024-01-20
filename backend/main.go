@@ -3,9 +3,10 @@ package main
 //go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --clean ../openapi.yaml
 
 import (
-	"couplet/config"
 	"couplet/database"
 	"couplet/handler"
+	"fmt"
+	"os"
 
 	"log"
 	"net/http"
@@ -14,14 +15,39 @@ import (
 )
 
 func main() {
-	// Load config
-	//config, err := config.GetConfig()
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
+	// Load environment variables
+	dbHost, envSet := os.LookupEnv("DB_HOST")
+	if !envSet {
+		log.Fatalln("database host not specified")
+	}
+
+	dbPort, envSet := os.LookupEnv("DB_PORT")
+	if !envSet {
+		log.Fatalln("database port not specified")
+	}
+
+	dbUser, envSet := os.LookupEnv("DB_USER")
+	if !envSet {
+		log.Fatalln("database username not specified")
+	}
+
+	dbPassword, envSet := os.LookupEnv("DB_PASSWORD")
+	if !envSet {
+		log.Fatalln("database password not specified")
+	}
+
+	dbName, envSet := os.LookupEnv("DB_NAME")
+	if !envSet {
+		log.Fatalln("database name not specified")
+	}
+
+	port, envSet := os.LookupEnv("PORT")
+	if !envSet {
+		log.Fatalln("port not specified")
+	}
 
 	// Connect to database
-	db, err := database.ConfigureDB(config.Config{})
+	db, err := database.ConfigureDB(dbHost, dbPort, dbUser, dbPassword, dbName)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -37,7 +63,7 @@ func main() {
 	}
 
 	// Run server indefinitely until an error occurs
-	if err := http.ListenAndServe(":8080", server); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), server); err != nil {
 		log.Fatalln(err)
 	}
 }
