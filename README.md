@@ -46,6 +46,8 @@ Use `task` to build and execute the project, as targets have already been define
 
 Running locally will provide faster build times and slightly better performance, while Docker will be more consistent/reliable and won't conflict with other installations and processes on your machine. The choice is yours!
 
+Bonus: If running the back end in Docker, you can view the API documentation with a nice UI at `localhost:80`
+
 ### Front End
 Coming soon...
 
