@@ -21,7 +21,8 @@ The installation process can vary by tool and operating system, so follow the pr
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/), used to build our back end in isolated containers
 
 ### Front End
-- Coming soon
+- [Node](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs), our frontend package manager
+  - Afterwards, install all node dependencies with the command `npm install` in the `frontend/` directory. This needs to be re-run if dependencies change
 
 ### General
 - [Task](https://taskfile.dev/installation/), a tool for running useful development tasks. A spiritual successor to [Make](https://www.gnu.org/software/make/). Our Taskfiles make it easy for developers to build and run our application quickly and consistently
@@ -49,7 +50,11 @@ Running locally will provide faster build times and slightly better performance,
 Bonus: If running the back end in Docker, you can view the API documentation with a nice UI at `localhost:80`
 
 ### Front End
-Coming soon...
+1. Download the Expo Go app on your phone from either the App Store or the Google Play store
+2. From the `frontend/` directory, run `npx expo start`
+3. Scan the QR code on your phone and wait for the app to load
+4. If you want to run the app on your computer, you will need to make sure you spin up the relevant emulator. This is either an Android Studio emulator if you want to run on Android, or an XCode simulator if you want to run on iOS
+5. To run on android, press a. To run on iOS, press i
 
 ## Contributing
 - Nobody is allowed to push to `main`. Open a new branch, push to it, and open a pull request to get your changes into `main`
