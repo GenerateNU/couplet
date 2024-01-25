@@ -1,5 +1,6 @@
-# Couplet executable binary
-couplet
+# Couplet executable binaries
+server
+!cmd/*
 
 # OpenAPI generated code
 api/

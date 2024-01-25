@@ -3,7 +3,7 @@ openapi: 3.1.0
 info:
   version: 0.0.0
   title: Couplet API
-  description: Log in and connect with other users through shared interests and local events
+  description: Connect with other users through shared interests and local events
 
 paths:
   /health-check:
@@ -12,24 +12,27 @@ paths:
       operationId: healthCheck
       responses:
         '200':
-          description: Server is healthy!
-        default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: The server is healthy
   /users:
     post:
-      summary: Register a new user
+      summary: Create a new user
       operationId: createUser
+      requestBody:
+        description: User to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
       responses:
         '200':
-          description: Successfully registered user
+          description: Successfully created user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
           $ref: '#/components/responses/BadRequest'
-        default:
-          $ref: '#/components/responses/UnexpectedError'
     get:
       # TODO: Paginate this
       summary: Get all users
@@ -43,9 +46,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        default:
-          $ref: '#/components/responses/UnexpectedError'
-  '/users/{userId}':
+  /users/{userId}:
     get:
       summary: Get a user by their user ID
       operationId: getUserById
@@ -55,8 +56,7 @@ paths:
           description: ID of user to retrieve
           required: true
           schema:
-            type: integer
-            format: int64
+            $ref: '#/components/schemas/UserId'
       responses:
         '200':
           description: Successfully retrieved specified user
@@ -66,13 +66,11 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           $ref: '#/components/responses/NotFound'
-        default:
-          $ref: '#/components/responses/UnexpectedError'
 
 components:
   responses:
     UnexpectedError:
-      description: Unexpected error occurred
+      description: An unexpected error occurred
       content:
         application/json:
           schema:
@@ -104,11 +102,52 @@ components:
       properties:
         code:
           type: integer
-          format: int32
+          format: uint16
           minimum: 100
           maximum: 599
+          example: 500
         message:
           type: string
+          example: Internal server error
+    Event:
+      type: object
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/EventId'
+        createdAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        name:
+          type: string
+          minLength: 1
+          example: The Big Event
+        # TODO:
+        # location
+        # org_id fk
+        # link TBD
+        # schedule TBD
+        # - optional datetime range (within a week)
+        # - optional recurring until (some day)
+        # price range low~high
+        # image(s)
+        # bio
+        # event types/tags (enum array)
+    EventId:
+      type: string
+      format: uuid
+      example: 5e91507e-5630-4efd-9fd4-799178870b10
+      x-oapi-codegen-extra-tags:
+        gorm: primaryKey, default:gen_random_uuid()
     User:
       type: object
       required:
@@ -119,13 +158,8 @@ components:
         - lastName
         - age
       properties:
-        # TODO: Determine properties worth storing
         id:
-          type: string
-          format: uuid
-          example: 5e91507e-5630-4efd-9fd4-799178870b10
-          x-oapi-codegen-extra-tags:
-            gorm: primaryKey, default:gen_random_uuid()
+          $ref: '#/components/schemas/UserId'
         createdAt:
           type: string
           format: date-time
@@ -144,6 +178,56 @@ components:
           example: Smith
         age:
           type: integer
-          format: uint32
+          format: uint8
           minimum: 18
           example: 22
+        # TODO
+        # gender
+        # hashed password
+        # email
+        # phone number/social
+        # Location
+        # preferences
+        # - what they like
+        # Profile
+        # - pics
+        # - about me
+        # matches TBD
+    UserId:
+      type: string
+      format: uuid
+      example: 5e91507e-5630-4efd-9fd4-799178870b10
+      x-oapi-codegen-extra-tags:
+        gorm: primaryKey, default:gen_random_uuid()
+    Organization:
+      type: object
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
+        createdAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        name:
+          type: string
+          minLength: 1
+          example: The Events Company
+        # TODO
+        # bio
+        # profile pic/image
+        # org types/tags (enum array)
+    OrganizationId:
+      type: string
+      format: uuid
+      example: 5e91507e-5630-4efd-9fd4-799178870b10
+      x-oapi-codegen-extra-tags:
+        gorm: primaryKey, default:gen_random_uuid()

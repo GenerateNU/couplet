@@ -1,7 +1,7 @@
 package database
 
 import (
-	"couplet/api"
+	"couplet/internal/api"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -9,8 +9,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func ConfigureDB(host string, port string, username string, password string, databaseName string) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+// Connects to a PostgreSQL database through GORM
+func ConfigureDB(host string, port uint16, username string, password string, databaseName string) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		host, port, username, password, databaseName)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -25,7 +26,8 @@ func ConfigureDB(host string, port string, username string, password string, dat
 	return db, MigrateDB(db)
 }
 
-func ConnPooling(db *gorm.DB) error {
+// Enables connection pooling on a GORM database
+func EnableConnPooling(db *gorm.DB) error {
 	sqlDB, err := db.DB()
 
 	if err != nil {
@@ -38,6 +40,7 @@ func ConnPooling(db *gorm.DB) error {
 	return nil
 }
 
+// Performs database migrations for defined schema if necessary
 func MigrateDB(db *gorm.DB) error {
 	// TODO: Add other models to auto-migration list
 	return db.AutoMigrate(api.User{})

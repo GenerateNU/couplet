@@ -33,7 +33,8 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	go.uber.org/multierr v1.11.0 // indirect
+	github.com/sethvargo/go-envconfig v1.0.0
+	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.19.0 // indirect

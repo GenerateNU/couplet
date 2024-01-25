@@ -2,18 +2,30 @@ version: '3'
 
 tasks:
   run:
+    deps: [install]
     summary: Runs the frontend mobile app
     cmds:
       - npm run start
   run-android:
+    deps: [install]
     summary: Runs the frontend mobile app for Android
     cmds:
       - npm run android
   run-ios:
+    deps: [install]
     summary: Runs the frontend mobile app for iOS
     cmds:
       - npm run ios
   run-web:
+    deps: [install]
     summary: Runs the frontend mobile app in a web view
     cmds:
       - npm run web
+  install:
+    summary: Installs all dependencies
+    sources:
+      - package.json
+    generates:
+      - node_modules/**
+    cmds:
+      - npm install

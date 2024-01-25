@@ -3,3 +3,6 @@
 
 # ENV files
 .env
+
+# VS Code workspace settings
+.vscode/

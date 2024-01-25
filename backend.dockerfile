@@ -10,5 +10,6 @@ COPY ./openapi.yaml ./openapi.yaml
 # Set the container's working directory
 WORKDIR ./backend
 
-# Build and run the backend
-CMD ["task","run"]
+# Build and run the backend server
+CMD ["task","build"]
+CMD ["./server"]

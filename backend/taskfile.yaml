@@ -5,31 +5,31 @@ tasks:
     deps: [build]
     summary: Runs the backend server
     cmds:
-      - ./couplet
+      - ./server
   build:
     deps: [generate]
-    summary: Build the backend executable
+    summary: Build backend executables
     sources:
       - ./**/*.go
     generates:
-      - couplet
+      - server
     cmds:
       - go mod download
-      - go build -o couplet
+      - go build ./cmd/...
   generate:
     aliases: [gen]
     summary: Generate server code from OpenAPI spec
     sources:
-      - openapi.yaml
+      - ../openapi.yaml
     generates:
-      - api/**
+      - internal/api/**
     cmds:
-      - go generate
+      - go generate ./...
   clean:
     summary: Delete build files
     cmds:
-      - rm -f couplet
-      - rm -rf api
+      - rm -f server
+      - rm -rf internal/api
 
   test:
     deps: [generate]
@@ -42,5 +42,5 @@ tasks:
     cmds:
       - golangci-lint run
       - go mod tidy
-      - go fmt
-      - go vet
+      - go fmt ./...
+      - go vet ./...

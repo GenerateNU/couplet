@@ -22,7 +22,6 @@ services:
       DB_USER: ${DB_USER:?database username not specified}
       DB_PASSWORD: ${DB_PASSWORD:?database password not specified}
       DB_NAME: couplet
-      PORT: ${PORT:-8080}
     ports:
       - ${PORT:-8080}:${PORT:-8080}
   swagger-ui:
@@ -30,7 +29,7 @@ services:
     environment:
       API_URL: ./openapi.yaml
     ports:
-      - "80:8080"
+      - 80:8080
     volumes:
       - ./openapi.yaml:/usr/share/nginx/html/openapi.yaml
 volumes:
