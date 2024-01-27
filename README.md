@@ -2,6 +2,8 @@
 A mobile app that connects people through shared interests in events rather than superficial swipes
 
 ![backend-ci](https://github.com/GenerateNU/couplet/actions/workflows/backend-ci.yaml/badge.svg)
+![frontend-ci](https://github.com/GenerateNU/couplet/actions/workflows/frontend-ci.yaml/badge.svg)
+![misc-ci](https://github.com/GenerateNU/couplet/actions/workflows/misc-ci.yaml/badge.svg)
 
 ## Set Up Your Development Environment
 First, understand the tech stack:
