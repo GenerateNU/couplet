@@ -1,3 +1,4 @@
+---
 version: '3'
 
 dotenv: ['.env']
@@ -9,3 +10,4 @@ includes:
   frontend:
     taskfile: ./frontend/taskfile.yaml
     dir: ./frontend
+...

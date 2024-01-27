@@ -1,3 +1,4 @@
+---
 version: '3'
 
 tasks:
@@ -43,3 +44,4 @@ tasks:
       - go mod tidy
       - go fmt ./...
       - go vet ./...
+...

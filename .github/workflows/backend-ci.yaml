@@ -1,10 +1,11 @@
+---
 name: backend-ci
 
 on:
   push:
     branches:
       - "*"
-    paths: 
+    paths:
       - "backend/**"
   pull_request:
     branches:
@@ -31,7 +32,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go-version }}  
+          go-version: ${{ matrix.go-version }}
 
       - name: Install Task
         uses: arduino/setup-task@v1
@@ -40,7 +41,9 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install backend linter
-        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+        run: >
+          go install
+          github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
       - name: Check backend
         run: task backend:check
@@ -71,3 +74,4 @@ jobs:
 
       - name: Run tests
         run: task backend:test
+...

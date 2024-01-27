@@ -1,10 +1,11 @@
+---
 name: frontend-ci
 
 on:
   push:
     branches:
       - "*"
-    paths: 
+    paths:
       - "frontend/**"
   pull_request:
     branches:
@@ -46,7 +47,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-       
+
       - name: Install Task
         uses: arduino/setup-task@v1
         with:
@@ -55,3 +56,4 @@ jobs:
 
       - name: Run tests
         run: task frontend:test
+...

@@ -1,9 +1,10 @@
+---
 openapi: 3.1.0
 
 info:
   version: 0.0.0
   title: Couplet API
-  description: Connect with other users through shared interests and local events
+  description: Connect with other users through local events
 
 paths:
   /health-check:
@@ -195,16 +196,17 @@ components:
           type: array
           items:
             type: string
-            enum: [indoors, outdoors] # TODO: Define more tags
+            enum: [indoors, outdoors]
+            # TODO: Define more tags
         OrganizationID:
           type: string
           format: uuid
           example: 5e91507e-5630-4efd-9fd4-799178870b10
-        # TODO:
-        # schedule TBD
-        # - optional datetime range (within a week)
-        # - optional recurring until (some day)
-        # price range low~high
+          # TODO:
+          # schedule TBD
+          # - optional datetime range (within a week)
+          # - optional recurring until (some day)
+          # price range low~high
     EventId:
       type: string
       format: uuid
@@ -263,11 +265,12 @@ components:
           type: array
           items:
             type: string
-            enum: [nonprofit] # TODO: Define more tags
+            enum: [nonprofit]
+            # TODO: Define more tags
         bio:
           type: string
           minLength: 1
-          example: At The Events Company, we care about connecting people through events
+          example: At The Events Company, we connect people through events
         image:
           type: string
           format: uri
@@ -311,19 +314,20 @@ components:
           format: uint8
           minimum: 18
           example: 22
-        # TODO
-        # gender
-        # hashed password
-        # email
-        # phone number/social
-        # Location
-        # preferences
-        # - what they like
-        # Profile
-        # - pics
-        # - about me
-        # matches TBD
+          # TODO
+          # gender
+          # hashed password
+          # email
+          # phone number/social
+          # Location
+          # preferences
+          # - what they like
+          # Profile
+          # - pics
+          # - about me
+          # matches TBD
     UserId:
       type: string
       format: uuid
       example: 5e91507e-5630-4efd-9fd4-799178870b10
+...
