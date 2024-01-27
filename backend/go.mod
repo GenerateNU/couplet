@@ -20,9 +20,11 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/dlclark/regexp2 v1.10.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
@@ -34,6 +36,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sethvargo/go-envconfig v1.0.0
+	github.com/stretchr/testify v1.8.4
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect

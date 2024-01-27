@@ -29,3 +29,17 @@ tasks:
       - node_modules/**
     cmds:
       - npm install
+  clean:
+    summary: Delete build files
+    cmds:
+      - rm -rf node_modules
+  test:
+    deps: [install]
+    summary: Run frontend tests
+    cmds:
+      - npm run test
+  check:
+    deps: [install]
+    summary: Run static analysis checks
+    cmds:
+      - npm run check

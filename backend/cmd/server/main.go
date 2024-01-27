@@ -40,7 +40,7 @@ func main() {
 
 	// Connect to the database
 	var db *gorm.DB
-	if db, err = database.ConfigureDB(config.DbHost, config.DbPort, config.DbUser, config.DbPassword, config.DbName); err != nil {
+	if db, err = database.NewDb(config.DbHost, config.DbPort, config.DbUser, config.DbPassword, config.DbName); err != nil {
 		log.Fatalln(err)
 	}
 	if err = database.EnableConnPooling(db); err != nil {
@@ -48,7 +48,10 @@ func main() {
 	}
 
 	// Instantiate a controller for business logic
-	c := controller.NewController(db)
+	var c controller.Controller
+	if c, err = controller.NewController(db); err != nil {
+		log.Fatalln(err)
+	}
 
 	// Instantiate a handler for serving API requests
 	h := handler.NewHandler(c)

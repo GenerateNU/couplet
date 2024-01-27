@@ -30,17 +30,16 @@ tasks:
     cmds:
       - rm -f server
       - rm -rf internal/api
-
   test:
     deps: [generate]
     summary: Run backend tests
     cmds:
-      - go test
+      - go test ./...
   check:
     deps: [generate]
     summary: Run static analysis checks
     cmds:
-      - golangci-lint run
+      - golangci-lint run ./...
       - go mod tidy
       - go fmt ./...
       - go vet ./...

@@ -1,16 +1,16 @@
-name: backend-ci
+name: frontend-ci
 
 on:
   push:
     branches:
       - "*"
     paths: 
-      - "backend/**"
+      - "frontend/**"
   pull_request:
     branches:
       - "main"
     paths:
-      - "backend/**"
+      - "frontend/**"
   workflow_dispatch:
 
 concurrency:
@@ -18,20 +18,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-and-build:
-    name: "Back End: Lint and Build"
+  lint:
+    name: "Front End: Lint"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.21.x]
+        node-version: [20.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: ${{ matrix.go-version }}  
 
       - name: Install Task
         uses: arduino/setup-task@v1
@@ -39,30 +34,19 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install backend linter
-        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-      - name: Check backend
-        run: task backend:check
-
-      - name: Build backend
-        run: task backend:build
+      - name: Check frontend
+        run: task frontend:check
 
   test:
-    name: "Back End: Test"
+    name: "Front End: Test"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.21.x]
+        node-version: [20.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: ${{ matrix.go-version }}
-
+       
       - name: Install Task
         uses: arduino/setup-task@v1
         with:
@@ -70,4 +54,4 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests
-        run: task backend:test
+        run: task frontend:test

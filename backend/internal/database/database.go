@@ -4,13 +4,14 @@ import (
 	"couplet/internal/api"
 	"fmt"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 // Connects to a PostgreSQL database through GORM
-func ConfigureDB(host string, port uint16, username string, password string, databaseName string) (*gorm.DB, error) {
+func NewDb(host string, port uint16, username string, password string, databaseName string) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		host, port, username, password, databaseName)
 
@@ -44,4 +45,15 @@ func EnableConnPooling(db *gorm.DB) error {
 func MigrateDB(db *gorm.DB) error {
 	// TODO: Add other models to auto-migration list
 	return db.AutoMigrate(api.User{})
+}
+
+// Creates a new mock postgres-GORM database
+func NewMockDb() *gorm.DB {
+	mockDb, _, _ := sqlmock.New()
+	dialector := postgres.New(postgres.Config{
+		Conn:       mockDb,
+		DriverName: "postgres",
+	})
+	db, _ := gorm.Open(dialector, &gorm.Config{})
+	return db
 }
