@@ -94,6 +94,42 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Address:
+      type: object
+      required:
+        - line1
+        - zipCode
+        - city
+        - state
+        - country
+      properties:
+        line1:
+          type: string
+          minLength: 1
+          example: 360 Huntington Ave
+        line2:
+          type: string
+          minLength: 1
+          example: Room 270
+        zipCode:
+          type: string
+          minLength: 5
+          maxLength: 5
+          example: 02115
+        city:
+          type: string
+          minLength: 1
+          example: Boston
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: MA
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: US
     Error:
       type: object
       required:
@@ -116,9 +152,16 @@ components:
         - createdAt
         - updatedAt
         - name
+        - bio
+        - address
+        - images
+        - tags
+        - OrganizationID
       properties:
         id:
           $ref: '#/components/schemas/EventId'
+          x-oapi-codegen-extra-tags:
+            gorm: primaryKey, default:gen_random_uuid()
         createdAt:
           type: string
           format: date-time
@@ -131,23 +174,108 @@ components:
           type: string
           minLength: 1
           example: The Big Event
+        bio:
+          type: string
+          minLength: 1
+          example: Come to the Big Event and have the best night of your life!
+        address:
+          $ref: '#/components/schemas/Address'
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+        externalLink:
+          type: string
+          format: uri
+          example: https://example.com
+        tags:
+          type: array
+          items:
+            type: string
+            enum: [indoors, outdoors] # TODO: Define more tags
+        OrganizationID:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
         # TODO:
-        # location
-        # org_id fk
-        # link TBD
         # schedule TBD
         # - optional datetime range (within a week)
         # - optional recurring until (some day)
         # price range low~high
-        # image(s)
-        # bio
-        # event types/tags (enum array)
     EventId:
       type: string
       format: uuid
       example: 5e91507e-5630-4efd-9fd4-799178870b10
-      x-oapi-codegen-extra-tags:
-        gorm: primaryKey, default:gen_random_uuid()
+    Coordinate:
+      type: object
+      required:
+        - longitude
+        - latitude
+      properties:
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+          example: 71.43
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+          example: 32.82
+    Organization:
+      type: object
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - name
+        - events
+        - tags
+        - bio
+        - image
+      properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
+          x-oapi-codegen-extra-tags:
+            gorm: primaryKey, default:gen_random_uuid()
+        createdAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2022-02-22T11:22:33Z
+        name:
+          type: string
+          minLength: 1
+          example: The Events Company
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        tags:
+          type: array
+          items:
+            type: string
+            enum: [nonprofit] # TODO: Define more tags
+        bio:
+          type: string
+          minLength: 1
+          example: At The Events Company, we care about connecting people through events
+        image:
+          type: string
+          format: uri
+          example: https://example.com/image.png
+    OrganizationId:
+      type: string
+      format: uuid
+      example: 5e91507e-5630-4efd-9fd4-799178870b10
     User:
       type: object
       required:
@@ -160,6 +288,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UserId'
+          x-oapi-codegen-extra-tags:
+            gorm: primaryKey, default:gen_random_uuid()
         createdAt:
           type: string
           format: date-time
@@ -197,37 +327,3 @@ components:
       type: string
       format: uuid
       example: 5e91507e-5630-4efd-9fd4-799178870b10
-      x-oapi-codegen-extra-tags:
-        gorm: primaryKey, default:gen_random_uuid()
-    Organization:
-      type: object
-      required:
-        - id
-        - createdAt
-        - updatedAt
-        - name
-      properties:
-        id:
-          $ref: '#/components/schemas/OrganizationId'
-        createdAt:
-          type: string
-          format: date-time
-          example: 2022-02-22T11:22:33Z
-        updatedAt:
-          type: string
-          format: date-time
-          example: 2022-02-22T11:22:33Z
-        name:
-          type: string
-          minLength: 1
-          example: The Events Company
-        # TODO
-        # bio
-        # profile pic/image
-        # org types/tags (enum array)
-    OrganizationId:
-      type: string
-      format: uuid
-      example: 5e91507e-5630-4efd-9fd4-799178870b10
-      x-oapi-codegen-extra-tags:
-        gorm: primaryKey, default:gen_random_uuid()
