@@ -67,6 +67,42 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           $ref: '#/components/responses/NotFound'
+  /events:
+    post:
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        description: Event to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Successfully created event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /events/{eventId}:
+    delete:
+      summary: Delete an event by its event ID
+      operationId: deleteEventById
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of event to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/EventId'
+      responses:
+        '204':
+          description: Successfully deleted specified event
+        '404':
+          $ref: "#/components/responses/NotFound"
 
 components:
   responses:
