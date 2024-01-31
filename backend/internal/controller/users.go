@@ -13,7 +13,7 @@ import (
 // Creates a new user.
 // POST /users
 func (c Controller) CreateUser(ctx context.Context, req *api.CreateUserRequest) (*api.User, error) {
-	id := uuid.New();
+	id := uuid.New()
 	fmt.Println(id)
 
 	user := api.User{
@@ -30,7 +30,7 @@ func (c Controller) CreateUser(ctx context.Context, req *api.CreateUserRequest) 
 		return nil, result.Error
 	}
 
-    return &user, nil
+	return &user, nil
 }
 
 // Gets all users.

@@ -11,7 +11,7 @@ import (
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (api.CreateUserRes, error) {
 	// TODO: Validate user input
-    return h.controller.CreateUser(ctx, user)
+	return h.controller.CreateUser(ctx, user)
 }
 
 // Gets all users.
