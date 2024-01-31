@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"couplet/internal/api"
+	"errors"
 
 	ht "github.com/ogen-go/ogen/http"
 )
@@ -10,8 +11,13 @@ import (
 // Creates a new user.
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (api.CreateUserRes, error) {
+	
 	// TODO: Validate user input
-	return h.controller.CreateUser(ctx, user)
+	if user.Age.Value < 18 {
+		return nil, errors.New("must be at least 18 years old")
+	}
+
+	return h.controller.CreateUser(ctx, user.FirstName.Value, user.LastName.Value, user.Age.Value)
 }
 
 // Gets all users.

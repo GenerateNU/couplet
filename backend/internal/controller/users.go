@@ -3,28 +3,22 @@ package controller
 import (
 	"context"
 	"couplet/internal/api"
-	"fmt"
 
 	"github.com/google/uuid"
 	ht "github.com/ogen-go/ogen/http"
-	"gorm.io/gorm/clause"
 )
 
 // Creates a new user.
 // POST /users
-func (c Controller) CreateUser(ctx context.Context, req *api.CreateUserRequest) (*api.User, error) {
-	id := uuid.New()
-	fmt.Println(id)
-
+func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*api.User, error) {
 	user := api.User{
-		ID:        api.UserId(id), // Generate a new UUID
-		FirstName: req.FirstName.Value,
-		LastName:  req.LastName.Value,
-		Age:       req.Age.Value,
+		ID:        uuid.New(),
+		FirstName: firstName,
+		LastName:  lastName,
+		Age:       age,
 	}
-	fmt.Println(user)
 
-	result := c.database.Clauses(clause.Returning{}).Create(&user)
+	result := c.database.Create(&user)
 
 	if result.Error != nil {
 		return nil, result.Error
