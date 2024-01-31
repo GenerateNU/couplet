@@ -12,7 +12,7 @@ paths:
       summary: Check if the server is running and servicing requests
       operationId: healthCheck
       responses:
-        '200':
+        "200":
           description: The server is healthy
   /users:
     post:
@@ -24,29 +24,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/CreateUserRequest"
       responses:
-        '200':
+        "200":
           description: Successfully created user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/BadRequest"
     get:
       # TODO: Paginate this
       summary: Get all users
       operationId: getAllUsers
       responses:
-        '200':
+        "200":
           description: Successfully retrieved all users
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
   /users/{userId}:
     get:
       summary: Get a user by their user ID
@@ -57,16 +57,31 @@ paths:
           description: ID of user to retrieve
           required: true
           schema:
-            $ref: '#/components/schemas/UserId'
+            $ref: "#/components/schemas/UserId"
       responses:
-        '200':
+        "200":
           description: Successfully retrieved specified user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                $ref: "#/components/schemas/User"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Delete a user by their user ID
+      operationId: deleteUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserId"
+      responses:
+        "204":
+          description: Successfully deleted specified user
+        "404":
+          $ref: "#/components/responses/NotFound"
 
 components:
   responses:
@@ -75,25 +90,25 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     BadRequest:
       description: Invalid request body
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
   schemas:
     Address:
       type: object
@@ -160,7 +175,7 @@ components:
         - OrganizationID
       properties:
         id:
-          $ref: '#/components/schemas/EventId'
+          $ref: "#/components/schemas/EventId"
           x-oapi-codegen-extra-tags:
             gorm: primaryKey, default:gen_random_uuid()
         createdAt:
@@ -180,7 +195,7 @@ components:
           minLength: 1
           example: Come to the Big Event and have the best night of your life!
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         images:
           type: array
           items:
@@ -242,7 +257,7 @@ components:
         - image
       properties:
         id:
-          $ref: '#/components/schemas/OrganizationId'
+          $ref: "#/components/schemas/OrganizationId"
           x-oapi-codegen-extra-tags:
             gorm: primaryKey, default:gen_random_uuid()
         createdAt:
@@ -260,7 +275,7 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/Event'
+            $ref: "#/components/schemas/Event"
         tags:
           type: array
           items:
@@ -290,7 +305,7 @@ components:
         - age
       properties:
         id:
-          $ref: '#/components/schemas/UserId'
+          $ref: "#/components/schemas/UserId"
           x-oapi-codegen-extra-tags:
             gorm: primaryKey, default:gen_random_uuid()
         createdAt:
@@ -330,4 +345,19 @@ components:
       type: string
       format: uuid
       example: 5e91507e-5630-4efd-9fd4-799178870b10
-...
+    CreateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
