@@ -8,12 +8,16 @@ import (
 	"couplet/internal/database"
 	"couplet/internal/handler"
 	"fmt"
+	"log/slog"
+	"os"
 
 	"log"
 	"net/http"
 
 	"couplet/internal/api"
 
+	"github.com/pterm/pterm"
+	"github.com/pterm/pterm/putils"
 	"github.com/sethvargo/go-envconfig"
 	"gorm.io/gorm"
 )
@@ -26,7 +30,8 @@ type EnvConfig struct {
 	DbPassword string `env:"DB_PASSWORD, required"` // the password to connect to the database with
 	DbName     string `env:"DB_NAME, required"`     // the name of the database to connect to
 
-	Port uint16 `env:"PORT, default=8080"` // the port for the server to listen on
+	Port     uint16 `env:"PORT, default=8080"`      // the port for the server to listen on
+	LogLevel string `env:"LOG_LEVEL, default=INFO"` // the level of event to log
 }
 
 func main() {
@@ -35,22 +40,36 @@ func main() {
 	var config EnvConfig
 	var err error
 	if err = envconfig.Process(ctx, &config); err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
+
+	// Display splash screen. Purely cosmetic :)
+	logo, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromStringWithStyle("couplet", pterm.FgMagenta.ToStyle())).Srender()
+	pterm.DefaultCenter.Println(logo)
+	credit := pterm.DefaultBox.Sprint("Prototype created by " + pterm.Cyan("Generate"))
+	pterm.DefaultCenter.Println(credit)
+
+	// Configure slog logger
+	logLevel := AsLogLevel(config.LogLevel)
+	logger := slog.New(pterm.NewSlogHandler(pterm.DefaultLogger.WithLevel(logLevel)))
 
 	// Connect to the database
 	var db *gorm.DB
-	if db, err = database.NewDb(config.DbHost, config.DbPort, config.DbUser, config.DbPassword, config.DbName); err != nil {
-		log.Fatalln(err)
+	if db, err = database.NewDB(config.DbHost, config.DbPort, config.DbUser, config.DbPassword, config.DbName, logger); err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 	if err = database.EnableConnPooling(db); err != nil {
-		log.Fatalln(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
+	logger.Info("server successfully connected to database")
 
 	// Instantiate a controller for business logic
 	var c controller.Controller
 	if c, err = controller.NewController(db); err != nil {
-		log.Fatalln(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 
 	// Instantiate a handler for serving API requests
@@ -59,11 +78,30 @@ func main() {
 	// Instantiate generated server
 	var s *api.Server
 	if s, err = api.NewServer(h); err != nil {
-		log.Fatalln(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
+	logger.Info("server successfully instantiated and listening", "port", config.Port)
 
 	// Run server indefinitely until an error occurs
 	if err = http.ListenAndServe(fmt.Sprintf(":%d", config.Port), s); err != nil {
-		log.Fatalln(err)
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+}
+
+// Converts a string to its corresponding log level
+func AsLogLevel(logLevel string) pterm.LogLevel {
+	switch logLevel {
+	case "DEBUG":
+		return pterm.LogLevelDebug
+	case "INFO":
+		return pterm.LogLevelInfo
+	case "WARN":
+		return pterm.LogLevelWarn
+	case "ERROR":
+		return pterm.LogLevelError
+	default:
+		return pterm.LogLevelDisabled
 	}
 }
