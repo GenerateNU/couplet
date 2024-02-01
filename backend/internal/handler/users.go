@@ -11,7 +11,7 @@ import (
 // Creates a new user.
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (api.CreateUserRes, error) {
-	
+
 	// TODO: Validate user input
 	if user.Age.Value < 18 {
 		return nil, errors.New("must be at least 18 years old")
