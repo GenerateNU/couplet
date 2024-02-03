@@ -1,3 +1,4 @@
+// Connects to database and defines internal models
 package database
 
 import (
@@ -45,7 +46,6 @@ func EnableConnPooling(db *gorm.DB) error {
 
 // Performs database migrations for defined schema if necessary
 func MigrateDB(db *gorm.DB) error {
-	// TODO: Add other models to auto-migration list
 	return db.AutoMigrate(User{}, Organization{}, Event{})
 }
 
