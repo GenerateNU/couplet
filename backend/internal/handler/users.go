@@ -22,5 +22,5 @@ func (h Handler) GetAllUsers(ctx context.Context) ([]api.User, error) {
 // Gets a user by their user ID.
 // GET /users/{userId}
 func (h Handler) GetUserById(ctx context.Context, params api.GetUserByIdParams) (api.GetUserByIdRes, error) {
-	return &api.User{}, ht.ErrNotImplemented
+	return h.controller.GetUserById(ctx, params)
 }

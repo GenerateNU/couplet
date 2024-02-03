@@ -14,7 +14,10 @@ func TestNewController(t *testing.T) {
 	assert.Empty(t, c)
 	assert.NotNil(t, err)
 
-	c, err = controller.NewController(database.NewMockDB())
+	db, mock := database.NewMockDB()
+
+	c, err = controller.NewController(db)
+	assert.NotEmpty(t, mock)
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 }

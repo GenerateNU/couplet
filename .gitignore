@@ -6,3 +6,6 @@
 
 # VS Code workspace settings
 .vscode/
+
+# Things to ignore on Stone's device
+requirements.txt
