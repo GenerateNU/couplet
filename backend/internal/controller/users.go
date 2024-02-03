@@ -42,19 +42,19 @@ func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParam
 // Deletes a user by their user ID.
 // DELETE /users/{userId}
 func (c Controller) DeleteUserById(ctx context.Context, userId string) (api.DeleteUserByIdRes, error) {
-    // Retrieve the user before deleting
-    user := &api.User{}
-    // if err := c.database.First(user, userId).Error; err != nil {
-    //     return nil, err
-    // }
+	// Retrieve the user before deleting
+	user := &api.User{}
+	// if err := c.database.First(user, userId).Error; err != nil {
+	//     return nil, err
+	// }
 
-    // Delete the user
+	// Delete the user
 	result := c.database.Delete(&api.User{}, userId)
 
-    if result.Error != nil {
-        return nil, result.Error
-    }
+	if result.Error != nil {
+		return nil, result.Error
+	}
 
-    // Return the deleted user
-    return user, nil
+	// Return the deleted user
+	return user, nil
 }

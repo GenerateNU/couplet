@@ -38,5 +38,5 @@ func (h Handler) DeleteUserById(ctx context.Context, params api.DeleteUserByIdPa
 		return nil, errors.New("user ID must not be empty")
 	}
 
-	return h.controller.DeleteUserById(ctx, params.UserId.String());
+	return h.controller.DeleteUserById(ctx, params.UserId.String())
 }
