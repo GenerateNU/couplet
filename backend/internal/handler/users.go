@@ -12,7 +12,6 @@ import (
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (api.CreateUserRes, error) {
 
-	// TODO: Validate user input
 	if user.Age.Value < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
@@ -35,5 +34,9 @@ func (h Handler) GetUserById(ctx context.Context, params api.GetUserByIdParams) 
 // Deletes a user by their user ID.
 // DELETE /users/{userId}
 func (h Handler) DeleteUserById(ctx context.Context, params api.DeleteUserByIdParams) (api.DeleteUserByIdRes, error) {
-	return nil, ht.ErrNotImplemented
+	if params.UserId.String() == "" {
+		return nil, errors.New("user ID must not be empty")
+	}
+
+	return h.controller.DeleteUserById(ctx, params.UserId.String());
 }

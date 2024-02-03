@@ -76,10 +76,16 @@ paths:
           description: ID of user to delete
           required: true
           schema:
-            $ref: "#/components/schemas/UserId"
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "204":
           description: Successfully deleted specified user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
         "404":
           $ref: "#/components/responses/NotFound"
 

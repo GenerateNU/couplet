@@ -10,7 +10,7 @@ import (
 
 // Creates a new user.
 // POST /users
-func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*api.User, error) {
+func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (api.CreateUserRes, error) {
 	user := api.User{
 		ID:        uuid.New(),
 		FirstName: firstName,
@@ -41,6 +41,20 @@ func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParam
 
 // Deletes a user by their user ID.
 // DELETE /users/{userId}
-func (c Controller) DeleteUserById(ctx context.Context, params api.DeleteUserByIdParams) (api.DeleteUserByIdRes, error) {
-	return nil, ht.ErrNotImplemented
+func (c Controller) DeleteUserById(ctx context.Context, userId string) (api.DeleteUserByIdRes, error) {
+    // Retrieve the user before deleting
+    user := &api.User{}
+    // if err := c.database.First(user, userId).Error; err != nil {
+    //     return nil, err
+    // }
+
+    // Delete the user
+	result := c.database.Delete(&api.User{}, userId)
+
+    if result.Error != nil {
+        return nil, result.Error
+    }
+
+    // Return the deleted user
+    return user, nil
 }
