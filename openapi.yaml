@@ -38,6 +38,15 @@ paths:
       # TODO: Paginate this
       summary: Get all users
       operationId: getAllUsers
+      parameters: 
+        - name: offset
+          in: query 
+          schema:
+            type: integer
+        - name: limit 
+          in: query
+          schema:
+            type: integer  
       responses:
         '200':
           description: Successfully retrieved all users
@@ -47,6 +56,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
   /users/{userId}:
     get:
       summary: Get a user by their user ID
@@ -69,7 +83,39 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           $ref: '#/components/responses/NotFound'
-
+    put:
+      summary: Completely updates an existing user by their user ID
+      operationId: putUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to retrieve
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully updated specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        # '201':
+        #   description: Successfully create specified user
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 components:
   responses:
     UnexpectedError:
@@ -244,7 +290,7 @@ components:
         - image
       properties:
         id:
-          $ref: '#/components/schemas/OrganizationId'
+          type: string
           x-oapi-codegen-extra-tags:
             gorm: primaryKey, default:gen_random_uuid()
         createdAt:
