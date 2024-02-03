@@ -194,14 +194,14 @@ components:
     Event:
       type: object
       required:
-        - id
-        - createdAt
-        - updatedAt
+        # - id
+        # - createdAt
+        # - updatedAt
         - name
         - bio
         - address
-        - images
-        - tags
+        # - images
+        # - tags
         - OrganizationID
       properties:
         id:
@@ -229,17 +229,17 @@ components:
           minLength: 1
           example: 420 Huntington Ave, Boston, MA 02115
           # $ref: "#/components/schemas/Address"
-        images:
-          type: array
-          items:
-            type: string
-            format: uri
-            example: https://example.com/image.png
-          minItems: 1
-        externalLink:
-          type: string
-          format: uri
-          example: https://example.com
+        # images:
+        #   type: array
+        #   items:
+        #     type: string
+        #     format: uri
+        #     example: https://example.com/image.png
+        #   minItems: 1
+        # externalLink:
+        #   type: string
+        #   format: uri
+        #   example: https://example.com
         tags:
           type: array
           items:
