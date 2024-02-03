@@ -4,6 +4,7 @@ import (
 	"context"
 	"couplet/internal/api"
 	"couplet/internal/database"
+	"fmt"
 	"time"
 )
 
@@ -30,9 +31,13 @@ func (c Controller) CreateEvent(ctx context.Context, event *api.Event) (*api.Eve
 
 func (c Controller) DeleteEventById(ctx context.Context, event api.EventId) error {
 	res := c.database.Delete(&database.Event{}, event)
+	if res.RowsAffected == 0 {
+		return fmt.Errorf("row with id=%v cannot be deleted because it doesn't exist", event)
+	}
 
 	if res.Error != nil {
 		return res.Error
 	}
+
 	return nil
 }

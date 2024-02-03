@@ -13,12 +13,13 @@ func (h Handler) CreateEvent(ctx context.Context, event *api.Event) (api.CreateE
 	return event, nil
 }
 
-
 func (h Handler) DeleteEventById(ctx context.Context, params api.DeleteEventByIdParams) (api.DeleteEventByIdRes, error) {
 	err := h.controller.DeleteEventById(ctx, params.EventId)
 	if err != nil {
-		return nil, err
+		return &api.Error{
+			Code:    404,
+			Message: err.Error(),
+		}, nil
 	}
 	return &api.DeleteEventByIdNoContent{}, nil
 }
-
