@@ -45,7 +45,7 @@ func (c Controller) DeleteUserById(ctx context.Context, userId string) (api.Dele
 	// Retrieve the user before deleting
 	user := &api.User{}
 	if err := c.database.Where("id = ?", userId).First(&user).Error; err != nil {
-	    return nil, err
+		return nil, err
 	}
 
 	// Delete the user
