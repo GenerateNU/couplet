@@ -4,6 +4,7 @@ import (
 	"context"
 	"couplet/internal/api"
 
+	"github.com/google/uuid"
 	ht "github.com/ogen-go/ogen/http"
 )
 
@@ -22,5 +23,41 @@ func (h Handler) GetAllUsers(ctx context.Context) ([]api.User, error) {
 // Gets a user by their user ID.
 // GET /users/{userId}
 func (h Handler) GetUserById(ctx context.Context, params api.GetUserByIdParams) (api.GetUserByIdRes, error) {
-	return &api.User{}, ht.ErrNotImplemented
+	//Grab the user from the database
+	user, err := h.controller.GetUserById(ctx, params)
+	//Return an empty user if there was an error
+	if err != nil {
+		return &api.User{}, err
+	}
+	//Convert the database user into an api user
+	apiUser := api.User{
+		ID:        uuid.UUID(user.ID),
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Age:       user.Age,
+	}
+	return &apiUser, nil
+}
+
+// Updates the specific user at their ID
+// GET /users/{userId}
+func (h Handler) PartialUpdateUserById(ctx context.Context, params api.PartialUpdateUserByIdParams) (api.PartialUpdateUserByIdRes, error) {
+	//The user to be updated from the database
+	user, err := h.controller.PartialUpdateUserById(ctx, params)
+	//Return an empty user if there was an error
+	if err != nil {
+		return &api.User{}, err
+	}
+	//Convert the database user into an api user
+	apiUser := api.User{
+		ID:        uuid.UUID(user.ID),
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Age:       user.Age,
+	}
+	return &apiUser, nil
 }
