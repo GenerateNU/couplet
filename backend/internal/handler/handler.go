@@ -1,4 +1,4 @@
-// Handle API requests
+// Handles API requests and translate between internal and external schema
 package handler
 
 import (
