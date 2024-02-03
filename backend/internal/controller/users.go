@@ -44,12 +44,12 @@ func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParam
 func (c Controller) DeleteUserById(ctx context.Context, userId string) (api.DeleteUserByIdRes, error) {
 	// Retrieve the user before deleting
 	user := &api.User{}
-	// if err := c.database.First(user, userId).Error; err != nil {
-	//     return nil, err
-	// }
+	if err := c.database.Where("id = ?", userId).First(&user).Error; err != nil {
+	    return nil, err
+	}
 
 	// Delete the user
-	result := c.database.Delete(&api.User{}, userId)
+	result := c.database.Where("id = ?", userId).Delete(&api.User{})
 
 	if result.Error != nil {
 		return nil, result.Error
