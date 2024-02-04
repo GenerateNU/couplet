@@ -27,3 +27,7 @@ func (id *UserID) Scan(src interface{}) error {
 func (id UserID) Value() (driver.Value, error) {
 	return id.UUID().Value()
 }
+
+func (id UserID) String() string {
+	return id.UUID().String()
+}

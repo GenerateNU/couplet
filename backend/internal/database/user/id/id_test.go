@@ -32,6 +32,9 @@ func FuzzUserIDParity(f *testing.F) {
 			assert.Nil(t, actualErr)
 			assert.Equal(t, expectedErr, actualErr)
 			assert.Equal(t, expected, actual)
+
+			// If successful scan, test String()
+			assert.Equal(t, uuid.String(), userId.String())
 		}
 	})
 }
