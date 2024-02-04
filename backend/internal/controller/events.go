@@ -6,6 +6,8 @@ import (
 	"couplet/internal/database"
 	"fmt"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func (c Controller) CreateEvent(ctx context.Context, event *api.Event) (*api.Event, error) {
@@ -32,7 +34,7 @@ func (c Controller) CreateEvent(ctx context.Context, event *api.Event) (*api.Eve
 func (c Controller) DeleteEventById(ctx context.Context, event api.EventId) error {
 	res := c.database.Delete(&database.Event{}, event)
 	if res.RowsAffected == 0 {
-		return fmt.Errorf("row with id=%v cannot be deleted because it doesn't exist", event)
+		return fmt.Errorf("event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(event).String())
 	}
 
 	if res.Error != nil {
