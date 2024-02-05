@@ -32,9 +32,9 @@ func (c Controller) CreateEvent(ctx context.Context, event *api.Event) (*api.Eve
 }
 
 func (c Controller) DeleteEventById(ctx context.Context, event api.EventId) error {
-	res := c.database.Delete(&database.Event{}, event)
+	res := c.database.Delete(&database.Event{}, database.EventID(event))
 	if res.RowsAffected == 0 {
-		return fmt.Errorf("event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(event).String())
+		return fmt.Errorf("404 - event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(event).String())
 	}
 
 	if res.Error != nil {

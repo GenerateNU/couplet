@@ -16,10 +16,14 @@ func (h Handler) CreateEvent(ctx context.Context, event *api.Event) (api.CreateE
 func (h Handler) DeleteEventById(ctx context.Context, params api.DeleteEventByIdParams) (api.DeleteEventByIdRes, error) {
 	err := h.controller.DeleteEventById(ctx, params.EventId)
 	if err != nil {
-		return &api.Error{
-			Code:    404,
-			Message: err.Error(),
-		}, nil
+		code := err.Error()[:3]
+		switch code {
+		case "404":
+			return &api.Error{
+				Code:    404,
+				Message: err.Error(),
+			}, nil
+		}
 	}
 	return &api.DeleteEventByIdNoContent{}, nil
 }
