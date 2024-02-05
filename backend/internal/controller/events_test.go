@@ -13,6 +13,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/arsham/dbtools/dbtesting"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,50 +24,54 @@ func TestCreateUser(t *testing.T) {
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 
-	// set up recorder to keep track of the auto-generated userID
+	// set up recorder to keep track of the auto-generated eventID
 	rec := dbtesting.NewValueRecorder()
 
-	// set up exampleEvent data
-	exampleEvent := api.Event{
-		Name:    "Big event",
-		Bio:     "Event description",
-		Address: "123 Something St, Boston",
+	// set up example event data
+	orgId := uuid.New()
+	exampleEventOne := api.Event{
+		Name:           "Big event",
+		Bio:            "Event description",
+		OrganizationID: orgId,
+	}
+	exampleEventTwo := api.Event{
+		Name:           "Big event",
+		Bio:            "Event description",
+		OrganizationID: orgId,
 	}
 
-	// expect the insert statement and create the user
+	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "events" ("id","created_at","updated_at","name","bio","address","organization_id")
-		VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEvent.Name, exampleEvent.Bio, exampleEvent.Address, sqlmock.AnyArg()).
+		INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+		VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedEventOne, err := c.CreateEvent(context.Background(), &exampleEvent)
+	insertedEventOne, err := c.CreateEvent(context.Background(), &exampleEventOne)
 	assert.Nil(t, err)
 
-	// ensure that all fields were set properly on the User object
-	assert.Equal(t, insertedEventOne.Name, exampleEvent.Name)
-	assert.Equal(t, insertedEventOne.Bio, exampleEvent.Bio)
-	assert.Equal(t, insertedEventOne.Address, exampleEvent.Address)
+	// ensure that all fields were set properly on the Event object
+	assert.Equal(t, insertedEventOne.Name, exampleEventOne.Name)
+	assert.Equal(t, insertedEventOne.Bio, exampleEventOne.Bio)
 
-	// create a second user with the same data to show that repeated POST calls always creates new users
+	// create a second user with the same data to show that repeated POST calls always creates new events
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
-		VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEvent.Name, exampleEvent.Bio, exampleEvent.Address, sqlmock.AnyArg()).
+	INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+		VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedEventTwo, err := c.CreateEvent(context.Background(), &exampleEvent)
+	insertedEventTwo, err := c.CreateEvent(context.Background(), &exampleEventTwo)
 	assert.Nil(t, err)
 
-	assert.Equal(t, insertedEventTwo.Name, exampleEvent.Name)
-	assert.Equal(t, insertedEventTwo.Bio, exampleEvent.Bio)
-	assert.Equal(t, insertedEventTwo.Address, exampleEvent.Address)
+	assert.Equal(t, insertedEventTwo.Name, exampleEventTwo.Name)
+	assert.Equal(t, insertedEventTwo.Bio, exampleEventTwo.Bio)
 
-	// IMPORTANT! assert that internally, the second user is not the same as the first user
+	// IMPORTANT! assert that internally, the second event id is not the same as the first event id
 	assert.NotEqual(t, insertedEventTwo.ID, insertedEventOne.ID)
 
 	// ensure that all expectations are met in the mock
@@ -74,61 +79,57 @@ func TestCreateUser(t *testing.T) {
 	assert.Nil(t, errExpectations)
 }
 
-// func TestDeleteUser(t *testing.T) {
-// 	// set up mock database
-// 	db, mock := database.NewMockDB()
-// 	c, err := controller.NewController(db)
-// 	assert.NotEmpty(t, c)
-// 	assert.Nil(t, err)
+func TestDeleteUser(t *testing.T) {
+	// set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db)
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
 
-// 	// set up recorder to keep track of the auto-generated userID and created/updated times
-// 	rec := dbtesting.NewValueRecorder()
+	// set up recorder to keep track of the auto-generated userID and created/updated times
+	rec := dbtesting.NewValueRecorder()
 
-// 	// set up user data
-// 	firstName := "firstName"
-// 	lastName := "lastName"
-// 	age := 20
+	// set up user data
+	orgId := uuid.New()
+	exampleEventOne := api.Event{
+		Name:           "Big event",
+		Bio:            "Event description",
+		OrganizationID: orgId,
+	}
 
-// 	// expect the insert statement and create the user
-// 	mock.ExpectBegin()
-// 	mock.ExpectExec(regexp.QuoteMeta(`
-// 		INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
-// 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-// 		WithArgs(rec.Record("id"), rec.Record("createdTime"), rec.Record("updatedTime"), "firstName", "lastName", age).
-// 		WillReturnResult(sqlmock.NewResult(1, 1))
+	// expect the insert statement and create the user
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(`
+		INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+		VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(rec.Record("id"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
-// 	mock.ExpectCommit()
+	mock.ExpectCommit()
 
-// 	_, err = c.CreateUser(context.Background(), "firstName", "lastName", 20)
-// 	assert.Nil(t, err)
+	createdEvent, err := c.CreateEvent(context.Background(), &exampleEventOne)
+	assert.Nil(t, err)
 
-// 	// retrieve the user's ID
-// 	userId := rec.Value("id").(string)
+	// ensure that all fields were set properly on the Event object
+	assert.Equal(t, createdEvent.Name, exampleEventOne.Name)
+	assert.Equal(t, createdEvent.Bio, exampleEventOne.Bio)
 
-// 	// expect the select statement from the delete endpoint and return the user
-// 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "users" WHERE id = $1 ORDER BY "users"."id" LIMIT 1`)).
-// 		WithArgs(userId).
-// 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
-// 			AddRow(userId, rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), "firstName", "lastName", 20))
+	// expect the delete statement and delete the user
+	mock.ExpectExec(regexp.QuoteMeta(`
+		DELETE FROM "events" WHERE id = $1`)).
+		WithArgs(exampleEventOne.ID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
 
-// 	mock.ExpectBegin()
+	err = c.DeleteEventById(context.Background(), exampleEventOne.ID.Value)
+	assert.Nil(t, err)
 
-// 	// expect the delete statement and delete the user
-// 	mock.ExpectExec(regexp.QuoteMeta(`
-// 		DELETE FROM "users" WHERE id = $1`)).
-// 		WithArgs(userId).
-// 		WillReturnResult(sqlmock.NewResult(1, 1))
-// 	mock.ExpectCommit()
+	// ensure that all expectations are met in the mock
+	errExpectations := mock.ExpectationsWereMet()
+	assert.Nil(t, errExpectations)
 
-// 	deletedUser, err := c.DeleteUserById(context.Background(), userId)
-// 	assert.Nil(t, err)
+	// res := db.Find(exampleEventOne.ID.Value)
 
-// 	// ensure that the deleted user is returned and matches the info of the user that was created
-// 	assert.Equal(t, deletedUser.Age, uint8(age))
-// 	assert.Equal(t, deletedUser.FirstName, firstName)
-// 	assert.Equal(t, deletedUser.LastName, lastName)
-
-// 	// ensure that all expectations are met in the mock
-// 	errExpectations := mock.ExpectationsWereMet()
-// 	assert.Nil(t, errExpectations)
-// }
+	// // ensure that the deleted user is returned and matches the info of the user that was created
+	// assert.Equal(t, res.RowsAffected, int64(0))
+}

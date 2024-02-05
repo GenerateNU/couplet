@@ -16,7 +16,7 @@ func (c Controller) CreateEvent(ctx context.Context, event *api.Event) (*api.Eve
 		UpdatedAt:      time.Now(),
 		Name:           event.GetName(),
 		Bio:            event.GetBio(),
-		OrganizationID: database.OrganizationID(event.OrganizationID),
+		OrganizationID: database.OrganizationID(event.GetOrganizationID()),
 	}
 
 	res := c.database.Create(&newEvent)
