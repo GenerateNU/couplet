@@ -4,6 +4,7 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/controller"
 	"couplet/internal/database"
+	"fmt"
 
 	"testing"
 
@@ -117,11 +118,18 @@ func TestDeleteUser(t *testing.T) {
 	// expect the delete statement and delete the user
 	mock.ExpectExec(regexp.QuoteMeta(`
 		DELETE FROM "events" WHERE id = $1`)).
-		WithArgs(exampleEventOne.ID).
+		WithArgs(rec.Value("id")).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	err = c.DeleteEventById(context.Background(), exampleEventOne.ID.Value)
+	fmt.Println(exampleEventOne.ID.Value)
+	fmt.Println(uuid.UUID(exampleEventOne.ID.Value).String())
+
+	fmt.Println(createdEvent.ID.Value)
+	fmt.Println(uuid.UUID(createdEvent.ID.Value).String())
+
+	id, _ := uuid.Parse(rec.Value("id").(string))
+	err = c.DeleteEventById(context.Background(), api.EventId(id))
 	assert.Nil(t, err)
 
 	// ensure that all expectations are met in the mock
