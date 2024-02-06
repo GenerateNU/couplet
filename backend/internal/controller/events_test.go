@@ -4,7 +4,6 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/controller"
 	"couplet/internal/database"
-	"fmt"
 
 	"testing"
 
@@ -18,7 +17,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateUser(t *testing.T) {
+func TestCreateEvent(t *testing.T) {
 	// set up mock database
 	db, mock := database.NewMockDB()
 	c, err := controller.NewController(db)
@@ -80,30 +79,29 @@ func TestCreateUser(t *testing.T) {
 	assert.Nil(t, errExpectations)
 }
 
-func TestDeleteUser(t *testing.T) {
+func TestDeleteEvent(t *testing.T) {
 	// set up mock database
 	db, mock := database.NewMockDB()
 	c, err := controller.NewController(db)
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 
-	// set up recorder to keep track of the auto-generated userID and created/updated times
+	// set up recorder to keep track of the auto-generated eventId and created/updated times
 	rec := dbtesting.NewValueRecorder()
 
 	// set up user data
-	orgId := uuid.New()
 	exampleEventOne := api.Event{
 		Name:           "Big event",
 		Bio:            "Event description",
-		OrganizationID: orgId,
+		OrganizationID: uuid.New(),
 	}
 
-	// expect the insert statement and create the user
+	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("id"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
+		WithArgs(rec.Record("eventId"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectCommit()
@@ -115,29 +113,18 @@ func TestDeleteUser(t *testing.T) {
 	assert.Equal(t, createdEvent.Name, exampleEventOne.Name)
 	assert.Equal(t, createdEvent.Bio, exampleEventOne.Bio)
 
-	// expect the delete statement and delete the user
+	// expect the delete statement and delete the event
+	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
 		DELETE FROM "events" WHERE id = $1`)).
-		WithArgs(rec.Value("id")).
+		WithArgs(rec.Value("eventId")).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	fmt.Println(exampleEventOne.ID.Value)
-	fmt.Println(uuid.UUID(exampleEventOne.ID.Value).String())
-
-	fmt.Println(createdEvent.ID.Value)
-	fmt.Println(uuid.UUID(createdEvent.ID.Value).String())
-
-	id, _ := uuid.Parse(rec.Value("id").(string))
-	err = c.DeleteEventById(context.Background(), api.EventId(id))
+	err = c.DeleteEventById(context.Background(), createdEvent.ID.Value)
 	assert.Nil(t, err)
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
 	assert.Nil(t, errExpectations)
-
-	// res := db.Find(exampleEventOne.ID.Value)
-
-	// // ensure that the deleted user is returned and matches the info of the user that was created
-	// assert.Equal(t, res.RowsAffected, int64(0))
 }
