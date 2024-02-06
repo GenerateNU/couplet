@@ -8,11 +8,16 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
+// GET (/users/:id) a single user by their id
+// GET (/users) all users with pagination (ask if you don't know what this is)
+// PUT (/users/:id) to completely update an existing user, returning the created object if successful
+// PATCH (/users/:id) to partially update one or many fields of an existing user, returning the created object if successful
+
 // Creates a new user.
 // POST /users
-func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUserRes, error) {
-	return &api.User{}, ht.ErrNotImplemented
-}
+// func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUserRes, error) {
+// 	return &api.User{}, ht.ErrNotImplemented
+// }
 
 // Gets all users.
 // GET /users
