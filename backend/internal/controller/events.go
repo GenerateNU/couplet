@@ -22,7 +22,6 @@ func (c Controller) CreateEvent(ctx context.Context, apiEvent *api.Event) (*api.
 	}
 
 	res := c.database.Create(&newEvent)
-	fmt.Println("created:", newEvent.ID)
 	if res.RowsAffected < 1 {
 		return nil, fmt.Errorf("no event created")
 	}

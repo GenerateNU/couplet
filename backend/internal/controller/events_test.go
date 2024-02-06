@@ -56,7 +56,7 @@ func TestCreateEvent(t *testing.T) {
 	assert.Equal(t, insertedEventOne.Name, exampleEventOne.Name)
 	assert.Equal(t, insertedEventOne.Bio, exampleEventOne.Bio)
 
-	// create a second user with the same data to show that repeated POST calls always creates new events
+	// create a second event with the same data to show that repeated POST calls always creates new events
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
 	INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
@@ -89,7 +89,7 @@ func TestDeleteEvent(t *testing.T) {
 	// set up recorder to keep track of the auto-generated eventId and created/updated times
 	rec := dbtesting.NewValueRecorder()
 
-	// set up user data
+	// set up event data
 	exampleEventOne := api.Event{
 		Name:           "Big event",
 		Bio:            "Event description",
