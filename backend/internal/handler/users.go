@@ -15,14 +15,19 @@ import (
 
 // Creates a new user.
 // POST /users
-// func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUserRes, error) {
-// 	return &api.User{}, ht.ErrNotImplemented
-// }
+func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUserRes, error) {
+	return &api.User{}, ht.ErrNotImplemented
+}
 
 // Gets all users.
 // GET /users
-func (h Handler) GetAllUsers(ctx context.Context) ([]api.User, error) {
-	return []api.User{}, ht.ErrNotImplemented
+func (h Handler) GetAllUsers(ctx context.Context, params api.GetAllUsersParams) (api.GetAllUsersRes, error) {
+	return nil, ht.ErrNotImplemented
+}
+
+// Puts All users
+func (h Handler) PutUserById(ctx context.Context, user *api.User, params api.PutUserByIdParams) (api.PutUserByIdRes, error) {
+	return nil, nil
 }
 
 // Gets a user by their user ID.

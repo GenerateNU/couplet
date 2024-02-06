@@ -61,36 +61,35 @@ func (c Controller) PartialUpdateUserById(ctx context.Context, params api.Partia
 
 // 	return users, nil
 // }
+// func (c Controller) PutUserById(ctx context.Context, userId api.User.ID, updatedUser *api.User) (*api.User, error) {
+// 	var user api.User
 
-func (c Controller) PutUserById(ctx context.Context, userId api.UserId, updatedUser *api.User) (*api.User, error) {
-	var user api.User
+// 	// Do we create a new entry if entry doesn't exists?
+// 	err := c.database.Where("id = ?", userId).First(&user).Error
 
-	// Do we create a new entry if entry doesn't exists?
-	err := c.database.Where("id = ?", userId).First(&user).Error
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	if err != nil {
-		return nil, err
-	}
+// 	userUpdates := make(map[string]interface{})
 
-	userUpdates := make(map[string]interface{})
+// 	userUpdates["updatedAt"] = time.Now()
 
-	userUpdates["updatedAt"] = time.Now()
+// 	if updatedUser.FirstName != "" {
+// 		userUpdates["FirstName"] = updatedUser.FirstName
+// 	}
 
-	if updatedUser.FirstName != "" {
-		userUpdates["FirstName"] = updatedUser.FirstName
-	}
+// 	if updatedUser.LastName != "" {
+// 		userUpdates["LastName"] = updatedUser.LastName
+// 	}
 
-	if updatedUser.LastName != "" {
-		userUpdates["LastName"] = updatedUser.LastName
-	}
+// 	if updatedUser.Age >= 0 {
+// 		userUpdates["Age"] = updatedUser.Age
+// 	}
 
-	if updatedUser.Age >= 0 {
-		userUpdates["Age"] = updatedUser.Age
-	}
+// 	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
+// 		return nil, err
+// 	}
 
-	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
+// 	return &user, nil
+// }

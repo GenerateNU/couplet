@@ -122,9 +122,6 @@ paths:
             type: string
             format: uuid
             example: 5e91507e-5630-4efd-9fd4-799178870b10
-            type: string
-            format: uuid
-            example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         '200':
           description: Successfully retrieved specified user
