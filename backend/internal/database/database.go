@@ -2,6 +2,9 @@
 package database
 
 import (
+	"couplet/internal/database/event"
+	"couplet/internal/database/org"
+	"couplet/internal/database/user"
 	"fmt"
 	"log/slog"
 
@@ -46,7 +49,7 @@ func EnableConnPooling(db *gorm.DB) error {
 
 // Performs database migrations for defined schema if necessary
 func MigrateDB(db *gorm.DB) error {
-	return db.AutoMigrate(User{}, Organization{}, Event{})
+	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{})
 }
 
 // Creates a new mock postgres-GORM database
