@@ -12,11 +12,11 @@ import (
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (api.CreateUserRes, error) {
 
-	if user.Age.Value < 18 {
+	if user.Age < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
 
-	return h.controller.CreateUser(ctx, user.FirstName.Value, user.LastName.Value, user.Age.Value)
+	return h.controller.CreateUser(ctx, user.FirstName, user.LastName, user.Age)
 }
 
 // Gets all users.
