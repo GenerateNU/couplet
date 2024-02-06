@@ -43,7 +43,7 @@ func TestCreateEvent(t *testing.T) {
 	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+		INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -59,7 +59,7 @@ func TestCreateEvent(t *testing.T) {
 	// create a second user with the same data to show that repeated POST calls always creates new events
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-	INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+	INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -99,7 +99,7 @@ func TestDeleteEvent(t *testing.T) {
 	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "events" ("id","created_at","updated_at","name","bio","organization_id")
+		INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("eventId"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
