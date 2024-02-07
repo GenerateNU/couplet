@@ -135,9 +135,17 @@ func TestPutUserById(t *testing.T) {
 		Age:       25,
 	}
 
+	// Test the Put Request
+	putRequestParams := api.PutUserByIdParams{
+		UserId:    uuid1,
+		FirstName: api.NewOptString("PutUserFirstName"),
+		LastName:  api.NewOptString("PutUserLastName"),
+		Age:       api.NewOptInt(99),
+	}
+
 	// Insert the user into the database
-	err := db.Create(&user1).Error
-	assert.NoError(t, tx)
+	err = db.Create(&user1).Error
+	assert.NoError(t, err)
 	// Gets and Checks if the Test User is properly created
 	var retrievedUser user.User;
 	err = db.First(&retrievedUser, "id = ", db_UUID).Error
@@ -149,13 +157,6 @@ func TestPutUserById(t *testing.T) {
 	assert.Equal(t, user1.LastName, retrievedUser.LastName)
 	assert.Equal(t, user1.Age, retrievedUser.Age)
 
-	// Test the Put Request
-	putRequestParams := api.PutUserByIdParams{
-		UserId:    uuid1,
-		FirstName: api.NewOptString("PutUserFirstName"),
-		LastName:  api.NewOptString("PutUserLastName"),
-		Age:       api.NewOptInt(99),
-	}
 
 	expectUserQuery(mock, user1)
 	updatedUser, err := c.PutUserById(context.Background(), putRequestParams)
@@ -186,7 +187,7 @@ func TestGetAllUsers(t *testing.T) {
 		LastName:  "User1LastName",
 		Age:       20,
 	}
-	err := db.Create(&user1).Error
+	err = db.Create(&user1).Error
     assert.NoError(t, err, "Failed to create user 1")
 
 	// Create new User 2
@@ -201,7 +202,7 @@ func TestGetAllUsers(t *testing.T) {
 		LastName:  "User2LastName",
 		Age:       40,
 	}
-	err := db.Create(&user2).Error
+	err = db.Create(&user2).Error
     assert.NoError(t, err, "Failed to create user 2")
 
     // Test the Get All Users Request

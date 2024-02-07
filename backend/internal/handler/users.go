@@ -18,29 +18,30 @@ func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUser
 // GET /users
 func (h Handler) GetAllUsers(ctx context.Context, params api.GetAllUsersParams) (api.GetAllUsersRes, error) {
 	// Gets all the users depending on page and limit
-	limit := int(params.Limit.Value)
-    offset := int(params.Offset.Value)
-	users, err := h.controller.GetAllUsers(limit, offset)
+	// limit := int(params.Limit.Value)
+    // offset := int(params.Offset.Value)
+	// users, err := h.controller.GetAllUsers(limit, offset)
 	
-	if err != nil {
-        return nil, err
-    }
+	// if err != nil {
+    //     return nil, err
+    // }
 
-    // Convert the database users into API users
-    apiUsers := []api.User{}
-    for _, user := range users {
-        apiUser := api.User{
-            ID:        uuid.UUID(user.ID),
-            CreatedAt: user.CreatedAt,
-            UpdatedAt: user.UpdatedAt,
-            FirstName: user.FirstName,
-            LastName:  user.LastName,
-            Age:       user.Age,
-        }
-        apiUsers = append(apiUsers, apiUser)
-    }
+    // // Convert the database users into API users
+    // apiUsers := []api.User{}
+    // for _, user := range users {
+    //     apiUser := api.User{
+    //         ID:        uuid.UUID(user.ID),
+    //         CreatedAt: user.CreatedAt,
+    //         UpdatedAt: user.UpdatedAt,
+    //         FirstName: user.FirstName,
+    //         LastName:  user.LastName,
+    //         Age:       user.Age,
+    //     }
+    //     apiUsers = append(apiUsers, apiUser)
+    // }
 
-    return apiUsers, nil
+    // return apiUsers, nil
+	return nil, ht.ErrNotImplemented
 }
 
 // Updates the user based on their ID
