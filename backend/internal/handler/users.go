@@ -8,11 +8,6 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-// GET (/users/:id) a single user by their id
-// GET (/users) all users with pagination (ask if you don't know what this is)
-// PUT (/users/:id) to completely update an existing user, returning the created object if successful
-// PATCH (/users/:id) to partially update one or many fields of an existing user, returning the created object if successful
-
 // Creates a new user.
 // POST /users
 func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUserRes, error) {
@@ -22,12 +17,52 @@ func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUser
 // Gets all users.
 // GET /users
 func (h Handler) GetAllUsers(ctx context.Context, params api.GetAllUsersParams) (api.GetAllUsersRes, error) {
-	return nil, ht.ErrNotImplemented
+	// Gets all the users depending on page and limit
+	limit := int(params.Limit.Value)
+    offset := int(params.Offset.Value)
+	users, err := h.controller.GetAllUsers(limit, offset)
+	
+	if err != nil {
+        return nil, err
+    }
+
+    // Convert the database users into API users
+    apiUsers := []api.User{}
+    for _, user := range users {
+        apiUser := api.User{
+            ID:        uuid.UUID(user.ID),
+            CreatedAt: user.CreatedAt,
+            UpdatedAt: user.UpdatedAt,
+            FirstName: user.FirstName,
+            LastName:  user.LastName,
+            Age:       user.Age,
+        }
+        apiUsers = append(apiUsers, apiUser)
+    }
+
+    return apiUsers, nil
 }
 
-// Puts All users
-func (h Handler) PutUserById(ctx context.Context, user *api.User, params api.PutUserByIdParams) (api.PutUserByIdRes, error) {
-	return nil, nil
+// Updates the user based on their ID
+// PUT /users/{userId}
+func (h Handler) PutUserById(ctx context.Context, updatedUser *api.User, params api.PutUserByIdParams) (api.PutUserByIdRes, error) {
+	// Update the user and return it
+	user, err := h.controller.PutUserById(ctx, updatedUser, params)
+	// Returns an empty user if there was an error
+	if err != nil {
+        return &api.User{}, err
+    }
+
+    // Convert the updated database user into an API user
+    apiUser := api.User{
+        ID:        uuid.UUID(user.ID),
+        CreatedAt: user.CreatedAt,
+        UpdatedAt: user.UpdatedAt,
+        FirstName: user.FirstName,
+        LastName:  user.LastName,
+        Age:       user.Age,
+    }
+    return &apiUser, nil
 }
 
 // Gets a user by their user ID.

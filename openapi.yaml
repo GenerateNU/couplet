@@ -43,10 +43,15 @@ paths:
           in: query 
           schema:
             type: integer
+            format: uint32
+            default: 0
         - name: limit 
           in: query
           schema:
             type: integer  
+            format: uint8
+            minimum: 1
+            default: 50
       responses:
         '200':
           description: Successfully retrieved all users
@@ -55,7 +60,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid 
+                    - $ref: '#/components/schemas/User'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -154,12 +164,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        # '201':
-        #   description: Successfully create specified user
-        #   content:
-        #     application/json:
-        #       schema:
-        #         $ref: '#/components/schemas/User'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':

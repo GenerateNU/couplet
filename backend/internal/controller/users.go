@@ -51,45 +51,43 @@ func (c Controller) PartialUpdateUserById(ctx context.Context, params api.Partia
 	return user, nil
 }
 
-// func (c Controller) GetAllUsers(ctx context.Context, limit int, offset int) ([]api.User, error) {
-// 	var users []api.User
+// Gets all the users in the database based on the limit and offset 
+func (c Controller) GetAllUsers(limit int, offset int) ([]db.User, error) {
+	var users []db.User
+	err := c.database.Limit(limit).Offset(offset).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
 
-// 	err := c.database.Limit(limit).Offset(offset).Find(&users).Error
-// 	if err != nil {
-// 		return nil, err
-// 	}
 
-// 	return users, nil
-// }
-// func (c Controller) PutUserById(ctx context.Context, userId api.User.ID, updatedUser *api.User) (*api.User, error) {
-// 	var user api.User
+func (c Controller) PutUserById(ctx context.Context, updatedUser *api.User, params api.PutUserByIdParams) (db.User, error) {
+	var user db.User
+	err := c.database.First(&user, "id = ?", params.UserId).Error
+	if err != nil {
+		return db.User{}, err
+	}
 
-// 	// Do we create a new entry if entry doesn't exists?
-// 	err := c.database.Where("id = ?", userId).First(&user).Error
+	userUpdates := make(map[string]interface{})
 
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	userUpdates["updatedAt"] = time.Now()
 
-// 	userUpdates := make(map[string]interface{})
+	if updatedUser.FirstName != "" {
+		userUpdates["FirstName"] = updatedUser.FirstName
+	}
 
-// 	userUpdates["updatedAt"] = time.Now()
+	if updatedUser.LastName != "" {
+		userUpdates["LastName"] = updatedUser.LastName
+	}
 
-// 	if updatedUser.FirstName != "" {
-// 		userUpdates["FirstName"] = updatedUser.FirstName
-// 	}
+	if updatedUser.Age >= 0 {
+		userUpdates["Age"] = updatedUser.Age
+	}
 
-// 	if updatedUser.LastName != "" {
-// 		userUpdates["LastName"] = updatedUser.LastName
-// 	}
+	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
+		return db.User{}, err
+	}
 
-// 	if updatedUser.Age >= 0 {
-// 		userUpdates["Age"] = updatedUser.Age
-// 	}
-
-// 	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
-// 		return nil, err
-// 	}
-
-// 	return &user, nil
-// }
+	return user, nil
+}
