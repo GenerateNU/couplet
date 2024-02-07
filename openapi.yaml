@@ -26,7 +26,7 @@ paths:
             type: integer
             format: uint8
             minimum: 1
-            default: 20
+            default: 10
             example: 20
         - name: offset
           in: query
@@ -44,7 +44,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Org'
+                  allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: '#/components/schemas/Org'
+                  - required:
+                    - id
+                    - name
+                    - bio
+                    - tags
     post:
       summary: Create a new organization
       operationId: createOrg
@@ -54,22 +65,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Org'
+              allOf:
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - name
+                  - bio
       responses:
-        '200':
+        '201':
           description: Successfully created organization
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Org'
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
         '400':
           $ref: '#/components/responses/BadRequest'
-  /orgs/{orgId}:
+  /orgs/{id}:
     delete:
       summary: Delete an organization by its ID
       operationId: deleteOrgById
       parameters:
-        - name: orgId
+        - name: id
           in: path
           description: ID of organization to delete
           required: true
@@ -83,14 +109,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Org'
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
         '404':
           $ref: '#/components/responses/NotFound'
     get:
       summary: Get an organization by its ID
       operationId: getOrgById
       parameters:
-        - name: orgId
+        - name: id
           in: path
           description: ID of organization to retrieve
           required: true
@@ -104,14 +141,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Org'
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
         '404':
           $ref: '#/components/responses/NotFound'
     patch:
       summary: Partially update an organization by its ID
       operationId: partialUpdateOrgById
       parameters:
-        - name: orgId
+        - name: id
           in: path
           description: ID of organization to update
           required: true
@@ -132,41 +180,83 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Org'
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
-      summary: Update an organization by its ID
-      operationId: updateOrgById
+      summary: Update an organization by its ID if it exists, else create it
+      operationId: saveOrgById
       parameters:
-        - name: orgId
+        - name: id
           in: path
-          description: ID of organization to update
+          description: ID of organization to save
           required: true
           schema:
             type: string
             format: uuid
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       requestBody:
-        description: Organization to update
+        description: Organization to save
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Org'
+              allOf:
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - name
+                  - bio
+                  - tags
       responses:
         '200':
           description: Successfully updated specified organization
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Org'
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
+        '201':
+          description: Successfully created specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                - properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                - $ref: '#/components/schemas/Org'
+                - required:
+                  - id
+                  - name
+                  - bio
+                  - tags
         '400':
           $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
   /users:
     post:
       summary: Create a new user
@@ -188,7 +278,6 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
     get:
-      # TODO: Paginate this
       summary: Get all users
       operationId: getAllUsers
       responses:
@@ -200,12 +289,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-  /users/{userId}:
+  /users/{id}:
     get:
       summary: Get a user by their user ID
       operationId: getUserById
       parameters:
-        - name: userId
+        - name: id
           in: path
           description: ID of user to retrieve
           required: true
@@ -372,32 +461,11 @@ components:
           # price range low~high
     Org:
       type: object
-      required:
-        - id
-        - name
-        - events
-        - tags
-        - bio
-        - image
       properties:
-        id:
-          type: string
-          format: uuid
-          example: 5e91507e-5630-4efd-9fd4-799178870b10
         name:
           type: string
           minLength: 1
           example: The Events Company
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-        tags:
-          type: array
-          items:
-            type: string
-            enum: [nonprofit]
-            # TODO: Define more tags
         bio:
           type: string
           minLength: 1
@@ -406,6 +474,13 @@ components:
           type: string
           format: uri
           example: https://example.com/image.png
+        tags:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            minLength: 1
+            example: nonprofit
     User:
       type: object
       required:

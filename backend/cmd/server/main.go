@@ -6,7 +6,6 @@ import (
 	"context"
 	"couplet/internal/controller"
 	"couplet/internal/database"
-	"couplet/internal/database/user/id"
 	"couplet/internal/handler"
 	"fmt"
 	"log/slog"
@@ -17,7 +16,6 @@ import (
 
 	"couplet/internal/api"
 
-	"github.com/google/uuid"
 	"github.com/pterm/pterm"
 	"github.com/pterm/pterm/putils"
 	"github.com/sethvargo/go-envconfig"
@@ -84,7 +82,6 @@ func main() {
 		os.Exit(1)
 	}
 	logger.Info("server successfully instantiated and listening", "port", config.Port)
-	logger.Info(fmt.Sprintf("lol %s", id.UserID(uuid.New())))
 
 	// Run server indefinitely until an error occurs
 	if err = http.ListenAndServe(fmt.Sprintf(":%d", config.Port), s); err != nil {
