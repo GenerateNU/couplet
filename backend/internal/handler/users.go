@@ -4,7 +4,9 @@ import (
 	"context"
 	"couplet/internal/api"
 	"errors"
+	"fmt"
 
+	"github.com/google/uuid"
 	ht "github.com/ogen-go/ogen/http"
 )
 
@@ -16,7 +18,7 @@ func (h Handler) CreateUser(ctx context.Context, user *api.CreateUserRequest) (a
 		return nil, errors.New("must be at least 18 years old")
 	}
 
-	return h.controller.CreateUser(ctx, user.FirstName, user.LastName, user.Age)
+	return h.controller.CreateUser(user.FirstName, user.LastName, user.Age)
 }
 
 // Gets all users.
@@ -34,9 +36,19 @@ func (h Handler) GetUserById(ctx context.Context, params api.GetUserByIdParams) 
 // Deletes a user by their user ID.
 // DELETE /users/{userId}
 func (h Handler) DeleteUserById(ctx context.Context, params api.DeleteUserByIdParams) (api.DeleteUserByIdRes, error) {
-	if params.UserId.String() == "" {
-		return nil, errors.New("user ID must not be empty")
+	uuid, err := uuid.Parse(params.UserId.String())
+	if err != nil {
+		return nil, errors.New("invalid userID provided")
 	}
 
-	return h.controller.DeleteUserById(ctx, params.UserId.String())
+	h.logger.Info(fmt.Sprintf("DELETE /users/%s", uuid))
+	o, err := h.controller.DeleteUserById(uuid)
+	if err != nil {
+		return &api.Error{
+			Code:    404,
+			Message: err.Error(),
+		}, nil
+	}
+
+	return &o, nil
 }

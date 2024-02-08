@@ -10,12 +10,12 @@ import (
 )
 
 func TestNewController(t *testing.T) {
-	c, err := controller.NewController(nil)
+	c, err := controller.NewController(nil, nil)
 	assert.Empty(t, c)
 	assert.NotNil(t, err)
 
 	db, mock := database.NewMockDB()
-	c, err = controller.NewController(db)
+	c, err = controller.NewController(db, nil)
 
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)

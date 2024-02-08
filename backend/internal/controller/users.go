@@ -10,7 +10,7 @@ import (
 
 // Creates a new user.
 // POST /users
-func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*api.User, error) {
+func (c Controller) CreateUser(firstName string, lastName string, age uint8) (*api.User, error) {
 	user := api.User{
 		ID:        uuid.New(),
 		FirstName: firstName,
@@ -39,22 +39,21 @@ func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParam
 	return &api.User{}, ht.ErrNotImplemented
 }
 
+// Gets a user from the database by their ID
+func (c Controller) GetUser(id uuid.UUID) (u api.User, txErr error) {
+	txErr = c.database.First(&u, id).Error
+	return
+}
+
 // Deletes a user by their user ID.
 // DELETE /users/{userId}
-func (c Controller) DeleteUserById(ctx context.Context, userId string) (*api.User, error) {
-	// Retrieve the user before deleting
-	user := &api.User{}
-	if err := c.database.Where("id = ?", userId).First(&user).Error; err != nil {
-		return nil, err
+func (c Controller) DeleteUserById(id uuid.UUID) (u api.User, txErr error) {
+	u, txErr = c.GetUser(id)
+
+	if txErr != nil {
+		return api.User{}, txErr
 	}
 
-	// Delete the user
-	result := c.database.Where("id = ?", userId).Delete(&api.User{})
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	// Return the deleted user
-	return user, nil
+	txErr = c.database.Delete(&u).Error
+	return
 }
