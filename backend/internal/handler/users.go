@@ -16,54 +16,72 @@ func (h Handler) CreateUser(ctx context.Context, user *api.User) (api.CreateUser
 
 // Gets all users.
 // GET /users
-func (h Handler) GetAllUsers(ctx context.Context, params api.GetAllUsersParams) (api.GetAllUsersRes, error) {
+func (h Handler) GetAllUsers(ctx context.Context, params api.GetAllUsersParams) ([]api.GetAllUsersOKItem, error) {
 	// Gets all the users depending on page and limit
-	// limit := int(params.Limit.Value)
-    // offset := int(params.Offset.Value)
-	// users, err := h.controller.GetAllUsers(limit, offset)
-	
-	// if err != nil {
-    //     return nil, err
-    // }
+	limit := params.Limit.Value
+    offset := params.Offset.Value
+	users, err := h.controller.GetAllUsers(limit, offset)
 
-    // // Convert the database users into API users
-    // apiUsers := []api.User{}
-    // for _, user := range users {
-    //     apiUser := api.User{
-    //         ID:        uuid.UUID(user.ID),
-    //         CreatedAt: user.CreatedAt,
-    //         UpdatedAt: user.UpdatedAt,
-    //         FirstName: user.FirstName,
-    //         LastName:  user.LastName,
-    //         Age:       user.Age,
-    //     }
-    //     apiUsers = append(apiUsers, apiUser)
-    // }
+	if err != nil {
+        return nil, err
+    }
 
-    // return apiUsers, nil
-	return nil, ht.ErrNotImplemented
+    // Convert the database users into API users
+	apiUsers := []api.GetAllUsersOKItem{}
+    for _, user := range users {
+        apiUser := api.GetAllUsersOKItem {
+            ID:        uuid.UUID(user.ID),
+            CreatedAt: user.CreatedAt,
+            UpdatedAt: user.UpdatedAt,
+            FirstName: user.FirstName,
+            LastName:  user.LastName,
+            Age:       user.Age,
+        }
+        apiUsers = append(apiUsers, apiUser)
+    }
+
+	return apiUsers, nil
 }
 
 // Updates the user based on their ID
 // PUT /users/{userId}
 func (h Handler) PutUserById(ctx context.Context, updatedUser *api.User, params api.PutUserByIdParams) (api.PutUserByIdRes, error) {
-	// Update the user and return it
-	user, err := h.controller.PutUserById(ctx, updatedUser, params)
-	// Returns an empty user if there was an error
-	if err != nil {
-        return &api.User{}, err
-    }
+	
 
-    // Convert the updated database user into an API user
-    apiUser := api.User{
-        ID:        uuid.UUID(user.ID),
-        CreatedAt: user.CreatedAt,
-        UpdatedAt: user.UpdatedAt,
-        FirstName: user.FirstName,
-        LastName:  user.LastName,
-        Age:       user.Age,
+	// Checks if user exists 
+	_, err := h.controller.GetUserById(ctx, api.GetUserByIdParams{UserId: uuid.UUID(params.UserId)})
+	alreadyExists := err == nil
+
+	if alreadyExists {
+		responseUser, err := h.controller.PutUserById(ctx, updatedUser, params.UserId.String())
+		if err != nil {
+			return &api.Error{
+				Code:    400,
+				Message: err.Error(),
+			}, nil
+		}
+		updatedUser := api.PutUserByIdOK{
+			ID:        uuid.UUID(responseUser.ID),
+			CreatedAt: responseUser.CreatedAt,
+			UpdatedAt: responseUser.UpdatedAt,
+			FirstName: responseUser.FirstName,
+			LastName:  responseUser.LastName,
+			Age:       responseUser.Age,
+		}
+		return &updatedUser, nil
+	}
+
+	// Replace with the CreateUser Endpoint 
+	responseUser, err := h.controller.CreateUser(ctx, updatedUser.FirstName, updatedUser.LastName, updatedUser.Age)
+    createdUser := api.PutUserByIdCreated{
+        ID:        uuid.UUID(responseUser.ID),
+        CreatedAt: responseUser.CreatedAt,
+        UpdatedAt: responseUser.UpdatedAt,
+        FirstName: responseUser.FirstName,
+        LastName:  responseUser.LastName,
+        Age:       responseUser.Age,
     }
-    return &apiUser, nil
+    return &createdUser, nil
 }
 
 // Gets a user by their user ID.
