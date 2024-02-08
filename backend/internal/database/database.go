@@ -53,12 +53,12 @@ func MigrateDB(db *gorm.DB) error {
 }
 
 // Creates a new mock postgres-GORM database
-func NewMockDB() *gorm.DB {
-	mockDb, _, _ := sqlmock.New()
+func NewMockDB() (*gorm.DB, sqlmock.Sqlmock) {
+	mockDb, mock, _ := sqlmock.New()
 	dialector := postgres.New(postgres.Config{
 		Conn:       mockDb,
 		DriverName: "postgres",
 	})
 	db, _ := gorm.Open(dialector, &gorm.Config{})
-	return db
+	return db, mock
 }
