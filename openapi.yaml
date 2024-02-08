@@ -66,6 +66,110 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '404':
+          $ref: '#/components/responses/NotFound' 
+  /events:
+      get:
+        summary: Get all events
+        operationId: getAllEvents
+        parameters:
+          - in: query
+            name: limit
+            schema:
+              type: integer
+              default: 10
+            description: Maximum number of events to return.
+          - in: query
+            name: offset
+            schema:
+              type: integer
+              default: 0
+            description: Number of events to skip before starting to collect the result set.
+        responses:
+          '200':
+            description: Successfully retrieved all events
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Event'
+          '404':
+            $ref: '#/components/responses/NotFound'
+  /events/{eventId}:
+    get:
+      summary: Get an event by its event ID
+      operationId: getEventById
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of event to retrieve
+          required: true
+          schema:
+            $ref: '#/components/schemas/EventId'
+      responses:
+        '200':
+          description: Successfully retrieved specified event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put: 
+      summary: Update an event by its event ID
+      operationId: updateEventById
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of event to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/EventId'
+      requestBody:
+        description: Event to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Successfully updated specified event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update an event by its event ID
+      operationId: patchEventById
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of event to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/EventId'
+      requestBody:
+        description: Event to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Successfully updated specified event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
           $ref: '#/components/responses/NotFound'
 
 components:
