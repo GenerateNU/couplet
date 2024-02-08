@@ -4,6 +4,7 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/controller"
 	"couplet/internal/database"
+	"time"
 
 	"testing"
 
@@ -113,6 +114,12 @@ func TestDeleteEvent(t *testing.T) {
 	assert.Equal(t, createdEvent.Name, exampleEventOne.Name)
 	assert.Equal(t, createdEvent.Bio, exampleEventOne.Bio)
 
+	// expect the initial select statement to store the event
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(rec.Value("eventId")).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"}).
+			AddRow(rec.Value("eventId"), rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), "firstName", "lastName", 20))
+
 	// expect the delete statement and delete the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
@@ -121,7 +128,7 @@ func TestDeleteEvent(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	err = c.DeleteEventById(context.Background(), createdEvent.ID.Value)
+	_, err = c.DeleteEventById(context.Background(), createdEvent.ID.Value)
 	assert.Nil(t, err)
 
 	// ensure that all expectations are met in the mock

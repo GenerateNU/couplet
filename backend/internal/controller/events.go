@@ -36,15 +36,20 @@ func (c Controller) CreateEvent(ctx context.Context, apiEvent *api.Event) (*api.
 	return apiEvent, nil
 }
 
-func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) error {
+func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) (*api.Event, error) {
+	eventObj := &api.Event{}
+	if err := c.database.Where("id = ?", eventId.EventID(apiEvent)).First(&eventObj).Error; err != nil {
+		return nil, err
+	}
+
 	res := c.database.Where("id = ?", eventId.EventID(apiEvent)).Delete(&event.Event{})
 	if res.RowsAffected == 0 {
-		return fmt.Errorf("404 - event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(apiEvent).String())
+		return nil, fmt.Errorf("event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(apiEvent).String())
 	}
 
 	if res.Error != nil {
-		return res.Error
+		return nil, res.Error
 	}
 
-	return nil
+	return eventObj, nil
 }
