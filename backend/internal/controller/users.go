@@ -5,6 +5,7 @@ import (
 	"couplet/internal/api"
 	db "couplet/internal/database/user"
 	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -13,11 +14,7 @@ func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParam
 	userId := params.UserId
 	var user db.User
 	result := c.database.First(&user, "id = ?", userId)
-	if result.Error != nil {
-		return db.User{}, result.Error
-	} else {
-		return user, nil
-	}
+	return user, result.Error
 }
 
 // Updates a specific user in the database by their id
@@ -26,33 +23,26 @@ func (c Controller) PartialUpdateUserById(ctx context.Context, params api.Partia
 	userId := params.UserId
 	var user db.User
 	result := c.database.First(&user, "id = ?", userId)
-	if result.Error != nil {
-		return db.User{}, result.Error
-	}
-	createdAt := params.CreatedAt
-	firstName := params.FirstName
-	lastName := params.LastName
-	age := params.Age
 	//Update the fields of the user if applicable
-	if createdAt.IsSet() {
-		user.CreatedAt = createdAt.Value
+	if params.CreatedAt.IsSet() {
+		user.CreatedAt = params.CreatedAt.Value
 	}
-	if firstName.IsSet() {
-		user.FirstName = firstName.Value
+	if params.FirstName.IsSet() {
+		user.FirstName = params.FirstName.Value
 	}
-	if lastName.IsSet() {
-		user.LastName = lastName.Value
+	if params.LastName.IsSet() {
+		user.LastName = params.LastName.Value
 	}
-	if age.IsSet() {
-		user.Age = uint8(age.Value)
+	if params.Age.IsSet() {
+		user.Age = uint8(params.Age.Value)
 	}
-	if createdAt.IsSet() || firstName.IsSet() || lastName.IsSet() || age.IsSet() {
+	if params.CreatedAt.IsSet() || params.FirstName.IsSet() || params.LastName.IsSet() || params.Age.IsSet() {
 		user.UpdatedAt = time.Now()
 	}
-	return user, nil
+	return user, result.Error
 }
 
-// Gets all the users in the database based on the limit and offset 
+// Gets all the users in the database based on the limit and offset
 func (c Controller) GetAllUsers(limit uint8, offset uint32) ([]api.User, error) {
 	var users []api.User
 	err := c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
