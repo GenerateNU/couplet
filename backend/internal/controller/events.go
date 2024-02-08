@@ -37,7 +37,7 @@ func (c Controller) CreateEvent(ctx context.Context, apiEvent *api.Event) (*api.
 }
 
 func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) (*api.Event, error) {
-	eventObj := &api.Event{}
+	eventObj := &event.Event{}
 	if err := c.database.Where("id = ?", eventId.EventID(apiEvent)).First(&eventObj).Error; err != nil {
 		return nil, err
 	}
@@ -51,5 +51,14 @@ func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) (
 		return nil, res.Error
 	}
 
-	return eventObj, nil
+	deletedEvent := &api.Event{
+		ID:             api.NewOptEventId(apiEvent),
+		CreatedAt:      api.NewOptDateTime(eventObj.CreatedAt),
+		UpdatedAt:      api.NewOptDateTime(eventObj.UpdatedAt),
+		Name:           eventObj.Name,
+		Bio:            eventObj.Bio,
+		OrganizationID: eventObj.OrgID.UUID(),
+	}
+
+	return deletedEvent, nil
 }
