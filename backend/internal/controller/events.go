@@ -31,7 +31,7 @@ func (c *Controller) GetAllEvents(ctx context.Context, params api.GetAllEventsPa
 		return nil, result.Error
 	}
 
-	return events, nil // fix this issue
+	return nil, nil // fix this issue, should return events but it's not the right type rn
 }
 
 // PUT (/events/:id) to completely update an existing event, returning the created object if successful
