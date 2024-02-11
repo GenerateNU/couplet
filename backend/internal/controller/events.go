@@ -42,7 +42,7 @@ func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) (
 		return nil, err
 	}
 
-	res := c.database.Where("id = ?", eventId.EventID(apiEvent)).Delete(&event.Event{})
+	res := c.database.Delete(&eventObj)
 	if res.RowsAffected == 0 {
 		return nil, fmt.Errorf("event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(apiEvent).String())
 	}

@@ -35,11 +35,7 @@ func TestCreateEvent(t *testing.T) {
 		Bio:            "Event description",
 		OrganizationID: orgId,
 	}
-	exampleEventTwo := api.Event{
-		Name:           "Big event",
-		Bio:            "Event description",
-		OrganizationID: orgId,
-	}
+	exampleEventTwo := exampleEventOne
 
 	// expect the insert statement and create the event
 	mock.ExpectBegin()
@@ -123,15 +119,33 @@ func TestDeleteEvent(t *testing.T) {
 	// expect the delete statement and delete the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		DELETE FROM "events" WHERE id = $1`)).
+		DELETE FROM "events"`)).
 		WithArgs(rec.Value("eventId")).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	_, err = c.DeleteEventById(context.Background(), createdEvent.ID.Value)
+	deletedEvent, err := c.DeleteEventById(context.Background(), createdEvent.ID.Value)
 	assert.Nil(t, err)
+
+	// ensure the deleted event value returned correctly
+	assert.Equal(t, deletedEvent, createdEvent)
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
+	assert.Nil(t, errExpectations)
+
+	// deleting an event that doesn't exist should return an error
+	badId := uuid.New()
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(badId).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"})) // no rows added
+
+	_, err = c.DeleteEventById(context.Background(), api.EventId(badId))
+	assert.Error(t, err)
+
+	// ensure that all expectations are met in the mock
+	errExpectations = mock.ExpectationsWereMet()
+
 	assert.Nil(t, errExpectations)
 }
