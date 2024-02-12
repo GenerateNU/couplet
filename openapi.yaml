@@ -132,9 +132,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                $ref: "#/components/schemas/User"
+        "404":
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Completely updates an existing user by their user ID
       operationId: putUserById
@@ -148,6 +148,7 @@ paths:
             format: uuid
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       requestBody:
+        description: User to update
         required: true
         content:
           application/json:
@@ -170,6 +171,44 @@ paths:
           $ref: '#/components/responses/BadRequest'
         "404":
           $ref: "#/components/responses/NotFound"
+  /events:
+    post:
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        description: Event to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+      responses:
+        "201":
+          description: Successfully created event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /events/{eventId}:
+    delete:
+      summary: Delete an event by its event ID
+      operationId: deleteEventById
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of event to delete
+          required: true
+          schema:
+            $ref: "#/components/schemas/EventId"
+      responses:
+        "200":
+          description: Successfully deleted specified event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
     delete:
       summary: Delete a user by their user ID
       operationId: deleteUserById
@@ -219,42 +258,51 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
   schemas:
-    Address:
-      type: object
-      required:
-        - line1
-        - zipCode
-        - city
-        - state
-        - country
-      properties:
-        line1:
-          type: string
-          minLength: 1
-          example: 360 Huntington Ave
-        line2:
-          type: string
-          minLength: 1
-          example: Room 270
-        zipCode:
-          type: string
-          minLength: 5
-          maxLength: 5
-          example: 02115
-        city:
-          type: string
-          minLength: 1
-          example: Boston
-        state:
-          type: string
-          minLength: 2
-          maxLength: 2
-          example: MA
-        country:
-          type: string
-          minLength: 2
-          maxLength: 2
-          example: US
+    # Address:
+    #   type: object
+    #   required:
+    #     - id
+    #     - line1
+    #     - zipCode
+    #     - city
+    #     - state
+    #     - country
+    #   properties:
+    #     id:
+    #       $ref: "#/components/schemas/AddressId"
+    #       x-oapi-codegen-extra-tags:
+    #         gorm: primaryKey, default:gen_random_uuid()
+    #     line1:
+    #       type: string
+    #       minLength: 1
+    #       example: 360 Huntington Ave
+    #     line2:
+    #       type: string
+    #       minLength: 1
+    #       example: Room 270
+    #     zipCode:
+    #       type: string
+    #       minLength: 5
+    #       maxLength: 5
+    #       example: 02115
+    #     city:
+    #       type: string
+    #       minLength: 1
+    #       example: Boston
+    #     state:
+    #       type: string
+    #       minLength: 2
+    #       maxLength: 2
+    #       example: MA
+    #     country:
+    #       type: string
+    #       minLength: 2
+    #       maxLength: 2
+    #       example: US
+    # AddressId:
+    #   type: string
+    #   format: uuid
+    #   example: 5e91507e-5630-4efd-9fd4-799178870b10
     Error:
       type: object
       required:
@@ -273,14 +321,14 @@ components:
     Event:
       type: object
       required:
-        - id
-        - createdAt
-        - updatedAt
+        # - id
+        # - createdAt
+        # - updatedAt
         - name
         - bio
         - address
-        - images
-        - tags
+        # - images
+        # - tags
         - OrganizationID
       properties:
         id:
@@ -314,8 +362,20 @@ components:
           minItems: 1
         externalLink:
           type: string
-          format: uri
-          example: https://example.com
+          minLength: 1
+          example: 420 Huntington Ave, Boston, MA 02115
+          # $ref: "#/components/schemas/Address"
+        # images:
+        #   type: array
+        #   items:
+        #     type: string
+        #     format: uri
+        #     example: https://example.com/image.png
+        #   minItems: 1
+        # externalLink:
+        #   type: string
+        #   format: uri
+        #   example: https://example.com
         tags:
           type: array
           items:
@@ -415,8 +475,6 @@ components:
           type: string
           format: uuid
           example: 5e91507e-5630-4efd-9fd4-799178870b10
-          x-oapi-codegen-extra-tags:
-            gorm: primaryKey, default:gen_random_uuid()
         createdAt:
           type: string
           format: date-time
