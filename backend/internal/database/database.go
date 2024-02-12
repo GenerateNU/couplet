@@ -4,9 +4,9 @@ package database
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
-	"couplet/internal/database/user"
 	"fmt"
 	"log/slog"
+	"os/user"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -49,7 +49,8 @@ func EnableConnPooling(db *gorm.DB) error {
 
 // Performs database migrations for defined schema if necessary
 func MigrateDB(db *gorm.DB) error {
-	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{})
+	// Add new models here to ensure they are migrated on startup
+	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{})
 }
 
 // Creates a new mock postgres-GORM database
