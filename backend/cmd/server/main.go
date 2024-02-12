@@ -67,13 +67,13 @@ func main() {
 
 	// Instantiate a controller for business logic
 	var c controller.Controller
-	if c, err = controller.NewController(db); err != nil {
+	if c, err = controller.NewController(db, logger); err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
 	// Instantiate a handler for serving API requests
-	h := handler.NewHandler(c)
+	h := handler.NewHandler(c, logger)
 
 	// Instantiate generated server
 	var s *api.Server

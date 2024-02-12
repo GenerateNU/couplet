@@ -1,6 +1,6 @@
 module couplet
 
-go 1.21.6
+go 1.22.0
 
 require (
 	github.com/go-faster/errors v0.7.1
@@ -27,6 +27,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/sclevine/spec v1.4.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/term v0.16.0 // indirect
@@ -35,6 +36,7 @@ require (
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
+	github.com/arsham/dbtools v0.6.5
 	github.com/dlclark/regexp2 v1.10.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect

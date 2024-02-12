@@ -2,18 +2,10 @@ package controller
 
 import (
 	"context"
-	"couplet/internal/api"
+	"couplet/internal/api"=
 	db "couplet/internal/database/user"
 	"time"
 )
-
-// Searches the database for the specific user id
-func (c Controller) GetUserById(ctx context.Context, params api.GetUserByIdParams) (db.User, error) {
-	userId := params.UserId
-	var user db.User
-	result := c.database.First(&user, "id = ?", userId)
-	return user, result.Error
-}
 
 // Updates a specific user in the database by their id
 func (c Controller) PartialUpdateUserById(ctx context.Context, params api.PartialUpdateUserByIdParams) (db.User, error) {
@@ -50,8 +42,10 @@ func (c Controller) GetAllUsers(limit uint8, offset uint32) ([]db.User, error) {
 	return users, nil
 }
 
-func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*db.User, error) {
-	user := db.User{
+// Creates a new user.
+func (c Controller) CreateUser(firstName string, lastName string, age uint8) (*api.User, error) {
+	user := api.User{
+		ID:        uuid.New(),
 		FirstName: firstName,
 		LastName:  lastName,
 		Age:       age,
@@ -94,4 +88,22 @@ func (c Controller) SaveUserById(ctx context.Context, updatedUser *api.User, use
 	}
 
 	return &user, nil
+
+// Gets a user from the database by their ID
+func (c Controller) GetUser(id uuid.UUID) (u api.User, txErr error) {
+	txErr = c.database.First(&u, id).Error
+	return
+}
+
+// Deletes a user by their user ID.
+// DELETE /users/{userId}
+func (c Controller) DeleteUserById(id uuid.UUID) (u api.User, txErr error) {
+	u, txErr = c.GetUser(id)
+
+	if txErr != nil {
+		return api.User{}, txErr
+	}
+
+	txErr = c.database.Delete(&u).Error
+	return
 }

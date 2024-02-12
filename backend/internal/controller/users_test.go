@@ -14,10 +14,10 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
-
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
+
 
 func TestGetUserById(t *testing.T) {
 
@@ -178,89 +178,130 @@ func TestPutUserById(t *testing.T) {
 	require.Equal(t, createUser.ID, putUser.ID)
 }
 
-func TestGetAllUsers(t *testing.T) {
-	// Database Setup
+func TestCreateUser(t *testing.T) {
+	// set up mock database
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	// logger := slog.New(pterm.NewSlogHandler(pterm.DefaultLogger.WithLevel(pterm.LogLevelDebug)))
+	c, err := controller.NewController(db, nil)
 	require.NotEmpty(t, c)
-	require.NoError(t, err)
+	require.Nil(t, err)
 
-	// Create new User 1
-	uuid1 := uuid.New()
-	db_UUID1 := userId.UserID(uuid1)
-	time1 := time.Now()
-	user1 := user.User{
-		ID:        db_UUID1,
-		CreatedAt: time1,
-		UpdatedAt: time1,
-		FirstName: "User1FirstName",
-		LastName:  "User1LastName",
-		Age:       20,
-	}
+	// set up recorder to keep track of the auto-generated userID
+	rec := dbtesting.NewValueRecorder()
 
+	// set up user data
+	firstName := "John"
+	lastName := "Smith"
+	var age uint8 = 20
+
+	// expect the insert statement and create the user
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, uint8(user1.Age)).
+		WithArgs(rec.Record("id"), sqlmock.AnyArg(), sqlmock.AnyArg(), firstName, lastName, age).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	err = db.Create(&user1).Error
-	require.NoError(t, err, "Failed to create user 1")
+	user, err := c.CreateUser(firstName, lastName, age)
+	require.Nil(t, err)
 
-	// Create new User 2
-	uuid2 := uuid.New()
-	db_UUID2 := userId.UserID(uuid2)
-	time2 := time.Now()
-	user2 := user.User{
-		ID:        db_UUID2,
-		CreatedAt: time2,
-		UpdatedAt: time2,
-		FirstName: "User2FirstName",
-		LastName:  "User2LastName",
-		Age:       40,
-	}
+	// ensure that all fields were set properly on the User object
+	require.Equal(t, user.Age, age)
+	require.Equal(t, user.FirstName, firstName)
+	require.Equal(t, user.LastName, lastName)
 
+	// create a second user with the same data to show that repeated POST calls always creates new users
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-        INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
-        VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(user2.ID, user2.CreatedAt, user2.UpdatedAt, user2.FirstName, user2.LastName, uint8(user2.Age)).
+		INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
+		VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(rec.Record("newUserId"), sqlmock.AnyArg(), sqlmock.AnyArg(), firstName, lastName, age).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	err = db.Create(&user2).Error
-	require.NoError(t, err, "Failed to create user 2")
+	newUser, err := c.CreateUser(firstName, lastName, age)
+	require.Nil(t, err)
 
-	// Test the Get All Users Request
-	var limit uint8 = 50
-	var offset uint32 = 0
+	require.Equal(t, newUser.Age, age)
+	require.Equal(t, newUser.FirstName, firstName)
+	require.Equal(t, newUser.LastName, lastName)
 
-	getUsers, err := c.GetAllUsers(limit, offset)
-	require.NoError(t, err, "Failed to get all users")
+	// IMPORTANT! assert that internally, the second user is not the same as the first user
+	require.NotEqual(t, newUser.ID, user.ID)
 
-	// Check Both Users and their Fields
-	require.Equal(t, 2, len(getUsers))
-
-	require.Equal(t, user1.ID, getUsers[0].ID)
-	require.Equal(t, user1.CreatedAt, getUsers[0].CreatedAt)
-	require.Equal(t, user1.UpdatedAt, getUsers[0].UpdatedAt)
-	require.Equal(t, user1.FirstName, getUsers[0].FirstName)
-	require.Equal(t, user1.LastName, getUsers[0].LastName)
-	require.Equal(t, user1.Age, getUsers[0].Age)
-
-	require.Equal(t, user2.ID, getUsers[1].ID)
-	require.Equal(t, user2.CreatedAt, getUsers[1].CreatedAt)
-	require.Equal(t, user2.UpdatedAt, getUsers[1].UpdatedAt)
-	require.Equal(t, user2.FirstName, getUsers[1].FirstName)
-	require.Equal(t, user2.LastName, getUsers[1].LastName)
-	require.Equal(t, user2.Age, getUsers[1].Age)
+	// ensure that all expectations are met in the mock
+	errExpectations := mock.ExpectationsWereMet()
+	require.Nil(t, errExpectations)
 }
 
-func expectUserQuery(mock sqlmock.Sqlmock, user user.User) {
-	mock.ExpectQuery("^SELECT \\* FROM \"users\" WHERE id = \\$1 ORDER BY \"users\".\"id\" LIMIT 1").
-		WithArgs(user.ID).
+func TestDeleteUser(t *testing.T) {
+	// set up mock database
+	db, mock := database.NewMockDB()
+
+	c, err := controller.NewController(db, nil)
+	require.NotEmpty(t, c)
+	require.Nil(t, err)
+
+	// set up recorder to keep track of the auto-generated userID and created/updated times
+	rec := dbtesting.NewValueRecorder()
+
+	// set up user data
+	firstName := "firstName"
+	lastName := "lastName"
+	var age uint8 = 20
+
+	// expect the insert statement and create the user
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(`
+		INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
+		VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(rec.Record("id"), rec.Record("createdTime"), rec.Record("updatedTime"), "firstName", "lastName", age).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	mock.ExpectCommit()
+
+	_, err = c.CreateUser("firstName", "lastName", age)
+	require.Nil(t, err)
+
+	// retrieve the user's ID
+	userId := rec.Value("id").(string)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" LIMIT 1`)).
+		WithArgs(userId).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
-			AddRow(user.ID, user.CreatedAt, user.UpdatedAt, user.FirstName, user.LastName, user.Age))
+			AddRow(userId, rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), "firstName", "lastName", 20))
+
+	mock.ExpectBegin()
+
+	// expect the delete statement and delete the user
+	mock.ExpectExec(regexp.QuoteMeta(`
+		DELETE FROM "users" WHERE "users"."id" = $1`)).
+		WithArgs(userId).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	uuidUser, err := uuid.Parse(userId)
+	require.Nil(t, err)
+
+	deletedUser, err := c.DeleteUserById(uuidUser)
+	require.Nil(t, err)
+
+	// ensure that the deleted user is returned and matches the info of the user that was created
+	require.Equal(t, deletedUser.Age, age)
+	require.Equal(t, deletedUser.FirstName, firstName)
+	require.Equal(t, deletedUser.LastName, lastName)
+
+	// try deleting a fake user
+	badId := uuid.New()
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" LIMIT 1`)).
+		WithArgs(badId).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"})) // no rows added
+
+	deletedUser, err = c.DeleteUserById(badId)
+	require.Error(t, err)
+
+	// ensure that all expectations are met in the mock
+	errExpectations := mock.ExpectationsWereMet()
+	require.Nil(t, errExpectations)
 }
