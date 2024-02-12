@@ -8,9 +8,9 @@ import (
 	user "couplet/internal/database/user"
 	userId "couplet/internal/database/user/id"
 	"fmt"
+	"regexp"
 	"testing"
 	"time"
-	"regexp"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
@@ -128,18 +128,18 @@ func TestPutUserById(t *testing.T) {
 	putRequestBody.SetAge(25)
 
 	mock.ExpectBegin()
-    mock.ExpectExec(regexp.QuoteMeta(`
+	mock.ExpectExec(regexp.QuoteMeta(`
         INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
         VALUES ($1,$2,$3,$4,$5,$6)`)).
-        WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), putRequestBody.FirstName, putRequestBody.LastName, uint8(putRequestBody.Age)).
-        WillReturnResult(sqlmock.NewResult(1, 1))
-    mock.ExpectCommit()
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), putRequestBody.FirstName, putRequestBody.LastName, uint8(putRequestBody.Age)).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
 
 	dummyID := uuid.New()
 
 	// Insert User into database
-	createUser, err := c.PutUserById(context.Background(), &putRequestBody, dummyID.String())
-    require.NoError(t, err)
+	createUser, err := c.SaveUserById(context.Background(), &putRequestBody, dummyID.String())
+	require.NoError(t, err)
 
 	require.Equal(t, "UserFirstName", createUser.FirstName)
 	require.Equal(t, "UserLastName", createUser.LastName)
@@ -156,9 +156,9 @@ func TestPutUserById(t *testing.T) {
 	// Retrieve the User and Update the User
 	mock.ExpectBegin()
 	mock.ExpectQuery("^SELECT \\* FROM \"users\" WHERE id = \\$1 ORDER BY \"users\".\"id\" LIMIT 1").
-    WithArgs(newUserID).
-    WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
-        AddRow(newUserID, createUser.CreatedAt, createUser.UpdatedAt, createUser.FirstName, createUser.LastName, createUser.Age))
+		WithArgs(newUserID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(newUserID, createUser.CreatedAt, createUser.UpdatedAt, createUser.FirstName, createUser.LastName, createUser.Age))
 	mock.ExpectExec(regexp.QuoteMeta(`
 		UPDATE "users"
 		SET "first_name" = $1, "last_name" = $2, "age" = $3, "updated_at" = $4
@@ -167,14 +167,14 @@ func TestPutUserById(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	mock.ExpectCommit()
 
-	putUser, err := c.PutUserById(context.Background(), &putRequestBody2, newUserID)
+	putUser, err := c.SaveUserById(context.Background(), &putRequestBody2, newUserID)
 	require.NoError(t, err)
 
 	require.Equal(t, "UpdatedFirstName", putUser.FirstName)
 	require.Equal(t, "UpdatedLastName", putUser.LastName)
 	require.Equal(t, uint8(99), putUser.Age)
 	require.Equal(t, createUser.CreatedAt, putUser.CreatedAt)
-    require.True(t, putUser.UpdatedAt.After(createUser.UpdatedAt))
+	require.True(t, putUser.UpdatedAt.After(createUser.UpdatedAt))
 	require.Equal(t, createUser.ID, putUser.ID)
 }
 
@@ -225,11 +225,11 @@ func TestGetAllUsers(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
         INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
-        VALUES ($1,$2,$3,$4,$5,$6)`),).
+        VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(user2.ID, user2.CreatedAt, user2.UpdatedAt, user2.FirstName, user2.LastName, uint8(user2.Age)).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
-	
+
 	err = db.Create(&user2).Error
 	require.NoError(t, err, "Failed to create user 2")
 

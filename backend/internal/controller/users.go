@@ -5,8 +5,6 @@ import (
 	"couplet/internal/api"
 	db "couplet/internal/database/user"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // Searches the database for the specific user id
@@ -43,8 +41,8 @@ func (c Controller) PartialUpdateUserById(ctx context.Context, params api.Partia
 }
 
 // Gets all the users in the database based on the limit and offset
-func (c Controller) GetAllUsers(limit uint8, offset uint32) ([]api.User, error) {
-	var users []api.User
+func (c Controller) GetAllUsers(limit uint8, offset uint32) ([]db.User, error) {
+	var users []db.User
 	err := c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
 	if err != nil {
 		return nil, err
@@ -52,9 +50,8 @@ func (c Controller) GetAllUsers(limit uint8, offset uint32) ([]api.User, error) 
 	return users, nil
 }
 
-func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*api.User, error) {
-	user := api.User{
-		ID:        uuid.New(),
+func (c Controller) CreateUser(ctx context.Context, firstName string, lastName string, age uint8) (*db.User, error) {
+	user := db.User{
 		FirstName: firstName,
 		LastName:  lastName,
 		Age:       age,
@@ -69,8 +66,8 @@ func (c Controller) CreateUser(ctx context.Context, firstName string, lastName s
 	return &user, nil
 }
 
-func (c Controller) PutUserById(ctx context.Context, updatedUser *api.User, userId string) (*api.User, error) {
-	var user api.User
+func (c Controller) SaveUserById(ctx context.Context, updatedUser *api.User, userId string) (*db.User, error) {
+	var user db.User
 	err := c.database.First(&user, "id = ?", userId).Error
 	if err != nil {
 		return nil, err
@@ -88,7 +85,7 @@ func (c Controller) PutUserById(ctx context.Context, updatedUser *api.User, user
 		userUpdates["LastName"] = updatedUser.LastName
 	}
 
-	if updatedUser.Age >= 0 {
+	if updatedUser.Age > 0 {
 		userUpdates["Age"] = updatedUser.Age
 	}
 
