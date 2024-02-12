@@ -35,9 +35,22 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
     get:
-      # TODO: Paginate this
       summary: Get all users
       operationId: getAllUsers
+      parameters: 
+        - name: offset
+          in: query 
+          schema:
+            type: integer
+            format: uint32
+            default: 0
+        - name: limit 
+          in: query
+          schema:
+            type: integer  
+            format: uint8
+            minimum: 1
+            default: 50
       responses:
         "200":
           description: Successfully retrieved all users
@@ -46,8 +59,61 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid 
+                    - $ref: '#/components/schemas/User'
   /users/{userId}:
+    patch:
+      summary: Partially update one or many fields of an existing user, returning the created object if successful
+      operationId: partialUpdateUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to partially update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+        - name: createdAt
+          in: query
+          description: The time at which the user was created
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: '2012-10-31 15:50:13.793654'
+        - name: firstName
+          in : query
+          description: The first name of the user
+          required: false
+          schema:
+            type: string
+        - name: lastName
+          in : query
+          description: The last name of the user
+          required: false
+          schema:
+            type: string
+        - name: age
+          in : query
+          description: The age of the user
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully updated specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
     get:
       summary: Get a user by their user ID
       operationId: getUserById
@@ -57,14 +123,51 @@ paths:
           description: ID of user to retrieve
           required: true
           schema:
-            $ref: "#/components/schemas/UserId"
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
           description: Successfully retrieved specified user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Completely updates an existing user by their user ID
+      operationId: putUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully updated specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '201':
+          description: Successfully created specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         "404":
           $ref: "#/components/responses/NotFound"
     delete:
@@ -264,8 +367,6 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/OrganizationId"
-          x-oapi-codegen-extra-tags:
-            gorm: primaryKey, default:gen_random_uuid()
         createdAt:
           type: string
           format: date-time
