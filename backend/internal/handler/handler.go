@@ -5,7 +5,6 @@ import (
 	"context"
 	"couplet/internal/api"
 	"couplet/internal/controller"
-
 	"log/slog"
 )
 
