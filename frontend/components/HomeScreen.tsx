@@ -11,7 +11,7 @@ export default function HomeScreen() {
         borderRadius: 12,
         alignSelf: "center",
         marginBottom: 10,
-        minHeight: "100%",
+        height: "90%",
         paddingBottom: "30%",
       }}
     >
