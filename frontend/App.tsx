@@ -5,7 +5,7 @@ import { View, Platform, StatusBar } from "react-native";
 
 export default function App() {
   return (
-    <View className="h-100%">
+    <View>
       {Platform.OS === "ios" && <StatusBar barStyle="default" />}
       <PaperProvider>
         <HomeScreen />
