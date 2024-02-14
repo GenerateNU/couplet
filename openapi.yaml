@@ -73,6 +73,26 @@ paths:
                       - bio
         "404":
           $ref: "#/components/responses/NotFound"
+  /events/swipes:
+    post:
+      summary: Create a swipe between a user and an event
+      operationId: createEventSwipe
+      requestBody:
+        description: EventSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventSwipe"
+      responses:
+        "201":
+          description: Successfully created event swipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSwipe"
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /health-check:
     get:
       summary: Check if the server is running and servicing requests
@@ -567,6 +587,27 @@ paths:
                       - age
         "400":
           $ref: "#/components/responses/BadRequest"
+  /users/swipes:
+    post:
+      summary: Create a swipe between users
+      operationId: createUserSwipe
+      requestBody:
+        description: UserSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSwipe"
+      responses:
+        "201":
+          description: Successfully created user swipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSwipe"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
 
 components:
   responses:
@@ -780,4 +821,38 @@ components:
           format: uint8
           minimum: 18
           example: 22
+    EventSwipe:
+      type: object
+      required:
+        - userId
+        - eventId
+        - liked
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        eventId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
+    UserSwipe:
+      type: object
+      required:
+        - userId
+        - otherUserId
+        - liked
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        otherUserId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
 ...
