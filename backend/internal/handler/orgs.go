@@ -9,7 +9,7 @@ import (
 	"fmt"
 )
 
-// Create a new organization.
+// Creates a new organization.
 // POST /orgs
 func (h Handler) CreateOrg(ctx context.Context, req *api.CreateOrgReq) (api.CreateOrgRes, error) {
 	// TODO: Write tests
@@ -50,9 +50,9 @@ func (h Handler) CreateOrg(ctx context.Context, req *api.CreateOrgReq) (api.Crea
 	return &res, nil
 }
 
-// Delete an organization by its ID.
-// DELETE /orgs/{orgId}
-func (h Handler) DeleteOrgById(ctx context.Context, params api.DeleteOrgByIdParams) (api.DeleteOrgByIdRes, error) {
+// Deletes an organization by its ID.
+// DELETE /orgs/{id}
+func (h Handler) DeleteOrg(ctx context.Context, params api.DeleteOrgParams) (api.DeleteOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("DELETE /orgs/%s", params.ID))
 	o, err := h.controller.DeleteOrg(org_id.Wrap(params.ID))
@@ -63,7 +63,7 @@ func (h Handler) DeleteOrgById(ctx context.Context, params api.DeleteOrgByIdPara
 		}, nil
 	}
 
-	res := api.DeleteOrgByIdOK{
+	res := api.DeleteOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -75,9 +75,9 @@ func (h Handler) DeleteOrgById(ctx context.Context, params api.DeleteOrgByIdPara
 	return &res, nil
 }
 
-// Get an organization by its ID.
-// GET /orgs/{orgId}
-func (h Handler) GetOrgById(ctx context.Context, params api.GetOrgByIdParams) (api.GetOrgByIdRes, error) {
+// Gets an organization by its ID.
+// GET /orgs/{id}
+func (h Handler) GetOrg(ctx context.Context, params api.GetOrgParams) (api.GetOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("GET /orgs/%s", params.ID))
 	o, err := h.controller.GetOrg(org_id.Wrap(params.ID))
@@ -88,7 +88,7 @@ func (h Handler) GetOrgById(ctx context.Context, params api.GetOrgByIdParams) (a
 		}, nil
 	}
 
-	res := api.GetOrgByIdOK{
+	res := api.GetOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -100,7 +100,7 @@ func (h Handler) GetOrgById(ctx context.Context, params api.GetOrgByIdParams) (a
 	return &res, nil
 }
 
-// Get multiple organizations.
+// Gets multiple organizations.
 // GET /orgs
 func (h Handler) GetOrgs(ctx context.Context, params api.GetOrgsParams) ([]api.GetOrgsOKItem, error) {
 	// TODO: Write tests
@@ -124,23 +124,23 @@ func (h Handler) GetOrgs(ctx context.Context, params api.GetOrgsParams) ([]api.G
 	return res, err
 }
 
-// Partially update an organization by its ID.
-// PATCH /orgs/{orgId}
-func (h Handler) PartialUpdateOrgById(ctx context.Context, req *api.Org, params api.PartialUpdateOrgByIdParams) (api.PartialUpdateOrgByIdRes, error) {
+// Partially updates an organization by its ID.
+// PATCH /orgs/{id}
+func (h Handler) PatchOrg(ctx context.Context, req *api.Org, params api.PatchOrgParams) (api.PatchOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("PATCH /orgs/%s", params.ID))
 
-	_, getErr := h.controller.GetOrg(org_id.OrgID(params.ID))
+	_, getErr := h.controller.GetOrg(org_id.Wrap(params.ID))
 	doesNotExist := getErr != nil
 	if doesNotExist {
-		return &api.PartialUpdateOrgByIdNotFound{
+		return &api.PatchOrgNotFound{
 			Code:    404,
 			Message: getErr.Error(),
 		}, nil
 	}
 
 	var reqOrg org.Org
-	reqOrg.ID = org_id.OrgID(params.ID)
+	reqOrg.ID = org_id.Wrap(params.ID)
 	if req.Name.Set {
 		reqOrg.Name = req.Name.Value
 	}
@@ -159,7 +159,7 @@ func (h Handler) PartialUpdateOrgById(ctx context.Context, req *api.Org, params 
 
 	o, valErr, txErr := h.controller.UpdateOrg(reqOrg)
 	if valErr != nil {
-		return &api.PartialUpdateOrgByIdBadRequest{
+		return &api.PatchOrgBadRequest{
 			Code:    400,
 			Message: valErr.Error(),
 		}, nil
@@ -167,7 +167,7 @@ func (h Handler) PartialUpdateOrgById(ctx context.Context, req *api.Org, params 
 	if txErr != nil {
 		return nil, errors.New("failed to update organization")
 	}
-	res := api.PartialUpdateOrgByIdOK{
+	res := api.PatchOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -179,9 +179,9 @@ func (h Handler) PartialUpdateOrgById(ctx context.Context, req *api.Org, params 
 	return &res, nil
 }
 
-// Update an organization by its ID.
-// PUT /orgs/{orgId}
-func (h Handler) SaveOrgById(ctx context.Context, req *api.SaveOrgByIdReq, params api.SaveOrgByIdParams) (api.SaveOrgByIdRes, error) {
+// Updates an organization by its ID.
+// PUT /orgs/{id}
+func (h Handler) PutOrg(ctx context.Context, req *api.PutOrgReq, params api.PutOrgParams) (api.PutOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("PUT /orgs/%s", params.ID))
 
@@ -211,7 +211,7 @@ func (h Handler) SaveOrgById(ctx context.Context, req *api.SaveOrgByIdReq, param
 		if txErr != nil {
 			return nil, errors.New("failed to update organization")
 		}
-		res := api.SaveOrgByIdOK{
+		res := api.PutOrgOK{
 			ID:   o.ID.Unwrap(),
 			Name: o.Name,
 			Bio:  o.Bio,
@@ -234,7 +234,7 @@ func (h Handler) SaveOrgById(ctx context.Context, req *api.SaveOrgByIdReq, param
 		return nil, errors.New("failed to create organization")
 	}
 
-	res := api.SaveOrgByIdCreated{
+	res := api.PutOrgCreated{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,

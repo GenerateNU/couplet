@@ -1,24 +1,17 @@
 package controller
 
 import (
-	"context"
-	"couplet/internal/api"
 	"couplet/internal/database/event"
-	eventId "couplet/internal/database/event/id"
-	orgId "couplet/internal/database/org/id"
+	"couplet/internal/database/event_id"
 	"fmt"
-	"time"
-
-	"github.com/google/uuid"
 )
 
-func (c Controller) CreateEvent(ctx context.Context, apiEvent *api.Event) (*api.Event, error) {
+// Creates a new event in the database
+func (c Controller) CreateEvent(params event.Event) (e *event.Event, err error) {
 	newEvent := event.Event{
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Name:      apiEvent.GetName(),
-		Bio:       apiEvent.GetBio(),
-		OrgID:     orgId.OrgID(apiEvent.GetOrganizationID()),
+		Name:  params.Name,
+		Bio:   params.Bio,
+		OrgID: params.OrgID,
 	}
 
 	res := c.database.Create(&newEvent)
@@ -29,36 +22,25 @@ func (c Controller) CreateEvent(ctx context.Context, apiEvent *api.Event) (*api.
 		return nil, res.Error
 	}
 
-	apiEvent.SetID(api.NewOptEventId(api.EventId(newEvent.ID)))
-	apiEvent.SetCreatedAt(api.NewOptDateTime(newEvent.CreatedAt))
-	apiEvent.SetUpdatedAt(api.NewOptDateTime(newEvent.UpdatedAt))
-
-	return apiEvent, nil
+	return &newEvent, nil
 }
 
-func (c Controller) DeleteEventById(ctx context.Context, apiEvent api.EventId) (*api.Event, error) {
-	eventObj := &event.Event{}
-	if err := c.database.Where("id = ?", eventId.EventID(apiEvent)).First(&eventObj).Error; err != nil {
-		return nil, err
+// Deletes an event from the database by its ID
+func (c Controller) DeleteEvent(id event_id.EventID) (event.Event, error) {
+	// TODO: Do this in one transaction
+	event := event.Event{}
+	if err := c.database.Where("id = ?", id).First(&event).Error; err != nil {
+		return event, err
 	}
 
-	res := c.database.Delete(&eventObj)
+	res := c.database.Delete(&event)
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("event with id=%v cannot be deleted because it doesn't exist", uuid.UUID(apiEvent).String())
+		return event, fmt.Errorf("event with id=%s cannot be deleted because it doesn't exist", id)
 	}
 
 	if res.Error != nil {
-		return nil, res.Error
+		return event, res.Error
 	}
 
-	deletedEvent := &api.Event{
-		ID:             api.NewOptEventId(apiEvent),
-		CreatedAt:      api.NewOptDateTime(eventObj.CreatedAt),
-		UpdatedAt:      api.NewOptDateTime(eventObj.UpdatedAt),
-		Name:           eventObj.Name,
-		Bio:            eventObj.Bio,
-		OrganizationID: eventObj.OrgID.UUID(),
-	}
-
-	return deletedEvent, nil
+	return event, nil
 }
