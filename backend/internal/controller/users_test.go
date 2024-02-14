@@ -1,31 +1,36 @@
 package controller_test
 
 import (
-	"context"
-	"couplet/internal/api"
 	"couplet/internal/controller"
-	database "couplet/internal/database"
-	user "couplet/internal/database/user"
-	userId "couplet/internal/database/user/id"
+	"couplet/internal/database"
+	"couplet/internal/database/user"
+	"couplet/internal/database/user_id"
 	"fmt"
 	"regexp"
 	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/stretchr/testify/assert"
+	"github.com/arsham/dbtools/dbtesting"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
+func expectUserQuery(mock sqlmock.Sqlmock, user user.User) {
+	mock.ExpectQuery("^SELECT \\* FROM \"users\" WHERE id = \\$1 ORDER BY \"users\".\"id\" LIMIT 1").
+		WithArgs(user.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(user.ID, user.CreatedAt, user.UpdatedAt, user.FirstName, user.LastName, user.Age))
+}
 
-func TestGetUserById(t *testing.T) {
+func TestGetUser(t *testing.T) {
 
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	c, err := controller.NewController(db, nil)
 
 	uuid1 := uuid.New()
-	db_UUID := userId.UserID(uuid1)
+	db_UUID := user_id.UserID(uuid1)
 	time1 := time.Now()
 
 	user1 := user.User{
@@ -40,9 +45,9 @@ func TestGetUserById(t *testing.T) {
 	tx := db.Create(&user1)
 	//Gets the Stone user from the database
 	expectUserQuery(mock, user1)
-	databaseUser, e := c.GetUserById(context.Background(), api.GetUserByIdParams{UserId: uuid1})
+	databaseUser, e := c.GetUser(user_id.Wrap(uuid1))
 	expectUserQuery(mock, user1)
-	databaseUserAgain, _ := c.GetUserById(context.Background(), api.GetUserByIdParams{UserId: uuid1})
+	databaseUserAgain, _ := c.GetUser(user_id.Wrap(uuid1))
 
 	if tx.Error != nil && err != nil && e != nil {
 		fmt.Println("Error Hit")
@@ -63,12 +68,12 @@ func TestGetUserById(t *testing.T) {
 	}
 }
 
-func TestPartialUpdateUserById(t *testing.T) {
+func TestPartialUpdateUser(t *testing.T) {
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	c, err := controller.NewController(db, nil)
 
 	uuid1 := uuid.New()
-	db_UUID := userId.UserID(uuid1)
+	db_UUID := user_id.UserID(uuid1)
 	time1 := time.Now()
 
 	user1 := user.User{
@@ -82,19 +87,16 @@ func TestPartialUpdateUserById(t *testing.T) {
 	//Insert the user into the database
 	tx := db.Create(&user1)
 	//Gets the Stone user from the database
-	requestUUID := api.PartialUpdateUserByIdParams{
-		UserId: uuid1,
-	}
-	requestName := api.PartialUpdateUserByIdParams{
-		UserId:    uuid1,
-		FirstName: api.NewOptString("Rock"),
-		LastName:  api.NewOptString("Johnson"),
-		Age:       api.NewOptInt(99),
+	requestUser := user.User{
+		ID:        user_id.Wrap(uuid1),
+		FirstName: "Rock",
+		LastName:  "Johnson",
+		Age:       uint8(99),
 	}
 	expectUserQuery(mock, user1)
-	databaseUser, _ := c.PartialUpdateUserById(context.Background(), requestUUID)
+	databaseUser, _, _ := c.UpdateUser(requestUser)
 	expectUserQuery(mock, user1)
-	databaseUser1, _ := c.PartialUpdateUserById(context.Background(), requestName)
+	databaseUser1, _, _ := c.UpdateUser(requestUser)
 
 	if tx.Error != nil && err != nil {
 		fmt.Println("Error Has Occured")
@@ -115,17 +117,18 @@ func TestPartialUpdateUserById(t *testing.T) {
 	}
 }
 
-func TestPutUserById(t *testing.T) {
+func TestPutUser(t *testing.T) {
 	// Database Setup
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	c, err := controller.NewController(db, nil)
 	require.NoError(t, err)
 
 	// Create New User Using PUT
-	putRequestBody := api.User{}
-	putRequestBody.SetFirstName("UserFirstName")
-	putRequestBody.SetLastName("UserLastName")
-	putRequestBody.SetAge(25)
+	putRequestBody := user.User{
+		FirstName: "UserFirstName",
+		LastName:  "UserLastName",
+		Age:       25,
+	}
 
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
@@ -135,10 +138,10 @@ func TestPutUserById(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	dummyID := uuid.New()
+	dummyID := user_id.Wrap(uuid.New())
 
 	// Insert User into database
-	createUser, err := c.SaveUserById(context.Background(), &putRequestBody, dummyID.String())
+	createUser, err := c.SaveUser(putRequestBody, dummyID)
 	require.NoError(t, err)
 
 	require.Equal(t, "UserFirstName", createUser.FirstName)
@@ -146,12 +149,13 @@ func TestPutUserById(t *testing.T) {
 	require.Equal(t, uint8(25), createUser.Age)
 
 	// Get User ID to Update User
-	newUserID := uuid.UUID(createUser.ID).String()
+	newUserID := createUser.ID
 
-	putRequestBody2 := api.User{}
-	putRequestBody2.SetFirstName("UpdatedFirstName")
-	putRequestBody2.SetLastName("UpdatedLastName")
-	putRequestBody2.SetAge(99)
+	putRequestBody2 := user.User{
+		FirstName: "UpdatedFirstName",
+		LastName:  "UpdatedLastName",
+		Age:       99,
+	}
 
 	// Retrieve the User and Update the User
 	mock.ExpectBegin()
@@ -167,7 +171,7 @@ func TestPutUserById(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	mock.ExpectCommit()
 
-	putUser, err := c.SaveUserById(context.Background(), &putRequestBody2, newUserID)
+	putUser, err := c.SaveUser(putRequestBody2, newUserID)
 	require.NoError(t, err)
 
 	require.Equal(t, "UpdatedFirstName", putUser.FirstName)
@@ -284,7 +288,7 @@ func TestDeleteUser(t *testing.T) {
 	uuidUser, err := uuid.Parse(userId)
 	require.Nil(t, err)
 
-	deletedUser, err := c.DeleteUserById(uuidUser)
+	deletedUser, err := c.DeleteUser(user_id.Wrap(uuidUser))
 	require.Nil(t, err)
 
 	// ensure that the deleted user is returned and matches the info of the user that was created
@@ -298,7 +302,7 @@ func TestDeleteUser(t *testing.T) {
 		WithArgs(badId).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"})) // no rows added
 
-	deletedUser, err = c.DeleteUserById(badId)
+	deletedUser, err = c.DeleteUser(user_id.Wrap(badId))
 	require.Error(t, err)
 
 	// ensure that all expectations are met in the mock

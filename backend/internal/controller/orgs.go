@@ -19,6 +19,7 @@ func (c Controller) CreateOrg(params org.Org) (o org.Org, valErr error, txErr er
 // Deletes an organization from the database by its ID
 func (c Controller) DeleteOrg(id org_id.OrgID) (o org.Org, txErr error) {
 	// TODO: Write tests
+	// TODO: Do this in one transaction
 	o, txErr = c.GetOrg(id)
 	if txErr != nil {
 		return

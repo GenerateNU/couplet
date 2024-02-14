@@ -1,14 +1,14 @@
 package controller_test
 
 import (
-	"couplet/internal/api"
 	"couplet/internal/controller"
 	"couplet/internal/database"
+	"couplet/internal/database/event"
+	"couplet/internal/database/event_id"
+	"couplet/internal/database/org_id"
 	"time"
 
 	"testing"
-
-	"context"
 
 	"regexp"
 
@@ -21,7 +21,7 @@ import (
 func TestCreateEvent(t *testing.T) {
 	// set up mock database
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	c, err := controller.NewController(db, nil)
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 
@@ -29,11 +29,11 @@ func TestCreateEvent(t *testing.T) {
 	rec := dbtesting.NewValueRecorder()
 
 	// set up example event data
-	orgId := uuid.New()
-	exampleEventOne := api.Event{
-		Name:           "Big event",
-		Bio:            "Event description",
-		OrganizationID: orgId,
+	orgId := org_id.Wrap(uuid.New())
+	exampleEventOne := event.Event{
+		Name:  "Big event",
+		Bio:   "Event description",
+		OrgID: orgId,
 	}
 	exampleEventTwo := exampleEventOne
 
@@ -42,11 +42,11 @@ func TestCreateEvent(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
+		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedEventOne, err := c.CreateEvent(context.Background(), &exampleEventOne)
+	insertedEventOne, err := c.CreateEvent(exampleEventOne)
 	assert.Nil(t, err)
 
 	// ensure that all fields were set properly on the Event object
@@ -58,11 +58,11 @@ func TestCreateEvent(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(`
 	INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrganizationID).
+		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedEventTwo, err := c.CreateEvent(context.Background(), &exampleEventTwo)
+	insertedEventTwo, err := c.CreateEvent(exampleEventTwo)
 	assert.Nil(t, err)
 
 	assert.Equal(t, insertedEventTwo.Name, exampleEventTwo.Name)
@@ -79,7 +79,7 @@ func TestCreateEvent(t *testing.T) {
 func TestDeleteEvent(t *testing.T) {
 	// set up mock database
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db)
+	c, err := controller.NewController(db, nil)
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 
@@ -87,10 +87,10 @@ func TestDeleteEvent(t *testing.T) {
 	rec := dbtesting.NewValueRecorder()
 
 	// set up event data
-	exampleEventOne := api.Event{
-		Name:           "Big event",
-		Bio:            "Event description",
-		OrganizationID: uuid.New(),
+	exampleEventOne := event.Event{
+		Name:  "Big event",
+		Bio:   "Event description",
+		OrgID: org_id.Wrap(uuid.New()),
 	}
 
 	// expect the insert statement and create the event
@@ -98,12 +98,12 @@ func TestDeleteEvent(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("eventId"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID).
+		WithArgs(rec.Record("eventId"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectCommit()
 
-	createdEvent, err := c.CreateEvent(context.Background(), &exampleEventOne)
+	createdEvent, err := c.CreateEvent(exampleEventOne)
 	assert.Nil(t, err)
 
 	// ensure that all fields were set properly on the Event object
@@ -114,7 +114,7 @@ func TestDeleteEvent(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
 		WithArgs(rec.Value("eventId")).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"}).
-			AddRow(rec.Value("eventId"), rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrganizationID))
+			AddRow(rec.Value("eventId"), rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID))
 
 	// expect the delete statement and delete the event
 	mock.ExpectBegin()
@@ -124,7 +124,7 @@ func TestDeleteEvent(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	deletedEvent, err := c.DeleteEventById(context.Background(), createdEvent.ID.Value)
+	deletedEvent, err := c.DeleteEvent(createdEvent.ID)
 	assert.Nil(t, err)
 
 	// ensure the deleted event value returned correctly
@@ -141,7 +141,7 @@ func TestDeleteEvent(t *testing.T) {
 		WithArgs(badId).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"})) // no rows added
 
-	_, err = c.DeleteEventById(context.Background(), api.EventId(badId))
+	_, err = c.DeleteEvent(event_id.Wrap(badId))
 	assert.Error(t, err)
 
 	// ensure that all expectations are met in the mock
