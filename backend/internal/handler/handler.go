@@ -14,6 +14,16 @@ type Handler struct {
 	logger     *slog.Logger          // event logger
 }
 
+// CreateEventSwipe implements api.Handler.
+func (Handler) CreateEventSwipe(ctx context.Context, req *api.EventSwipe) (api.CreateEventSwipeRes, error) {
+	panic("unimplemented")
+}
+
+// CreateUserSwipe implements api.Handler.
+func (Handler) CreateUserSwipe(ctx context.Context, req *api.UserSwipe) (api.CreateUserSwipeRes, error) {
+	panic("unimplemented")
+}
+
 // Creates a new handler for all defined API endpoints
 func NewHandler(controller controller.Controller, logger *slog.Logger) api.Handler {
 	return Handler{
