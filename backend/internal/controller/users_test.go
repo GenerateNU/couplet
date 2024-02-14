@@ -17,18 +17,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func expectUserQuery(mock sqlmock.Sqlmock, user user.User) {
-	mock.ExpectQuery("^SELECT \\* FROM \"users\" WHERE id = \\$1 ORDER BY \"users\".\"id\" LIMIT 1").
-		WithArgs(user.ID).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
-			AddRow(user.ID, user.CreatedAt, user.UpdatedAt, user.FirstName, user.LastName, user.Age))
-}
-
 func TestGetUser(t *testing.T) {
-
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db, nil)
-
+	c, _ := controller.NewController(db, nil)
 	uuid1 := uuid.New()
 	db_UUID := user_id.UserID(uuid1)
 	time1 := time.Now()
@@ -41,35 +32,46 @@ func TestGetUser(t *testing.T) {
 		LastName:  "Liu",
 		Age:       20,
 	}
+	mock.ExpectBegin()
+	mock.ExpectExec(`^INSERT INTO "users"`).
+		WithArgs(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	mock.ExpectQuery(`^SELECT \* FROM "users" WHERE "users"."id" = \$1 ORDER BY "users"."id" LIMIT 1`).
+		WithArgs(db_UUID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age))
+	mock.ExpectQuery(`^SELECT \* FROM "users" WHERE "users"."id" = \$1 ORDER BY "users"."id" LIMIT 1`).
+		WithArgs(db_UUID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age))
+	mock.ExpectRollback()
 	//Insert the user into the database
 	tx := db.Create(&user1)
-	//Gets the Stone user from the database
-	expectUserQuery(mock, user1)
-	databaseUser, e := c.GetUser(user_id.Wrap(uuid1))
-	expectUserQuery(mock, user1)
-	databaseUserAgain, _ := c.GetUser(user_id.Wrap(uuid1))
 
-	if tx.Error != nil && err != nil && e != nil {
+	db_user, db_error := c.GetUser(db_UUID)
+	db_user1, _ := c.GetUser(db_UUID)
+
+	if tx.Error != nil && db_error != nil {
 		fmt.Println("Error Hit")
+		fmt.Println(tx, mock, c)
 	} else {
-		assert.Equal(t, "Stone", databaseUser.FirstName)
-		assert.Equal(t, "Liu", databaseUser.LastName)
-		assert.Equal(t, time1, databaseUser.CreatedAt)
-		assert.Equal(t, time1, databaseUser.UpdatedAt)
-		assert.Equal(t, db_UUID, databaseUser.ID)
+		assert.Equal(t, "Stone", db_user.FirstName)
+		assert.Equal(t, "Liu", db_user.LastName)
+		assert.Equal(t, time1, db_user.CreatedAt)
+		assert.Equal(t, time1, db_user.UpdatedAt)
+		assert.Equal(t, db_UUID, db_user.ID)
 
-		//Ensure that multiple calls to the get method returns the same result
-		assert.Equal(t, "Stone", databaseUserAgain.FirstName)
-		assert.Equal(t, "Liu", databaseUserAgain.LastName)
-		assert.Equal(t, time1, databaseUserAgain.CreatedAt)
-		assert.Equal(t, time1, databaseUserAgain.UpdatedAt)
-		assert.Equal(t, db_UUID, databaseUserAgain.ID)
-
+		assert.Equal(t, "Stone", db_user1.FirstName)
+		assert.Equal(t, "Liu", db_user1.LastName)
+		assert.Equal(t, time1, db_user1.CreatedAt)
+		assert.Equal(t, time1, db_user1.UpdatedAt)
+		assert.Equal(t, db_UUID, db_user1.ID)
 	}
 }
 
 func TestPartialUpdateUser(t *testing.T) {
-	db, mock := database.NewMockDB()
+	db, _ := database.NewMockDB()
 	c, err := controller.NewController(db, nil)
 
 	uuid1 := uuid.New()
@@ -86,16 +88,15 @@ func TestPartialUpdateUser(t *testing.T) {
 	}
 	//Insert the user into the database
 	tx := db.Create(&user1)
+
 	//Gets the Stone user from the database
 	requestUser := user.User{
-		ID:        user_id.Wrap(uuid1),
+		ID:        db_UUID,
 		FirstName: "Rock",
 		LastName:  "Johnson",
 		Age:       uint8(99),
 	}
-	expectUserQuery(mock, user1)
-	databaseUser, _, _ := c.UpdateUser(requestUser)
-	expectUserQuery(mock, user1)
+	databaseUser, _, _ := c.UpdateUser(user1)
 	databaseUser1, _, _ := c.UpdateUser(requestUser)
 
 	if tx.Error != nil && err != nil {
