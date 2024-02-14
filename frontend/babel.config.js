@@ -1,12 +1,11 @@
-module.exports = function (api) {
-	api.cache(true);
-	return {
-		presets: ['babel-preset-expo'],
-		plugins: ['nativewind/babel', 'expo-router/babel'],
-		env: {
-			production: {
-				plugins: ['react-native-paper/babel'],
-			},
-		},
-	};
+module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel'],
+      },
+    },
+  };
 };

@@ -3,17 +3,185 @@ package controller_test
 import (
 	"couplet/internal/controller"
 	"couplet/internal/database"
-	"time"
-
-	"testing"
-
+	"couplet/internal/database/user"
+	"couplet/internal/database/user_id"
+	"fmt"
 	"regexp"
+	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/arsham/dbtools/dbtesting"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func TestGetUser(t *testing.T) {
+	db, mock := database.NewMockDB()
+	c, _ := controller.NewController(db, nil)
+	uuid1 := uuid.New()
+	db_UUID := user_id.UserID(uuid1)
+	time1 := time.Now()
+
+	user1 := user.User{
+		ID:        db_UUID,
+		CreatedAt: time1,
+		UpdatedAt: time1,
+		FirstName: "Stone",
+		LastName:  "Liu",
+		Age:       20,
+	}
+	mock.ExpectBegin()
+	mock.ExpectExec(`^INSERT INTO "users"`).
+		WithArgs(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	mock.ExpectQuery(`^SELECT \* FROM "users" WHERE "users"."id" = \$1 ORDER BY "users"."id" LIMIT 1`).
+		WithArgs(db_UUID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age))
+	mock.ExpectQuery(`^SELECT \* FROM "users" WHERE "users"."id" = \$1 ORDER BY "users"."id" LIMIT 1`).
+		WithArgs(db_UUID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(user1.ID, user1.CreatedAt, user1.UpdatedAt, user1.FirstName, user1.LastName, user1.Age))
+	mock.ExpectRollback()
+	//Insert the user into the database
+	tx := db.Create(&user1)
+
+	db_user, db_error := c.GetUser(db_UUID)
+	db_user1, _ := c.GetUser(db_UUID)
+
+	if tx.Error != nil && db_error != nil {
+		fmt.Println("Error Hit")
+		fmt.Println(tx, mock, c)
+	} else {
+		assert.Equal(t, "Stone", db_user.FirstName)
+		assert.Equal(t, "Liu", db_user.LastName)
+		assert.Equal(t, time1, db_user.CreatedAt)
+		assert.Equal(t, time1, db_user.UpdatedAt)
+		assert.Equal(t, db_UUID, db_user.ID)
+
+		assert.Equal(t, "Stone", db_user1.FirstName)
+		assert.Equal(t, "Liu", db_user1.LastName)
+		assert.Equal(t, time1, db_user1.CreatedAt)
+		assert.Equal(t, time1, db_user1.UpdatedAt)
+		assert.Equal(t, db_UUID, db_user1.ID)
+	}
+}
+
+func TestPartialUpdateUser(t *testing.T) {
+	db, _ := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+
+	uuid1 := uuid.New()
+	db_UUID := user_id.UserID(uuid1)
+	time1 := time.Now()
+
+	user1 := user.User{
+		ID:        db_UUID,
+		CreatedAt: time1,
+		UpdatedAt: time1,
+		FirstName: "Stone",
+		LastName:  "Liu",
+		Age:       20,
+	}
+	//Insert the user into the database
+	tx := db.Create(&user1)
+
+	//Gets the Stone user from the database
+	requestUser := user.User{
+		ID:        db_UUID,
+		FirstName: "Rock",
+		LastName:  "Johnson",
+		Age:       uint8(99),
+	}
+	databaseUser, _, _ := c.UpdateUser(user1)
+	databaseUser1, _, _ := c.UpdateUser(requestUser)
+
+	if tx.Error != nil && err != nil {
+		fmt.Println("Error Has Occured")
+	} else {
+		//Nothing should have changed
+		assert.Equal(t, "Stone", databaseUser.FirstName)
+		assert.Equal(t, "Liu", databaseUser.LastName)
+		assert.Equal(t, time1, databaseUser.CreatedAt)
+		assert.Equal(t, time1, databaseUser.UpdatedAt)
+		assert.Equal(t, db_UUID, databaseUser.ID)
+		assert.Equal(t, uint8(20), databaseUser.Age)
+		//Update the First and Last Name
+		assert.Equal(t, "Rock", databaseUser1.FirstName)
+		assert.Equal(t, "Johnson", databaseUser1.LastName)
+		assert.Equal(t, db_UUID, databaseUser1.ID)
+		assert.Equal(t, uint8(99), databaseUser1.Age)
+
+	}
+}
+
+func TestPutUser(t *testing.T) {
+	// Database Setup
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	require.NoError(t, err)
+
+	// Create New User Using PUT
+	putRequestBody := user.User{
+		FirstName: "UserFirstName",
+		LastName:  "UserLastName",
+		Age:       25,
+	}
+
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(`
+        INSERT INTO "users" ("id","created_at","updated_at","first_name","last_name","age")
+        VALUES ($1,$2,$3,$4,$5,$6)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), putRequestBody.FirstName, putRequestBody.LastName, uint8(putRequestBody.Age)).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	dummyID := user_id.Wrap(uuid.New())
+
+	// Insert User into database
+	createUser, err := c.SaveUser(putRequestBody, dummyID)
+	require.NoError(t, err)
+
+	require.Equal(t, "UserFirstName", createUser.FirstName)
+	require.Equal(t, "UserLastName", createUser.LastName)
+	require.Equal(t, uint8(25), createUser.Age)
+
+	// Get User ID to Update User
+	newUserID := createUser.ID
+
+	putRequestBody2 := user.User{
+		FirstName: "UpdatedFirstName",
+		LastName:  "UpdatedLastName",
+		Age:       99,
+	}
+
+	// Retrieve the User and Update the User
+	mock.ExpectBegin()
+	mock.ExpectQuery("^SELECT \\* FROM \"users\" WHERE id = \\$1 ORDER BY \"users\".\"id\" LIMIT 1").
+		WithArgs(newUserID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).
+			AddRow(newUserID, createUser.CreatedAt, createUser.UpdatedAt, createUser.FirstName, createUser.LastName, createUser.Age))
+	mock.ExpectExec(regexp.QuoteMeta(`
+		UPDATE "users"
+		SET "first_name" = $1, "last_name" = $2, "age" = $3, "updated_at" = $4
+		WHERE "id" = $5`)).
+		WithArgs("UpdatedFirstName", "UpdatedLastName", uint8(99), sqlmock.AnyArg(), newUserID).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectCommit()
+
+	putUser, err := c.SaveUser(putRequestBody2, newUserID)
+	require.NoError(t, err)
+
+	require.Equal(t, "UpdatedFirstName", putUser.FirstName)
+	require.Equal(t, "UpdatedLastName", putUser.LastName)
+	require.Equal(t, uint8(99), putUser.Age)
+	require.Equal(t, createUser.CreatedAt, putUser.CreatedAt)
+	require.True(t, putUser.UpdatedAt.After(createUser.UpdatedAt))
+	require.Equal(t, createUser.ID, putUser.ID)
+}
 
 func TestCreateUser(t *testing.T) {
 	// set up mock database
@@ -121,7 +289,7 @@ func TestDeleteUser(t *testing.T) {
 	uuidUser, err := uuid.Parse(userId)
 	require.Nil(t, err)
 
-	deletedUser, err := c.DeleteUserById(uuidUser)
+	deletedUser, err := c.DeleteUser(user_id.Wrap(uuidUser))
 	require.Nil(t, err)
 
 	// ensure that the deleted user is returned and matches the info of the user that was created
@@ -135,7 +303,7 @@ func TestDeleteUser(t *testing.T) {
 		WithArgs(badId).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"})) // no rows added
 
-	deletedUser, err = c.DeleteUserById(badId)
+	deletedUser, err = c.DeleteUser(user_id.Wrap(badId))
 	require.Error(t, err)
 
 	// ensure that all expectations are met in the mock
