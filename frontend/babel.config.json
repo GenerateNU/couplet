@@ -1,0 +1,9 @@
+{
+  "env": {
+    "production": {
+      "plugins": ["react-native-paper/babel"]
+    }
+  },
+  "plugins": ["expo-router/babel"],
+  "presets": ["babel-preset-expo"]
+}

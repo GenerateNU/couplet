@@ -1,5 +1,5 @@
 ---
-version: '3'
+version: "3"
 
 tasks:
   run:
@@ -44,4 +44,3 @@ tasks:
     summary: Run static analysis checks
     cmds:
       - npm run check
-...

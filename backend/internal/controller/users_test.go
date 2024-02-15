@@ -21,7 +21,7 @@ func TestGetUser(t *testing.T) {
 	db, mock := database.NewMockDB()
 	c, _ := controller.NewController(db, nil)
 	uuid1 := uuid.New()
-	db_UUID := user_id.UserID(uuid1)
+	db_UUID := user_id.Wrap(uuid1)
 	time1 := time.Now()
 
 	user1 := user.User{
@@ -75,7 +75,7 @@ func TestPartialUpdateUser(t *testing.T) {
 	c, err := controller.NewController(db, nil)
 
 	uuid1 := uuid.New()
-	db_UUID := user_id.UserID(uuid1)
+	db_UUID := user_id.Wrap(uuid1)
 	time1 := time.Now()
 
 	user1 := user.User{

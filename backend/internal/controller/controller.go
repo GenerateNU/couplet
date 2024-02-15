@@ -15,7 +15,7 @@ type Controller struct {
 }
 
 // Creates a new controller to handle business logic
-func NewController(database *gorm.DB, logger *slog.Logger) (Controller, error) {
+func NewController(database *gorm.DB, logger *slog.Logger) (c Controller, err error) {
 	if database == nil {
 		return Controller{}, errors.New("no database specified")
 	}
