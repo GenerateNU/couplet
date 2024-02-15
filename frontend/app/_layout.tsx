@@ -1,13 +1,13 @@
-import { View } from 'react-native'
-import React from 'react'
-import { Slot } from 'expo-router';
-import Navbar from '../components/Navbar';
+import { Slot } from "expo-router";
+import React from "react";
+import { View } from "react-native";
+import Navbar from "../components/Navbar";
 
-export default function _layout() {
+export default function Layout() {
   return (
-    <View style={{height:"100%"}}>
+    <View style={{ height: "100%" }}>
       <Slot />
       <Navbar />
     </View>
-  )
+  );
 }

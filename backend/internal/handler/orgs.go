@@ -185,11 +185,11 @@ func (h Handler) PutOrg(ctx context.Context, req *api.PutOrgReq, params api.PutO
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("PUT /orgs/%s", params.ID))
 
-	_, getErr := h.controller.GetOrg(org_id.OrgID(params.ID))
+	_, getErr := h.controller.GetOrg(org_id.Wrap(params.ID))
 	alreadyExists := getErr == nil
 
 	var reqOrg org.Org
-	reqOrg.ID = org_id.OrgID(params.ID)
+	reqOrg.ID = org_id.Wrap(params.ID)
 	reqOrg.Name = req.Name
 	reqOrg.Bio = req.Bio
 	if req.Image.Set {

@@ -12,7 +12,7 @@ export default function HomeScreen() {
         alignSelf: "center",
         marginBottom: 10,
         height: "90%",
-        paddingBottom: "30%",
+        paddingBottom: "30%"
       }}
     >
       <Title
@@ -23,7 +23,7 @@ export default function HomeScreen() {
           marginBottom: 10,
           minHeight: "100%",
           paddingBottom: "30%",
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         Welcome to Couplet!

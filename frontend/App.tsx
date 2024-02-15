@@ -1,7 +1,7 @@
-import * as React from "react";
-import HomeScreen from "./components/HomeScreen";
+import React from "react";
+import { Platform, StatusBar, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import { View, Platform, StatusBar } from "react-native";
+import HomeScreen from "./components/HomeScreen";
 
 export default function App() {
   return (

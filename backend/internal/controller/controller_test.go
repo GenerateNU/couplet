@@ -3,6 +3,7 @@ package controller_test
 import (
 	"couplet/internal/controller"
 	"couplet/internal/database"
+	"log/slog"
 
 	"testing"
 
@@ -14,10 +15,12 @@ func TestNewController(t *testing.T) {
 	assert.Empty(t, c)
 	assert.NotNil(t, err)
 
-	db, mock := database.NewMockDB()
+	db, _ := database.NewMockDB()
 	c, err = controller.NewController(db, nil)
-
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
-	assert.NotNil(t, mock)
+
+	c, err = controller.NewController(db, slog.Default())
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
 }

@@ -10,6 +10,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestWrapAndUnwrap(t *testing.T) {
+	id := uuid.UUID{}
+	assert.Equal(t, id, user_id.Wrap(id).Unwrap())
+
+	id = uuid.New()
+	assert.Equal(t, id, user_id.Wrap(id).Unwrap())
+}
+
 func FuzzSqlParity(f *testing.F) {
 	f.Add("5e91507e-5630-4efd-9fd4-799178870b10")
 	f.Add("f47ac10b-58cc-0372-8567-0e02b2c3d4")

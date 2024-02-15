@@ -36,10 +36,9 @@ type EnvConfig struct {
 
 func main() {
 	// Load environment variables
-	ctx := context.Background()
 	var config EnvConfig
 	var err error
-	if err = envconfig.Process(ctx, &config); err != nil {
+	if err = envconfig.Process(context.Background(), &config); err != nil {
 		log.Fatalln(err)
 	}
 
@@ -50,7 +49,7 @@ func main() {
 	pterm.DefaultCenter.Println(credit)
 
 	// Configure slog logger
-	logLevel := AsLogLevel(config.LogLevel)
+	logLevel := asLogLevel(config.LogLevel)
 	logger := slog.New(pterm.NewSlogHandler(pterm.DefaultLogger.WithLevel(logLevel)))
 
 	// Connect to the database
@@ -91,7 +90,7 @@ func main() {
 }
 
 // Converts a string to its corresponding log level
-func AsLogLevel(logLevel string) pterm.LogLevel {
+func asLogLevel(logLevel string) pterm.LogLevel {
 	switch logLevel {
 	case "DEBUG":
 		return pterm.LogLevelDebug
