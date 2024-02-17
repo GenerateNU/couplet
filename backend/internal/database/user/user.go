@@ -18,7 +18,7 @@ type User struct {
 	FirstName  string    `validate:"required,min=1,max=255"`
 	LastName   string    `validate:"required,min=1,max=255"`
 	Age        uint8     `validate:"required,min=18"`
-	UserSwipes []User    `gorm:"many2many:user_swipes;"`
+	UserSwipes []*User   `gorm:"many2many:user_swipes;"`
 }
 
 // Automatically generates a random ID if unset before creating
