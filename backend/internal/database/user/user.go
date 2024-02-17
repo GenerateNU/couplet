@@ -18,7 +18,7 @@ type User struct {
 	FirstName  string
 	LastName   string
 	Age        uint8
-	UserSwipes []User `gorm:"many2many:user_swipes;"`
+	UserSwipes []*User `gorm:"many2many:user_swipes;"`
 }
 
 // Automatically generates a random ID if unset before creating

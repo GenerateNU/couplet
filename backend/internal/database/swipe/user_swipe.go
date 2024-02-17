@@ -6,9 +6,9 @@ import (
 )
 
 type UserSwipe struct {
-	SenderId   user_id.UserID `gorm:"primaryKey"`
-	ReceiverId user_id.UserID `gorm:"primaryKey"`
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Liked      bool
+	UserId      user_id.UserID `gorm:"primaryKey"` // Swipe sender
+	UserSwipeId user_id.UserID `gorm:"primaryKey"` // Swipe receiver
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Liked       bool
 }
