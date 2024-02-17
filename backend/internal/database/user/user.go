@@ -12,12 +12,13 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type User struct {
-	ID        user_id.UserID `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	FirstName string
-	LastName  string
-	Age       uint8
+	ID         user_id.UserID `gorm:"primaryKey"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	FirstName  string
+	LastName   string
+	Age        uint8
+	UserSwipes []User `gorm:"many2many:user_swipes;"`
 }
 
 // Automatically generates a random ID if unset before creating
