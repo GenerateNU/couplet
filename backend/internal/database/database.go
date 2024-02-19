@@ -5,10 +5,10 @@ import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
 	"couplet/internal/database/swipe"
+	"couplet/internal/database/user"
 	"errors"
 	"fmt"
 	"log/slog"
-	"os/user"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -57,7 +57,11 @@ func Migrate(db *gorm.DB) error {
 	}
 
 	err := db.SetupJoinTable(&user.User{}, "UserSwipes", &swipe.UserSwipe{})
+	if err != nil {
+		return err
+	}
 
+	err = db.SetupJoinTable(&user.User{}, "EventSwipes", &swipe.EventSwipe{})
 	if err != nil {
 		return err
 	}

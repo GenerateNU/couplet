@@ -90,7 +90,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventSwipe"
+                allOf:
+                  - $ref: "#/components/schemas/EventSwipe"
+                  - required:
+                      - userId
+                      - eventId
+                      - liked
         "400":
           $ref: "#/components/responses/BadRequest"
   /health-check:
