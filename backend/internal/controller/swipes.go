@@ -8,11 +8,9 @@ import (
 // Creates a new event swipe in the database
 func (c Controller) CreateEventSwipe(params swipe.EventSwipe) (e *swipe.EventSwipe, err error) {
 	newEventSwipe := swipe.EventSwipe{
-		UserId:    params.UserId,
-		EventId:   params.EventId,
-		Liked:     params.Liked,
-		CreatedAt: params.CreatedAt,
-		UpdatedAt: params.UpdatedAt,
+		UserId:  params.UserId,
+		EventId: params.EventId,
+		Liked:   params.Liked,
 	}
 
 	res := c.database.Create(&newEventSwipe)

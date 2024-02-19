@@ -7,7 +7,6 @@ import (
 	"couplet/internal/database/swipe"
 	"couplet/internal/database/user_id"
 	"errors"
-	"time"
 )
 
 // CreateEventSwipe implements api.Handler.
@@ -16,8 +15,6 @@ func (h Handler) CreateEventSwipe(ctx context.Context, req *api.EventSwipe) (api
 	eventSwipeToCreate.UserId = user_id.UserID(req.UserId)
 	eventSwipeToCreate.EventId = event_id.EventID(req.EventId)
 	eventSwipeToCreate.Liked = req.Liked
-	eventSwipeToCreate.CreatedAt = time.Now()
-	eventSwipeToCreate.UpdatedAt = time.Now()
 
 	es, err := h.controller.CreateEventSwipe(eventSwipeToCreate)
 	if err != nil {
