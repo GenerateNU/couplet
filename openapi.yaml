@@ -91,8 +91,14 @@ paths:
             application/json:
               schema:
                 allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
                   - $ref: "#/components/schemas/EventSwipe"
                   - required:
+                      - id
                       - userId
                       - eventId
                       - liked
@@ -613,7 +619,6 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
 
-
 components:
   responses:
     UnexpectedError:
@@ -860,4 +865,3 @@ components:
           example: 5e91507e-5630-4efd-9fd4-799178870b10
         liked:
           type: boolean
-...
