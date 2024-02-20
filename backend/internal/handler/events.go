@@ -76,23 +76,21 @@ func (h Handler) GetEvent(ctx context.Context, params api.GetEventParams) (api.G
 func (h Handler) GetEvents(ctx context.Context, params api.GetEventsParams) ([]api.GetEventsOKItem, error) {
 	h.logger.Info("GET /events")
 
-	// this syntax is not correct
+	events, err := h.controller.GetEvents(params.Limit, params.Offset)
+	if err != nil {
+		return nil, errors.New("failed to get events")
+	}
 
-	// events, err := h.controller.GetEvents(params.Limit, params.Offset)
-	// if err != nil {
-	// 	return nil, errors.New("failed to get events")
-	// }
+	var res []api.GetEventsOKItem
+	for _, e := range events {
+		res = append(res, api.GetEventsOKItem{
+			ID:   e.ID.Unwrap(),
+			Name: e.Name,
+			Bio:  e.Bio,
+		})
+	}
 
-	// var res api.GetEventsOK
-	// for _, e := range events {
-	// 	res = append(res, &api.Event{
-	// 		ID:   e.ID.Unwrap(),
-	// 		Name: e.Name,
-	// 		Bio:  e.Bio,
-	// 	})
-	// }
-
-	return nil, nil
+	return res, nil
 }
 
 // PUT (/events/:id) to completely update an existing event, returning the created object if successful
