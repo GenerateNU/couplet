@@ -31,7 +31,22 @@ func (h Handler) CreateEventSwipe(ctx context.Context, req *api.EventSwipe) (api
 	return &res, nil
 }
 
-// CreateUserSwipe implements api.Handler.
-func (Handler) CreateUserSwipe(ctx context.Context, req *api.UserSwipe) (api.CreateUserSwipeRes, error) {
-	panic("unimplemented")
+func (h Handler) CreateUserSwipe(ctx context.Context, req *api.UserSwipe) (api.CreateUserSwipeRes, error) {
+	var userSwipeToCreate swipe.UserSwipe
+	userSwipeToCreate.UserId = user_id.UserID(req.UserId)
+	userSwipeToCreate.UserSwipeId = user_id.UserID(req.OtherUserId)
+	userSwipeToCreate.Liked = req.Liked
+
+	us, err := h.controller.CreateUserSwipe(userSwipeToCreate)
+	if err != nil {
+		return nil, errors.New("failed to create user swipe")
+	}
+
+	res := api.UserSwipe{
+		UserId:      us.UserId.Unwrap(),
+		OtherUserId: us.UserSwipeId.Unwrap(),
+		Liked:       us.Liked,
+	}
+
+	return &res, nil
 }
