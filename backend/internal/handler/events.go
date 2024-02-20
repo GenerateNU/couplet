@@ -73,6 +73,27 @@ func (h Handler) GetEvent(ctx context.Context, params api.GetEventParams) (api.G
 }
 
 // GET (/events) all events with pagination
+func (h Handler) GetEvents(ctx context.Context, params api.GetEventsParams) ([]api.GetEventsOKItem, error) {
+	h.logger.Info("GET /events")
+
+	// this syntax is not correct
+
+	// events, err := h.controller.GetEvents(params.Limit, params.Offset)
+	// if err != nil {
+	// 	return nil, errors.New("failed to get events")
+	// }
+
+	// var res api.GetEventsOK
+	// for _, e := range events {
+	// 	res = append(res, &api.Event{
+	// 		ID:   e.ID.Unwrap(),
+	// 		Name: e.Name,
+	// 		Bio:  e.Bio,
+	// 	})
+	// }
+
+	return nil, nil
+}
 
 // PUT (/events/:id) to completely update an existing event, returning the created object if successful
 func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, params api.PutEventParams) (api.PutEventRes, error) {
@@ -95,3 +116,9 @@ func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, pa
 }
 
 // PATCH (/events/:id) to partially update one or many fields of an existing event, returning the created object if successful
+
+func (h Handler) PatchEvent(ctx context.Context, req *api.Event, params api.PatchEventParams) (api.PatchEventRes, error) {
+	h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
+	// todo
+	return nil, nil
+}
