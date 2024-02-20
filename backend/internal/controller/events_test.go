@@ -138,8 +138,9 @@ func TestDeleteEvent(t *testing.T) {
 	badId := uuid.New()
 
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
-		WithArgs(badId).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"})) // no rows added
+		WithArgs(exampleEventOne.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(exampleEventOne.ID, exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID))
 
 	_, err = c.DeleteEvent(event_id.Wrap(badId))
 	assert.Error(t, err)
@@ -147,5 +148,183 @@ func TestDeleteEvent(t *testing.T) {
 	// ensure that all expectations are met in the mock
 	errExpectations = mock.ExpectationsWereMet()
 
+	assert.Nil(t, errExpectations)
+}
+
+func TestGetEvent(t *testing.T) {
+	// Set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	assert.Nil(t, err)
+
+	// Mocked event data
+	orgId := org_id.Wrap(uuid.New())
+	mockEvent := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Sample Event",
+		Bio:   "A brief description",
+		OrgID: orgId,
+	}
+
+	// Set expectation: select query to fetch the event by ID
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(mockEvent.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
+
+	// Call GetEvent
+	retrievedEvent, err := c.GetEvent(mockEvent.ID)
+	assert.Nil(t, err)
+
+	// Assert that the retrieved event matches the mocked event
+	assert.Equal(t, mockEvent.ID, retrievedEvent.ID)
+	assert.Equal(t, mockEvent.Name, retrievedEvent.Name)
+	assert.Equal(t, mockEvent.Bio, retrievedEvent.Bio)
+	assert.Equal(t, mockEvent.OrgID, retrievedEvent.OrgID)
+
+	// Ensure all expectations were met
+	errExpectations := mock.ExpectationsWereMet()
+	assert.Nil(t, errExpectations)
+}
+
+func TestGetEvents(t *testing.T) {
+	// Set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	assert.Nil(t, err)
+
+	// Mocked event data
+	orgId := org_id.Wrap(uuid.New())
+	mockEventOne := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Sample Event",
+		Bio:   "A brief description",
+		OrgID: orgId,
+	}
+	mockEventTwo := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Another Event",
+		Bio:   "A different description",
+		OrgID: orgId,
+	}
+	mockEventThree := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Third Event",
+		Bio:   "A third description",
+		OrgID: orgId,
+	}
+	mockEventFour := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Fourth Event",
+		Bio:   "A fourth description",
+		OrgID: orgId,
+	}
+	mockEventFive := event.Event{
+		ID:    event_id.Wrap(uuid.New()),
+		Name:  "Fifth Event",
+		Bio:   "A fifth description",
+		OrgID: orgId,
+	}
+
+	// Set expectation: select query to fetch all events
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEventOne.ID, mockEventOne.Name, mockEventOne.Bio, mockEventOne.OrgID).
+			AddRow(mockEventTwo.ID, mockEventTwo.Name, mockEventTwo.Bio, mockEventTwo.OrgID).
+			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
+			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID).
+			AddRow(mockEventFive.ID, mockEventFive.Name, mockEventFive.Bio, mockEventFive.OrgID))
+
+	// Call GetEvents
+	retrievedAllEvents1, err := c.GetEvents(10, 0)
+	assert.Nil(t, err)
+
+	// Assert that all of the retrieved events match the mocked events
+	assert.Equal(t, 5, len(retrievedAllEvents1))
+	assert.Equal(t, mockEventOne.ID, retrievedAllEvents1[0].ID)
+	assert.Equal(t, mockEventOne.Name, retrievedAllEvents1[0].Name)
+	assert.Equal(t, mockEventOne.Bio, retrievedAllEvents1[0].Bio)
+	assert.Equal(t, mockEventOne.OrgID, retrievedAllEvents1[0].OrgID)
+	assert.Equal(t, mockEventTwo.ID, retrievedAllEvents1[1].ID)
+	assert.Equal(t, mockEventTwo.Name, retrievedAllEvents1[1].Name)
+	assert.Equal(t, mockEventTwo.Bio, retrievedAllEvents1[1].Bio)
+	assert.Equal(t, mockEventTwo.OrgID, retrievedAllEvents1[1].OrgID)
+	assert.Equal(t, mockEventThree.ID, retrievedAllEvents1[2].ID)
+	assert.Equal(t, mockEventThree.Name, retrievedAllEvents1[2].Name)
+	assert.Equal(t, mockEventThree.Bio, retrievedAllEvents1[2].Bio)
+	assert.Equal(t, mockEventThree.OrgID, retrievedAllEvents1[2].OrgID)
+	assert.Equal(t, mockEventFour.ID, retrievedAllEvents1[3].ID)
+	assert.Equal(t, mockEventFour.Name, retrievedAllEvents1[3].Name)
+	assert.Equal(t, mockEventFour.Bio, retrievedAllEvents1[3].Bio)
+	assert.Equal(t, mockEventFour.OrgID, retrievedAllEvents1[3].OrgID)
+	assert.Equal(t, mockEventFive.ID, retrievedAllEvents1[4].ID)
+	assert.Equal(t, mockEventFive.Name, retrievedAllEvents1[4].Name)
+	assert.Equal(t, mockEventFive.Bio, retrievedAllEvents1[4].Bio)
+	assert.Equal(t, mockEventFive.OrgID, retrievedAllEvents1[4].OrgID)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEventOne.ID, mockEventOne.Name, mockEventOne.Bio, mockEventOne.OrgID).
+			AddRow(mockEventTwo.ID, mockEventTwo.Name, mockEventTwo.Bio, mockEventTwo.OrgID))
+
+	// Call GetEvents with a limit
+	retrievedAllEvents2, err := c.GetEvents(2, 0)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 2, len(retrievedAllEvents2))
+	assert.Equal(t, mockEventOne.ID, retrievedAllEvents2[0].ID)
+	assert.Equal(t, mockEventOne.Name, retrievedAllEvents2[0].Name)
+	assert.Equal(t, mockEventOne.Bio, retrievedAllEvents2[0].Bio)
+	assert.Equal(t, mockEventOne.OrgID, retrievedAllEvents2[0].OrgID)
+	assert.Equal(t, mockEventTwo.ID, retrievedAllEvents2[1].ID)
+	assert.Equal(t, mockEventTwo.Name, retrievedAllEvents2[1].Name)
+	assert.Equal(t, mockEventTwo.Bio, retrievedAllEvents2[1].Bio)
+	assert.Equal(t, mockEventTwo.OrgID, retrievedAllEvents2[1].OrgID)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
+			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID))
+
+	// Call GetEvents with a limit and offset
+	retrievedAllEvents3, err := c.GetEvents(2, 2)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 2, len(retrievedAllEvents3))
+	assert.Equal(t, mockEventThree.ID, retrievedAllEvents3[0].ID)
+	assert.Equal(t, mockEventThree.Name, retrievedAllEvents3[0].Name)
+	assert.Equal(t, mockEventThree.Bio, retrievedAllEvents3[0].Bio)
+	assert.Equal(t, mockEventThree.OrgID, retrievedAllEvents3[0].OrgID)
+	assert.Equal(t, mockEventFour.ID, retrievedAllEvents3[1].ID)
+	assert.Equal(t, mockEventFour.Name, retrievedAllEvents3[1].Name)
+	assert.Equal(t, mockEventFour.Bio, retrievedAllEvents3[1].Bio)
+	assert.Equal(t, mockEventFour.OrgID, retrievedAllEvents3[1].OrgID)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
+			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID).
+			AddRow(mockEventFive.ID, mockEventFive.Name, mockEventFive.Bio, mockEventFive.OrgID))
+
+	// Call GetEvents with an offset, but no limit
+	retrievedAllEvents4, err := c.GetEvents(10, 2)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 3, len(retrievedAllEvents4))
+	assert.Equal(t, mockEventThree.ID, retrievedAllEvents4[0].ID)
+	assert.Equal(t, mockEventThree.Name, retrievedAllEvents4[0].Name)
+	assert.Equal(t, mockEventThree.Bio, retrievedAllEvents4[0].Bio)
+	assert.Equal(t, mockEventThree.OrgID, retrievedAllEvents4[0].OrgID)
+	assert.Equal(t, mockEventFour.ID, retrievedAllEvents4[1].ID)
+	assert.Equal(t, mockEventFour.Name, retrievedAllEvents4[1].Name)
+	assert.Equal(t, mockEventFour.Bio, retrievedAllEvents4[1].Bio)
+	assert.Equal(t, mockEventFour.OrgID, retrievedAllEvents4[1].OrgID)
+	assert.Equal(t, mockEventFive.ID, retrievedAllEvents4[2].ID)
+	assert.Equal(t, mockEventFive.Name, retrievedAllEvents4[2].Name)
+	assert.Equal(t, mockEventFive.Bio, retrievedAllEvents4[2].Bio)
+	assert.Equal(t, mockEventFive.OrgID, retrievedAllEvents4[2].OrgID)
+
+	// Ensure all expectations were met
+	errExpectations := mock.ExpectationsWereMet()
 	assert.Nil(t, errExpectations)
 }
