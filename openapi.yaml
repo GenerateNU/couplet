@@ -41,6 +41,46 @@ paths:
                       - bio
         "400":
           $ref: "#/components/responses/BadRequest"
+    get:
+      summary: Get multiple events
+      operationId: getEvents
+      parameters:
+        - name: limit
+          in: query
+          description: The number of events to return
+          schema:
+            type: integer
+            format: int
+            minimum: 1
+            default: 10
+            example: 20
+        - name: offset
+          in: query
+          description: The number of events to skip
+          schema:
+            type: integer
+            format: int
+            default: 0
+            example: 13
+      responses:
+        "200":
+          description: Successfully retrieved events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: "#/components/schemas/Event"
+                    - required:
+                        - id
+                        - name
+                        - bio
   /events/{id}:
     delete:
       summary: Delete an event by its event ID
@@ -73,6 +113,135 @@ paths:
                       - bio
         "404":
           $ref: "#/components/responses/NotFound"
+    get:
+      summary: Get an event by its ID
+      operationId: getEvent
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved specified event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Partially update an event by its ID
+      operationId: patchEvent
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Event fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+      responses:
+        "200":
+          description: Successfully updated specified event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update an event by its ID if it exists, else create it
+      operationId: putEvent
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to save
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Event to update
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Event"
+                - required:
+                    - name
+                    - bio
+      responses:
+        "200":
+          description: Successfully updated specified event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "201":
+          description: Successfully created specified event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /health-check:
     get:
       summary: Check if the server is running and servicing requests

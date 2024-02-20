@@ -54,3 +54,44 @@ func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) 
 	}
 	return &res, nil
 }
+
+// GET (/events/:id) a single event by their id
+func (h Handler) GetEvent(ctx context.Context, params api.GetEventParams) (api.GetEventRes, error) {
+	h.logger.Info(fmt.Sprintf("GET /events/%s", params.ID))
+	e, err := h.controller.GetEvent(event_id.Wrap(params.ID))
+	if err != nil {
+		return nil, errors.New("failed to get event")
+	}
+
+	res := api.GetEventOK{
+		ID:   e.ID.Unwrap(),
+		Name: e.Name,
+		Bio:  e.Bio,
+	}
+
+	return &res, nil
+}
+
+// GET (/events) all events with pagination
+
+// PUT (/events/:id) to completely update an existing event, returning the created object if successful
+func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, params api.PutEventParams) (api.PutEventRes, error) {
+	h.logger.Info(fmt.Sprintf("PUT /events/%s", params.ID))
+	e, err := h.controller.PutEvent(event_id.Wrap(params.ID), event.Event{
+		Name: updatedEvent.Name,
+		Bio:  updatedEvent.Bio,
+	})
+	if err != nil {
+		return nil, errors.New("failed to update event")
+	}
+
+	res := api.PutEventOK{
+		ID:   e.ID.Unwrap(),
+		Name: e.Name,
+		Bio:  e.Bio,
+	}
+
+	return &res, nil
+}
+
+// PATCH (/events/:id) to partially update one or many fields of an existing event, returning the created object if successful
