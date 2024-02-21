@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView } from "react-native";
 import EventCard from "./EventCard";
 
-const EventPage = () => {
+function EventPage() {
   const handleReact = () => {
     // TODO: Add logic to update the database with the user's reaction to the event
   };
@@ -31,6 +31,6 @@ const EventPage = () => {
       />
     </ScrollView>
   );
-};
+}
 
 export default EventPage;
