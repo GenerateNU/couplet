@@ -4,7 +4,6 @@ import (
 	"couplet/internal/controller"
 	"couplet/internal/database"
 	"couplet/internal/database/event_id"
-	"couplet/internal/database/org_id"
 	"couplet/internal/database/swipe"
 	"couplet/internal/database/user_id"
 
@@ -33,7 +32,7 @@ func TestCreateEventSwipe(t *testing.T) {
 	user_id := user_id.Wrap(uuid.New())
 
 	// set up example event data
-	orgId := org_id.Wrap(uuid.New())
+	// orgId := org_id.Wrap(uuid.New())
 	// exampleEvent := event.Event{
 	// 	Name:  "Big event",
 	// 	Bio:   "Event description",
