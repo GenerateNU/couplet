@@ -328,3 +328,107 @@ func TestGetEvents(t *testing.T) {
 	errExpectations := mock.ExpectationsWereMet()
 	assert.Nil(t, errExpectations)
 }
+
+func TestPutEvent(t *testing.T) {
+	// Set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
+
+	// Mocked event data
+	orgId := org_id.Wrap(uuid.New())
+	eventId := uuid.New()
+	mockEvent := event.Event{
+		ID:    event_id.Wrap(eventId),
+		Name:  "Sample Event",
+		Bio:   "A brief description",
+		OrgID: orgId,
+	}
+
+	// Set expectation: select query to get the event
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(mockEvent.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
+
+	// Set expectation: begin transaction
+	mock.ExpectBegin()
+
+	// Set expectation: update query to update the event
+	mock.ExpectExec(regexp.QuoteMeta(`UPDATE "events" SET "created_at"=$1,"updated_at"=$2,"name"=$3,"bio"=$4,"org_id"=$5 WHERE "id" = $6`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), mockEvent.Name, mockEvent.Bio, mockEvent.OrgID, mockEvent.ID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	// Set expectation: commit transaction
+	mock.ExpectCommit()
+
+	// Call PutEvent
+	updatedEvent, err := c.PutEvent(event_id.Wrap(eventId), mockEvent)
+	if err != nil {
+		t.Errorf("Error was not expected while updating event: %s", err)
+	}
+
+	// Assert that the updated event matches the mocked event data
+	assert.Equal(t, mockEvent.ID, updatedEvent.ID)
+	assert.Equal(t, mockEvent.Name, updatedEvent.Name)
+	assert.Equal(t, mockEvent.Bio, updatedEvent.Bio)
+	assert.Equal(t, mockEvent.OrgID, updatedEvent.OrgID)
+
+	// Ensure all expectations were met
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("There were unfulfilled expectations: %s", err)
+	}
+}
+
+func TestPatchEvent(t *testing.T) {
+	// Set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
+
+	// Mocked event data
+	orgId := org_id.Wrap(uuid.New())
+	eventId := uuid.New()
+	mockEvent := event.Event{
+		ID:    event_id.Wrap(eventId),
+		Name:  "Sample Event",
+		Bio:   "A brief description",
+		OrgID: orgId,
+	}
+
+	// Set expectation: select query to get the event
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(mockEvent.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
+			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
+
+	// Set expectation: begin transaction
+	mock.ExpectBegin()
+
+	// Set expectation: update query to update the event
+	mock.ExpectExec(regexp.QuoteMeta(`UPDATE "events" SET "created_at"=$1,"updated_at"=$2,"name"=$3,"bio"=$4,"org_id"=$5 WHERE "id" = $6`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), mockEvent.Name, mockEvent.Bio, mockEvent.OrgID, mockEvent.ID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	// Set expectation: commit transaction
+	mock.ExpectCommit()
+
+	// Call PatchEvent
+	updatedEvent, err := c.PatchEvent(event_id.Wrap(eventId), mockEvent)
+	if err != nil {
+		t.Errorf("Error was not expected while updating event: %s", err)
+	}
+
+	// Assert that the updated event matches the mocked event data
+	assert.Equal(t, mockEvent.ID, updatedEvent.ID)
+	assert.Equal(t, mockEvent.Name, updatedEvent.Name)
+	assert.Equal(t, mockEvent.Bio, updatedEvent.Bio)
+	assert.Equal(t, mockEvent.OrgID, updatedEvent.OrgID)
+
+	// Ensure all expectations were met
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("There were unfulfilled expectations: %s", err)
+	}
+}
