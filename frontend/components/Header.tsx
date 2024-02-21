@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { Text, View } from "react-native";
 
 export default function Header() {
   return (
@@ -13,7 +13,11 @@ export default function Header() {
         top: 0
       }}
     >
-        <Text style={{color:"white", textAlign:"center", marginTop: 40, width:"100%", fontSize:20 }}>Couplet</Text>
+      <Text
+        style={{ color: "white", textAlign: "center", marginTop: 40, width: "100%", fontSize: 20 }}
+      >
+        Couplet
+      </Text>
     </View>
-  )
+  );
 }
