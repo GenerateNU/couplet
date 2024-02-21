@@ -1,10 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import ReactionButton from "./ReactionButton";
-
-type ReactionProps = {
-  handleReact: (like: boolean) => void;
-};
+import { ReactionProps } from "./ReactionProps";
 
 function Reaction({ handleReact }: ReactionProps) {
   return (
