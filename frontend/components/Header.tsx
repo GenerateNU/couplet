@@ -6,14 +6,14 @@ export default function Header() {
     <View
       style={{
         backgroundColor: "black",
-        height: 90,
+        height: "100%",
         width: "100%",
         flexDirection: "row",
         position: "absolute",
         top: 0
       }}
     >
-        <Text style={{color:"white", textAlign:"center", marginTop: 40, width:"100%", fontSize:20 }}>Couplet</Text>
+        <Text style={{color:"white", textAlign:"center", marginTop: "10%", width:"100%", fontSize:20 }}>Couplet</Text>
     </View>
   )
 }
