@@ -2,7 +2,9 @@ import React from "react";
 import { Button } from "react-native-paper";
 import { ReactionButtonProps } from "./ReactionButtonProps";
 
-const ReactionButton = (props: ReactionButtonProps) => {
+/* eslint-disable react/no-children-prop */
+
+function ReactionButton({ like, icon, handleReact }: ReactionButtonProps) {
   return (
     <Button
       style={{
@@ -12,12 +14,12 @@ const ReactionButton = (props: ReactionButtonProps) => {
         alignSelf: "center" // This will center the button horizontally
       }}
       labelStyle={{ fontSize: 35, alignSelf: "flex-start" }}
-      icon={props.icon}
+      icon={icon}
       mode="elevated"
-      onPress={() => props.handleReact(props.like)}
+      onPress={() => handleReact(like)}
       children={undefined}
     />
   );
-};
+}
 
 export default ReactionButton;

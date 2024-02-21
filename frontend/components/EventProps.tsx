@@ -4,6 +4,5 @@ export interface EventCardProps {
   description: string;
   date: string;
   location: string;
-
   handleReact: (like: boolean) => void;
 }

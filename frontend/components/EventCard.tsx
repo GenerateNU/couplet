@@ -9,7 +9,14 @@ const logo = {
   height: 250
 };
 
-const EventCard: React.FC<EventCardProps> = (props) => {
+export default function EventCard({
+  handleReact,
+  id,
+  title,
+  description,
+  date,
+  location
+}: EventCardProps) {
   return (
     <ScrollView
       style={{
@@ -22,7 +29,7 @@ const EventCard: React.FC<EventCardProps> = (props) => {
       contentContainerStyle={{}}
       stickyHeaderIndices={[0]}
     >
-      <Reaction handleReact={props.handleReact} />
+      <Reaction handleReact={handleReact} />
       <View
         style={{
           flexGrow: 1,
@@ -35,16 +42,14 @@ const EventCard: React.FC<EventCardProps> = (props) => {
             fontSize: 96,
             paddingTop: "10%"
           }}
-        ></Text>
-        <Text style={{ fontSize: 96 }}>{props.id}</Text>
+        />
+        <Text style={{ fontSize: 96 }}>{id}</Text>
         <Image source={logo} />
-        <Text style={{ fontSize: 96 }}>{props.title}</Text>
-        <Text style={{ fontSize: 48 }}>{props.description}</Text>
-        <Text style={{ fontSize: 48 }}>{props.date}</Text>
-        <Text style={{ fontSize: 48 }}>{props.location}</Text>
+        <Text style={{ fontSize: 96 }}>{title}</Text>
+        <Text style={{ fontSize: 48 }}>{description}</Text>
+        <Text style={{ fontSize: 48 }}>{date}</Text>
+        <Text style={{ fontSize: 48 }}>{location}</Text>
       </View>
     </ScrollView>
   );
-};
-
-export default EventCard;
+}

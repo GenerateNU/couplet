@@ -6,7 +6,7 @@ type ReactionProps = {
   handleReact: (like: boolean) => void;
 };
 
-const Reaction = (props: ReactionProps) => {
+function Reaction({ handleReact }: ReactionProps) {
   return (
     <View
       style={{
@@ -15,10 +15,10 @@ const Reaction = (props: ReactionProps) => {
         paddingTop: "10%"
       }}
     >
-      <ReactionButton like={false} icon="cancel" handleReact={props.handleReact} />
-      <ReactionButton like={true} icon="heart" handleReact={props.handleReact} />
+      <ReactionButton like={false} icon="cancel" handleReact={handleReact} />
+      <ReactionButton like icon="heart" handleReact={handleReact} />
     </View>
   );
-};
+}
 
 export default Reaction;
