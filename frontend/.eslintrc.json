@@ -15,6 +15,7 @@
   },
   "plugins": ["react", "react-native", "@typescript-eslint"],
   "rules": {
+    "no-unused-vars": ["error", { "args": "none" }],
     "import/extensions": [
       "error",
       "ignorePackages",
