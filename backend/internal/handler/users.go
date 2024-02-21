@@ -108,7 +108,7 @@ func (h Handler) GetUsers(ctx context.Context, params api.GetUsersParams) ([]api
 func (h Handler) PutUser(ctx context.Context, updatedUser *api.PutUserReq, params api.PutUserParams) (api.PutUserRes, error) {
 	// TODO: Write tests
 	// Checks if user exists
-	_, err := h.controller.GetUser(user_id.UserID(params.ID))
+	_, err := h.controller.GetUser(user_id.Wrap(params.ID))
 	alreadyExists := err == nil
 
 	// TODO: Validate parameters

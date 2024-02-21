@@ -36,34 +36,32 @@ func (c Controller) CreateUser(firstName string, lastName string, age uint8) (us
 	return u, nil
 }
 
-func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.User, error) {
-	var user user.User
-	err := c.database.First(&user, "id = ?", id).Error
-	if err != nil {
-		return nil, err
+func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (user.User, error) {
+	user := user.User{}
+	if err := c.database.Where("id = ?", id).First(&user).Error; err != nil {
+		return user, err
 	}
 
-	userUpdates := make(map[string]interface{})
-
-	userUpdates["UpdatedAt"] = time.Now()
+	user.UpdatedAt = time.Now()
+	user.ID = id
 
 	if updatedUser.FirstName != "" {
-		userUpdates["FirstName"] = updatedUser.FirstName
+		user.FirstName = updatedUser.FirstName
 	}
 
 	if updatedUser.LastName != "" {
-		userUpdates["LastName"] = updatedUser.LastName
+		user.LastName = updatedUser.LastName
 	}
 
 	if updatedUser.Age > 0 {
-		userUpdates["Age"] = updatedUser.Age
+		user.Age = updatedUser.Age
 	}
 
-	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
-		return nil, err
+	if err := c.database.Model(&user).Updates(&user).Error; err != nil {
+		return user, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // Gets a user from the database by their ID
