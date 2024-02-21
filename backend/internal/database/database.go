@@ -4,10 +4,11 @@ package database
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
+	"couplet/internal/database/swipe"
+	"couplet/internal/database/user"
 	"errors"
 	"fmt"
 	"log/slog"
-	"os/user"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -53,6 +54,16 @@ func EnableConnPooling(db *gorm.DB) error {
 func Migrate(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("nil database specified")
+	}
+
+	err := db.SetupJoinTable(&user.User{}, "UserSwipes", &swipe.UserSwipe{})
+	if err != nil {
+		return err
+	}
+
+	err = db.SetupJoinTable(&user.User{}, "EventSwipes", &swipe.EventSwipe{})
+	if err != nil {
+		return err
 	}
 	// Add new models here to ensure they are migrated on startup
 	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{})

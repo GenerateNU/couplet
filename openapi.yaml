@@ -7,41 +7,41 @@ info:
     description: Connect with other users through local events
 
 paths:
-    /events:
-        post:
-            summary: Create a new event
-            operationId: createEvent
-            requestBody:
-                description: Event to create
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/Event'
-                                - required:
-                                      - name
-                                      - bio
-            responses:
-                '201':
-                    description: Successfully created event
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Event'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-        get:
+  /events:
+    post:
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        description: Event to create
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Event"
+                - required:
+                    - name
+                    - bio
+      responses:
+        "201":
+          description: Successfully created event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "400":
+          $ref: "#/components/responses/BadRequest"
+       get:
             summary: Get multiple events
             operationId: getEvents
             parameters:
@@ -83,38 +83,38 @@ paths:
                                               - id
                                               - name
                                               - bio
-    /events/{id}:
-        delete:
-            summary: Delete an event by its event ID
-            operationId: deleteEvent
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of event to delete
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            responses:
-                '200':
-                    description: Successfully deleted specified event
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Event'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                '404':
-                    $ref: '#/components/responses/NotFound'
+  /events/{id}:
+    delete:
+      summary: Delete an event by its event ID
+      operationId: deleteEvent
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully deleted specified event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Event"
+                  - required:
+                      - id
+                      - name
+                      - bio
+        "404":
+          $ref: "#/components/responses/NotFound"
         get:
             summary: Get an event by its ID
             operationId: getEvent
@@ -244,710 +244,796 @@ paths:
                                           - bio
                 '400':
                     $ref: '#/components/responses/BadRequest'
-    /health-check:
-        get:
-            summary: Check if the server is running and servicing requests
-            operationId: healthCheck
-            responses:
-                '200':
-                    description: The server is healthy
-    /orgs:
-        get:
-            summary: Get multiple organizations
-            operationId: getOrgs
-            parameters:
-                - name: limit
-                  in: query
-                  description: The number of organizations to return
-                  schema:
-                      type: integer
-                      format: uint8
-                      minimum: 1
-                      default: 10
-                      example: 20
-                - name: offset
-                  in: query
-                  description: The number of organizations to skip
-                  schema:
-                      type: integer
-                      format: uint32
-                      default: 0
-                      example: 13
-            responses:
-                '200':
-                    description: Successfully retrieved organizations
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    allOf:
-                                        - properties:
-                                              id:
-                                                  type: string
-                                                  format: uuid
-                                                  example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                        - $ref: '#/components/schemas/Org'
-                                        - required:
-                                              - id
-                                              - name
-                                              - bio
-                                              - tags
-        post:
-            summary: Create a new organization
-            operationId: createOrg
-            requestBody:
-                description: Organization to create
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/Org'
-                                - required:
-                                      - name
-                                      - bio
-            responses:
-                '201':
-                    description: Successfully created organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-    /orgs/{id}:
-        delete:
-            summary: Delete an organization by its ID
-            operationId: deleteOrg
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of organization to delete
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            responses:
-                '200':
-                    description: Successfully deleted specified organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        get:
-            summary: Get an organization by its ID
-            operationId: getOrg
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of organization to retrieve
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            responses:
-                '200':
-                    description: Successfully retrieved specified organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        patch:
-            summary: Partially update an organization by its ID
-            operationId: patchOrg
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of organization to update
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            requestBody:
-                description: Organization fields to update
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/Org'
-            responses:
-                '200':
-                    description: Successfully updated specified organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        put:
-            summary: Update an organization by its ID if it exists, else create it
-            operationId: putOrg
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of organization to save
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            requestBody:
-                description: Organization to update
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/Org'
-                                - required:
-                                      - name
-                                      - bio
-                                      - tags
-            responses:
-                '200':
-                    description: Successfully updated specified organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '201':
-                    description: Successfully created specified organization
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/Org'
-                                    - required:
-                                          - id
-                                          - name
-                                          - bio
-                                          - tags
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-    /users:
-        get:
-            summary: Get multiple users
-            operationId: getUsers
-            parameters:
-                - name: limit
-                  in: query
-                  description: The number of users to return
-                  schema:
-                      type: integer
-                      format: uint8
-                      minimum: 1
-                      default: 10
-                      example: 20
-                - name: offset
-                  in: query
-                  description: The number of users to skip
-                  schema:
-                      type: integer
-                      format: uint32
-                      default: 0
-                      example: 13
-            responses:
-                '200':
-                    description: Successfully retrieved users
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    allOf:
-                                        - properties:
-                                              id:
-                                                  type: string
-                                                  format: uuid
-                                                  example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                        - $ref: '#/components/schemas/User'
-                                        - required:
-                                              - id
-                                              - firstName
-                                              - lastName
-                                              - age
-        post:
-            summary: Create a new user
-            operationId: createUser
-            requestBody:
-                description: User to create
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/User'
-                                - required:
-                                      - firstName
-                                      - lastName
-                                      - age
-            responses:
-                '201':
-                    description: Successfully created user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-    /users/{id}:
-        delete:
-            summary: Delete a user by its ID
-            operationId: deleteUser
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of user to delete
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            responses:
-                '200':
-                    description: Successfully deleted specified user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        get:
-            summary: Get a user by its ID
-            operationId: getUser
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of user to retrieve
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            responses:
-                '200':
-                    description: Successfully retrieved specified user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        patch:
-            summary: Partially update a user by its ID
-            operationId: patchUser
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of user to update
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            requestBody:
-                description: User fields to update
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/User'
-            responses:
-                '200':
-                    description: Successfully updated specified user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-                '404':
-                    $ref: '#/components/responses/NotFound'
-        put:
-            summary: Update a user by its ID if it exists, else create it
-            operationId: putUser
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of user to update
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-            requestBody:
-                description: User to update
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/User'
-                                - required:
-                                      - firstName
-                                      - lastName
-                                      - age
-            responses:
-                '200':
-                    description: Successfully updated specified user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '201':
-                    description: Successfully created specified user
-                    content:
-                        application/json:
-                            schema:
-                                allOf:
-                                    - properties:
-                                          id:
-                                              type: string
-                                              format: uuid
-                                              example: 5e91507e-5630-4efd-9fd4-799178870b10
-                                    - $ref: '#/components/schemas/User'
-                                    - required:
-                                          - id
-                                          - firstName
-                                          - lastName
-                                          - age
-                '400':
-                    $ref: '#/components/responses/BadRequest'
+  /events/swipes:
+    post:
+      summary: Create a swipe between a user and an event
+      operationId: createEventSwipe
+      requestBody:
+        description: EventSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventSwipe"
+      responses:
+        "201":
+          description: Successfully created event swipe
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/EventSwipe"
+                  - required:
+                      - id
+                      - userId
+                      - eventId
+                      - liked
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /health-check:
+    get:
+      summary: Check if the server is running and servicing requests
+      operationId: healthCheck
+      responses:
+        "200":
+          description: The server is healthy
+  /orgs:
+    get:
+      summary: Get multiple organizations
+      operationId: getOrgs
+      parameters:
+        - name: limit
+          in: query
+          description: The number of organizations to return
+          schema:
+            type: integer
+            format: uint8
+            minimum: 1
+            default: 10
+            example: 20
+        - name: offset
+          in: query
+          description: The number of organizations to skip
+          schema:
+            type: integer
+            format: uint32
+            default: 0
+            example: 13
+      responses:
+        "200":
+          description: Successfully retrieved organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: "#/components/schemas/Org"
+                    - required:
+                        - id
+                        - name
+                        - bio
+                        - tags
+    post:
+      summary: Create a new organization
+      operationId: createOrg
+      requestBody:
+        description: Organization to create
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Org"
+                - required:
+                    - name
+                    - bio
+      responses:
+        "201":
+          description: Successfully created organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /orgs/{id}:
+    delete:
+      summary: Delete an organization by its ID
+      operationId: deleteOrg
+      parameters:
+        - name: id
+          in: path
+          description: ID of organization to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully deleted specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "404":
+          $ref: "#/components/responses/NotFound"
+    get:
+      summary: Get an organization by its ID
+      operationId: getOrg
+      parameters:
+        - name: id
+          in: path
+          description: ID of organization to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Partially update an organization by its ID
+      operationId: patchOrg
+      parameters:
+        - name: id
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Organization fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Org"
+      responses:
+        "200":
+          description: Successfully updated specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update an organization by its ID if it exists, else create it
+      operationId: putOrg
+      parameters:
+        - name: id
+          in: path
+          description: ID of organization to save
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Organization to update
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Org"
+                - required:
+                    - name
+                    - bio
+                    - tags
+      responses:
+        "200":
+          description: Successfully updated specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "201":
+          description: Successfully created specified organization
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/Org"
+                  - required:
+                      - id
+                      - name
+                      - bio
+                      - tags
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /users:
+    get:
+      summary: Get multiple users
+      operationId: getUsers
+      parameters:
+        - name: limit
+          in: query
+          description: The number of users to return
+          schema:
+            type: integer
+            format: uint8
+            minimum: 1
+            default: 10
+            example: 20
+        - name: offset
+          in: query
+          description: The number of users to skip
+          schema:
+            type: integer
+            format: uint32
+            default: 0
+            example: 13
+      responses:
+        "200":
+          description: Successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: "#/components/schemas/User"
+                    - required:
+                        - id
+                        - firstName
+                        - lastName
+                        - age
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        description: User to create
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/User"
+                - required:
+                    - firstName
+                    - lastName
+                    - age
+      responses:
+        "201":
+          description: Successfully created user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /users/{id}:
+    delete:
+      summary: Delete a user by its ID
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully deleted specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "404":
+          $ref: "#/components/responses/NotFound"
+    get:
+      summary: Get a user by its ID
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Partially update a user by its ID
+      operationId: patchUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: User fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Successfully updated specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a user by its ID if it exists, else create it
+      operationId: putUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: User to update
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/User"
+                - required:
+                    - firstName
+                    - lastName
+                    - age
+      responses:
+        "200":
+          description: Successfully updated specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "201":
+          description: Successfully created specified user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: "#/components/schemas/User"
+                  - required:
+                      - id
+                      - firstName
+                      - lastName
+                      - age
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /users/swipes:
+    post:
+      summary: Create a swipe between users
+      operationId: createUserSwipe
+      requestBody:
+        description: UserSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSwipe"
+      responses:
+        "201":
+          description: Successfully created user swipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSwipe"
+        "400":
+          $ref: "#/components/responses/BadRequest"
 
 components:
-    responses:
-        UnexpectedError:
-            description: An unexpected error occurred
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Error'
-        BadRequest:
-            description: Invalid request body
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Error'
-        NotFound:
-            description: The specified resource was not found
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Error'
-        Unauthorized:
-            description: Unauthorized
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Error'
-    schemas:
-        Address:
-            type: object
-            required:
-                - line1
-                - line2
-                - zipCode
-                - city
-                - state
-                - country
-            properties:
-                line1:
-                    type: string
-                    minLength: 1
-                    example: 360 Huntington Ave
-                line2:
-                    type: string
-                    minLength: 1
-                    example: Room 270
-                zipCode:
-                    type: string
-                    minLength: 5
-                    maxLength: 5
-                    example: 02115
-                city:
-                    type: string
-                    minLength: 1
-                    example: Boston
-                state:
-                    type: string
-                    minLength: 2
-                    maxLength: 2
-                    example: MA
-                country:
-                    type: string
-                    minLength: 2
-                    maxLength: 2
-                    example: US
-        Coordinate:
-            type: object
-            required:
-                - longitude
-                - latitude
-            properties:
-                longitude:
-                    type: number
-                    format: double
-                    minimum: -180
-                    maximum: 180
-                    example: 71.43
-                latitude:
-                    type: number
-                    format: double
-                    minimum: -90
-                    maximum: 90
-                    example: 32.82
-        Error:
-            type: object
-            required:
-                - code
-                - message
-            properties:
-                code:
-                    type: integer
-                    format: uint16
-                    minimum: 100
-                    maximum: 599
-                    example: 500
-                message:
-                    type: string
-                    example: Internal server error
-        Event:
-            type: object
-            properties:
-                name:
-                    type: string
-                    minLength: 1
-                    example: The Big Event
-                bio:
-                    type: string
-                    minLength: 1
-                    example: Come to the Big Event and have the best night of your life!
-                address:
-                    $ref: '#/components/schemas/Address'
-                images:
-                    type: array
-                    items:
-                        type: string
-                        format: uri
-                        example: https://example.com/image.png
-                    minItems: 1
-                externalLink:
-                    type: string
-                    minLength: 1
-                    example: 420 Huntington Ave, Boston, MA 02115
-                    # $ref: "#/components/schemas/Address"
-                # images:
-                #   type: array
-                #   items:
-                #     type: string
-                #     format: uri
-                #     example: https://example.com/image.png
-                #   minItems: 1
-                # externalLink:
-                #   type: string
-                #   format: uri
-                #   example: https://example.com
-                orgId:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    # TODO:
-                    # schedule TBD
-                    # - optional datetime range (within a week)
-                    # - optional recurring until (some day)
-                    # price range low~high
-        Org:
-            type: object
-            properties:
-                name:
-                    type: string
-                    minLength: 1
-                    example: The Events Company
-                bio:
-                    type: string
-                    minLength: 1
-                    example: At The Events Company, we connect people through events
-                image:
-                    type: string
-                    format: uri
-                    example: https://example.com/image.png
-                tags:
-                    type: array
-                    maxItems: 5
-                    items:
-                        type: string
-                        minLength: 1
-                        example: nonprofit
-        User:
-            type: object
-            properties:
-                firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                    # TODO
-                    # gender
-                    # hashed password
-                    # email
-                    # phone number/social
-                    # Location
-                    # preferences
-                    # - what they like
-                    # Profile
-                    # - pics
-                    # - about me
-                    # matches TBD
-        CreateUserRequest:
-            type: object
-            required:
-                - firstName
-                - lastName
-                - age
-            properties:
-                firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
+  responses:
+    UnexpectedError:
+      description: An unexpected error occurred
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Address:
+      type: object
+      required:
+        - line1
+        - line2
+        - zipCode
+        - city
+        - state
+        - country
+      properties:
+        line1:
+          type: string
+          minLength: 1
+          example: 360 Huntington Ave
+        line2:
+          type: string
+          minLength: 1
+          example: Room 270
+        zipCode:
+          type: string
+          minLength: 5
+          maxLength: 5
+          example: 02115
+        city:
+          type: string
+          minLength: 1
+          example: Boston
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: MA
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: US
+    Coordinate:
+      type: object
+      required:
+        - longitude
+        - latitude
+      properties:
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+          example: 71.43
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+          example: 32.82
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: uint16
+          minimum: 100
+          maximum: 599
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+    Event:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: The Big Event
+        bio:
+          type: string
+          minLength: 1
+          example: Come to the Big Event and have the best night of your life!
+        address:
+          $ref: "#/components/schemas/Address"
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+        externalLink:
+          type: string
+          minLength: 1
+          example: 420 Huntington Ave, Boston, MA 02115
+          # $ref: "#/components/schemas/Address"
+        # images:
+        #   type: array
+        #   items:
+        #     type: string
+        #     format: uri
+        #     example: https://example.com/image.png
+        #   minItems: 1
+        # externalLink:
+        #   type: string
+        #   format: uri
+        #   example: https://example.com
+        orgId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+          # TODO:
+          # schedule TBD
+          # - optional datetime range (within a week)
+          # - optional recurring until (some day)
+          # price range low~high
+    Org:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: The Events Company
+        bio:
+          type: string
+          minLength: 1
+          example: At The Events Company, we connect people through events
+        image:
+          type: string
+          format: uri
+          example: https://example.com/image.png
+        tags:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            minLength: 1
+            example: nonprofit
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+          # TODO
+          # gender
+          # hashed password
+          # email
+          # phone number/social
+          # Location
+          # preferences
+          # - what they like
+          # Profile
+          # - pics
+          # - about me
+          # matches TBD
+    CreateUserRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - age
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+    EventSwipe:
+      type: object
+      required:
+        - userId
+        - eventId
+        - liked
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        eventId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
+    UserSwipe:
+      type: object
+      required:
+        - userId
+        - otherUserId
+        - liked
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        otherUserId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
+...
