@@ -1,5 +1,5 @@
 import React from "react";
-import CardStack from "./CardStack";
+import CallToAction from "./CallToAction";
 import Header from "./Header";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import TagButton from "./TagButton";

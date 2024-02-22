@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from 'react-native'
-import React from 'react'
+import React from "react";
+import { Pressable, Text } from "react-native";
 
 export default function TagButton({text, selected}: {text: string, selected?: boolean}) {
     return (
