@@ -1,15 +1,17 @@
 import React from "react";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import HomeScreen from "../components/HomeScreen";
 import Navbar from "../components/Navbar";
 
 export default function index() {
   return (
-    <View>
-      <HomeScreen />
-      <View>
+    <SafeAreaView>
+      <SafeAreaView>
+        <HomeScreen />
+      </SafeAreaView>
+      <SafeAreaView>
         <Navbar/>
-      </View>
-    </View>
+      </SafeAreaView>
+    </SafeAreaView>
   );
 }

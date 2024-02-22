@@ -7,35 +7,35 @@ import HomePageSection from "./HomePageSection";
 
 export default function HomeScreen() {
   return (
-    <ScrollView>
-      <View>
-        {/* Header View */}
+      <ScrollView style={styles.scrollView}>
         <View>
-          <Header />
-        </View>
-
-        {/* Match Container View */}
-        <View style={styles.matchContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+          {/* Header View */}
+          <View>
+            <Header />
           </View>
-          <Text>Need Someone to Go With?</Text>
-          <View style={styles.buttonContainer}>
-            <TagButton text="Match" />
+
+          {/* Match Container View */}
+          <View style={styles.matchContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            </View>
+            <Text>Need Someone to Go With?</Text>
+            <View style={styles.buttonContainer}>
+              <TagButton text="Match" />
+            </View>
+          </View>
+
+          {/* Pintrestesque Section Views */}
+          <View style={styles.sectionContainer}>
+            <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]}/>
+            <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
+            <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
           </View>
         </View>
-
-        {/* Pintrestesque Section Views */}
-        <View style={styles.sectionContainer}>
-          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]} />
-          <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
   );
 }
 
@@ -67,6 +67,12 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   sectionContainer: {
-    margin: 10
+    margin: 10,
+  },
+  scrollableSection: {
+    marginVertical: 20
+  },
+  scrollView: {
+    marginBottom: 40
   }
 });
