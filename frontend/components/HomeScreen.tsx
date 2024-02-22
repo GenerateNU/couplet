@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, Image, StyleSheet, View } from "react-native";
+import CallToAction from "./CallToAction";
 import Header from "./Header";
 import TagButton from "./TagButton";
 
