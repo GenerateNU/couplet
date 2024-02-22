@@ -10,7 +10,7 @@ export default function TagButton({ text, selected }: { text: string; selected?:
         backgroundColor: selected ? "black" : "white",
         borderWidth: 1,
         padding: "5%",
-        borderRadius: 100,
+        borderRadius: 100
       }}
       onPress={() => console.log(text)}
     >

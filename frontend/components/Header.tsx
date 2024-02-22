@@ -12,7 +12,17 @@ export default function Header() {
         padding: 20
       }}
     >
-        <Text style={{color:"white", justifyContent: "center", textAlign:"center", width:"100%", fontSize:20 }}>Couplet</Text>
+      <Text
+        style={{
+          color: "white",
+          justifyContent: "center",
+          textAlign: "center",
+          width: "100%",
+          fontSize: 20
+        }}
+      >
+        Couplet
+      </Text>
     </View>
   );
 }

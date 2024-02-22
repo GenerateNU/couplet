@@ -2,40 +2,40 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "./Header";
-import TagButton from "./TagButton";
 import HomePageSection from "./HomePageSection";
+import TagButton from "./TagButton";
 
 export default function HomeScreen() {
   return (
-      <ScrollView style={styles.scrollView}>
+    <ScrollView style={styles.scrollView}>
+      <View>
+        {/* Header View */}
         <View>
-          {/* Header View */}
-          <View>
-            <Header />
-          </View>
+          <Header />
+        </View>
 
-          {/* Match Container View */}
-          <View style={styles.matchContainer}>
-            <View style={styles.imageContainer}>
-              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-              <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            </View>
-            <Text>Need Someone to Go With?</Text>
-            <View style={styles.buttonContainer}>
-              <TagButton text="Match" />
-            </View>
+        {/* Match Container View */}
+        <View style={styles.matchContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
           </View>
-
-          {/* Pintrestesque Section Views */}
-          <View style={styles.sectionContainer}>
-            <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]}/>
-            <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
-            <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
+          <Text>Need Someone to Go With?</Text>
+          <View style={styles.buttonContainer}>
+            <TagButton text="Match" />
           </View>
         </View>
-      </ScrollView>
+
+        {/* Pintrestesque Section Views */}
+        <View style={styles.sectionContainer}>
+          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]} />
+          <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   sectionContainer: {
-    margin: 10,
+    margin: 10
   },
   scrollableSection: {
     marginVertical: 20

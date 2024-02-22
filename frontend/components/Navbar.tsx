@@ -7,7 +7,7 @@ export default function Navbar() {
     <View
       style={{
         backgroundColor: "black",
-        flexDirection : "row",
+        flexDirection: "row",
         position: "absolute",
         bottom: 0
       }}
