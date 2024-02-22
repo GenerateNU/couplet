@@ -1,39 +1,46 @@
 import React from "react";
-import { Text, Image, StyleSheet, View } from "react-native";
-import CallToAction from "./CallToAction";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import Header from "./Header";
 import TagButton from "./TagButton";
+import HomePageSection from "./HomePageSection";
 
 export default function HomeScreen() {
   return (
-    <View>
-      <View style={{ height: 80 }}>
-        <Header />
-      </View>
-
-      <View style={{ flexDirection: "row", padding: 20 }}>
-        <TagButton text="All Events" />
-        <TagButton text="Liked Events" />
-      </View>
-
-      <View style={styles.container}>
-        <View style = {styles.imageContainer}>
-        <Image source={{ uri: "../assets/blankProfile.jpg" }} style={styles.image} />
-        <Image source={{ uri: "../assets/blankProfile.jpg" }} style={styles.image} />
-        <Image source={{ uri: "../assets/blankProfile.jpg" }} style={styles.image} />
-        <Image source={{ uri: "../assets/blankProfile.jpg" }} style={styles.image} />
+    <ScrollView>
+      <View>
+        {/* Header View */}
+        <View>
+          <Header />
         </View>
-        <Text>Need Someone to Go With?</Text>
-        <View style= {styles.buttonContainer}>
-          <TagButton text="Match"/>
+
+        {/* Match Container View */}
+        <View style={styles.matchContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+          </View>
+          <Text>Need Someone to Go With?</Text>
+          <View style={styles.buttonContainer}>
+            <TagButton text="Match" />
+          </View>
+        </View>
+
+        {/* Pintrestesque Section Views */}
+        <View style={styles.sectionContainer}>
+          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]} />
+          <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  matchContainer: {
     flexDirection: "column",
     alignItems: "flex-start",
     borderStyle: "solid",
@@ -48,15 +55,18 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 50,
     borderWidth: 1,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   imageContainer: {
     flexDirection: "row",
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingTop: 10
+  },
+  sectionContainer: {
+    margin: 10
   }
 });

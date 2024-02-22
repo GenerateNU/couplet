@@ -7,14 +7,11 @@ export default function Navbar() {
     <View
       style={{
         backgroundColor: "black",
-        height: 75,
-        width: "100%",
-        flexDirection: "row",
+        flexDirection : "row",
         position: "absolute",
         bottom: 0
       }}
     >
-      <NavButton route="Home" />
       <NavButton route="People" />
       <NavButton route="Favorites" />
       <NavButton route="Matches" />

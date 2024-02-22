@@ -6,18 +6,13 @@ export default function Header() {
     <View
       style={{
         backgroundColor: "black",
-        height: 90,
-        width: "100%",
+        flex: 1,
         flexDirection: "row",
-        position: "absolute",
-        top: 0
+        justifyContent: "center",
+        padding: 20
       }}
     >
-      <Text
-        style={{ color: "white", textAlign: "center", marginTop: 40, width: "100%", fontSize: 20 }}
-      >
-        Couplet
-      </Text>
+        <Text style={{color:"white", justifyContent: "center", textAlign:"center", width:"100%", fontSize:20 }}>Couplet</Text>
     </View>
   );
 }
