@@ -1,13 +1,7 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { EventCardProps } from "./EventProps";
 import Reaction from "./Reaction";
-
-const logo = {
-  uri: "https://reactnative.dev/img/tiny_logo.png",
-  width: 250,
-  height: 250
-};
 
 export default function EventCard({
   handleReact,
@@ -19,21 +13,35 @@ export default function EventCard({
   location
 }: EventCardProps) {
   return (
-    <View>
-      <Reaction handleReact={handleReact} />
+    <ScrollView
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        alignSelf: "center",
+        marginBottom: 10,
+        minHeight: "100%"
+      }}
+      contentContainerStyle={{}}
+      stickyHeaderIndices={[1]}
+    >
       <View
         style={{
           flexGrow: 1
         }}
       >
-        <Image source={logo} />
         <Text style={{ fontSize: 72 }}>{title}</Text>
         <Text style={{ fontSize: 24 }}>{date}</Text>
-        <Text style={{ fontSize: 18 }}>{price}</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontSize: 18, marginRight: 20 }}>{price}</Text>
+          <Text style={{ fontSize: 18 }}>{location}</Text>
+        </View>
 
-        <Text style={{ fontSize: 48 }}>{description}</Text>
-        <Text style={{ fontSize: 48 }}>{location}</Text>
+        <Text style={{ fontSize: 18, marginBottom: 10 }}>{description}</Text>
+        <Text style={{ fontSize: 24 }}>Location</Text>
+
+        <Text style={{ fontSize: 18 }}>{location}</Text>
       </View>
-    </View>
+      <Reaction handleReact={handleReact} />
+    </ScrollView>
   );
 }

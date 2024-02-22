@@ -4,7 +4,7 @@ import { ReactionButtonProps } from "./ReactionButtonProps";
 
 /* eslint-disable react/no-children-prop */
 
-function ReactionButton({ like, icon, handleReact }: ReactionButtonProps) {
+function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps) {
   return (
     <Button
       style={{
@@ -17,8 +17,9 @@ function ReactionButton({ like, icon, handleReact }: ReactionButtonProps) {
       icon={icon}
       mode="elevated"
       onPress={() => handleReact(like)}
-      children={undefined}
-    />
+    >
+      {label}
+    </Button>
   );
 }
 

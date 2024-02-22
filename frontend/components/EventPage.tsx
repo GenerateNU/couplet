@@ -1,8 +1,13 @@
 import React from "react";
-import { ScrollView } from "react-native";
+import { Image, ScrollView } from "react-native";
 import EventCard from "./EventCard";
 
 function EventPage() {
+  const logo = {
+    uri: "https://reactnative.dev/img/tiny_logo.png",
+    width: 250,
+    height: 250
+  };
   const handleReact = () => {
     // TODO: Add logic to update the database with the user's reaction to the event
   };
@@ -19,7 +24,8 @@ function EventPage() {
       contentContainerStyle={{}}
       stickyHeaderIndices={[0]}
     >
-      {/* photo carousel */}
+      <Image source={logo} />
+
       <EventCard
         id={1}
         title="Winter Ice Skating"

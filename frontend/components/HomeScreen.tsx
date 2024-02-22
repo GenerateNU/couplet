@@ -1,6 +1,6 @@
 import React from "react";
-import CardStack from "./CardStack";
+import EventPage from "./EventPage";
 
 export default function HomeScreen() {
-  return <CardStack />;
+  return <EventPage />;
 }
