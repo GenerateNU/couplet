@@ -26,15 +26,21 @@ export default function HomeScreen() {
           </View>
           <Text>Need Someone to Go With?</Text>
           <View style={styles.buttonContainer}>
-            <LinkButton text="Match Now"/>
+            <LinkButton text="Match Now" />
           </View>
         </View>
 
         {/* Pintrestesque Section Views */}
         <View style={styles.sectionContainer}>
-          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5].map((n) => ({id: n}))} />
-          <HomePageSection title="Live music and concerts" events={[1, 2, 3].map((n) => ({id: n}))} />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({id: n}))} />
+          <HomePageSection
+            title="This weekend in Boston"
+            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
+          />
+          <HomePageSection
+            title="Live music and concerts"
+            events={[1, 2, 3].map((n) => ({ id: n }))}
+          />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
         </View>
       </View>
     </ScrollView>
