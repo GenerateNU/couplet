@@ -1,7 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Header from "./Header";
 import TagButton from "./TagButton";
+import CallToAction from "./CallToAction";
 
 export default function HomeScreen() {
   return (
@@ -13,17 +14,7 @@ export default function HomeScreen() {
         <TagButton text="All Events" />
         <TagButton text="Liked Events" />
       </View>
-      <View
-        style={{
-          padding: 50,
-          margin: 25,
-          borderStyle: "solid",
-          borderWidth: 1,
-          backgroundColor: "gray"
-        }}
-      >
-        <Text>Need someone to go with?</Text>
-      </View>
+      <CallToAction/>
     </View>
   );
 }
