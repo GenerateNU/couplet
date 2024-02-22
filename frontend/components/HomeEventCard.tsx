@@ -1,6 +1,9 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
 
+const PIN = require("../assets/pin.png");
+const COIN = require("../assets/coin.png");
+
 export default function HomeEventCard() {
   return (
     <View
@@ -19,7 +22,7 @@ export default function HomeEventCard() {
       <View>
         <Text style={{ textAlign: "center", padding: 10, fontSize: 14 }}>Winter Ice Skating</Text>
         <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>
-          <Image source={require("../assets/pin.png")} style={{ width: 20, height: 20 }} />
+          <Image source={PIN} style={{ width: 20, height: 20 }} />
           <Text
             style={{
               textAlign: "center",
@@ -30,10 +33,7 @@ export default function HomeEventCard() {
           >
             Frog Pond
           </Text>
-          <Image
-            source={require("../assets/coin.png")}
-            style={{ width: 20, height: 20, marginLeft: 10 }}
-          />
+          <Image source={COIN} style={{ width: 20, height: 20, marginLeft: 10 }} />
           <Text
             style={{
               textAlign: "center",
