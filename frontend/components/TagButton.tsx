@@ -12,7 +12,6 @@ export default function TagButton({ text }: { text: string }) {
         paddingLeft: 20,
         paddingRight: 20,
         borderRadius: 100,
-        marginLeft: 10
       }}
       onPress={() => console.log("Favorites")}
     >
