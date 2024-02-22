@@ -8,8 +8,8 @@ export default function HomePageSection({ title, events }: { title: string; even
       <Text style={{ fontSize: 20 }}>{title} </Text>
       <View style={{ flexDirection: "row" }}>
         <ScrollView horizontal>
-          {events.map((event, index) => (
-            <HomeEventCard key={index} />
+          {events.map((event) => (
+            <HomeEventCard key={event.id} />
           ))}
         </ScrollView>
       </View>

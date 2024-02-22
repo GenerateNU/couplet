@@ -1,7 +1,8 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 
-export default function TagButton({ text, selected }: { text: string; selected?: boolean }) {
+
+export default function TagButton({ text, selected }: { text: string; selected: boolean}) {
   return (
     <Pressable
       style={{
@@ -18,3 +19,4 @@ export default function TagButton({ text, selected }: { text: string; selected?:
     </Pressable>
   );
 }
+

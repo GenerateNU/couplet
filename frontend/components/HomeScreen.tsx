@@ -3,7 +3,9 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "./Header";
 import HomePageSection from "./HomePageSection";
-import TagButton from "./TagButton";
+import LinkButton from "./LinkButton";
+
+const DUMMY_IMAGE = require("../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
   return (
@@ -17,22 +19,22 @@ export default function HomeScreen() {
         {/* Match Container View */}
         <View style={styles.matchContainer}>
           <View style={styles.imageContainer}>
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
-            <Image source={require("../assets/blankProfile.jpg")} style={styles.image} />
+            <Image source={DUMMY_IMAGE} style={styles.image} />
+            <Image source={DUMMY_IMAGE} style={styles.image} />
+            <Image source={DUMMY_IMAGE} style={styles.image} />
+            <Image source={DUMMY_IMAGE} style={styles.image} />
           </View>
           <Text>Need Someone to Go With?</Text>
           <View style={styles.buttonContainer}>
-            <TagButton text="Match" />
+            <LinkButton text="Match Now"/>
           </View>
         </View>
 
         {/* Pintrestesque Section Views */}
         <View style={styles.sectionContainer}>
-          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5]} />
-          <HomePageSection title="Live music and concerts" events={[1, 2, 3]} />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5]} />
+          <HomePageSection title="This weekend in Boston" events={[1, 2, 3, 4, 5].map((n) => ({id: n}))} />
+          <HomePageSection title="Live music and concerts" events={[1, 2, 3].map((n) => ({id: n}))} />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({id: n}))} />
         </View>
       </View>
     </ScrollView>
