@@ -8,6 +8,7 @@ function Reaction({ handleReact }: ReactionProps) {
     <View
       style={{
         flexDirection: "row",
+        marginHorizontal: "5%",
         justifyContent: "space-between",
         paddingTop: "10%"
       }}

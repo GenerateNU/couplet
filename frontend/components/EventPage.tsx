@@ -5,8 +5,8 @@ import EventCard from "./EventCard";
 function EventPage() {
   const logo = {
     uri: "https://reactnative.dev/img/tiny_logo.png",
-    width: 250,
-    height: 250
+    width: 400,
+    height: 400
   };
   const handleReact = () => {
     // TODO: Add logic to update the database with the user's reaction to the event
@@ -22,7 +22,7 @@ function EventPage() {
         minHeight: "100%"
       }}
       contentContainerStyle={{}}
-      stickyHeaderIndices={[0]}
+      stickyHeaderIndices={[1]}
     >
       <Image source={logo} />
 
