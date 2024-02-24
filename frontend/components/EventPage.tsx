@@ -20,7 +20,7 @@ function EventPage() {
       contentContainerStyle={{}}
       stickyHeaderIndices={[1]}
     >
-      <EventImageCarousel/>
+      <EventImageCarousel />
 
       <EventCard
         id={1}
