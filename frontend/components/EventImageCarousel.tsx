@@ -13,7 +13,7 @@ function EventImageCarousel() {
         borderRadius: 12,
         alignSelf: "center",
         marginBottom: 10,
-        minHeight: "100%"
+        height: "40%"
       }}
     >
       <Text>Event Image Carousel</Text>

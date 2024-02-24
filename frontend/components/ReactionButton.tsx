@@ -8,7 +8,6 @@ function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps)
   return (
     <Button
       style={{
-        padding: 5,
         paddingVertical: 10,
         marginHorizontal: 10,
         borderRadius: 30,

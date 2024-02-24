@@ -10,7 +10,7 @@ function Reaction({ handleReact }: ReactionProps) {
         flexDirection: "row",
         marginHorizontal: "5%",
         justifyContent: "space-between",
-        paddingTop: "10%"
+        paddingTop: "5%"
       }}
     >
       <ReactionButton like={false} icon="share" label="Share" handleReact={handleReact} />
