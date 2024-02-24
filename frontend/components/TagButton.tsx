@@ -1,7 +1,15 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 
-export default function TagButton({ text, selected, onPress }: { text: string; selected: boolean, onPress: () => void }) {
+export default function TagButton({
+  text,
+  selected,
+  onPress
+}: {
+  text: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
   return (
     <Pressable
       style={{
@@ -11,7 +19,7 @@ export default function TagButton({ text, selected, onPress }: { text: string; s
         borderWidth: 1,
         marginHorizontal: 10,
         padding: 15,
-        borderRadius: 50,
+        borderRadius: 50
       }}
       onPress={onPress}
     >

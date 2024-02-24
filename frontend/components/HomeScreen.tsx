@@ -9,16 +9,23 @@ import TagButton from "./TagButton";
 const DUMMY_IMAGE = require("../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
-  const [filter, setFilter] = useState(0)
+  const [filter, setFilter] = useState(0);
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
       {/* Header View */}
       <View>
         <Header />
-        <View style={{display: "flex", flexDirection: "row", backgroundColor: "white", paddingBottom: 10}}>
-          <TagButton text="All Events" selected={filter === 0} onPress={() => setFilter(0)}/>
-          <TagButton text="Liked Events" selected={filter === 1}  onPress={() => setFilter(1)}/>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            backgroundColor: "white",
+            paddingBottom: 10
+          }}
+        >
+          <TagButton text="All Events" selected={filter === 0} onPress={() => setFilter(0)} />
+          <TagButton text="Liked Events" selected={filter === 1} onPress={() => setFilter(1)} />
         </View>
       </View>
 
@@ -37,17 +44,23 @@ export default function HomeScreen() {
       </View>
 
       {/* Pintrestesque Section Views */}
-      {filter === 0 ? <View style={styles.sectionContainer}>
-        <HomePageSection
-          title="This weekend in Boston"
-          events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
-        />
-        <HomePageSection
-          title="Live music and concerts"
-          events={[1, 2, 3].map((n) => ({ id: n }))}
-        />
-        <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
-      </View> : <View><Text>test</Text></View>}
+      {filter === 0 ? (
+        <View style={styles.sectionContainer}>
+          <HomePageSection
+            title="This weekend in Boston"
+            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
+          />
+          <HomePageSection
+            title="Live music and concerts"
+            events={[1, 2, 3].map((n) => ({ id: n }))}
+          />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
+        </View>
+      ) : (
+        <View>
+          <Text>test</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
