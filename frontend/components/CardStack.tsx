@@ -17,10 +17,11 @@ function CardStack() {
     const dummyStack = [
       <EventCard
         id={1}
-        title="Museum"
-        description="Night at the museum"
+        title="Winter Ice Skating"
+        description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
         date="1/2/24"
-        location="MFA"
+        price={20}
+        location="Frog Pond"
         handleReact={handleReact}
       />,
       <EventCard
@@ -28,14 +29,16 @@ function CardStack() {
         title="Movie"
         description="Watch a movie at the theater"
         date="2/2/24"
+        price={40}
         location="AMC"
         handleReact={handleReact}
       />,
       <EventCard
         id={3}
         title="Hockey"
-        description="Bruins game"
+        description=""
         date="3/2/24"
+        price={30}
         location="TD Garden"
         handleReact={handleReact}
       />
