@@ -1,6 +1,7 @@
 import React from "react";
-import { Image, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import EventCard from "./EventCard";
+import EventImageCarousel from "./EventImageCarousel";
 
 function EventPage() {
   const logo = {
@@ -24,7 +25,7 @@ function EventPage() {
       contentContainerStyle={{}}
       stickyHeaderIndices={[1]}
     >
-      <Image source={logo} />
+      <EventImageCarousel/>
 
       <EventCard
         id={1}
@@ -34,7 +35,7 @@ function EventPage() {
         price={20}
         location="Frog Pond"
         handleReact={handleReact}
-      />
+      /> 
     </ScrollView>
   );
 }
