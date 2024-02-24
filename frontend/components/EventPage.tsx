@@ -4,11 +4,6 @@ import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 
 function EventPage() {
-  const logo = {
-    uri: "https://reactnative.dev/img/tiny_logo.png",
-    width: 400,
-    height: 400
-  };
   const handleReact = () => {
     // TODO: Add logic to update the database with the user's reaction to the event
   };
@@ -35,7 +30,7 @@ function EventPage() {
         price={20}
         location="Frog Pond"
         handleReact={handleReact}
-      /> 
+      />
     </ScrollView>
   );
 }
