@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 
 export default function index() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
       <SafeAreaView>
         <HomeScreen />
       </SafeAreaView>

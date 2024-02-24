@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 
-export default function TagButton({ text, selected }: { text: string; selected: boolean }) {
+export default function TagButton({ text, selected, onPress }: { text: string; selected: boolean, onPress: () => void }) {
   return (
     <Pressable
       style={{
@@ -9,10 +9,11 @@ export default function TagButton({ text, selected }: { text: string; selected: 
         borderColor: "black",
         backgroundColor: selected ? "black" : "white",
         borderWidth: 1,
-        padding: "5%",
-        borderRadius: 100
+        marginHorizontal: 10,
+        padding: 15,
+        borderRadius: 50,
       }}
-      onPress={() => console.log(text)}
+      onPress={onPress}
     >
       <Text style={{ color: selected ? "white" : "black" }}>{text}</Text>
     </Pressable>

@@ -12,13 +12,12 @@ export default function HomeEventCard() {
         borderWidth: 1,
         borderColor: "black",
         borderRadius: 10,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
         marginRight: 10
       }}
     >
       {/* <Image source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} style={{width: 150, height: 150}} /> */}
-      <View style={{ width: "100%", height: 150, backgroundColor: "rgb(200,200,200)" }} />
+      <View style={{ width: "100%", height: 150, backgroundColor: "rgb(200,200,200)", borderTopLeftRadius: 10,
+        borderTopRightRadius: 10, }} />
       <View>
         <Text style={{ textAlign: "center", padding: 10, fontSize: 14 }}>Winter Ice Skating</Text>
         <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>

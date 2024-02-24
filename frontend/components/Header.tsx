@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <View
       style={{
-        backgroundColor: "black",
+        backgroundColor: "white",
         flex: 1,
         flexDirection: "row",
         justifyContent: "center",
@@ -14,9 +14,9 @@ export default function Header() {
     >
       <Text
         style={{
-          color: "white",
+          color: "black",
           justifyContent: "center",
-          textAlign: "center",
+          textAlign: "left",
           width: "100%",
           fontSize: 20
         }}
