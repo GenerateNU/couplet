@@ -14,11 +14,11 @@ export default function Navbar() {
         bottom: 0
       }}
     >
-      <NavButton route="Home" />
-      <NavButton route="People" />
-      <NavButton route="Favorites" />
-      <NavButton route="Matches" />
-      <NavButton route="Profile" />
+      <NavButton route="routes/Home" />
+      <NavButton route="routes/People" />
+      <NavButton route="routes/Favorites" />
+      <NavButton route="routes/Matches" />
+      <NavButton route="routes/Profile" />
     </View>
   );
 }
