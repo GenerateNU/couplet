@@ -4,9 +4,8 @@ import HomeScreen from "../components/HomeScreen";
 import App from "../App";
 
 export default function index() {
+  console.log("REACHED INDEX")
   return (
-    <View>
       <App />
-    </View>
   );
 }

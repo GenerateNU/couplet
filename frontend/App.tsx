@@ -4,6 +4,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { Button, View, Text } from 'react-native';
 import { ResponseType, AuthSessionResult } from 'expo-auth-session';
 import * as AuthSession from 'expo-auth-session';
+import Home from './app/Home';
 
 const redirectUri = process.env.NODE_ENV === 'development'
   ? 'https://auth.expo.io/@yourExpoUsername/yourApp'
@@ -21,6 +22,7 @@ export default function App() {
 
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false); // Updated for clarity
+  const isSignedIn = authToken !== null || isAppleLoggedIn;
 
   useEffect(() => {
     if (response?.type === 'success') {
@@ -50,33 +52,41 @@ export default function App() {
   }
 
   return (
-    <View style={{
-      paddingTop: "100%",
-      width: "100%",
-      borderRadius: 12,
-      alignSelf: "center",
-      marginBottom: 10,
-      minHeight: "100%",
-      paddingBottom: "30%",
-    }}>
-      <Button
-        disabled={!request}
-        title="Login with Google"
-        onPress={() => {
-          promptAsync();
-        }}
-      />
-      {isAppleLoggedIn && <Text>Logged in with Apple!</Text>}
-      {!isAppleLoggedIn && (
-        <AppleAuthentication.AppleAuthenticationButton
-          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-          cornerRadius={5}
-          style={{ width: 200, height: 44, marginTop: 20 }}
-          onPress={handleAppleSignIn}
-        />
-      )}
-      {authToken && <Text>Logged in with Google!</Text>}
+    <View style={{ flex: 1 }}>
+      {isSignedIn ? (
+        <Home/>
+      ) : (
+<View style={{
+  paddingTop: "100%",
+  width: "100%",
+  borderRadius: 12,
+  alignSelf: "center",
+  marginBottom: 10,
+  minHeight: "100%",
+  paddingBottom: "30%",
+  alignItems: 'center', // Align items in the center horizontally
+}}>
+  <Button
+    disabled={!request}
+    title="Login with Google"
+    onPress={() => {
+      promptAsync();
+    }}
+  />
+  {isAppleLoggedIn && <Text>Logged in with Apple!</Text>}
+  {!isAppleLoggedIn && (
+    <AppleAuthentication.AppleAuthenticationButton
+      buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+      cornerRadius={5}
+      style={{ width: 200, height: 44, marginTop: 20 }} // Ensure consistent width and adjust marginTop if necessary
+      onPress={handleAppleSignIn}
+    />
+  )}
+  {authToken && <Text>Logged in with Google!</Text>}
+</View>
+
+    )}
     </View>
   );
 }
