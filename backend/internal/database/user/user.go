@@ -1,7 +1,6 @@
 package user
 
 import (
-	"couplet/internal/database/event"
 	"couplet/internal/database/user_id"
 	"time"
 
@@ -15,12 +14,12 @@ var validate = validator.New(validator.WithRequiredStructEnabled())
 type User struct {
 	ID          user_id.UserID `gorm:"primaryKey" validate:"required"`
 	CreatedAt   time.Time
-	UpdatedAt   time.Time     `validate:"gtefield=CreatedAt"`
-	FirstName   string        `validate:"required,min=1,max=255"`
-	LastName    string        `validate:"required,min=1,max=255"`
-	Age         uint8         `validate:"required,min=18"`
-	UserSwipes  []*User       `gorm:"many2many:user_swipes;"`
-	EventSwipes []event.Event `gorm:"many2many:event_swipes;"`
+	UpdatedAt   time.Time `validate:"gtefield=CreatedAt"`
+	FirstName   string    `validate:"required,min=1,max=255"`
+	LastName    string    `validate:"required,min=1,max=255"`
+	Age         uint8     `validate:"required,min=18"`
+	UserSwipes  []UserSwipe
+	EventSwipes []EventSwipe
 }
 
 // Automatically generates a random ID if unset before creating
@@ -38,6 +37,5 @@ func (u *User) AfterSave(tx *gorm.DB) error {
 
 // Ensures the user and its fields are valid
 func (u User) Validate() error {
-	// TODO: Write tests
 	return validate.Struct(u)
 }

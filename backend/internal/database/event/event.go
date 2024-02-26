@@ -38,7 +38,6 @@ func (e *Event) AfterSave(tx *gorm.DB) error {
 
 // Ensures the event and its fields are valid
 func (e Event) Validate() error {
-	// TODO: Write tests
 	return validate.Struct(e)
 }
 
