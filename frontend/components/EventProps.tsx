@@ -7,3 +7,7 @@ export type EventCardProps = {
   location: string;
   handleReact: (like: boolean) => void;
 };
+
+export type EventImageCarouselProps = {
+  images: string[];
+};
