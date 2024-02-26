@@ -87,7 +87,7 @@ func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
 	// TODO: Write tests
 	u = params
-	// TODO: validate fields
+	valErr = u.Validate()
 	if valErr == nil {
 		txErr = c.database.Updates(&u).Error
 	}

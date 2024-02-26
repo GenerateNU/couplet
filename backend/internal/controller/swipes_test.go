@@ -4,7 +4,7 @@ import (
 	"couplet/internal/controller"
 	"couplet/internal/database"
 	"couplet/internal/database/event_id"
-	"couplet/internal/database/swipe"
+	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
 
 	"testing"
@@ -39,9 +39,9 @@ func TestCreateEventSwipe(t *testing.T) {
 	// 	OrgID: orgId,
 	// }
 
-	exampleEventSwipe := swipe.EventSwipe{
-		UserId:  user_id,
-		EventId: event_id,
+	exampleEventSwipe := user.EventSwipe{
+		UserID:  user_id,
+		EventID: event_id,
 		Liked:   true,
 	}
 
@@ -50,16 +50,17 @@ func TestCreateEventSwipe(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "events" ("id","created_at","updated_at","user_id","event_id","liked")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventSwipe.UserId, exampleEventSwipe.EventId, exampleEventSwipe.Liked).
+		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventSwipe.UserID, exampleEventSwipe.EventID, exampleEventSwipe.Liked).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedEventSwipe, err := c.CreateEventSwipe(exampleEventSwipe)
-	assert.Nil(t, err)
+	insertedEventSwipe, valErr, txErr := c.CreateEventSwipe(exampleEventSwipe)
+	assert.Nil(t, valErr)
+	assert.Nil(t, txErr)
 
 	// ensure that all fields were set properly on the Event object
-	assert.Equal(t, insertedEventSwipe.UserId, exampleEventSwipe.UserId)
-	assert.Equal(t, insertedEventSwipe.EventId, exampleEventSwipe.EventId)
+	assert.Equal(t, insertedEventSwipe.UserID, exampleEventSwipe.UserID)
+	assert.Equal(t, insertedEventSwipe.EventID, exampleEventSwipe.EventID)
 	assert.Equal(t, insertedEventSwipe.Liked, exampleEventSwipe.Liked)
 
 	// // create a second event with the same data to show that repeated POST calls always creates new events
@@ -100,9 +101,9 @@ func TestCreateUserSwipe(t *testing.T) {
 	user_id := user_id.Wrap(uuid.New())
 
 	// set up example event data
-	exampleUserSwipe := swipe.UserSwipe{
-		UserId:      user_id,
-		UserSwipeId: other_user_id,
+	exampleUserSwipe := user.UserSwipe{
+		UserID:      user_id,
+		OtherUserID: other_user_id,
 		Liked:       true,
 	}
 
@@ -111,16 +112,17 @@ func TestCreateUserSwipe(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(`
 		INSERT INTO "user_swipes" ("id","created_at","updated_at","user_id","user_swipe_id","liked")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleUserSwipe.UserId, exampleUserSwipe.UserSwipeId, exampleUserSwipe.Liked).
+		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	insertedUserSwipe, err := c.CreateUserSwipe(exampleUserSwipe)
-	assert.Nil(t, err)
+	insertedUserSwipe, valErr, txErr := c.CreateUserSwipe(exampleUserSwipe)
+	assert.Nil(t, valErr)
+	assert.Nil(t, txErr)
 
 	// ensure that all fields were set properly on the Event object
-	assert.Equal(t, insertedUserSwipe.UserId, exampleUserSwipe.UserId)
-	assert.Equal(t, insertedUserSwipe.UserSwipeId, exampleUserSwipe.UserSwipeId)
+	assert.Equal(t, insertedUserSwipe.UserID, exampleUserSwipe.UserID)
+	assert.Equal(t, insertedUserSwipe.OtherUserID, exampleUserSwipe.OtherUserID)
 	assert.Equal(t, insertedUserSwipe.Liked, exampleUserSwipe.Liked)
 
 }
