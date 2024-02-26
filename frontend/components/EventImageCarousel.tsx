@@ -3,8 +3,6 @@ import { Dimensions, Image, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { EventImageCarouselProps } from "./EventProps";
 
-
-
 function EventImageCarousel({ images }: EventImageCarouselProps) {
   const { width } = Dimensions.get("window");
   return (
