@@ -4,21 +4,24 @@ import { ReactionButtonProps } from "./ReactionButtonProps";
 
 /* eslint-disable react/no-children-prop */
 
-function ReactionButton({ like, icon, handleReact }: ReactionButtonProps) {
+function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps) {
   return (
     <Button
       style={{
-        padding: 5,
-        paddingVertical: 20,
+        paddingVertical: 10,
+        marginHorizontal: 10,
+        borderRadius: 30,
+        backgroundColor: like ? "black" : "white",
         flex: 1,
         alignSelf: "center" // This will center the button horizontally
       }}
-      labelStyle={{ fontSize: 35, alignSelf: "flex-start" }}
+      labelStyle={{ fontSize: 20, alignSelf: "flex-start", color: like ? "white" : "black" }}
       icon={icon}
       mode="elevated"
       onPress={() => handleReact(like)}
-      children={undefined}
-    />
+    >
+      {label}
+    </Button>
   );
 }
 
