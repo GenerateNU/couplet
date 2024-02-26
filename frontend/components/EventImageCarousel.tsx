@@ -16,7 +16,7 @@ function EventImageCarousel() {
         width: "100%",
         borderRadius: 12,
         alignSelf: "center",
-        height: "32%"
+        height: "31%"
       }}
     >
       <Carousel
@@ -29,11 +29,10 @@ function EventImageCarousel() {
         renderItem={({ index }) => (
           <View
             style={{
-              flex: 1,
               justifyContent: "center"
             }}
           >
-            <Image source={{ uri: dummyImages[index], height: 300 }} />
+            <Image source={{ uri: dummyImages[index], height: 350 }} />
           </View>
         )}
       />
