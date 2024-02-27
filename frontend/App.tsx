@@ -27,8 +27,7 @@ export default function App() {
       {isSignedIn ? (
         <Home />
       ) : (
-        <>
-          <View
+        <View
             style={{
               paddingTop: "100%",
               width: "100%",
@@ -113,7 +112,6 @@ export default function App() {
               )}
             </View>
           </View>
-        </>
       )}
     </View>
   );
