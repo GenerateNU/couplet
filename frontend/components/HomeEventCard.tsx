@@ -1,11 +1,15 @@
+import { useRouter } from "expo-router";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 
 const PIN = require("../assets/pin.png");
 const COIN = require("../assets/coin.png");
 
 export default function HomeEventCard() {
+  const router = useRouter();
+
   return (
+    <Pressable onPress={() => router.push("DummyEventDetails")}>
     <View
       style={{
         borderStyle: "solid",
@@ -15,6 +19,7 @@ export default function HomeEventCard() {
         marginRight: 10
       }}
     >
+      
       {/* <Image source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} style={{width: 150, height: 150}} /> */}
       <View
         style={{
@@ -55,5 +60,6 @@ export default function HomeEventCard() {
         </View>
       </View>
     </View>
+    </Pressable>
   );
 }

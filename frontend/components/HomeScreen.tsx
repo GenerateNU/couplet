@@ -57,8 +57,17 @@ export default function HomeScreen() {
           <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
         </View>
       ) : (
-        <View>
-          <Text>test</Text>
+        // Eventually replace this with a different event browsing screen
+        <View style={styles.sectionContainer}>
+          <HomePageSection
+            title="This weekend in Boston"
+            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
+          />
+          <HomePageSection
+            title="Live music and concerts"
+            events={[1, 2, 3].map((n) => ({ id: n }))}
+          />
+          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
         </View>
       )}
     </ScrollView>
