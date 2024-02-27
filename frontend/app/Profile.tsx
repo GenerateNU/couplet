@@ -4,10 +4,9 @@ import Navbar from "../components/Navbar";
 
 export default function Profile() {
   return (
-    <View style={{ flex: 1,
-      justifyContent: 'space-between'}}>
+    <View style={{ flex: 1, justifyContent: "space-between" }}>
       <Text>Profile</Text>
-      <Navbar/>
+      <Navbar />
     </View>
   );
 }

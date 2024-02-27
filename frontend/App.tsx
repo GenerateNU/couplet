@@ -1,92 +1,120 @@
-import React, { useEffect, useState } from 'react';
-import * as Google from 'expo-auth-session/providers/google';
-import * as AppleAuthentication from 'expo-apple-authentication';
-import { Button, View, Text } from 'react-native';
-import { ResponseType, AuthSessionResult } from 'expo-auth-session';
-import * as AuthSession from 'expo-auth-session';
-import Home from './app/Home';
-
-const redirectUri = process.env.NODE_ENV === 'development'
-  ? 'https://auth.expo.io/@yourExpoUsername/yourApp'
-  : AuthSession.makeRedirectUri({
-      native: 'your.app://redirect',
-    });
+import * as AppleAuthentication from "expo-apple-authentication";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import Home from "./app/Home";
 
 export default function App() {
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: 'your-google-client-id.apps.googleusercontent.com',
-    redirectUri,
-    responseType: ResponseType.IdToken,
-    scopes: []
-  });
-
-  const [authToken, setAuthToken] = useState<string | null>(null);
-  const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false); // Updated for clarity
-  const isSignedIn = authToken !== null || isAppleLoggedIn;
-
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      if (authentication) {
-        setAuthToken(authentication.accessToken);
-      }
-    }
-  }, [response]);
+  const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
+  const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
+  const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
   async function handleAppleSignIn() {
     try {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
+          AppleAuthentication.AppleAuthenticationScope.EMAIL
+        ]
       });
-      setIsAppleLoggedIn(true); // Updated to set a boolean flag indicating login status
+      setIsAppleLoggedIn(true);
     } catch (e) {
-      if (e.code === 'ERR_CANCELED') {
-        // Handle that the user canceled the sign-in flow
-      } else {
-        // Handle other possible errors
-      }
+      console.log("CANCELLED");
     }
   }
 
   return (
     <View style={{ flex: 1 }}>
       {isSignedIn ? (
-        <Home/>
+        <Home />
       ) : (
-<View style={{
-  paddingTop: "100%",
-  width: "100%",
-  borderRadius: 12,
-  alignSelf: "center",
-  marginBottom: 10,
-  minHeight: "100%",
-  paddingBottom: "30%",
-  alignItems: 'center', // Align items in the center horizontally
-}}>
-  <Button
-    disabled={!request}
-    title="Login with Google"
-    onPress={() => {
-      promptAsync();
-    }}
-  />
-  {isAppleLoggedIn && <Text>Logged in with Apple!</Text>}
-  {!isAppleLoggedIn && (
-    <AppleAuthentication.AppleAuthenticationButton
-      buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-      cornerRadius={5}
-      style={{ width: 200, height: 44, marginTop: 20 }} // Ensure consistent width and adjust marginTop if necessary
-      onPress={handleAppleSignIn}
-    />
-  )}
-  {authToken && <Text>Logged in with Google!</Text>}
-</View>
-
-    )}
+        <>
+          <View
+            style={{
+              paddingTop: "100%",
+              width: "100%",
+              borderRadius: 12,
+              alignSelf: "center",
+              marginBottom: 10,
+              minHeight: "100%",
+              paddingBottom: "30%",
+              alignItems: "flex-start"
+            }}
+          >
+            <Text
+              style={{
+                marginTop: -140,
+                fontSize: 44,
+                fontWeight: "bold",
+                marginBottom: 15,
+                paddingLeft: 30
+              }}
+            >
+              Welcome to Couplet!
+            </Text>
+            <Text
+              style={{
+                fontSize: 18,
+                paddingHorizontal: 30,
+                marginBottom: 20
+              }}
+            >
+              Sign in with one of the providers below to get started.
+            </Text>
+            <View style={{ alignItems: "center", width: "100%", paddingHorizontal: 30 }}>
+              <TouchableOpacity
+                onPress={() => setIsGoogleLoggedIn(true)}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "black",
+                  backgroundColor: "white",
+                  padding: 10,
+                  borderRadius: 30,
+                  marginTop: 20,
+                  width: 300,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: 44,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5
+                }}
+              >
+                <Text style={{ color: "black", fontWeight: "500", fontSize: 20 }}>
+                  Sign in with Google
+                </Text>
+              </TouchableOpacity>
+              {isAppleLoggedIn && <Text style={{ marginTop: 20 }}>Logged in with Apple!</Text>}
+              {!isAppleLoggedIn && (
+                <AppleAuthentication.AppleAuthenticationButton
+                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                  buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE_OUTLINE}
+                  cornerRadius={30}
+                  style={{
+                    width: 200,
+                    height: 50,
+                    marginTop: 20,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2
+                    },
+                    minWidth: 300,
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5
+                  }}
+                  onPress={handleAppleSignIn}
+                />
+              )}
+            </View>
+          </View>
+        </>
+      )}
     </View>
   );
 }

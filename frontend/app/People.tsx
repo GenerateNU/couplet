@@ -4,10 +4,9 @@ import Navbar from "../components/Navbar";
 
 export default function People() {
   return (
-    <View style={{ flex: 1,
-      justifyContent: 'space-between'}}>
+    <View style={{ flex: 1, justifyContent: "space-between" }}>
       <Text>People</Text>
-      <Navbar/>
+      <Navbar />
     </View>
   );
 }
