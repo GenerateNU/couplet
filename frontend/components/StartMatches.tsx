@@ -36,9 +36,6 @@ export default function StartMatches() {
         style={{ width: "100%" }}
         data={data}
         pagingEnabled
-        onSnapToItem={(index) => {
-          const newIndex = index;
-        }}
         renderItem={({ index }) => (
           <EventCardItem
             title={`Title ${index + 1}`}
