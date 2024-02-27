@@ -24,12 +24,7 @@ function MatchesUserCard({ profile }: MatchesUserCardProps) {
           <Text style={styles.cardName}> {profile.name} </Text>
         </View>
       </View>
-      <Modal
-        animationType="slide"
-        transparent
-        visible={modalVisible}
-        onRequestClose={toggleModal}
-      >
+      <Modal animationType="slide" transparent visible={modalVisible} onRequestClose={toggleModal}>
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>X</Text>
