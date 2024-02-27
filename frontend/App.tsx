@@ -18,12 +18,8 @@ export default function App() {
       });
       setIsAppleLoggedIn(true);
     } catch (e) {
-
+      setIsAppleLoggedIn(false);
     }
-  }
-
-  async function handleGoogleSignin() {
-    setIsGoogleLoggedIn(true)
   }
 
   return (
@@ -66,7 +62,7 @@ export default function App() {
             </Text>
             <View style={{ alignItems: "center", width: "100%", paddingHorizontal: 30 }}>
               <TouchableOpacity
-                onPress={ handleGoogleSignin }
+                onPress={() => setIsGoogleLoggedIn(true)}
                 style={{
                   borderWidth: 1,
                   borderColor: "black",
@@ -112,7 +108,7 @@ export default function App() {
                     shadowRadius: 3.84,
                     elevation: 5
                   }}
-                  onPress={handleAppleSignIn}
+                  onPress={() => handleAppleSignIn}
                 />
               )}
             </View>
