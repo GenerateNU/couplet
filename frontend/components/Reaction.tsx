@@ -8,12 +8,13 @@ function Reaction({ handleReact }: ReactionProps) {
     <View
       style={{
         flexDirection: "row",
+        marginHorizontal: "5%",
         justifyContent: "space-between",
-        paddingTop: "10%"
+        paddingTop: "5%"
       }}
     >
-      <ReactionButton like={false} icon="cancel" handleReact={handleReact} />
-      <ReactionButton like icon="heart" handleReact={handleReact} />
+      <ReactionButton like={false} icon="share" label="Share" handleReact={handleReact} />
+      <ReactionButton like icon="heart" label="Save" handleReact={handleReact} />
     </View>
   );
 }
