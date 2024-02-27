@@ -3,6 +3,7 @@ import { ScrollView, View } from "react-native";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 import Reaction from "./Reaction";
+import { StyleSheet } from "react-native";
 
 function EventPage() {
   const dummyImages: string[] = [
@@ -20,14 +21,15 @@ function EventPage() {
       <ScrollView
         style={{
           width: "100%",
-          borderRadius: 12,
           alignSelf: "center",
-          minHeight: "85%",
-          height: "85%"
+          height: "90%",
         }}
         contentContainerStyle={{}}
       >
+        <View >
         <EventImageCarousel images={dummyImages} />
+        </View>
+        <View style = { styles.EventCardContainer}>
         <EventCard
           id={1}
           title="Winter Ice Skating"
@@ -37,10 +39,16 @@ function EventPage() {
           location="Frog Pond"
           handleReact={handleReact}
         />
+        </View>
       </ScrollView>
       <Reaction handleReact={handleReact} />
     </View>
   );
 }
-
+const styles = StyleSheet.create({
+  EventCardContainer : {
+    flex : 1,
+    transform : [{ translateY : 100}]
+  }
+})
 export default EventPage;
