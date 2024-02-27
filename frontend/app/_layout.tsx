@@ -1,11 +1,11 @@
 import { Slot } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Layout() {
   return (
-    <View style={{ height: "100%" }}>
+    <SafeAreaView style={{ height: "100%" }}>
       <Slot />
-    </View>
+    </SafeAreaView>
   );
 }
