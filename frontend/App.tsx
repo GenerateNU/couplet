@@ -107,7 +107,7 @@ export default function App() {
                   shadowRadius: 3.84,
                   elevation: 5
                 }}
-                onPress={() => handleAppleSignIn}
+                onPress={handleAppleSignIn}
               />
             )}
           </View>
