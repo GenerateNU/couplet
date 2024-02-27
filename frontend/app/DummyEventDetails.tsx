@@ -9,7 +9,7 @@ export default function DummyEventDetails() {
 
   return (
     <SafeAreaView>
-      <Button title="Go back" onPress={() => router.back()}/>
+      <Button title="Go back" onPress={() => router.back()} />
       <EventPage />
     </SafeAreaView>
   );
