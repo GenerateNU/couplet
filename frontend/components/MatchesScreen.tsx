@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React /*{ useState }*/ from "react";
 import { View, Text, ScrollView } from "react-native";
 import ConvosDropdown, { ConvoUser } from "./ConvosDropdown";
 import MatchesUserSection, { MatchesUser } from "./MatchesUserSection";
@@ -97,9 +97,9 @@ export default function MatchesScreen() {
     
   // Code for figuring out if they have any Likes
   // Using Dummy Data currently
-  const [activeConvos, setActiveConvos] = useState(dummyActiveData);
-  const [archiveConvos, setArchiveConvos] = useState(dummyArchiveData);
-  const [activeUsers, setActiveUsers] = useState(dummyUserData);
+  // const [activeConvos, setActiveConvos] = useState(dummyActiveData);
+  // const [archiveConvos, setArchiveConvos] = useState(dummyArchiveData);
+  // const [activeUsers, setActiveUsers] = useState(dummyUserData);
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
@@ -111,9 +111,9 @@ export default function MatchesScreen() {
           <Text style={{ fontSize: 22, lineHeight: 32, paddingLeft: '5%' }}>
             Make the first move!
           </Text>
-          <MatchesUserSection matches={activeUsers} />
-          <ConvosDropdown convos={activeConvos} convoType="activeConvos" />
-          <ConvosDropdown convos={archiveConvos} convoType="archiveConvos" />
+          <MatchesUserSection matches={dummyUserData} />
+          <ConvosDropdown convos={dummyActiveData} convoType="activeConvos" />
+          <ConvosDropdown convos={dummyArchiveData} convoType="archiveConvos" />
         </View>
       </View>
     </ScrollView>

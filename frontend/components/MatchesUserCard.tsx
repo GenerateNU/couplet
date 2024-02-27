@@ -9,7 +9,7 @@ type MatchesUserCardProps = {
 const AGE = require("../assets/birthday.png");
 const LOCATION = require("../assets/location.png");
 
-const MatchesUserCard: React.FC<MatchesUserCardProps> = ({ profile }) => {
+function MatchesUserCard({ profile }: MatchesUserCardProps) {
   const [modalVisible, setModalVisible] = useState(false);
   
   const toggleModal = () => {

@@ -14,7 +14,7 @@ type ConvosDropdownProps = {
 
 const PROFILE = require("../assets/profile.png");
 
-const ConvosDropdown: React.FC<ConvosDropdownProps> = ({ convos, convoType }) => {
+function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
   const [open, setOpen] = useState(false);
   
   const toggleItems = () => {
@@ -25,7 +25,7 @@ const ConvosDropdown: React.FC<ConvosDropdownProps> = ({ convos, convoType }) =>
     <View style={{ marginTop: 10 }}>
       <View onTouchStart={toggleItems} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: '5%', marginBottom: 10 }}>
         <Text style={{ fontSize: 14}}>
-          {convoType == "activeConvos" ? `Active Convos (${convos.length})` : `Archives (${convos.length})`}
+          {convoType === "activeConvos" ? `Active Convos (${convos.length})` : `Archives (${convos.length})`}
         </Text>
         <Text style={{ fontSize: 14 }}>
           {open ? '\u25B2' : '\u25BC'}
@@ -34,7 +34,7 @@ const ConvosDropdown: React.FC<ConvosDropdownProps> = ({ convos, convoType }) =>
       {open && (
         <View style={{ flexDirection: 'column', marginBottom: 10 }}>
           {convos.map((convo, index) => (
-            <View key={index} style={{ flexDirection: 'row', borderBottomWidth: 1, borderTopWidth: index === 0 ? 1 : 0, borderColor: 'lightgray', padding: 15, alignItems: 'center' }}>
+            <View key={convo.userID} style={{ flexDirection: 'row', borderBottomWidth: 1, borderTopWidth: index === 0 ? 1 : 0, borderColor: 'lightgray', padding: 15, alignItems: 'center' }}>
               <Image source={PROFILE} style={{ width: 55, height: 55, marginRight: 10 }} />
               <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                 <Text style={{ fontSize: 22, marginBottom: 5 }}>

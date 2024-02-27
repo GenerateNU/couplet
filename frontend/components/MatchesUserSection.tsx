@@ -13,7 +13,7 @@ type MatchesUserSectionProps = {
     matches: MatchesUser[];
 };
 
-const MatchesUserSection: React.FC<MatchesUserSectionProps> = ({ matches }) => {
+function MatchesUserSection ({ matches }: MatchesUserSectionProps) {
     return (
         <View style={{ marginVertical: 10, marginLeft: 10 }}>
           <View style={{ flexDirection: "row" }}>
