@@ -12,8 +12,6 @@ export default function Navbar() {
     <View
       style={{
         backgroundColor: "black",
-        height: 75,
-        width: "100%",
         flexDirection: "row",
         position: "absolute",
         bottom: 0

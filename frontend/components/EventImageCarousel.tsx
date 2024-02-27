@@ -5,6 +5,7 @@ import { EventImageCarouselProps } from "./EventProps";
 
 function EventImageCarousel({ images }: EventImageCarouselProps) {
   const { width } = Dimensions.get("window");
+
   return (
     <View
       style={{

@@ -11,7 +11,6 @@ function EventPage() {
     "https://www.flightonice.com/wp-content/uploads/2022/10/e4d4996c-da07-403e-a1c9-17696615d7ea_750x422.jpg",
     "https://www.novaparks.com/sites/default/files/styles/scale_1440/public/2024-01/IceSkating202312190151_NP.jpg?itok=a6ScPTLd"
   ];
-
   const handleReact = () => {
     // TODO: Add logic to update the database with the user's reaction to the event
   };
