@@ -35,18 +35,20 @@ type EnvConfig struct {
 }
 
 func main() {
-	// Load environment variables
-	var config EnvConfig
-	var err error
-	if err = envconfig.Process(context.Background(), &config); err != nil {
-		log.Fatalln(err)
-	}
-
 	// Display splash screen. Purely cosmetic :)
-	logo, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromStringWithStyle("couplet", pterm.FgMagenta.ToStyle())).Srender()
+	logo, err := pterm.DefaultBigText.WithLetters(putils.LettersFromStringWithStyle("couplet", pterm.FgMagenta.ToStyle())).Srender()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 	pterm.DefaultCenter.Println(logo)
 	credit := pterm.DefaultBox.Sprint("Prototype created by " + pterm.Cyan("Generate"))
 	pterm.DefaultCenter.Println(credit)
+
+	// Load environment variables
+	var config EnvConfig
+	if err = envconfig.Process(context.Background(), &config); err != nil {
+		log.Fatalln(err.Error())
+	}
 
 	// Configure slog logger
 	logLevel := asLogLevel(config.LogLevel)

@@ -7,11 +7,13 @@ import (
 	"couplet/internal/database/event_id"
 	"errors"
 	"fmt"
+
+	ht "github.com/ogen-go/ogen/http"
 )
 
 // Creates a new event.
 // POST /events
-func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.CreateEventRes, error) {
+func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.EventsPostRes, error) {
 	// TODO: Write tests
 	h.logger.Info("POST /events")
 
@@ -25,7 +27,7 @@ func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.
 		return nil, errors.New("failed to create event")
 	}
 
-	res := api.CreateEventCreated{
+	res := api.EventsPostCreated{
 		ID:   e.ID.Unwrap(),
 		Name: e.Name,
 		Bio:  e.Bio,
@@ -36,7 +38,7 @@ func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.
 
 // Deletes an event by its ID.
 // DELETE /events/{id}
-func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) (api.DeleteEventRes, error) {
+func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeleteParams) (api.EventsIDDeleteRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("DELETE /events/%s", params.ID))
 	o, err := h.controller.DeleteEvent(event_id.Wrap(params.ID))
@@ -47,7 +49,7 @@ func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) 
 		}, nil
 	}
 
-	res := api.DeleteEventOK{
+	res := api.EventsIDDeleteOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -55,15 +57,16 @@ func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) 
 	return &res, nil
 }
 
-// GET (/events/:id) a single event by their id
-func (h Handler) GetEvent(ctx context.Context, params api.GetEventParams) (api.GetEventRes, error) {
+// Gets an event by its ID.
+// GET /events/{id}
+func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) (api.EventsIDGetRes, error) {
 	h.logger.Info(fmt.Sprintf("GET /events/%s", params.ID))
 	e, err := h.controller.GetEvent(event_id.Wrap(params.ID))
 	if err != nil {
 		return nil, errors.New("failed to get event")
 	}
 
-	res := api.GetEventOK{
+	res := api.EventsIDGetOK{
 		ID:   e.ID.Unwrap(),
 		Name: e.Name,
 		Bio:  e.Bio,
@@ -72,8 +75,9 @@ func (h Handler) GetEvent(ctx context.Context, params api.GetEventParams) (api.G
 	return &res, nil
 }
 
-// GET (/events) all events with pagination
-func (h Handler) GetEvents(ctx context.Context, params api.GetEventsParams) ([]api.GetEventsOKItem, error) {
+// Gets all events with pagination.
+// GET /events
+func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]api.EventsGetOKItem, error) {
 	h.logger.Info("GET /events")
 
 	events, err := h.controller.GetEvents(params.Limit, params.Offset)
@@ -81,9 +85,9 @@ func (h Handler) GetEvents(ctx context.Context, params api.GetEventsParams) ([]a
 		return nil, errors.New("failed to get events")
 	}
 
-	var res []api.GetEventsOKItem
+	var res []api.EventsGetOKItem
 	for _, e := range events {
-		res = append(res, api.GetEventsOKItem{
+		res = append(res, api.EventsGetOKItem{
 			ID:   e.ID.Unwrap(),
 			Name: e.Name,
 			Bio:  e.Bio,
@@ -93,8 +97,9 @@ func (h Handler) GetEvents(ctx context.Context, params api.GetEventsParams) ([]a
 	return res, nil
 }
 
-// PUT (/events/:id) to completely update an existing event, returning the created object if successful
-func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, params api.PutEventParams) (api.PutEventRes, error) {
+// Completely updates an existing event
+// PUT /events/{id}
+func (h Handler) EventsIDPut(ctx context.Context, updatedEvent *api.EventsIDPutReq, params api.EventsIDPutParams) (api.EventsIDPutRes, error) {
 	h.logger.Info(fmt.Sprintf("PUT /events/%s", params.ID))
 	e, err := h.controller.PutEvent(event_id.Wrap(params.ID), event.Event{
 		Name: updatedEvent.Name,
@@ -104,7 +109,7 @@ func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, pa
 		return nil, errors.New("failed to update event")
 	}
 
-	res := api.PutEventOK{
+	res := api.EventsIDPutOK{
 		ID:   e.ID.Unwrap(),
 		Name: e.Name,
 		Bio:  e.Bio,
@@ -113,10 +118,9 @@ func (h Handler) PutEvent(ctx context.Context, updatedEvent *api.PutEventReq, pa
 	return &res, nil
 }
 
-// PATCH (/events/:id) to partially update one or many fields of an existing event, returning the created object if successful
-
-func (h Handler) PatchEvent(ctx context.Context, req *api.Event, params api.PatchEventParams) (api.PatchEventRes, error) {
+// Partially update one or many fields of an existing event
+// PATCH /events/{id}
+func (h Handler) EventsIDPatch(ctx context.Context, req *api.Event, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
 	h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
-	// todo
-	return nil, nil
+	return nil, ht.ErrNotImplemented
 }

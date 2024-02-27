@@ -4,7 +4,6 @@ package database
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
-	"couplet/internal/database/swipe"
 	"couplet/internal/database/user"
 	"errors"
 	"fmt"
@@ -55,18 +54,8 @@ func Migrate(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("nil database specified")
 	}
-
-	err := db.SetupJoinTable(&user.User{}, "UserSwipes", &swipe.UserSwipe{})
-	if err != nil {
-		return err
-	}
-
-	err = db.SetupJoinTable(&user.User{}, "EventSwipes", &swipe.EventSwipe{})
-	if err != nil {
-		return err
-	}
 	// Add new models here to ensure they are migrated on startup
-	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{})
+	return db.Debug().AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{}, user.EventSwipe{}, user.UserSwipe{})
 }
 
 // Creates a new mock postgres-GORM database
