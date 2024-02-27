@@ -35,7 +35,9 @@ export default function StartMatches() {
         <Text style={styles.suggestDateText}>Suggest a first date!</Text>
       </View>
       <Carousel
-        {...baseOptions}
+        vertical={false}
+        width={PAGE_WIDTH / 2.5}
+        height={PAGE_WIDTH / 1.5}
         ref={ref}
         style={{ width: "100%" }}
         data={data}
