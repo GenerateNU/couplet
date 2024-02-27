@@ -20,6 +20,8 @@ export default function StartMatches() {
     month: "long"
   })} ${today.getDate()}th, ${today.getFullYear()}`;
 
+  setData(data.map((_, index) => index));
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
