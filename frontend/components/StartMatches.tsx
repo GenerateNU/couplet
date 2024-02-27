@@ -9,12 +9,6 @@ export default function StartMatches() {
   const ref = React.useRef<ICarouselInstance>(null);
   const PAGE_WIDTH = Dimensions.get("window").width;
 
-  const baseOptions = {
-    vertical: false,
-    width: PAGE_WIDTH / 2.5,
-    height: PAGE_WIDTH / 1.5
-  } as const;
-
   const today = new Date();
   const date = `${today.toLocaleString("default", {
     month: "long"
