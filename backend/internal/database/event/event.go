@@ -14,12 +14,13 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type Event struct {
-	ID        event_id.EventID `gorm:"primaryKey"`
+	ID        event_id.EventID `gorm:"primaryKey" validate:"required"`
 	CreatedAt time.Time
-	UpdatedAt time.Time
-	Name      string
-	Bio       string
-	OrgID     org_id.OrgID
+	UpdatedAt time.Time    `validate:"gtefield=CreatedAt"`
+	Name      string       `validate:"required,min=1,max=255"`
+	Bio       string       `validate:"required,min=1,max=255"`
+	EventTags []EventTag   `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags" validate:"max=5"`
+	OrgID     org_id.OrgID `validate:"required"`
 }
 
 // Automatically generates a random ID if unset before creating
@@ -37,6 +38,21 @@ func (e *Event) AfterSave(tx *gorm.DB) error {
 
 // Ensures the event and its fields are valid
 func (e Event) Validate() error {
-	// TODO: Write tests
 	return validate.Struct(e)
+}
+
+type EventTag struct {
+	ID        string `gorm:"primaryKey" validate:"required,min=1,max=255"`
+	CreatedAt time.Time
+	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`
+	Events    []Event   `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags"`
+}
+
+// Automatically rolls back transactions that save invalid event tags to the database
+func (t *EventTag) AfterSave(tx *gorm.DB) error {
+	return t.Validate()
+}
+
+func (t EventTag) Validate() error {
+	return validate.Struct(t)
 }

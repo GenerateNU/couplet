@@ -25,29 +25,47 @@ func TestOrgValidate(t *testing.T) {
 	}
 	assert.Nil(t, validOrg.Validate())
 
-	invalidTimes := validOrg
-	invalidTimes.CreatedAt = invalidTimes.UpdatedAt.Add(1)
-	assert.NotNil(t, invalidTimes.Validate())
+	idCheck := validOrg
+	idCheck.ID = org_id.OrgID{}
+	assert.NotNil(t, idCheck.Validate())
 
-	invalidName := validOrg
-	invalidName.Name = ""
-	assert.NotNil(t, invalidName.Validate())
-	for i := 0; i < 256; i++ {
-		invalidName.Name = invalidName.Name + "a"
+	timesCheck := validOrg
+	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
+	assert.NotNil(t, timesCheck.Validate())
+
+	nameLengthCheck := validOrg
+	nameLengthCheck.Name = ""
+	for i := 0; i <= 256; i++ {
+		if i < 1 || i > 255 {
+			assert.NotNil(t, nameLengthCheck.Validate())
+		} else {
+			assert.Nil(t, nameLengthCheck.Validate())
+		}
+		nameLengthCheck.Name = nameLengthCheck.Name + "a"
 	}
-	assert.NotNil(t, invalidName.Validate())
 
-	validNoImage := validOrg
-	validNoImage.Image = ""
-	assert.Nil(t, validNoImage.Validate())
+	bioLengthCheck := validOrg
+	bioLengthCheck.Bio = ""
+	for i := 0; i <= 256; i++ {
+		if i < 1 || i > 255 {
+			assert.NotNil(t, bioLengthCheck.Validate())
+		} else {
+			assert.Nil(t, bioLengthCheck.Validate())
+		}
+		bioLengthCheck.Bio = bioLengthCheck.Bio + "a"
+	}
 
-	invalidImage := validOrg
-	invalidImage.Image = "invalid"
-	assert.NotNil(t, invalidImage.Validate())
+	noImageCheck := validOrg
+	noImageCheck.Image = ""
+	assert.Nil(t, noImageCheck.Validate())
 
-	invalidOrgTags := validOrg
-	invalidOrgTags.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}
-	assert.NotNil(t, invalidOrgTags.Validate())
+	imageUrlCheck := validOrg
+	imageUrlCheck.Image = "invalid"
+	assert.NotNil(t, imageUrlCheck.Validate())
+
+	orgTagsCheck := validOrg
+	orgTagsCheck.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}
+	assert.NotNil(t, orgTagsCheck.Validate())
 }
 
 func TestOrgTagValidate(t *testing.T) {
@@ -59,7 +77,18 @@ func TestOrgTagValidate(t *testing.T) {
 	}
 	assert.Nil(t, validOrgTag.Validate())
 
-	invalidTimes := validOrgTag
-	invalidTimes.CreatedAt = invalidTimes.UpdatedAt.Add(1)
-	assert.NotNil(t, invalidTimes.Validate())
+	idLengthCheck := validOrgTag
+	idLengthCheck.ID = ""
+	for i := 0; i <= 256; i++ {
+		if i < 1 || i > 255 {
+			assert.NotNil(t, idLengthCheck.Validate())
+		} else {
+			assert.Nil(t, idLengthCheck.Validate())
+		}
+		idLengthCheck.ID = idLengthCheck.ID + "a"
+	}
+
+	timesCheck := validOrgTag
+	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
+	assert.NotNil(t, timesCheck.Validate())
 }

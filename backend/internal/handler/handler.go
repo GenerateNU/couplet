@@ -34,7 +34,7 @@ func NewHandler(controller controller.Controller, logger *slog.Logger) api.Handl
 
 // Checks if the server is running and servicing requests.
 // GET /health-check
-func (h Handler) HealthCheck(ctx context.Context) error {
+func (h Handler) HealthCheckGet(ctx context.Context) error {
 	h.logger.Info("GET /health-check")
 	return nil
 }

@@ -13,7 +13,7 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type Org struct {
-	ID        org_id.OrgID `gorm:"primaryKey"`
+	ID        org_id.OrgID `gorm:"primaryKey" validate:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time     `validate:"gtefield=CreatedAt"`
 	Name      string        `validate:"required,min=1,max=255"`
