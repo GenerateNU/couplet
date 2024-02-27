@@ -28,90 +28,90 @@ export default function App() {
         <Home />
       ) : (
         <View
+          style={{
+            paddingTop: "100%",
+            width: "100%",
+            borderRadius: 12,
+            alignSelf: "center",
+            marginBottom: 10,
+            minHeight: "100%",
+            paddingBottom: "30%",
+            alignItems: "flex-start"
+          }}
+        >
+          <Text
             style={{
-              paddingTop: "100%",
-              width: "100%",
-              borderRadius: 12,
-              alignSelf: "center",
-              marginBottom: 10,
-              minHeight: "100%",
-              paddingBottom: "30%",
-              alignItems: "flex-start"
+              marginTop: -140,
+              fontSize: 44,
+              fontWeight: "bold",
+              marginBottom: 15,
+              paddingLeft: 30
             }}
           >
-            <Text
+            Welcome to Couplet!
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              paddingHorizontal: 30,
+              marginBottom: 20
+            }}
+          >
+            Sign in with one of the providers below to get started.
+          </Text>
+          <View style={{ alignItems: "center", width: "100%", paddingHorizontal: 30 }}>
+            <TouchableOpacity
+              onPress={() => setIsGoogleLoggedIn(true)}
               style={{
-                marginTop: -140,
-                fontSize: 44,
-                fontWeight: "bold",
-                marginBottom: 15,
-                paddingLeft: 30
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "white",
+                padding: 10,
+                borderRadius: 30,
+                marginTop: 20,
+                width: 300,
+                alignItems: "center",
+                justifyContent: "center",
+                height: 44,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5
               }}
             >
-              Welcome to Couplet!
-            </Text>
-            <Text
-              style={{
-                fontSize: 18,
-                paddingHorizontal: 30,
-                marginBottom: 20
-              }}
-            >
-              Sign in with one of the providers below to get started.
-            </Text>
-            <View style={{ alignItems: "center", width: "100%", paddingHorizontal: 30 }}>
-              <TouchableOpacity
-                onPress={() => setIsGoogleLoggedIn(true)}
+              <Text style={{ color: "black", fontWeight: "500", fontSize: 20 }}>
+                Sign in with Google
+              </Text>
+            </TouchableOpacity>
+            {isAppleLoggedIn && <Text style={{ marginTop: 20 }}>Logged in with Apple!</Text>}
+            {!isAppleLoggedIn && (
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE_OUTLINE}
+                cornerRadius={30}
                 style={{
-                  borderWidth: 1,
-                  borderColor: "black",
-                  backgroundColor: "white",
-                  padding: 10,
-                  borderRadius: 30,
+                  width: 200,
+                  height: 50,
                   marginTop: 20,
-                  width: 300,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: 44,
                   shadowColor: "#000",
                   shadowOffset: {
                     width: 0,
                     height: 2
                   },
+                  minWidth: 300,
                   shadowOpacity: 0.25,
                   shadowRadius: 3.84,
                   elevation: 5
                 }}
-              >
-                <Text style={{ color: "black", fontWeight: "500", fontSize: 20 }}>
-                  Sign in with Google
-                </Text>
-              </TouchableOpacity>
-              {isAppleLoggedIn && <Text style={{ marginTop: 20 }}>Logged in with Apple!</Text>}
-              {!isAppleLoggedIn && (
-                <AppleAuthentication.AppleAuthenticationButton
-                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                  buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE_OUTLINE}
-                  cornerRadius={30}
-                  style={{
-                    width: 200,
-                    height: 50,
-                    marginTop: 20,
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2
-                    },
-                    minWidth: 300,
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5
-                  }}
-                  onPress={() => handleAppleSignIn}
-                />
-              )}
-            </View>
+                onPress={() => handleAppleSignIn}
+              />
+            )}
           </View>
+        </View>
       )}
     </View>
   );
