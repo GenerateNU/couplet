@@ -1,9 +1,9 @@
 import { Link } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { Image, View } from "react-native";
 import { Button } from "react-native-paper";
 
-export default function NavButton({ route }: { route: string }) {
+export default function NavButton({ route, icon }: { route: string; icon: any }) {
   return (
     <View style={{ width: "100%", flex: 1, justifyContent: "center" }}>
       <Link
@@ -17,19 +17,11 @@ export default function NavButton({ route }: { route: string }) {
           style={{
             width: "auto",
             height: "100%",
-            justifyContent: "center"
+            justifyContent: "center",
+            marginLeft: 15
           }}
         >
-          <Text
-            style={{
-              color: "white",
-              width: "auto",
-              textAlign: "center",
-              textAlignVertical: "center"
-            }}
-          >
-            {route}
-          </Text>
+          <Image source={icon} style={{ height: 30, width: 30 }} resizeMode="contain" />
         </Button>
       </Link>
     </View>
