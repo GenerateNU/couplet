@@ -8,9 +8,49 @@ info:
 
 paths:
   /events:
+    get:
+      summary: Get multiple events
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: The number of events to return
+          schema:
+            type: integer
+            format: int
+            minimum: 1
+            default: 10
+            example: 20
+        - name: offset
+          in: query
+          required: true
+          description: The number of events to skip
+          schema:
+            type: integer
+            format: int
+            default: 0
+            example: 13
+      responses:
+        '200':
+          description: Successfully retrieved events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: '#/components/schemas/Event'
+                    - required:
+                        - id
+                        - name
+                        - bio
     post:
       summary: Create a new event
-      operationId: createEvent
       requestBody:
         description: Event to create
         required: true
@@ -44,7 +84,6 @@ paths:
   /events/{id}:
     delete:
       summary: Delete an event by its event ID
-      operationId: deleteEvent
       parameters:
         - name: id
           in: path
@@ -56,7 +95,7 @@ paths:
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
-          description: Successfully deleted specified event
+          description: Successfully deleted event
           content:
             application/json:
               schema:
@@ -73,17 +112,160 @@ paths:
                       - bio
         "404":
           $ref: "#/components/responses/NotFound"
+    get:
+      summary: Get an event by its ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        '200':
+          description: Successfully retrieved event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: '#/components/schemas/Event'
+                  - required:
+                      - id
+                      - name
+                      - bio
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Partially update an event by its ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Event fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Successfully updated event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: '#/components/schemas/Event'
+                  - required:
+                      - id
+                      - name
+                      - bio
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update an event by its ID if it exists, else create it
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to save
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      requestBody:
+        description: Event to update
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Event'
+                - required:
+                    - name
+                    - bio
+      responses:
+        '200':
+          description: Successfully updated event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: '#/components/schemas/Event'
+                  - required:
+                      - id
+                      - name
+                      - bio
+        '201':
+          description: Successfully created event
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  - $ref: '#/components/schemas/Event'
+                  - required:
+                      - id
+                      - name
+                      - bio
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /events/swipes:
+    post:
+      summary: Create a swipe between a user and an event
+      requestBody:
+        description: EventSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventSwipe"
+      responses:
+        "201":
+          description: Successfully created event swipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSwipe"
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /health-check:
     get:
       summary: Check if the server is running and servicing requests
-      operationId: healthCheck
       responses:
         "200":
           description: The server is healthy
   /orgs:
     get:
       summary: Get multiple organizations
-      operationId: getOrgs
       parameters:
         - name: limit
           in: query
@@ -124,7 +306,6 @@ paths:
                         - tags
     post:
       summary: Create a new organization
-      operationId: createOrg
       requestBody:
         description: Organization to create
         required: true
@@ -159,7 +340,6 @@ paths:
   /orgs/{id}:
     delete:
       summary: Delete an organization by its ID
-      operationId: deleteOrg
       parameters:
         - name: id
           in: path
@@ -171,7 +351,7 @@ paths:
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
-          description: Successfully deleted specified organization
+          description: Successfully deleted organization
           content:
             application/json:
               schema:
@@ -191,7 +371,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     get:
       summary: Get an organization by its ID
-      operationId: getOrg
       parameters:
         - name: id
           in: path
@@ -203,7 +382,7 @@ paths:
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
-          description: Successfully retrieved specified organization
+          description: Successfully retrieved organization
           content:
             application/json:
               schema:
@@ -223,7 +402,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     patch:
       summary: Partially update an organization by its ID
-      operationId: patchOrg
       parameters:
         - name: id
           in: path
@@ -242,7 +420,7 @@ paths:
               $ref: "#/components/schemas/Org"
       responses:
         "200":
-          description: Successfully updated specified organization
+          description: Successfully updated organization
           content:
             application/json:
               schema:
@@ -264,7 +442,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     put:
       summary: Update an organization by its ID if it exists, else create it
-      operationId: putOrg
       parameters:
         - name: id
           in: path
@@ -288,7 +465,7 @@ paths:
                     - tags
       responses:
         "200":
-          description: Successfully updated specified organization
+          description: Successfully updated organization
           content:
             application/json:
               schema:
@@ -305,7 +482,7 @@ paths:
                       - bio
                       - tags
         "201":
-          description: Successfully created specified organization
+          description: Successfully created organization
           content:
             application/json:
               schema:
@@ -326,7 +503,6 @@ paths:
   /users:
     get:
       summary: Get multiple users
-      operationId: getUsers
       parameters:
         - name: limit
           in: query
@@ -367,7 +543,6 @@ paths:
                         - age
     post:
       summary: Create a new user
-      operationId: createUser
       requestBody:
         description: User to create
         required: true
@@ -403,7 +578,6 @@ paths:
   /users/{id}:
     delete:
       summary: Delete a user by its ID
-      operationId: deleteUser
       parameters:
         - name: id
           in: path
@@ -415,7 +589,7 @@ paths:
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
-          description: Successfully deleted specified user
+          description: Successfully deleted user
           content:
             application/json:
               schema:
@@ -435,7 +609,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     get:
       summary: Get a user by its ID
-      operationId: getUser
       parameters:
         - name: id
           in: path
@@ -447,7 +620,7 @@ paths:
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "200":
-          description: Successfully retrieved specified user
+          description: Successfully retrieved user
           content:
             application/json:
               schema:
@@ -467,7 +640,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     patch:
       summary: Partially update a user by its ID
-      operationId: patchUser
       parameters:
         - name: id
           in: path
@@ -486,7 +658,7 @@ paths:
               $ref: "#/components/schemas/User"
       responses:
         "200":
-          description: Successfully updated specified user
+          description: Successfully updated user
           content:
             application/json:
               schema:
@@ -508,7 +680,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     put:
       summary: Update a user by its ID if it exists, else create it
-      operationId: putUser
       parameters:
         - name: id
           in: path
@@ -532,7 +703,7 @@ paths:
                     - age
       responses:
         "200":
-          description: Successfully updated specified user
+          description: Successfully updated user
           content:
             application/json:
               schema:
@@ -549,7 +720,7 @@ paths:
                       - lastName
                       - age
         "201":
-          description: Successfully created specified user
+          description: Successfully created user
           content:
             application/json:
               schema:
@@ -567,15 +738,28 @@ paths:
                       - age
         "400":
           $ref: "#/components/responses/BadRequest"
+  /users/swipes:
+    post:
+      summary: Create a swipe between users
+      requestBody:
+        description: UserSwipe to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSwipe"
+      responses:
+        "201":
+          description: Successfully created user swipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSwipe"
+        "400":
+          $ref: "#/components/responses/BadRequest"
 
 components:
   responses:
-    UnexpectedError:
-      description: An unexpected error occurred
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
     BadRequest:
       description: Invalid request body
       content:
@@ -594,12 +778,17 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
+    UnexpectedError:
+      description: An unexpected error occurred
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
   schemas:
     Address:
       type: object
       required:
         - line1
-        - line2
         - zipCode
         - city
         - state
@@ -664,6 +853,7 @@ components:
           example: 500
         message:
           type: string
+          minLength: 1
           example: Internal server error
     Event:
       type: object
@@ -685,31 +875,15 @@ components:
             format: uri
             example: https://example.com/image.png
           minItems: 1
+          maxItems: 5
         externalLink:
           type: string
-          minLength: 1
-          example: 420 Huntington Ave, Boston, MA 02115
-          # $ref: "#/components/schemas/Address"
-        # images:
-        #   type: array
-        #   items:
-        #     type: string
-        #     format: uri
-        #     example: https://example.com/image.png
-        #   minItems: 1
-        # externalLink:
-        #   type: string
-        #   format: uri
-        #   example: https://example.com
+          format: uri
+          example: https://example.com
         orgId:
           type: string
           format: uuid
           example: 5e91507e-5630-4efd-9fd4-799178870b10
-          # TODO:
-          # schedule TBD
-          # - optional datetime range (within a week)
-          # - optional recurring until (some day)
-          # price range low~high
     Org:
       type: object
       properties:
@@ -748,36 +922,48 @@ components:
           format: uint8
           minimum: 18
           example: 22
-          # TODO
-          # gender
-          # hashed password
-          # email
-          # phone number/social
-          # Location
-          # preferences
-          # - what they like
-          # Profile
-          # - pics
-          # - about me
-          # matches TBD
-    CreateUserRequest:
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+          maxItems: 5
+    EventSwipe:
       type: object
       required:
-        - firstName
-        - lastName
-        - age
+        - userId
+        - eventId
+        - liked
       properties:
-        firstName:
+        userId:
           type: string
-          minLength: 1
-          example: Bob
-        lastName:
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        eventId:
           type: string
-          minLength: 1
-          example: Smith
-        age:
-          type: integer
-          format: uint8
-          minimum: 18
-          example: 22
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
+          example: true
+    UserSwipe:
+      type: object
+      required:
+        - userId
+        - otherUserId
+        - liked
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        otherUserId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        liked:
+          type: boolean
+          example: true
 ...

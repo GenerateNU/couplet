@@ -4,9 +4,10 @@ package database
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
+	"couplet/internal/database/user"
+	"errors"
 	"fmt"
 	"log/slog"
-	"os/user"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -30,36 +31,46 @@ func NewDB(host string, port uint16, username string, password string, databaseN
 		return nil, err
 	}
 
-	return db, MigrateDB(db)
+	return db, Migrate(db)
 }
 
 // Enables connection pooling on a GORM database
 func EnableConnPooling(db *gorm.DB) error {
-	sqlDB, err := db.DB()
+	if db == nil {
+		return errors.New("nil database specified")
+	}
 
+	sqlDB, err := db.DB()
 	if err != nil {
 		return err
 	}
-
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
-
 	return nil
 }
 
 // Performs database migrations for defined schema if necessary
-func MigrateDB(db *gorm.DB) error {
+func Migrate(db *gorm.DB) error {
+	if db == nil {
+		return errors.New("nil database specified")
+	}
 	// Add new models here to ensure they are migrated on startup
-	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{})
+	return db.Debug().AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{}, user.EventSwipe{}, user.UserSwipe{})
 }
 
 // Creates a new mock postgres-GORM database
 func NewMockDB() (*gorm.DB, sqlmock.Sqlmock) {
-	mockDb, mock, _ := sqlmock.New()
+	mockDb, mock, err := sqlmock.New()
+	if err != nil {
+		panic(err)
+	}
 	dialector := postgres.New(postgres.Config{
 		Conn:       mockDb,
 		DriverName: "postgres",
 	})
-	db, _ := gorm.Open(dialector, &gorm.Config{})
+	db, err := gorm.Open(dialector, &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 	return db, mock
 }

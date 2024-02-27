@@ -35,22 +35,23 @@ type EnvConfig struct {
 }
 
 func main() {
-	// Load environment variables
-	ctx := context.Background()
-	var config EnvConfig
-	var err error
-	if err = envconfig.Process(ctx, &config); err != nil {
-		log.Fatalln(err)
-	}
-
 	// Display splash screen. Purely cosmetic :)
-	logo, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromStringWithStyle("couplet", pterm.FgMagenta.ToStyle())).Srender()
+	logo, err := pterm.DefaultBigText.WithLetters(putils.LettersFromStringWithStyle("couplet", pterm.FgMagenta.ToStyle())).Srender()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 	pterm.DefaultCenter.Println(logo)
 	credit := pterm.DefaultBox.Sprint("Prototype created by " + pterm.Cyan("Generate"))
 	pterm.DefaultCenter.Println(credit)
 
+	// Load environment variables
+	var config EnvConfig
+	if err = envconfig.Process(context.Background(), &config); err != nil {
+		log.Fatalln(err.Error())
+	}
+
 	// Configure slog logger
-	logLevel := AsLogLevel(config.LogLevel)
+	logLevel := asLogLevel(config.LogLevel)
 	logger := slog.New(pterm.NewSlogHandler(pterm.DefaultLogger.WithLevel(logLevel)))
 
 	// Connect to the database
@@ -91,7 +92,7 @@ func main() {
 }
 
 // Converts a string to its corresponding log level
-func AsLogLevel(logLevel string) pterm.LogLevel {
+func asLogLevel(logLevel string) pterm.LogLevel {
 	switch logLevel {
 	case "DEBUG":
 		return pterm.LogLevelDebug

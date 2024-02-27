@@ -7,11 +7,13 @@ import (
 	"couplet/internal/database/event_id"
 	"errors"
 	"fmt"
+
+	ht "github.com/ogen-go/ogen/http"
 )
 
 // Creates a new event.
 // POST /events
-func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.CreateEventRes, error) {
+func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.EventsPostRes, error) {
 	// TODO: Write tests
 	h.logger.Info("POST /events")
 
@@ -25,7 +27,7 @@ func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.
 		return nil, errors.New("failed to create event")
 	}
 
-	res := api.CreateEventCreated{
+	res := api.EventsPostCreated{
 		ID:   e.ID.Unwrap(),
 		Name: e.Name,
 		Bio:  e.Bio,
@@ -36,7 +38,7 @@ func (h Handler) CreateEvent(ctx context.Context, req *api.CreateEventReq) (api.
 
 // Deletes an event by its ID.
 // DELETE /events/{id}
-func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) (api.DeleteEventRes, error) {
+func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeleteParams) (api.EventsIDDeleteRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("DELETE /events/%s", params.ID))
 	o, err := h.controller.DeleteEvent(event_id.Wrap(params.ID))
@@ -47,10 +49,78 @@ func (h Handler) DeleteEvent(ctx context.Context, params api.DeleteEventParams) 
 		}, nil
 	}
 
-	res := api.DeleteEventOK{
+	res := api.EventsIDDeleteOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
 	}
 	return &res, nil
+}
+
+// Gets an event by its ID.
+// GET /events/{id}
+func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) (api.EventsIDGetRes, error) {
+	h.logger.Info(fmt.Sprintf("GET /events/%s", params.ID))
+	e, err := h.controller.GetEvent(event_id.Wrap(params.ID))
+	if err != nil {
+		return nil, errors.New("failed to get event")
+	}
+
+	res := api.EventsIDGetOK{
+		ID:   e.ID.Unwrap(),
+		Name: e.Name,
+		Bio:  e.Bio,
+	}
+
+	return &res, nil
+}
+
+// Gets all events with pagination.
+// GET /events
+func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]api.EventsGetOKItem, error) {
+	h.logger.Info("GET /events")
+
+	events, err := h.controller.GetEvents(params.Limit, params.Offset)
+	if err != nil {
+		return nil, errors.New("failed to get events")
+	}
+
+	var res []api.EventsGetOKItem
+	for _, e := range events {
+		res = append(res, api.EventsGetOKItem{
+			ID:   e.ID.Unwrap(),
+			Name: e.Name,
+			Bio:  e.Bio,
+		})
+	}
+
+	return res, nil
+}
+
+// Completely updates an existing event
+// PUT /events/{id}
+func (h Handler) EventsIDPut(ctx context.Context, updatedEvent *api.EventsIDPutReq, params api.EventsIDPutParams) (api.EventsIDPutRes, error) {
+	h.logger.Info(fmt.Sprintf("PUT /events/%s", params.ID))
+	e, err := h.controller.PutEvent(event_id.Wrap(params.ID), event.Event{
+		Name: updatedEvent.Name,
+		Bio:  updatedEvent.Bio,
+	})
+	if err != nil {
+		return nil, errors.New("failed to update event")
+	}
+
+	res := api.EventsIDPutOK{
+		ID:   e.ID.Unwrap(),
+		Name: e.Name,
+		Bio:  e.Bio,
+	}
+
+	return &res, nil
+}
+
+// Partially update one or many fields of an existing event
+// PATCH /events/{id}
+func (h Handler) EventsIDPatch(ctx context.Context, req *api.Event, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
+	h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
+	return nil, ht.ErrNotImplemented
 }
