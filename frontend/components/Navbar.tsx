@@ -2,6 +2,11 @@ import React from "react";
 import { View } from "react-native";
 import NavButton from "./NavButton";
 
+const CHAT = require("../assets/chat.png");
+const HEART = require("../assets/heart.png");
+const HOME = require("../assets/home.png");
+const PERSON = require("../assets/person.png");
+
 export default function Navbar() {
   return (
     <View
@@ -12,10 +17,10 @@ export default function Navbar() {
         bottom: 0
       }}
     >
-      <NavButton route="People" />
-      <NavButton route="Favorites" />
-      <NavButton route="Matches" />
-      <NavButton route="Profile" />
+      <NavButton route="Home" icon={HOME} />
+      <NavButton route="Favorites" icon={HEART} />
+      <NavButton route="Matches" icon={CHAT} />
+      <NavButton route="Profile" icon={PERSON} />
     </View>
   );
 }
