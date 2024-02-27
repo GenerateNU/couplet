@@ -10,7 +10,7 @@ export default function App() {
 
   async function handleAppleSignIn() {
     try {
-      const credential = await AppleAuthentication.signInAsync({
+      await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL
@@ -18,8 +18,12 @@ export default function App() {
       });
       setIsAppleLoggedIn(true);
     } catch (e) {
-      console.log("CANCELLED");
+
     }
+  }
+
+  async function handleGoogleSignin() {
+    setIsGoogleLoggedIn(true)
   }
 
   return (
@@ -62,7 +66,7 @@ export default function App() {
             </Text>
             <View style={{ alignItems: "center", width: "100%", paddingHorizontal: 30 }}>
               <TouchableOpacity
-                onPress={() => setIsGoogleLoggedIn(true)}
+                onPress={ handleGoogleSignin }
                 style={{
                   borderWidth: 1,
                   borderColor: "black",
