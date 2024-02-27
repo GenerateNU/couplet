@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Text, View, Image, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MatchesUser } from "./MatchesUserSection";
 
 type MatchesUserCardProps = {
   profile: MatchesUser;
-}
+};
 
 const AGE = require("../assets/birthday.png");
 const LOCATION = require("../assets/location.png");
 
 function MatchesUserCard({ profile }: MatchesUserCardProps) {
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -19,17 +19,12 @@ function MatchesUserCard({ profile }: MatchesUserCardProps) {
   return (
     <TouchableOpacity onPress={toggleModal}>
       <View style={styles.cardContainer}>
-        <View style={styles.cardImage}/>
+        <View style={styles.cardImage} />
         <View>
           <Text style={styles.cardName}> {profile.name} </Text>
         </View>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={toggleModal}
-      >
+      <Modal animationType="slide" transparent visible={modalVisible} onRequestClose={toggleModal}>
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>X</Text>
@@ -69,60 +64,60 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
   },
-  cardName: { 
-    padding: 10, 
-    fontSize: 18 
+  cardName: {
+    padding: 10,
+    fontSize: 18
   },
   modalContainer: {
     flex: 1,
     backgroundColor: "white",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: 50,
+    paddingVertical: 50
   },
   modalContent: {
-    alignItems: "center",
+    alignItems: "center"
   },
   modalTitle: {
     fontSize: 36,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   modalValues: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 10
   },
   valueContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 25,
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 25
   },
   icon: {
     width: 20,
     height: 20,
-    resizeMode: 'contain',
-    marginRight: 5,
+    resizeMode: "contain",
+    marginRight: 5
   },
   valueText: {
-    fontSize: 16,
+    fontSize: 16
   },
   modalName: {
-    fontSize: 24,
+    fontSize: 24
   },
   closeButton: {
     position: "absolute",
     top: 45,
     right: 20,
-    zIndex: 1,
+    zIndex: 1
   },
   closeButtonText: {
-    fontSize: 30,
+    fontSize: 30
   },
   profilePicture: {
-    width: '95%',
+    width: "95%",
     aspectRatio: 1,
-    backgroundColor: "rgb(200,200,200)",
-  },
+    backgroundColor: "rgb(200,200,200)"
+  }
 });
 
 export default MatchesUserCard;
