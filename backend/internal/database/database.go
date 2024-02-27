@@ -4,10 +4,10 @@ package database
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
+	"couplet/internal/database/user"
 	"errors"
 	"fmt"
 	"log/slog"
-	"os/user"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -55,7 +55,7 @@ func Migrate(db *gorm.DB) error {
 		return errors.New("nil database specified")
 	}
 	// Add new models here to ensure they are migrated on startup
-	return db.AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{})
+	return db.Debug().AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{}, user.EventSwipe{}, user.UserSwipe{})
 }
 
 // Creates a new mock postgres-GORM database

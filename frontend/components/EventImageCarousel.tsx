@@ -1,26 +1,37 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
+import { EventImageCarouselProps } from "./EventProps";
 
-function EventImageCarousel() {
-  const dummyImages = [
-    "https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg",
-    "https://cff2.earth.com/uploads/2023/05/16064103/Farms-960x640.jpg"
-  ];
+function EventImageCarousel({ images }: EventImageCarouselProps) {
+  const { width } = Dimensions.get("window");
+
   return (
     <View
       style={{
         width: "100%",
         borderRadius: 12,
         alignSelf: "center",
-        marginBottom: 10,
-        height: "40%"
+        height: "31%"
       }}
     >
-      <Text>Event Image Carousel</Text>
-      <Image source={{ uri: dummyImages[0], height: 300 }} />
-      {/* <Image
-                source={{uri: dummyImages[0]}}
-            /> */}
+      <Carousel
+        loop
+        width={width}
+        height={width}
+        autoPlay
+        data={images}
+        scrollAnimationDuration={1000}
+        renderItem={({ index }) => (
+          <View
+            style={{
+              justifyContent: "center"
+            }}
+          >
+            <Image source={{ uri: images[index], height: 350 }} />
+          </View>
+        )}
+      />
     </View>
   );
 }
