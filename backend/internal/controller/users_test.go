@@ -23,7 +23,6 @@ func TestGetUser(t *testing.T) {
 	c, err := controller.NewController(db, nil)
 	require.NotEmpty(t, c)
 	require.Nil(t, err)
-	time1 := time.Now()
 
 	// Mock User Data
 	newUserId := user_id.Wrap(uuid.New())
