@@ -170,8 +170,8 @@ func TestSaveUser(t *testing.T) {
 		LastName:  "PutLastName",
 		Age:       20,
 	}
-	
-	// Expect the Select Statement and Update the User 
+
+	// Expect the Select Statement and Update the User
 	mock.ExpectQuery(`^SELECT \* FROM "users" WHERE id = \$1 ORDER BY "users"\."id" LIMIT 1`).
 		WithArgs(userId1).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"}).

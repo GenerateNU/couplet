@@ -432,4 +432,3 @@ func TestPatchEvent(t *testing.T) {
 		t.Errorf("There were unfulfilled expectations: %s", err)
 	}
 }
-
