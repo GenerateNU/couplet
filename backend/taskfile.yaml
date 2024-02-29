@@ -3,12 +3,14 @@ version: '3'
 
 tasks:
   run:
-    deps: [build]
+    deps:
+      - build
     summary: Runs the backend server
     cmds:
       - ./server
   build:
-    deps: [generate]
+    deps:
+      - generate
     summary: Build backend executables
     sources:
       - ./**/*.go
@@ -18,7 +20,8 @@ tasks:
       - go mod download
       - go build ./cmd/...
   generate:
-    aliases: [gen]
+    aliases:
+      - gen
     summary: Generate server code from OpenAPI spec
     sources:
       - ../openapi.yaml
@@ -32,12 +35,14 @@ tasks:
       - rm -f server
       - rm -rf internal/api
   test:
-    deps: [generate]
+    deps:
+      - generate
     summary: Run backend tests
     cmds:
       - go test ./...
   check:
-    deps: [generate]
+    deps:
+      - generate
     summary: Run static analysis checks
     cmds:
       - golangci-lint run ./...

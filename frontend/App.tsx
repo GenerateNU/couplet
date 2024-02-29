@@ -107,7 +107,8 @@ export default function App() {
                   shadowRadius: 3.84,
                   elevation: 5
                 }}
-                onPress={handleAppleSignIn}
+                // eslint-disable-next-line react/jsx-no-bind
+                onPress={handleAppleSignIn} // TODO: Remove
               />
             )}
           </View>

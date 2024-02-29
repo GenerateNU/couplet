@@ -1,9 +1,8 @@
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 import Reaction from "./Reaction";
-import { StyleSheet } from "react-native";
 
 function EventPage() {
   const dummyImages: string[] = [
@@ -22,23 +21,23 @@ function EventPage() {
         style={{
           width: "100%",
           alignSelf: "center",
-          height: "90%",
+          height: "90%"
         }}
         contentContainerStyle={{}}
       >
-        <View >
-        <EventImageCarousel images={dummyImages} />
+        <View>
+          <EventImageCarousel images={dummyImages} />
         </View>
-        <View style = { styles.EventCardContainer}>
-        <EventCard
-          id={1}
-          title="Winter Ice Skating"
-          description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
-          date="1/2/24"
-          price={20}
-          location="Frog Pond"
-          handleReact={handleReact}
-        />
+        <View style={styles.EventCardContainer}>
+          <EventCard
+            id={1}
+            title="Winter Ice Skating"
+            description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
+            date="1/2/24"
+            price={20}
+            location="Frog Pond"
+            handleReact={handleReact}
+          />
         </View>
       </ScrollView>
       <Reaction handleReact={handleReact} />
@@ -46,9 +45,9 @@ function EventPage() {
   );
 }
 const styles = StyleSheet.create({
-  EventCardContainer : {
-    flex : 1,
-    transform : [{ translateY : 100}]
+  EventCardContainer: {
+    flex: 1,
+    transform: [{ translateY: 100 }]
   }
-})
+});
 export default EventPage;

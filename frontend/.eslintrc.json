@@ -14,6 +14,7 @@
     "sourceType": "module"
   },
   "plugins": ["react", "react-native", "@typescript-eslint"],
+  "ignorePatterns": ["api/schema.d.ts"],
   "rules": {
     "no-unused-vars": ["error", { "args": "none" }],
     "import/extensions": [
