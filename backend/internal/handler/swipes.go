@@ -10,6 +10,8 @@ import (
 )
 
 func (h Handler) EventsSwipesPost(ctx context.Context, req *api.EventSwipe) (api.EventsSwipesPostRes, error) {
+	// TODO: Write tests
+	h.logger.Info("POST /events/swipes")
 	var eventSwipeToCreate user.EventSwipe
 	eventSwipeToCreate.UserID = user_id.UserID(req.UserId)
 	eventSwipeToCreate.EventID = event_id.EventID(req.EventId)
@@ -30,6 +32,8 @@ func (h Handler) EventsSwipesPost(ctx context.Context, req *api.EventSwipe) (api
 }
 
 func (h Handler) UsersSwipesPost(ctx context.Context, req *api.UserSwipe) (api.UsersSwipesPostRes, error) {
+	// TODO: Write tests
+	h.logger.Info("POST /users/swipes")
 	var userSwipeToCreate user.UserSwipe
 	userSwipeToCreate.UserID = user_id.UserID(req.UserId)
 	userSwipeToCreate.OtherUserID = user_id.UserID(req.OtherUserId)
@@ -37,6 +41,9 @@ func (h Handler) UsersSwipesPost(ctx context.Context, req *api.UserSwipe) (api.U
 
 	us, valErr, txErr := h.controller.CreateUserSwipe(userSwipeToCreate)
 	if valErr != nil || txErr != nil {
+		if valErr != nil {
+			h.logger.Info(valErr.Error())
+		}
 		return nil, errors.New("failed to create user swipe") // TODO: should return a specific HTTP error
 	}
 

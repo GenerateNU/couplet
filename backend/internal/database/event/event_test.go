@@ -22,10 +22,6 @@ func TestEventValidate(t *testing.T) {
 	}
 	assert.Nil(t, validEvent.Validate())
 
-	idCheck := validEvent
-	idCheck.ID = event_id.EventID{}
-	assert.NotNil(t, idCheck.Validate())
-
 	timesCheck := validEvent
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())
@@ -59,29 +55,4 @@ func TestEventValidate(t *testing.T) {
 	orgIdCheck := validEvent
 	orgIdCheck.OrgID = org_id.OrgID{}
 	assert.NotNil(t, orgIdCheck.Validate())
-}
-
-func TestEventTagValidate(t *testing.T) {
-	validEventTag := event.EventTag{
-		ID:        "tag",
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
-		Events:    []event.Event{{ID: event_id.Wrap(uuid.New())}, {ID: event_id.Wrap(uuid.New())}},
-	}
-	assert.Nil(t, validEventTag.Validate())
-
-	idLengthCheck := validEventTag
-	idLengthCheck.ID = ""
-	for i := 0; i <= 256; i++ {
-		if i < 1 || i > 255 {
-			assert.NotNil(t, idLengthCheck.Validate())
-		} else {
-			assert.Nil(t, idLengthCheck.Validate())
-		}
-		idLengthCheck.ID = idLengthCheck.ID + "a"
-	}
-
-	timesCheck := validEventTag
-	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
-	assert.NotNil(t, timesCheck.Validate())
 }

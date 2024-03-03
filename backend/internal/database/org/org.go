@@ -13,12 +13,12 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type Org struct {
-	ID        org_id.OrgID `gorm:"primaryKey" validate:"required"`
+	ID        org_id.OrgID `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time     `validate:"gtefield=CreatedAt"`
-	Name      string        `validate:"required,min=1,max=255"`
-	Bio       string        `validate:"required,min=1,max=255"`
-	Image     string        `validate:"omitempty,url"`
+	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`
+	Name      string    `validate:"required,min=1,max=255"`
+	Bio       string    `validate:"required,min=1,max=255"`
+	Image     OrgImage
 	OrgTags   []OrgTag      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags" validate:"max=5"`
 	Events    []event.Event `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 }
@@ -39,20 +39,4 @@ func (o *Org) AfterSave(tx *gorm.DB) error {
 // Ensures the organization and its fields are valid
 func (o Org) Validate() error {
 	return validate.Struct(o)
-}
-
-type OrgTag struct {
-	ID        string `gorm:"primaryKey" validate:"required,min=1,max=255"`
-	CreatedAt time.Time
-	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`
-	Orgs      []Org     `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags"`
-}
-
-// Automatically rolls back transactions that save invalid org tags to the database
-func (t *OrgTag) AfterSave(tx *gorm.DB) error {
-	return t.Validate()
-}
-
-func (t OrgTag) Validate() error {
-	return validate.Struct(t)
 }

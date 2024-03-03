@@ -19,12 +19,13 @@ func (c Controller) GetUsers(limit uint8, offset uint32) ([]user.User, error) {
 }
 
 // Creates a new user.
-func (c Controller) CreateUser(firstName string, lastName string, age uint8) (user.User, error) {
+func (c Controller) CreateUser(firstName string, lastName string, age uint8, images []user.UserImage) (user.User, error) {
 	u := user.User{
 		ID:        user_id.Wrap(uuid.New()),
 		FirstName: firstName,
 		LastName:  lastName,
 		Age:       age,
+		Images:    images,
 	}
 
 	result := c.database.Create(&u)

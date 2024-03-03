@@ -54,8 +54,25 @@ func Migrate(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("nil database specified")
 	}
+	// Ensure core database tables exist
+	if !db.Migrator().HasTable(&user.User{}) {
+		if db.Migrator().CreateTable(&user.User{}) != nil {
+			return errors.New("failed to create user database table")
+		}
+	}
+	if !db.Migrator().HasTable(&org.Org{}) {
+		if db.Migrator().CreateTable(&org.Org{}) != nil {
+			return errors.New("failed to create org database table")
+		}
+	}
+	if !db.Migrator().HasTable(&event.Event{}) {
+		if db.Migrator().CreateTable(&event.Event{}) != nil {
+			return errors.New("failed to create event database table")
+		}
+	}
 	// Add new models here to ensure they are migrated on startup
-	return db.Debug().AutoMigrate(user.User{}, org.Org{}, event.Event{}, org.OrgTag{}, event.EventTag{}, user.EventSwipe{}, user.UserSwipe{})
+	allModels := []interface{}{&user.UserImage{}, &user.User{}, &org.OrgImage{}, &org.OrgTag{}, &org.Org{}, &event.EventImage{}, &event.EventTag{}, &event.Event{}, &user.EventSwipe{}, &user.UserSwipe{}}
+	return db.Debug().AutoMigrate(allModels...)
 }
 
 // Creates a new mock postgres-GORM database

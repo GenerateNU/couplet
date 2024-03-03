@@ -19,15 +19,11 @@ func TestOrgValidate(t *testing.T) {
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Image:     "https://example.com/image.png",
+		Image:     org.OrgImage{Url: "https://example.com/image.png"},
 		OrgTags:   []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}},
 		Events:    []event.Event{{ID: event_id.Wrap(uuid.New())}},
 	}
 	assert.Nil(t, validOrg.Validate())
-
-	idCheck := validOrg
-	idCheck.ID = org_id.OrgID{}
-	assert.NotNil(t, idCheck.Validate())
 
 	timesCheck := validOrg
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
@@ -56,39 +52,14 @@ func TestOrgValidate(t *testing.T) {
 	}
 
 	noImageCheck := validOrg
-	noImageCheck.Image = ""
+	noImageCheck.Image = org.OrgImage{}
 	assert.Nil(t, noImageCheck.Validate())
 
 	imageUrlCheck := validOrg
-	imageUrlCheck.Image = "invalid"
+	imageUrlCheck.Image = org.OrgImage{Url: "invalid"}
 	assert.NotNil(t, imageUrlCheck.Validate())
 
 	orgTagsCheck := validOrg
 	orgTagsCheck.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}
 	assert.NotNil(t, orgTagsCheck.Validate())
-}
-
-func TestOrgTagValidate(t *testing.T) {
-	validOrgTag := org.OrgTag{
-		ID:        "tag",
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
-		Orgs:      []org.Org{{ID: org_id.Wrap(uuid.New())}, {ID: org_id.Wrap(uuid.New())}},
-	}
-	assert.Nil(t, validOrgTag.Validate())
-
-	idLengthCheck := validOrgTag
-	idLengthCheck.ID = ""
-	for i := 0; i <= 256; i++ {
-		if i < 1 || i > 255 {
-			assert.NotNil(t, idLengthCheck.Validate())
-		} else {
-			assert.Nil(t, idLengthCheck.Validate())
-		}
-		idLengthCheck.ID = idLengthCheck.ID + "a"
-	}
-
-	timesCheck := validOrgTag
-	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
-	assert.NotNil(t, timesCheck.Validate())
 }

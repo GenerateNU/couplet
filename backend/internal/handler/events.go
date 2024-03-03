@@ -5,6 +5,7 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
+	"couplet/internal/database/org_id"
 	"errors"
 	"fmt"
 
@@ -20,6 +21,11 @@ func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.Ev
 	var eventToCreate event.Event
 	eventToCreate.Name = req.Name
 	eventToCreate.Bio = req.Bio
+	eventToCreate.Images = []event.EventImage{}
+	for _, v := range req.Images {
+		eventToCreate.Images = append(eventToCreate.Images, event.EventImage{Url: v.String()})
+	}
+	eventToCreate.OrgID = org_id.Wrap(req.OrgId)
 
 	e, err := h.controller.CreateEvent(eventToCreate)
 	// TODO: check for validation error from the controller and return 400
@@ -28,9 +34,11 @@ func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.Ev
 	}
 
 	res := api.EventsPostCreated{
-		ID:   e.ID.Unwrap(),
-		Name: e.Name,
-		Bio:  e.Bio,
+		ID:     e.ID.Unwrap(),
+		Name:   e.Name,
+		Bio:    e.Bio,
+		Images: req.Images,
+		OrgId:  api.NewOptUUID(e.OrgID.Unwrap()),
 	}
 
 	return &res, nil

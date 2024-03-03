@@ -12,12 +12,13 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type User struct {
-	ID          user_id.UserID `gorm:"primaryKey" validate:"required"`
+	ID          user_id.UserID `gorm:"primaryKey"`
 	CreatedAt   time.Time
-	UpdatedAt   time.Time `validate:"gtefield=CreatedAt"`
-	FirstName   string    `validate:"required,min=1,max=255"`
-	LastName    string    `validate:"required,min=1,max=255"`
-	Age         uint8     `validate:"required,min=18"`
+	UpdatedAt   time.Time   `validate:"gtefield=CreatedAt"`
+	FirstName   string      `validate:"required,min=1,max=255"`
+	LastName    string      `validate:"required,min=1,max=255"`
+	Age         uint8       `validate:"required,min=18"`
+	Images      []UserImage `validate:"min=1,max=5"`
 	UserSwipes  []UserSwipe
 	EventSwipes []EventSwipe
 }

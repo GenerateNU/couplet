@@ -4,16 +4,25 @@ import (
 	"couplet/internal/database/user_id"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type UserSwipe struct {
-	UserID      user_id.UserID `gorm:"primaryKey" validate:"required"` // Swipe sender
-	OtherUserID user_id.UserID `gorm:"primaryKey" validate:"required"` // Swipe receiver
-	OtherUser   User           `gorm:"foreignKey:OtherUserID"`
+	ID          uuid.UUID      `gorm:"primaryKey"`
+	UserID      user_id.UserID `gorm:"index:user,unique" validate:"required"` // Swipe sender
+	OtherUserID user_id.UserID `gorm:"index:user,unique" validate:"required"` // Swipe receiver
 	Liked       bool
 	CreatedAt   time.Time
 	UpdatedAt   time.Time `validate:"gtefield=CreatedAt"`
+}
+
+// Automatically generates a random ID if unset before creating
+func (u *UserSwipe) BeforeCreate(tx *gorm.DB) error {
+	if (u.ID == uuid.UUID{}) {
+		u.ID = uuid.New()
+	}
+	return nil
 }
 
 // Automatically rolls back transactions that save invalid data to the database

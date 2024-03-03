@@ -208,13 +208,13 @@ func TestCreateUser(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	user, err := c.CreateUser(firstName, lastName, age)
+	newUser1, err := c.CreateUser(firstName, lastName, age, []user.UserImage{})
 	require.Nil(t, err)
 
 	// ensure that all fields were set properly on the User object
-	require.Equal(t, user.Age, age)
-	require.Equal(t, user.FirstName, firstName)
-	require.Equal(t, user.LastName, lastName)
+	require.Equal(t, newUser1.Age, age)
+	require.Equal(t, newUser1.FirstName, firstName)
+	require.Equal(t, newUser1.LastName, lastName)
 
 	// create a second user with the same data to show that repeated POST calls always creates new users
 	mock.ExpectBegin()
@@ -225,15 +225,15 @@ func TestCreateUser(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	newUser, err := c.CreateUser(firstName, lastName, age)
+	newUser2, err := c.CreateUser(firstName, lastName, age, []user.UserImage{})
 	require.Nil(t, err)
 
-	require.Equal(t, newUser.Age, age)
-	require.Equal(t, newUser.FirstName, firstName)
-	require.Equal(t, newUser.LastName, lastName)
+	require.Equal(t, newUser2.Age, age)
+	require.Equal(t, newUser2.FirstName, firstName)
+	require.Equal(t, newUser2.LastName, lastName)
 
 	// IMPORTANT! assert that internally, the second user is not the same as the first user
-	require.NotEqual(t, newUser.ID, user.ID)
+	require.NotEqual(t, newUser2.ID, newUser1.ID)
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
@@ -266,7 +266,7 @@ func TestDeleteUser(t *testing.T) {
 
 	mock.ExpectCommit()
 
-	_, err = c.CreateUser("firstName", "lastName", age)
+	_, err = c.CreateUser("firstName", "lastName", age, []user.UserImage{})
 	require.Nil(t, err)
 
 	// retrieve the user's ID

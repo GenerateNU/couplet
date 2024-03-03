@@ -21,10 +21,6 @@ func TestUserValidate(t *testing.T) {
 	}
 	assert.Nil(t, validUser.Validate())
 
-	idCheck := validUser
-	idCheck.ID = user_id.UserID{}
-	assert.NotNil(t, idCheck.Validate())
-
 	timesCheck := validUser
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())

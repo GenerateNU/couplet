@@ -16,9 +16,11 @@ tasks:
       - ./**/*.go
     generates:
       - server
+      - data-gen
     cmds:
       - go mod download
-      - go build ./cmd/...
+      - go build ./cmd/server
+      - go build ./cmd/data-gen
   generate:
     aliases:
       - gen
@@ -33,6 +35,7 @@ tasks:
     summary: Delete build files
     cmds:
       - rm -f server
+      - rm -f data-gen
       - rm -rf internal/api
   test:
     deps:
