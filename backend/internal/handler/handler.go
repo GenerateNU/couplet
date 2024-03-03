@@ -1,6 +1,8 @@
 // Handles API requests and translate between internal and external schema
 package handler
 
+//go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --target ../api --clean ../../../openapi.yaml
+
 import (
 	"context"
 	"couplet/internal/api"

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/user_id"
 	"time"
@@ -12,7 +11,6 @@ import (
 type EventSwipe struct {
 	UserID    user_id.UserID   `gorm:"primaryKey" validate:"required"`
 	EventID   event_id.EventID `gorm:"primaryKey" validate:"required"`
-	Event     event.Event      `gorm:"foreignKey:EventID"`
 	Liked     bool
 	CreatedAt time.Time
 	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`

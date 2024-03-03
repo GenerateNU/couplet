@@ -20,8 +20,12 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 	if req.Age < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
+	images := []user.UserImage{}
+	for _, v := range req.Images {
+		images = append(images, user.UserImage{Url: v.String()})
+	}
 
-	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age)
+	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age, images)
 	// TODO: check for validation error from the controller and return 400
 	if err != nil {
 		return nil, errors.New("failed to create user")
@@ -32,6 +36,7 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
+		Images:    req.Images,
 	}
 
 	return &res, nil
@@ -129,7 +134,12 @@ func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq,
 		return &updatedUser, nil
 	}
 
-	responseUser, _ := h.controller.CreateUser(updatedUser.FirstName, updatedUser.LastName, updatedUser.Age)
+	images := []user.UserImage{}
+	for _, v := range updatedUser.Images {
+		images = append(images, user.UserImage{Url: v.String()})
+	}
+
+	responseUser, _ := h.controller.CreateUser(updatedUser.FirstName, updatedUser.LastName, updatedUser.Age, images)
 	createdUser := api.UsersIDPutCreated{
 		ID:        uuid.UUID(responseUser.ID),
 		FirstName: responseUser.FirstName,

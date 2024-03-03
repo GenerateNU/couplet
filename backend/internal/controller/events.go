@@ -7,22 +7,19 @@ import (
 )
 
 // Creates a new event in the database
-func (c Controller) CreateEvent(params event.Event) (e *event.Event, err error) {
-	newEvent := event.Event{
-		Name:  params.Name,
-		Bio:   params.Bio,
-		OrgID: params.OrgID,
-	}
+func (c Controller) CreateEvent(params event.Event) (e event.Event, err error) {
+	e = params
 
-	res := c.database.Create(&newEvent)
+	res := c.database.Create(&e)
 	if res.RowsAffected < 1 {
-		return nil, fmt.Errorf("no event created")
+		err = fmt.Errorf("no event created")
+		return
 	}
 	if res.Error != nil {
-		return nil, res.Error
+		err = res.Error
+		return
 	}
-
-	return &newEvent, nil
+	return
 }
 
 // Deletes an event from the database by its ID
