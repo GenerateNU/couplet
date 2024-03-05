@@ -18,14 +18,17 @@ func TestEventTagValidate(t *testing.T) {
 		Events:    []event.Event{{ID: event_id.Wrap(uuid.New())}, {ID: event_id.Wrap(uuid.New())}},
 	}
 	assert.Nil(t, validEventTag.Validate())
+	assert.Nil(t, (&validEventTag).BeforeSave(nil))
 
 	idLengthCheck := validEventTag
 	idLengthCheck.ID = ""
 	for i := 0; i <= 256; i++ {
 		if i < 1 || i > 255 {
 			assert.NotNil(t, idLengthCheck.Validate())
+			assert.NotNil(t, (&idLengthCheck).BeforeSave(nil))
 		} else {
 			assert.Nil(t, idLengthCheck.Validate())
+			assert.Nil(t, (&idLengthCheck).BeforeSave(nil))
 		}
 		idLengthCheck.ID = idLengthCheck.ID + "a"
 	}
@@ -33,4 +36,5 @@ func TestEventTagValidate(t *testing.T) {
 	timesCheck := validEventTag
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())
+	assert.NotNil(t, (&timesCheck).BeforeSave(nil))
 }

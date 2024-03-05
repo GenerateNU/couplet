@@ -32,7 +32,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 }
 
 // Automatically rolls back transactions that save invalid data to the database
-func (u *User) AfterSave(tx *gorm.DB) error {
+func (u *User) BeforeSave(tx *gorm.DB) error {
 	return u.Validate()
 }
 

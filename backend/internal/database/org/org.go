@@ -15,10 +15,10 @@ var validate = validator.New(validator.WithRequiredStructEnabled())
 type Org struct {
 	ID        org_id.OrgID `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`
-	Name      string    `validate:"required,min=1,max=255"`
-	Bio       string    `validate:"required,min=1,max=255"`
-	Image     OrgImage
+	UpdatedAt time.Time     `validate:"gtefield=CreatedAt"`
+	Name      string        `validate:"required,min=1,max=255"`
+	Bio       string        `validate:"required,min=1,max=255"`
+	Image     OrgImage      `validate:"omitempty"`
 	OrgTags   []OrgTag      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags" validate:"max=5"`
 	Events    []event.Event `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 }
@@ -32,7 +32,7 @@ func (o *Org) BeforeCreate(tx *gorm.DB) error {
 }
 
 // Rolls back transactions that save invalid data to the database
-func (o *Org) AfterSave(tx *gorm.DB) error {
+func (o *Org) BeforeSave(tx *gorm.DB) error {
 	return o.Validate()
 }
 

@@ -31,9 +31,10 @@ func TestCreateEvent(t *testing.T) {
 	// set up example event data
 	orgId := org_id.Wrap(uuid.New())
 	exampleEventOne := event.Event{
-		Name:  "Big event",
-		Bio:   "Event description",
-		OrgID: orgId,
+		Name:   "Big event",
+		Bio:    "Event description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 	exampleEventTwo := exampleEventOne
 
@@ -88,9 +89,10 @@ func TestDeleteEvent(t *testing.T) {
 
 	// set up event data
 	exampleEventOne := event.Event{
-		Name:  "Big event",
-		Bio:   "Event description",
-		OrgID: org_id.Wrap(uuid.New()),
+		Name:   "Big event",
+		Bio:    "Event description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  org_id.Wrap(uuid.New()),
 	}
 
 	// expect the insert statement and create the event
@@ -160,10 +162,11 @@ func TestGetEvent(t *testing.T) {
 	// Mocked event data
 	orgId := org_id.Wrap(uuid.New())
 	mockEvent := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 
 	// Set expectation: select query to fetch the event by ID
@@ -196,34 +199,39 @@ func TestGetEvents(t *testing.T) {
 	// Mocked event data
 	orgId := org_id.Wrap(uuid.New())
 	mockEventOne := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 	mockEventTwo := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Another Event",
-		Bio:   "A different description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Another Event",
+		Bio:    "A different description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 	mockEventThree := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Third Event",
-		Bio:   "A third description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Third Event",
+		Bio:    "A third description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 	mockEventFour := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Fourth Event",
-		Bio:   "A fourth description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Fourth Event",
+		Bio:    "A fourth description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 	mockEventFive := event.Event{
-		ID:    event_id.Wrap(uuid.New()),
-		Name:  "Fifth Event",
-		Bio:   "A fifth description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Fifth Event",
+		Bio:    "A fifth description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 
 	// Set expectation: select query to fetch all events
@@ -340,10 +348,11 @@ func TestPutEvent(t *testing.T) {
 	orgId := org_id.Wrap(uuid.New())
 	eventId := uuid.New()
 	mockEvent := event.Event{
-		ID:    event_id.Wrap(eventId),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(eventId),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 
 	// Set expectation: select query to get the event
@@ -392,10 +401,11 @@ func TestPatchEvent(t *testing.T) {
 	orgId := org_id.Wrap(uuid.New())
 	eventId := uuid.New()
 	mockEvent := event.Event{
-		ID:    event_id.Wrap(eventId),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(eventId),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		OrgID:  orgId,
 	}
 
 	// Set expectation: select query to get the event
