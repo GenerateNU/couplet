@@ -16,7 +16,13 @@ import (
 	"github.com/arsham/dbtools/dbtesting"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"gorm.io/gorm"
 )
+
+const imageUrl = "https://example.com/image.png"
+
+var images = []event.EventImage{{Url: imageUrl}}
 
 func TestCreateEvent(t *testing.T) {
 	// set up mock database
@@ -31,9 +37,10 @@ func TestCreateEvent(t *testing.T) {
 	// set up example event data
 	orgId := org_id.Wrap(uuid.New())
 	exampleEventOne := event.Event{
-		Name:  "Big event",
-		Bio:   "Event description",
-		OrgID: orgId,
+		Name:   "Big event",
+		Bio:    "Event description",
+		OrgID:  orgId,
+		Images: images,
 	}
 	exampleEventTwo := exampleEventOne
 
@@ -44,6 +51,11 @@ func TestCreateEvent(t *testing.T) {
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(regexp.QuoteMeta(`
+		INSERT INTO "event_images" ("created_at","updated_at","url","event_id") VALUES ($1,$2,$3,$4)
+		ON CONFLICT ("id") DO UPDATE SET "event_id"="excluded"."event_id" RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg()).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	insertedEventOne, err := c.CreateEvent(exampleEventOne)
@@ -60,6 +72,11 @@ func TestCreateEvent(t *testing.T) {
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(regexp.QuoteMeta(`
+		INSERT INTO "event_images" ("created_at","updated_at","url","event_id","id") VALUES ($1,$2,$3,$4,$5)
+		ON CONFLICT ("id") DO UPDATE SET "event_id"="excluded"."event_id" RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	insertedEventTwo, err := c.CreateEvent(exampleEventTwo)
@@ -88,9 +105,11 @@ func TestDeleteEvent(t *testing.T) {
 
 	// set up event data
 	exampleEventOne := event.Event{
-		Name:  "Big event",
-		Bio:   "Event description",
-		OrgID: org_id.Wrap(uuid.New()),
+		ID:     event_id.Wrap(uuid.New()),
+		Name:   "Big event",
+		Bio:    "Event description",
+		OrgID:  org_id.Wrap(uuid.New()),
+		Images: images,
 	}
 
 	// expect the insert statement and create the event
@@ -100,24 +119,28 @@ func TestDeleteEvent(t *testing.T) {
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
 		WithArgs(rec.Record("eventId"), rec.Record("createdTime"), rec.Record("updatedTime"), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
-
+	mock.ExpectQuery(regexp.QuoteMeta(`
+		INSERT INTO "event_images" ("created_at","updated_at","url","event_id","id") VALUES ($1,$2,$3,$4,$5)
+		ON CONFLICT ("id") DO UPDATE SET "event_id"="excluded"."event_id" RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	createdEvent, err := c.CreateEvent(exampleEventOne)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	// ensure that all fields were set properly on the Event object
-	assert.Equal(t, createdEvent.Name, exampleEventOne.Name)
-	assert.Equal(t, createdEvent.Bio, exampleEventOne.Bio)
+	require.Equal(t, createdEvent.Name, exampleEventOne.Name)
+	require.Equal(t, createdEvent.Bio, exampleEventOne.Bio)
 
 	// expect the initial select statement to store the event
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
 		WithArgs(rec.Value("eventId")).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "org_id"}).
 			AddRow(rec.Value("eventId"), rec.Value("createdTime").(time.Time), rec.Value("updatedTime").(time.Time), exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID))
 
 	// expect the delete statement and delete the event
-	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
 		DELETE FROM "events"`)).
 		WithArgs(rec.Value("eventId")).
@@ -125,30 +148,40 @@ func TestDeleteEvent(t *testing.T) {
 	mock.ExpectCommit()
 
 	deletedEvent, err := c.DeleteEvent(createdEvent.ID)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	// ensure the deleted event value returned correctly
-	assert.Equal(t, deletedEvent, createdEvent)
+	require.Equal(t, deletedEvent.ID, createdEvent.ID)
+
+	// try to find the event again and make sure this fails
+	mock.ExpectBegin()
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
+		WithArgs(rec.Value("eventId")).
+		WillReturnError(gorm.ErrRecordNotFound)
+	mock.ExpectRollback()
+
+	_, err = c.GetEvent(createdEvent.ID)
+	// log.Printf("found: %v", found)
+	require.Error(t, err) // we WANT an error here
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
-	assert.Nil(t, errExpectations)
+	require.Nil(t, errExpectations)
 
 	// deleting an event that doesn't exist should return an error
 	badId := uuid.New()
-
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
-		WithArgs(exampleEventOne.ID).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
-			AddRow(exampleEventOne.ID, exampleEventOne.Name, exampleEventOne.Bio, exampleEventOne.OrgID))
+		WithArgs(badId).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}))
 
 	_, err = c.DeleteEvent(event_id.Wrap(badId))
-	assert.Error(t, err)
+	require.Error(t, err)
+	require.ErrorContains(t, err, "event with id="+badId.String()+" cannot be deleted because it doesn't exist")
 
 	// ensure that all expectations are met in the mock
 	errExpectations = mock.ExpectationsWereMet()
-
-	assert.Nil(t, errExpectations)
+	require.Nil(t, errExpectations)
 }
 
 func TestGetEvent(t *testing.T) {
@@ -167,10 +200,12 @@ func TestGetEvent(t *testing.T) {
 	}
 
 	// Set expectation: select query to fetch the event by ID
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
 		WithArgs(mockEvent.ID).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
+	mock.ExpectCommit()
 
 	// Call GetEvent
 	retrievedEvent, err := c.GetEvent(mockEvent.ID)
@@ -227,6 +262,7 @@ func TestGetEvents(t *testing.T) {
 	}
 
 	// Set expectation: select query to fetch all events
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEventOne.ID, mockEventOne.Name, mockEventOne.Bio, mockEventOne.OrgID).
@@ -234,6 +270,7 @@ func TestGetEvents(t *testing.T) {
 			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
 			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID).
 			AddRow(mockEventFive.ID, mockEventFive.Name, mockEventFive.Bio, mockEventFive.OrgID))
+	mock.ExpectCommit()
 
 	// Call GetEvents
 	retrievedAllEvents1, err := c.GetEvents(10, 0)
@@ -262,10 +299,12 @@ func TestGetEvents(t *testing.T) {
 	assert.Equal(t, mockEventFive.Bio, retrievedAllEvents1[4].Bio)
 	assert.Equal(t, mockEventFive.OrgID, retrievedAllEvents1[4].OrgID)
 
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEventOne.ID, mockEventOne.Name, mockEventOne.Bio, mockEventOne.OrgID).
 			AddRow(mockEventTwo.ID, mockEventTwo.Name, mockEventTwo.Bio, mockEventTwo.OrgID))
+	mock.ExpectCommit()
 
 	// Call GetEvents with a limit
 	retrievedAllEvents2, err := c.GetEvents(2, 0)
@@ -281,10 +320,12 @@ func TestGetEvents(t *testing.T) {
 	assert.Equal(t, mockEventTwo.Bio, retrievedAllEvents2[1].Bio)
 	assert.Equal(t, mockEventTwo.OrgID, retrievedAllEvents2[1].OrgID)
 
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
 			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID))
+	mock.ExpectCommit()
 
 	// Call GetEvents with a limit and offset
 	retrievedAllEvents3, err := c.GetEvents(2, 2)
@@ -300,11 +341,13 @@ func TestGetEvents(t *testing.T) {
 	assert.Equal(t, mockEventFour.Bio, retrievedAllEvents3[1].Bio)
 	assert.Equal(t, mockEventFour.OrgID, retrievedAllEvents3[1].OrgID)
 
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events"`)).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEventThree.ID, mockEventThree.Name, mockEventThree.Bio, mockEventThree.OrgID).
 			AddRow(mockEventFour.ID, mockEventFour.Name, mockEventFour.Bio, mockEventFour.OrgID).
 			AddRow(mockEventFive.ID, mockEventFive.Name, mockEventFive.Bio, mockEventFive.OrgID))
+	mock.ExpectCommit()
 
 	// Call GetEvents with an offset, but no limit
 	retrievedAllEvents4, err := c.GetEvents(10, 2)
@@ -340,25 +383,33 @@ func TestPutEvent(t *testing.T) {
 	orgId := org_id.Wrap(uuid.New())
 	eventId := uuid.New()
 	mockEvent := event.Event{
-		ID:    event_id.Wrap(eventId),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(eventId),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		OrgID:  orgId,
+		Images: images,
 	}
 
 	// Set expectation: select query to get the event
+	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
 		WithArgs(mockEvent.ID).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
+	// mock.ExpectCommit()
 
 	// Set expectation: begin transaction
-	mock.ExpectBegin()
+	// mock.ExpectBegin()
 
 	// Set expectation: update query to update the event
 	mock.ExpectExec(regexp.QuoteMeta(`UPDATE "events" SET "created_at"=$1,"updated_at"=$2,"name"=$3,"bio"=$4,"org_id"=$5 WHERE "id" = $6`)).
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), mockEvent.Name, mockEvent.Bio, mockEvent.OrgID, mockEvent.ID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(regexp.QuoteMeta(`
+		INSERT INTO "event_images" ("created_at","updated_at","url","event_id","id") VALUES ($1,$2,$3,$4,$5)
+		ON CONFLICT ("id") DO UPDATE SET "event_id"="excluded"."event_id" RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 
 	// Set expectation: commit transaction
 	mock.ExpectCommit()
@@ -392,25 +443,31 @@ func TestPatchEvent(t *testing.T) {
 	orgId := org_id.Wrap(uuid.New())
 	eventId := uuid.New()
 	mockEvent := event.Event{
-		ID:    event_id.Wrap(eventId),
-		Name:  "Sample Event",
-		Bio:   "A brief description",
-		OrgID: orgId,
+		ID:     event_id.Wrap(eventId),
+		Name:   "Sample Event",
+		Bio:    "A brief description",
+		OrgID:  orgId,
+		Images: images,
 	}
 
 	// Set expectation: select query to get the event
+	mock.ExpectBegin()
+
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE id = $1 ORDER BY "events"."id" LIMIT 1`)).
 		WithArgs(mockEvent.ID).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "name", "bio", "org_id"}).
 			AddRow(mockEvent.ID, mockEvent.Name, mockEvent.Bio, mockEvent.OrgID))
 
 	// Set expectation: begin transaction
-	mock.ExpectBegin()
-
 	// Set expectation: update query to update the event
 	mock.ExpectExec(regexp.QuoteMeta(`UPDATE "events" SET "created_at"=$1,"updated_at"=$2,"name"=$3,"bio"=$4,"org_id"=$5 WHERE "id" = $6`)).
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), mockEvent.Name, mockEvent.Bio, mockEvent.OrgID, mockEvent.ID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectQuery(regexp.QuoteMeta(`
+		INSERT INTO "event_images" ("created_at","updated_at","url","event_id","id") VALUES ($1,$2,$3,$4,$5)
+		ON CONFLICT ("id") DO UPDATE SET "event_id"="excluded"."event_id" RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 
 	// Set expectation: commit transaction
 	mock.ExpectCommit()

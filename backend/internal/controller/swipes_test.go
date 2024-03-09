@@ -24,20 +24,9 @@ func TestCreateEventSwipe(t *testing.T) {
 	assert.NotEmpty(t, c)
 	assert.Nil(t, err)
 
-	// set up recorder to keep track of the auto-generated eventID
-	rec := dbtesting.NewValueRecorder()
-
 	// set up example event data
 	event_id := event_id.Wrap(uuid.New())
 	user_id := user_id.Wrap(uuid.New())
-
-	// set up example event data
-	// orgId := org_id.Wrap(uuid.New())
-	// exampleEvent := event.Event{
-	// 	Name:  "Big event",
-	// 	Bio:   "Event description",
-	// 	OrgID: orgId,
-	// }
 
 	exampleEventSwipe := user.EventSwipe{
 		UserID:  user_id,
@@ -48,9 +37,8 @@ func TestCreateEventSwipe(t *testing.T) {
 	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "events" ("id","created_at","updated_at","user_id","event_id","liked")
-		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventSwipe.UserID, exampleEventSwipe.EventID, exampleEventSwipe.Liked).
+		INSERT INTO "event_swipes" ("user_id","event_id","liked","created_at","updated_at") VALUES ($1,$2,$3,$4,$5)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
@@ -63,27 +51,13 @@ func TestCreateEventSwipe(t *testing.T) {
 	assert.Equal(t, insertedEventSwipe.EventID, exampleEventSwipe.EventID)
 	assert.Equal(t, insertedEventSwipe.Liked, exampleEventSwipe.Liked)
 
-	// // create a second event with the same data to show that repeated POST calls always creates new events
-	// mock.ExpectBegin()
-	// mock.ExpectExec(regexp.QuoteMeta(`
-	// INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
-	// 	VALUES ($1,$2,$3,$4,$5,$6)`)).
-	// 	WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrgID).
-	// 	WillReturnResult(sqlmock.NewResult(1, 1))
-	// mock.ExpectCommit()
+	/* TODO:
+	- test that the same user can have multiple swipes for different events
+	- test that the same event can have multiple swipes from different users */
 
-	// insertedEventTwo, err := c.CreateEvent(exampleEventTwo)
-	// assert.Nil(t, err)
-
-	// assert.Equal(t, insertedEventTwo.Name, exampleEventTwo.Name)
-	// assert.Equal(t, insertedEventTwo.Bio, exampleEventTwo.Bio)
-
-	// // IMPORTANT! assert that internally, the second event id is not the same as the first event id
-	// assert.NotEqual(t, insertedEventTwo.ID, insertedEventOne.ID)
-
-	// // ensure that all expectations are met in the mock
-	// errExpectations := mock.ExpectationsWereMet()
-	// assert.Nil(t, errExpectations)
+	// ensure that all expectations are met in the mock
+	errExpectations := mock.ExpectationsWereMet()
+	assert.Nil(t, errExpectations)
 }
 
 func TestCreateUserSwipe(t *testing.T) {
@@ -110,9 +84,9 @@ func TestCreateUserSwipe(t *testing.T) {
 	// expect the insert statement and create the event
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "user_swipes" ("id","created_at","updated_at","user_id","user_swipe_id","liked")
+		INSERT INTO "user_swipes" ("id","user_id","other_user_id","liked","created_at","updated_at")
 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked).
+		WithArgs(rec.Record("idOne"), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked, sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
