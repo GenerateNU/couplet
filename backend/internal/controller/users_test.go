@@ -31,6 +31,7 @@ func TestGetUser(t *testing.T) {
 		FirstName: "Stone",
 		LastName:  "Liu",
 		Age:       20,
+		Images:    []user.UserImage{{Url: "https://example.com/image.png"}},
 	}
 	mock.ExpectBegin()
 	mock.ExpectExec(`^INSERT INTO "users"`).
@@ -85,6 +86,7 @@ func TestPartialUpdateUser(t *testing.T) {
 		FirstName: "Stone",
 		LastName:  "Liu",
 		Age:       20,
+		Images:    []user.UserImage{{Url: "https://example.com/image.png"}},
 	}
 	//Insert the user into the database
 	tx := db.Create(&user1)
@@ -95,6 +97,7 @@ func TestPartialUpdateUser(t *testing.T) {
 		FirstName: "Rock",
 		LastName:  "Johnson",
 		Age:       uint8(99),
+		Images:    []user.UserImage{{Url: "https://example.com/image.png"}},
 	}
 	databaseUser, _, _ := c.UpdateUser(user1)
 	databaseUser1, _, _ := c.UpdateUser(requestUser)
@@ -129,6 +132,7 @@ func TestPutUser(t *testing.T) {
 		FirstName: "UserFirstName",
 		LastName:  "UserLastName",
 		Age:       25,
+		Images:    []user.UserImage{{Url: "https://example.com/image.png"}},
 	}
 
 	mock.ExpectBegin()
@@ -156,6 +160,7 @@ func TestPutUser(t *testing.T) {
 		FirstName: "UpdatedFirstName",
 		LastName:  "UpdatedLastName",
 		Age:       99,
+		Images:    []user.UserImage{{Url: "https://example.com/image.png"}},
 	}
 
 	// Retrieve the User and Update the User

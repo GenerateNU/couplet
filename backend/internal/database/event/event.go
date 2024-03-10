@@ -33,7 +33,7 @@ func (e *Event) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 // Automatically rolls back transactions that save invalid data to the database
-func (e *Event) AfterSave(tx *gorm.DB) error {
+func (e *Event) BeforeSave(tx *gorm.DB) error {
 	return e.Validate()
 }
 

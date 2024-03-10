@@ -14,7 +14,7 @@ type OrgTag struct {
 }
 
 // Automatically rolls back transactions that save invalid org tags to the database
-func (t *OrgTag) AfterSave(tx *gorm.DB) error {
+func (t *OrgTag) BeforeSave(tx *gorm.DB) error {
 	return t.Validate()
 }
 
