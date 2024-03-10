@@ -14,7 +14,6 @@ import (
 	"github.com/arsham/dbtools/dbtesting"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestGetUser(t *testing.T) {
@@ -125,7 +124,7 @@ func TestPutUser(t *testing.T) {
 	// Database Setup
 	db, mock := database.NewMockDB()
 	c, err := controller.NewController(db, nil)
-	require.NoError(t, err)
+	assert.Nil(t, err)
 
 	// Create New User Using POST
 	firstName, lastName := "John", "Doe"
@@ -141,17 +140,17 @@ func TestPutUser(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`
 		INSERT INTO "user_images" ("created_at","updated_at","url","user_id") VALUES ($1,$2,$3,$4)
 		ON CONFLICT ("id") DO UPDATE SET "user_id"="excluded"."user_id" RETURNING "id"`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), "https://example.com/image.png", sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	// Insert User into database
 	createUser, err := c.CreateUser(firstName, lastName, age, images)
-	require.NoError(t, err)
+	assert.Nil(t, err)
 
-	require.Equal(t, firstName, createUser.FirstName)
-	require.Equal(t, lastName, createUser.LastName)
-	require.Equal(t, age, createUser.Age)
+	assert.Equal(t, firstName, createUser.FirstName)
+	assert.Equal(t, lastName, createUser.LastName)
+	assert.Equal(t, age, createUser.Age)
 
 	// // Get User ID to Update User
 	newUserID := createUser.ID
@@ -180,19 +179,19 @@ func TestPutUser(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`
 		INSERT INTO "user_images" ("created_at","updated_at","url","user_id","id") VALUES ($1,$2,$3,$4,$5)
 		ON CONFLICT ("id") DO UPDATE SET "user_id"="excluded"."user_id" RETURNING "id"`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), "https://example.com/image.png", sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	putUser, err := c.SaveUser(putRequestBody, newUserID)
-	require.NoError(t, err)
+	assert.Nil(t, err)
 
-	require.Equal(t, updatedFirstName, putUser.FirstName)
-	require.Equal(t, updatedLastName, putUser.LastName)
-	require.Equal(t, updatedAge, putUser.Age)
-	require.Equal(t, createUser.CreatedAt, putUser.CreatedAt)
-	require.True(t, putUser.UpdatedAt.After(createUser.UpdatedAt))
-	require.Equal(t, createUser.ID, putUser.ID)
+	assert.Equal(t, updatedFirstName, putUser.FirstName)
+	assert.Equal(t, updatedLastName, putUser.LastName)
+	assert.Equal(t, updatedAge, putUser.Age)
+	assert.Equal(t, createUser.CreatedAt, putUser.CreatedAt)
+	assert.True(t, putUser.UpdatedAt.After(createUser.UpdatedAt))
+	assert.Equal(t, createUser.ID, putUser.ID)
 }
 
 func TestCreateUser(t *testing.T) {
@@ -200,8 +199,8 @@ func TestCreateUser(t *testing.T) {
 	db, mock := database.NewMockDB()
 	// logger := slog.New(pterm.NewSlogHandler(pterm.DefaultLogger.WithLevel(pterm.LogLevelDebug)))
 	c, err := controller.NewController(db, nil)
-	require.NotEmpty(t, c)
-	require.Nil(t, err)
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
 
 	// set up recorder to keep track of the auto-generated userID
 	rec := dbtesting.NewValueRecorder()
@@ -211,8 +210,7 @@ func TestCreateUser(t *testing.T) {
 	lastName := "Smith"
 	var age uint8 = 20
 
-	imageUrl := "https://example.com/image.png"
-	images := []user.UserImage{{Url: imageUrl}}
+	images := []user.UserImage{{Url: "https://example.com/image.png"}}
 
 	// expect the insert statement and create the user
 	mock.ExpectBegin()
@@ -224,17 +222,17 @@ func TestCreateUser(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`
 		INSERT INTO "user_images" ("created_at","updated_at","url","user_id") VALUES ($1,$2,$3,$4)
 		ON CONFLICT ("id") DO UPDATE SET "user_id"="excluded"."user_id" RETURNING "id"`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), "https://example.com/image.png", sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	newUser1, err := c.CreateUser(firstName, lastName, age, images)
-	require.Nil(t, err)
+	assert.Nil(t, err)
 
 	// ensure that all fields were set properly on the User object
-	require.Equal(t, newUser1.Age, age)
-	require.Equal(t, newUser1.FirstName, firstName)
-	require.Equal(t, newUser1.LastName, lastName)
+	assert.Equal(t, newUser1.Age, age)
+	assert.Equal(t, newUser1.FirstName, firstName)
+	assert.Equal(t, newUser1.LastName, lastName)
 
 	// create a second user with the same data to show that repeated POST calls always creates new users
 	mock.ExpectBegin()
@@ -246,23 +244,23 @@ func TestCreateUser(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`
 		INSERT INTO "user_images" ("created_at","updated_at","url","user_id","id") VALUES ($1,$2,$3,$4,$5)
 		ON CONFLICT ("id") DO UPDATE SET "user_id"="excluded"."user_id" RETURNING "id"`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), "https://example.com/image.png", sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 	mock.ExpectCommit()
 
 	newUser2, err := c.CreateUser(firstName, lastName, age, images)
-	require.Nil(t, err)
+	assert.Nil(t, err)
 
-	require.Equal(t, newUser2.Age, age)
-	require.Equal(t, newUser2.FirstName, firstName)
-	require.Equal(t, newUser2.LastName, lastName)
+	assert.Equal(t, newUser2.Age, age)
+	assert.Equal(t, newUser2.FirstName, firstName)
+	assert.Equal(t, newUser2.LastName, lastName)
 
 	// IMPORTANT! assert that internally, the second user is not the same as the first user
-	require.NotEqual(t, newUser2.ID, newUser1.ID)
+	assert.NotEqual(t, newUser2.ID, newUser1.ID)
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
-	require.Nil(t, errExpectations)
+	assert.Nil(t, errExpectations)
 }
 
 func TestDeleteUser(t *testing.T) {
@@ -270,8 +268,8 @@ func TestDeleteUser(t *testing.T) {
 	db, mock := database.NewMockDB()
 
 	c, err := controller.NewController(db, nil)
-	require.NotEmpty(t, c)
-	require.Nil(t, err)
+	assert.NotEmpty(t, c)
+	assert.Nil(t, err)
 
 	// set up recorder to keep track of the auto-generated userID and created/updated times
 	rec := dbtesting.NewValueRecorder()
@@ -280,8 +278,7 @@ func TestDeleteUser(t *testing.T) {
 	firstName := "firstName"
 	lastName := "lastName"
 	var age uint8 = 20
-	imageUrl := "https://example.com/image.png"
-	images := []user.UserImage{{Url: imageUrl}}
+	images := []user.UserImage{{Url: "https://example.com/image.png"}}
 
 	// expect the insert statement and create the user
 	mock.ExpectBegin()
@@ -293,13 +290,13 @@ func TestDeleteUser(t *testing.T) {
 	mock.ExpectQuery(regexp.QuoteMeta(`
 		INSERT INTO "user_images" ("created_at","updated_at","url","user_id") VALUES ($1,$2,$3,$4)
 		ON CONFLICT ("id") DO UPDATE SET "user_id"="excluded"."user_id" RETURNING "id"`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), imageUrl, sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), "https://example.com/image.png", sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
 
 	mock.ExpectCommit()
 
 	_, err = c.CreateUser("firstName", "lastName", age, images)
-	require.Nil(t, err)
+	assert.Nil(t, err)
 
 	// retrieve the user's ID
 	userId := rec.Value("id").(string)
@@ -318,15 +315,15 @@ func TestDeleteUser(t *testing.T) {
 	mock.ExpectCommit()
 
 	uuidUser, err := uuid.Parse(userId)
-	require.Nil(t, err)
+	assert.Nil(t, err)
 
 	deletedUser, err := c.DeleteUser(user_id.Wrap(uuidUser))
-	require.Nil(t, err)
+	assert.Nil(t, err)
 
 	// ensure that the deleted user is returned and matches the info of the user that was created
-	require.Equal(t, deletedUser.Age, age)
-	require.Equal(t, deletedUser.FirstName, firstName)
-	require.Equal(t, deletedUser.LastName, lastName)
+	assert.Equal(t, deletedUser.Age, age)
+	assert.Equal(t, deletedUser.FirstName, firstName)
+	assert.Equal(t, deletedUser.LastName, lastName)
 
 	// try deleting a fake user
 	badId := uuid.New()
@@ -335,9 +332,9 @@ func TestDeleteUser(t *testing.T) {
 		WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "first_name", "last_name", "age"})) // no rows added
 
 	deletedUser, err = c.DeleteUser(user_id.Wrap(badId))
-	require.Error(t, err)
+	assert.Error(t, err)
 
 	// ensure that all expectations are met in the mock
 	errExpectations := mock.ExpectationsWereMet()
-	require.Nil(t, errExpectations)
+	assert.Nil(t, errExpectations)
 }
