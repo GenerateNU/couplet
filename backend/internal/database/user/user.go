@@ -18,7 +18,7 @@ type User struct {
 	FirstName   string      `validate:"required,min=1,max=255"`
 	LastName    string      `validate:"required,min=1,max=255"`
 	Age         uint8       `validate:"required,min=18"`
-	Images      []UserImage `validate:"min=1,max=5"`
+	Images      []UserImage `validate:"max=5"`
 	UserSwipes  []UserSwipe
 	EventSwipes []EventSwipe
 }

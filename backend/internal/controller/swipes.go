@@ -11,9 +11,18 @@ func (c Controller) CreateEventSwipe(params user.EventSwipe) (es user.EventSwipe
 	// TODO: Write tests
 	es = params
 	valErr = es.Validate()
-	if valErr == nil {
-		txErr = c.database.Omit(clause.Associations).Create(&es).Error
+	if valErr != nil {
+		return
 	}
+
+	tx := c.database.Begin()
+	txErr = tx.Omit(clause.Associations).Create(&es).Error
+
+	if txErr != nil {
+		tx.Rollback()
+	}
+
+	tx.Commit()
 	return
 }
 
@@ -22,8 +31,17 @@ func (c Controller) CreateUserSwipe(params user.UserSwipe) (us user.UserSwipe, v
 	// TODO: Write tests
 	us = params
 	valErr = us.Validate()
-	if valErr == nil {
-		txErr = c.database.Omit(clause.Associations).Create(&us).Error
+	if valErr != nil {
+		return
 	}
+
+	tx := c.database.Begin()
+	txErr = tx.Omit(clause.Associations).Create(&us).Error
+
+	if txErr != nil {
+		tx.Rollback()
+	}
+
+	tx.Commit()
 	return
 }

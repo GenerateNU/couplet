@@ -10,35 +10,72 @@ func (c Controller) CreateOrg(params org.Org) (o org.Org, valErr error, txErr er
 	// TODO: Write tests
 	o = params
 	valErr = o.Validate()
-	if valErr == nil {
-		txErr = c.database.Create(&o).Error
+
+	if valErr != nil {
+		return
 	}
+
+	tx := c.database.Begin()
+	txErr = tx.Create(&o).Error
+
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }
 
 // Deletes an organization from the database by its ID
 func (c Controller) DeleteOrg(id org_id.OrgID) (o org.Org, txErr error) {
 	// TODO: Write tests
-	// TODO: Do this in one transaction
-	o, txErr = c.GetOrg(id)
+	tx := c.database.Begin()
+	txErr = tx.Preload("OrgTags").First(&o, id).Error
+
 	if txErr != nil {
+		tx.Rollback()
 		return
 	}
-	txErr = c.database.Delete(&o).Error
+
+	txErr = tx.Delete(&o).Error
+
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }
 
 // Gets an organization from the database by its ID
 func (c Controller) GetOrg(id org_id.OrgID) (o org.Org, txErr error) {
 	// TODO: Write tests
-	txErr = c.database.Preload("OrgTags").First(&o, id).Error
+	tx := c.database.Begin()
+
+	txErr = tx.Preload("OrgTags").First(&o, id).Error
+
+	if txErr != nil {
+		tx.Rollback()
+	}
+
+	tx.Commit()
 	return
 }
 
 // Gets several organizations from the database
 func (c Controller) GetOrgs(limit uint8, offset uint32) (orgs []org.Org, txErr error) {
 	// TODO: Write tests
-	txErr = c.database.Preload("OrgTags").Limit(int(limit)).Offset(int(offset)).Find(&orgs).Error
+	tx := c.database.Begin()
+
+	txErr = tx.Preload("OrgTags").Limit(int(limit)).Offset(int(offset)).Find(&orgs).Error
+
+	if txErr != nil {
+		tx.Rollback()
+	}
+
+	tx.Commit()
 	return
 }
 
@@ -47,8 +84,19 @@ func (c Controller) UpdateOrg(params org.Org) (o org.Org, valErr error, txErr er
 	// TODO: Write tests
 	o = params
 	valErr = o.Validate()
-	if valErr == nil {
-		txErr = c.database.Updates(&o).Error
+
+	if valErr != nil {
+		return
 	}
+
+	tx := c.database.Begin()
+	txErr = tx.Updates(&o).Error
+
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }

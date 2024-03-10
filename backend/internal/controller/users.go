@@ -28,25 +28,33 @@ func (c Controller) CreateUser(firstName string, lastName string, age uint8, ima
 		Images:    images,
 	}
 
-	result := c.database.Create(&u)
+	tx := c.database.Begin()
+
+	result := tx.Create(&u)
 
 	if result.Error != nil {
+		tx.Rollback()
 		return user.User{}, result.Error
 	}
 
+	tx.Commit()
 	return u, nil
 }
 
 func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.User, error) {
 	var user user.User
-	err := c.database.First(&user, "id = ?", id).Error
+
+	tx := c.database.Begin()
+	err := tx.First(&user, "id = ?", id).Error
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
 	userUpdates := make(map[string]interface{})
 
 	userUpdates["UpdatedAt"] = time.Now()
+	userUpdates["Images"] = updatedUser.Images
 
 	if updatedUser.FirstName != "" {
 		userUpdates["FirstName"] = updatedUser.FirstName
@@ -60,10 +68,12 @@ func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.Us
 		userUpdates["Age"] = updatedUser.Age
 	}
 
-	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
+	if err := tx.Model(&user).Updates(userUpdates).Error; err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
+	tx.Commit()
 	return &user, nil
 }
 
@@ -76,11 +86,21 @@ func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
 // Deletes a user from the database by its ID
 func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 	// TODO: Do this in one transaction
+	tx := c.database.Begin()
+
 	u, txErr = c.GetUser(id)
 	if txErr != nil {
+		tx.Rollback()
 		return
 	}
-	txErr = c.database.Delete(&u).Error
+
+	txErr = tx.Delete(&u).Error
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }
 
@@ -89,8 +109,19 @@ func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txE
 	// TODO: Write tests
 	u = params
 	valErr = u.Validate()
-	if valErr == nil {
-		txErr = c.database.Updates(&u).Error
+
+	tx := c.database.Begin()
+	if valErr != nil {
+		tx.Rollback()
+		return
 	}
+
+	txErr = tx.Updates(&u).Error
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }

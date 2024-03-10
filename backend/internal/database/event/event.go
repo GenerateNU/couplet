@@ -19,7 +19,7 @@ type Event struct {
 	UpdatedAt time.Time    `validate:"gtefield=CreatedAt"`
 	Name      string       `validate:"required,min=1,max=255"`
 	Bio       string       `validate:"required,min=1,max=255"`
-	Images    []EventImage `validate:"min=1,max=5"`
+	Images    []EventImage `validate:"max=5"`
 	EventTags []EventTag   `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags" validate:"max=5"`
 	OrgID     org_id.OrgID `validate:"required"`
 }
