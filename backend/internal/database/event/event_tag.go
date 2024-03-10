@@ -14,7 +14,7 @@ type EventTag struct {
 }
 
 // Automatically rolls back transactions that save invalid event tags to the database
-func (t *EventTag) AfterSave(tx *gorm.DB) error {
+func (t *EventTag) BeforeSave(tx *gorm.DB) error {
 	return t.Validate()
 }
 
