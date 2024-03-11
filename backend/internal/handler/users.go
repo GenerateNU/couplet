@@ -13,25 +13,30 @@ import (
 
 // Creates a new user.
 // POST /users
-func (h Handler) CreateUser(ctx context.Context, req *api.CreateUserReq) (api.CreateUserRes, error) {
+func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.UsersPostRes, error) {
 	// TODO: Write tests
 	h.logger.Info("POST /users")
 
 	if req.Age < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
+	images := []user.UserImage{}
+	for _, v := range req.Images {
+		images = append(images, user.UserImage{Url: v.String()})
+	}
 
-	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age)
+	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age, images)
 	// TODO: check for validation error from the controller and return 400
 	if err != nil {
 		return nil, errors.New("failed to create user")
 	}
 
-	res := api.CreateUserCreated{
+	res := api.UsersPostCreated{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
+		Images:    req.Images,
 	}
 
 	return &res, nil
@@ -39,7 +44,7 @@ func (h Handler) CreateUser(ctx context.Context, req *api.CreateUserReq) (api.Cr
 
 // Deletes a user by their user ID.
 // DELETE /users/{id}
-func (h Handler) DeleteUser(ctx context.Context, params api.DeleteUserParams) (api.DeleteUserRes, error) {
+func (h Handler) UsersIDDelete(ctx context.Context, params api.UsersIDDeleteParams) (api.UsersIDDeleteRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("DELETE /users/%s", params.ID))
 	u, err := h.controller.DeleteUser(user_id.Wrap(params.ID))
@@ -50,7 +55,7 @@ func (h Handler) DeleteUser(ctx context.Context, params api.DeleteUserParams) (a
 		}, nil
 	}
 
-	res := api.DeleteUserOK{
+	res := api.UsersIDDeleteOK{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
@@ -62,7 +67,7 @@ func (h Handler) DeleteUser(ctx context.Context, params api.DeleteUserParams) (a
 
 // Gets a user by its ID.
 // GET /users/{id}
-func (h Handler) GetUser(ctx context.Context, params api.GetUserParams) (api.GetUserRes, error) {
+func (h Handler) UsersIDGet(ctx context.Context, params api.UsersIDGetParams) (api.UsersIDGetRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("GET /users/%s", params.ID))
 	u, err := h.controller.GetUser(user_id.Wrap(params.ID))
@@ -73,7 +78,7 @@ func (h Handler) GetUser(ctx context.Context, params api.GetUserParams) (api.Get
 		}, nil
 	}
 
-	res := api.GetUserOK{
+	res := api.UsersIDGetOK{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
@@ -84,15 +89,15 @@ func (h Handler) GetUser(ctx context.Context, params api.GetUserParams) (api.Get
 
 // Gets multiple users.
 // GET /users
-func (h Handler) GetUsers(ctx context.Context, params api.GetUsersParams) ([]api.GetUsersOKItem, error) {
+func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api.UsersGetOKItem, error) {
 	// TODO: Write tests
 	h.logger.Info("GET /users")
 	limit := params.Limit.Value   // default value makes this safe
 	offset := params.Offset.Value // default value makes this safe
 	users, err := h.controller.GetUsers(limit, offset)
-	res := []api.GetUsersOKItem{}
+	res := []api.UsersGetOKItem{}
 	for _, u := range users {
-		item := api.GetUsersOKItem{
+		item := api.UsersGetOKItem{
 			ID:        u.ID.Unwrap(),
 			FirstName: u.FirstName,
 			LastName:  u.LastName,
@@ -105,7 +110,7 @@ func (h Handler) GetUsers(ctx context.Context, params api.GetUsersParams) ([]api
 
 // Updates the user based on their ID
 // PUT /users/{userId}
-func (h Handler) PutUser(ctx context.Context, updatedUser *api.PutUserReq, params api.PutUserParams) (api.PutUserRes, error) {
+func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq, params api.UsersIDPutParams) (api.UsersIDPutRes, error) {
 	// TODO: Write tests
 	// Checks if user exists
 	_, err := h.controller.GetUser(user_id.Wrap(params.ID))
@@ -120,7 +125,7 @@ func (h Handler) PutUser(ctx context.Context, updatedUser *api.PutUserReq, param
 				Message: err.Error(),
 			}, nil
 		}
-		updatedUser := api.PutUserOK{
+		updatedUser := api.UsersIDPutOK{
 			ID:        uuid.UUID(responseUser.ID),
 			FirstName: responseUser.FirstName,
 			LastName:  responseUser.LastName,
@@ -129,8 +134,13 @@ func (h Handler) PutUser(ctx context.Context, updatedUser *api.PutUserReq, param
 		return &updatedUser, nil
 	}
 
-	responseUser, _ := h.controller.CreateUser(updatedUser.FirstName, updatedUser.LastName, updatedUser.Age)
-	createdUser := api.PutUserCreated{
+	images := []user.UserImage{}
+	for _, v := range updatedUser.Images {
+		images = append(images, user.UserImage{Url: v.String()})
+	}
+
+	responseUser, _ := h.controller.CreateUser(updatedUser.FirstName, updatedUser.LastName, updatedUser.Age, images)
+	createdUser := api.UsersIDPutCreated{
 		ID:        uuid.UUID(responseUser.ID),
 		FirstName: responseUser.FirstName,
 		LastName:  responseUser.LastName,
@@ -141,13 +151,13 @@ func (h Handler) PutUser(ctx context.Context, updatedUser *api.PutUserReq, param
 
 // Updates the specific user at their ID
 // GET /users/{userId}
-func (h Handler) PatchUser(ctx context.Context, req *api.User, params api.PatchUserParams) (api.PatchUserRes, error) {
+func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
 	h.logger.Info(fmt.Sprintf("PATCH /users/%s", params.ID))
 
 	_, getErr := h.controller.GetUser(user_id.Wrap(params.ID))
 	doesNotExist := getErr != nil
 	if doesNotExist {
-		return &api.PatchUserNotFound{
+		return &api.UsersIDPatchNotFound{
 			Code:    404,
 			Message: getErr.Error(),
 		}, nil
@@ -167,15 +177,15 @@ func (h Handler) PatchUser(ctx context.Context, req *api.User, params api.PatchU
 
 	u, valErr, txErr := h.controller.UpdateUser(reqUser)
 	if valErr != nil {
-		return &api.PatchUserBadRequest{
+		return &api.UsersIDPatchBadRequest{
 			Code:    400,
 			Message: valErr.Error(),
 		}, nil
 	}
 	if txErr != nil {
-		return nil, errors.New("failed to update organization")
+		return nil, errors.New("failed to update user")
 	}
-	res := api.PatchUserOK{
+	res := api.UsersIDPatchOK{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
