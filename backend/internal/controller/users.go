@@ -19,42 +19,33 @@ func (c Controller) GetUsers(limit uint8, offset uint32) ([]user.User, error) {
 }
 
 // Creates a new user.
-func (c Controller) CreateUser(firstName string, lastName string, age uint8, images []user.UserImage) (user.User, error) {
+func (c Controller) CreateUser(firstName string, lastName string, age uint8) (user.User, error) {
 	u := user.User{
 		ID:        user_id.Wrap(uuid.New()),
 		FirstName: firstName,
 		LastName:  lastName,
 		Age:       age,
-		Images:    images,
 	}
 
-	tx := c.database.Begin()
-
-	result := tx.Create(&u)
+	result := c.database.Create(&u)
 
 	if result.Error != nil {
-		tx.Rollback()
 		return user.User{}, result.Error
 	}
 
-	tx.Commit()
 	return u, nil
 }
 
 func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.User, error) {
 	var user user.User
-
-	tx := c.database.Begin()
-	err := tx.First(&user, "id = ?", id).Error
+	err := c.database.First(&user, "id = ?", id).Error
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 
 	userUpdates := make(map[string]interface{})
 
 	userUpdates["UpdatedAt"] = time.Now()
-	userUpdates["Images"] = updatedUser.Images
 
 	if updatedUser.FirstName != "" {
 		userUpdates["FirstName"] = updatedUser.FirstName
@@ -68,12 +59,10 @@ func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.Us
 		userUpdates["Age"] = updatedUser.Age
 	}
 
-	if err := tx.Model(&user).Updates(userUpdates).Error; err != nil {
-		tx.Rollback()
+	if err := c.database.Model(&user).Updates(userUpdates).Error; err != nil {
 		return nil, err
 	}
 
-	tx.Commit()
 	return &user, nil
 }
 
@@ -86,21 +75,11 @@ func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
 // Deletes a user from the database by its ID
 func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 	// TODO: Do this in one transaction
-	tx := c.database.Begin()
-
 	u, txErr = c.GetUser(id)
 	if txErr != nil {
-		tx.Rollback()
 		return
 	}
-
-	txErr = tx.Delete(&u).Error
-	if txErr != nil {
-		tx.Rollback()
-		return
-	}
-
-	tx.Commit()
+	txErr = c.database.Delete(&u).Error
 	return
 }
 
@@ -108,20 +87,9 @@ func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
 	// TODO: Write tests
 	u = params
-	valErr = u.Validate()
-
-	tx := c.database.Begin()
-	if valErr != nil {
-		tx.Rollback()
-		return
+	// TODO: validate fields
+	if valErr == nil {
+		txErr = c.database.Updates(&u).Error
 	}
-
-	txErr = tx.Updates(&u).Error
-	if txErr != nil {
-		tx.Rollback()
-		return
-	}
-
-	tx.Commit()
 	return
 }

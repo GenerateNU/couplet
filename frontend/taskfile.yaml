@@ -3,41 +3,25 @@ version: "3"
 
 tasks:
   run:
-    deps:
-      - generate
+    deps: [install]
     summary: Runs the frontend mobile app
     cmds:
       - npm run start
   run-android:
-    deps:
-      - generate
+    deps: [install]
     summary: Runs the frontend mobile app for Android
     cmds:
       - npm run android
   run-ios:
-    deps:
-      - generate
+    deps: [install]
     summary: Runs the frontend mobile app for iOS
     cmds:
       - npm run ios
   run-web:
-    deps:
-      - generate
+    deps: [install]
     summary: Runs the frontend mobile app in a web view
     cmds:
       - npm run web
-  generate:
-    deps:
-      - install
-    aliases:
-      - gen
-    summary: Generate client types from OpenAPI spec
-    sources:
-      - ../openapi.yaml
-    generates:
-      - api/schema.d.ts
-    cmds:
-      - npm run generate
   install:
     summary: Installs all dependencies
     sources:
@@ -50,16 +34,13 @@ tasks:
     summary: Delete build files
     cmds:
       - rm -rf node_modules
-      - rm -f api/schema.d.ts
   test:
-    deps:
-      - generate
+    deps: [install]
     summary: Run frontend tests
     cmds:
       - npm run test
   check:
-    deps:
-      - generate
+    deps: [install]
     summary: Run static analysis checks
     cmds:
       - npm run check

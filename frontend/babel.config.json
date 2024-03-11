@@ -4,6 +4,6 @@
       "plugins": ["react-native-paper/babel"]
     }
   },
-  "plugins": ["expo-router/babel", "react-native-reanimated/plugin"],
+  "plugins": ["expo-router/babel"],
   "presets": ["babel-preset-expo"]
 }

@@ -1,12 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
-import Navbar from "../components/Navbar";
 
 export default function Profile() {
   return (
-    <View style={{ flex: 1, justifyContent: "space-between" }}>
+    <View>
       <Text>Profile</Text>
-      <Navbar />
     </View>
   );
 }

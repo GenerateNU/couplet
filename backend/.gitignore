@@ -1,5 +1,4 @@
 # Couplet executable binaries
-data-gen
 server
 !cmd/*
 
