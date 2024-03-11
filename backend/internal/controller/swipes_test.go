@@ -1,85 +1,55 @@
 package controller_test
 
-// func TestCreateEventSwipe(t *testing.T) {
-// 	// set up mock database
-// 	db, mock := database.NewMockDB()
-// 	c, err := controller.NewController(db, nil)
-// 	assert.NotEmpty(t, c)
-// 	assert.Nil(t, err)
+import (
+	"couplet/internal/controller"
+	"couplet/internal/database"
+	"couplet/internal/database/user"
+	"couplet/internal/database/user_id"
+	"regexp"
+	"testing"
 
-// 	// set up example event data
-// 	event_id := event_id.Wrap(uuid.New())
-// 	user_id := user_id.Wrap(uuid.New())
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+)
 
-// 	exampleEventSwipe := user.EventSwipe{
-// 		UserID:  user_id,
-// 		EventID: event_id,
-// 		Liked:   true,
-// 	}
+func TestCreateUserSwipe(t *testing.T) {
+	// Set up mock database
+	db, mock := database.NewMockDB()
+	c, err := controller.NewController(db, nil)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, c)
 
-// 	// expect the insert statement and create the event
-// 	mock.ExpectBegin()
-// 	mock.ExpectExec(regexp.QuoteMeta(`
-// 		INSERT INTO "event_swipes" ("user_id","event_id","liked","created_at","updated_at") VALUES ($1,$2,$3,$4,$5)`)).
-// 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
-// 		WillReturnResult(sqlmock.NewResult(1, 1))
-// 	mock.ExpectCommit()
+	// Set up example user swipe data
+	userID := user_id.Wrap(uuid.New())
+	otherUserID := user_id.Wrap(uuid.New())
+	exampleUserSwipe := user.UserSwipe{
+		UserID:      userID,
+		OtherUserID: otherUserID,
+		Liked:       true,
+	}
 
-// 	insertedEventSwipe, valErr, txErr := c.CreateEventSwipe(exampleEventSwipe)
-// 	assert.Nil(t, valErr)
-// 	assert.Nil(t, txErr)
+	// Expect the insert statement and create the user swipe
+	mock.ExpectBegin()
+	mock.ExpectQuery(regexp.QuoteMeta(`
+        INSERT INTO "user_swipes" ("created_at","updated_at","user_id","other_user_id","liked")
+        VALUES ($1,$2,$3,$4,$5) RETURNING "id"`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+	mock.ExpectCommit()
 
-// 	// ensure that all fields were set properly on the Event object
-// 	assert.Equal(t, insertedEventSwipe.UserID, exampleEventSwipe.UserID)
-// 	assert.Equal(t, insertedEventSwipe.EventID, exampleEventSwipe.EventID)
-// 	assert.Equal(t, insertedEventSwipe.Liked, exampleEventSwipe.Liked)
+	// Call CreateUserSwipe and check for no error
+	insertedUserSwipe, valErr, txErr := c.CreateUserSwipe(exampleUserSwipe)
+	assert.Nil(t, valErr)
+	assert.Nil(t, txErr)
+	assert.NotNil(t, insertedUserSwipe)
 
-// 	/* TODO:
-// 	- test that the same user can have multiple swipes for different events
-// 	- test that the same event can have multiple swipes from different users */
+	// Verify that the fields are correctly set
+	assert.Equal(t, exampleUserSwipe.UserID, insertedUserSwipe.UserID)
+	assert.Equal(t, exampleUserSwipe.OtherUserID, insertedUserSwipe.OtherUserID)
+	assert.Equal(t, exampleUserSwipe.Liked, insertedUserSwipe.Liked)
 
-// 	// ensure that all expectations are met in the mock
-// 	errExpectations := mock.ExpectationsWereMet()
-// 	assert.Nil(t, errExpectations)
-// }
-
-// func TestCreateUserSwipe(t *testing.T) {
-// 	// set up mock database
-// 	db, mock := database.NewMockDB()
-// 	c, err := controller.NewController(db, nil)
-// 	assert.NotEmpty(t, c)
-// 	assert.Nil(t, err)
-
-// 	// set up recorder to keep track of the auto-generated eventID
-// 	rec := dbtesting.NewValueRecorder()
-
-// 	// set up example event data
-// 	other_user_id := user_id.Wrap(uuid.New())
-// 	user_id := user_id.Wrap(uuid.New())
-
-// 	// set up example event data
-// 	exampleUserSwipe := user.UserSwipe{
-// 		UserID:      user_id,
-// 		OtherUserID: other_user_id,
-// 		Liked:       true,
-// 	}
-
-// 	// expect the insert statement and create the event
-// 	mock.ExpectBegin()
-// 	mock.ExpectExec(regexp.QuoteMeta(`
-// 		INSERT INTO "user_swipes" ("id","user_id","other_user_id","liked","created_at","updated_at")
-// 		VALUES ($1,$2,$3,$4,$5,$6)`)).
-// 		WithArgs(rec.Record("idOne"), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked, sqlmock.AnyArg(), sqlmock.AnyArg()).
-// 		WillReturnResult(sqlmock.NewResult(1, 1))
-// 	mock.ExpectCommit()
-
-// 	insertedUserSwipe, valErr, txErr := c.CreateUserSwipe(exampleUserSwipe)
-// 	assert.Nil(t, valErr)
-// 	assert.Nil(t, txErr)
-
-// 	// ensure that all fields were set properly on the Event object
-// 	assert.Equal(t, insertedUserSwipe.UserID, exampleUserSwipe.UserID)
-// 	assert.Equal(t, insertedUserSwipe.OtherUserID, exampleUserSwipe.OtherUserID)
-// 	assert.Equal(t, insertedUserSwipe.Liked, exampleUserSwipe.Liked)
-
-// }
+	// Ensure that all expectations are met in the mock
+	errExpectations := mock.ExpectationsWereMet()
+	assert.Nil(t, errExpectations)
+}
