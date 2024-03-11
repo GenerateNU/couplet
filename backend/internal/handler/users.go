@@ -118,7 +118,11 @@ func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq,
 
 	// TODO: Validate parameters
 	if alreadyExists {
-		responseUser, err := h.controller.SaveUser(user.User{FirstName: updatedUser.FirstName, LastName: updatedUser.LastName, Age: updatedUser.Age}, user_id.Wrap(params.ID))
+		images := []user.UserImage{}
+		for _, v := range updatedUser.Images {
+			images = append(images, user.UserImage{Url: v.String()})
+		}
+		responseUser, err := h.controller.SaveUser(user.User{FirstName: updatedUser.FirstName, LastName: updatedUser.LastName, Age: updatedUser.Age, Images: images}, user_id.Wrap(params.ID))
 		if err != nil {
 			return &api.Error{
 				Code:    400,
@@ -173,6 +177,14 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 	}
 	if req.Age.Set {
 		reqUser.Age = req.Age.Value
+	}
+
+	if req.Images != nil {
+		images := []user.UserImage{}
+		for _, v := range req.Images {
+			images = append(images, user.UserImage{Url: v.String()})
+		}
+		reqUser.Images = images
 	}
 
 	u, valErr, txErr := h.controller.UpdateUser(reqUser)
