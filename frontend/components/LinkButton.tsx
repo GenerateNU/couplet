@@ -1,8 +1,20 @@
 import { Link } from "expo-router";
 import React from "react";
 import { Pressable, Text } from "react-native";
+import {
+  DMSans_400Regular as DMSansRegular
+} from '@expo-google-fonts/dm-sans';
+import { useFonts } from "expo-font";
 
 export default function LinkButton({ text }: { text: string }) {
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+
   return (
     <Pressable
       style={{
@@ -15,7 +27,7 @@ export default function LinkButton({ text }: { text: string }) {
       }}
     >
       <Link href="/People">
-        <Text style={{ color: "white" }}>{text}</Text>
+        <Text style={{ color: "white", fontFamily: "DMSansRegular" }}>{text}</Text>
       </Link>
     </Pressable>
   );

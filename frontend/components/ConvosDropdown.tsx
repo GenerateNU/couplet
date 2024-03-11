@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
+import {
+  DMSans_400Regular as DMSansRegular
+} from '@expo-google-fonts/dm-sans';
+import { useFonts } from "expo-font";
 
 export type ConvoUser = {
   userID: number;
@@ -21,6 +25,14 @@ function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
     setOpen(!open);
   };
 
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+
   return (
     <View style={{ marginTop: 10 }}>
       <View
@@ -33,7 +45,7 @@ function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
           marginBottom: 10
         }}
       >
-        <Text style={{ fontSize: 14 }}>
+        <Text style={{ fontSize: 14, fontFamily: "DMSansRegular" }}>
           {convoType === "activeConvos"
             ? `Active Convos (${convos.length})`
             : `Archives (${convos.length})`}
@@ -56,8 +68,8 @@ function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
             >
               <Image source={PROFILE} style={{ width: 55, height: 55, marginRight: 10 }} />
               <View style={{ flexDirection: "column", justifyContent: "center" }}>
-                <Text style={{ fontSize: 22, marginBottom: 5 }}>{convo.name}</Text>
-                <Text style={{ fontSize: 14, marginBottom: 5 }}>{convo.chatLine}</Text>
+                <Text style={{ fontSize: 22, marginBottom: 5, fontFamily: "DMSansRegular"}}>{convo.name}</Text>
+                <Text style={{ fontSize: 14, marginBottom: 5, fontFamily: "DMSansRegular" }}>{convo.chatLine}</Text>
               </View>
             </View>
           ))}

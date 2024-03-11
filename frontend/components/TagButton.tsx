@@ -1,5 +1,9 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
+import {
+  DMSans_400Regular as DMSansRegular
+} from '@expo-google-fonts/dm-sans';
+import { useFonts } from "expo-font";
 
 export default function TagButton({
   text,
@@ -10,6 +14,14 @@ export default function TagButton({
   selected: boolean;
   onPress: () => void;
 }) {
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+  
   return (
     <Pressable
       style={{
@@ -23,7 +35,7 @@ export default function TagButton({
       }}
       onPress={onPress}
     >
-      <Text style={{ color: selected ? "white" : "black" }}>{text}</Text>
+      <Text style={{ color: selected ? "white" : "black", fontFamily: "DMSansRegular"}}>{text}</Text>
     </Pressable>
   );
 }
