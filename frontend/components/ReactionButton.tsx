@@ -1,10 +1,21 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
+import { Text } from "react-native";
 import { Button } from "react-native-paper";
 import { ReactionButtonProps } from "./ReactionButtonProps";
 
 /* eslint-disable react/no-children-prop */
 
 function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps) {
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <Button
       style={{
@@ -20,7 +31,7 @@ function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps)
       mode="elevated"
       onPress={() => handleReact(like)}
     >
-      {label}
+      <Text style={{ fontFamily: "DMSansRegular" }}>{label}</Text>
     </Button>
   );
 }

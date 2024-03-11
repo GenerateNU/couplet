@@ -1,3 +1,5 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -7,6 +9,13 @@ const COIN = require("../assets/coin.png");
 
 export default function HomeEventCard() {
   const router = useRouter();
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <Pressable onPress={() => router.push("DummyEventDetails")}>
@@ -30,7 +39,11 @@ export default function HomeEventCard() {
           }}
         />
         <View>
-          <Text style={{ textAlign: "center", padding: 10, fontSize: 14 }}>Winter Ice Skating</Text>
+          <Text
+            style={{ textAlign: "center", padding: 10, fontSize: 14, fontFamily: "DMSansRegular" }}
+          >
+            Winter Ice Skating
+          </Text>
           <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>
             <Image source={PIN} style={{ width: 20, height: 20 }} />
             <Text
@@ -38,7 +51,8 @@ export default function HomeEventCard() {
                 textAlign: "center",
                 justifyContent: "center",
                 verticalAlign: "middle",
-                marginTop: 2
+                marginTop: 2,
+                fontFamily: "DMSansRegular"
               }}
             >
               Frog Pond
@@ -50,7 +64,8 @@ export default function HomeEventCard() {
                 justifyContent: "center",
                 verticalAlign: "middle",
                 marginTop: 2,
-                marginHorizontal: 2
+                marginHorizontal: 2,
+                fontFamily: "DMSansRegular"
               }}
             >
               Cost

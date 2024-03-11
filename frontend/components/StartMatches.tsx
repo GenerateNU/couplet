@@ -1,3 +1,5 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
@@ -15,6 +17,14 @@ export default function StartMatches() {
   })} ${today.getDate()}th, ${today.getFullYear()}`;
 
   setData(data.map((_, index) => index));
+
+  const [fontsLoaded] = useFonts({
+    DMSansRegular
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -58,12 +68,13 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: "#898A8D",
-    marginTop: 29
+    marginTop: 29,
+    fontFamily: "DMSansRegular"
   },
   matchMessage: {
     textAlign: "center",
     marginTop: 30,
-    fontFamily: "Comic Neue",
+    fontFamily: "DMSansRegular",
     fontSize: 24
   },
   phoneNumberContainer: {
@@ -76,14 +87,14 @@ const styles = StyleSheet.create({
   },
   phoneNumber: {
     textAlign: "center",
-    fontFamily: "Comic Neue, sans-serif",
+    fontFamily: "DMSansRegular",
     fontSize: 18,
     padding: 8
   },
   suggestDateText: {
     marginTop: 100,
     paddingLeft: 22,
-    fontFamily: "Comic Neue, sans-serif",
+    fontFamily: "DMSansRegular",
     fontSize: 22,
     paddingBottom: 10
   },
@@ -97,7 +108,7 @@ const styles = StyleSheet.create({
   browseMoreButtonText: {
     color: "#FFF",
     textAlign: "center",
-    fontFamily: "Comic Neue, sans-serif",
+    fontFamily: "DMSansRegular",
     fontSize: 18
   },
   notificationContainer: {
@@ -113,6 +124,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     fontSize: 24,
     lineHeight: 44,
-    fontFamily: "Comic Neue, sans-serif"
+    fontFamily: "DMSansRegular"
   }
 });

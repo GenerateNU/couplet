@@ -1,4 +1,10 @@
+import {
+  DMSans_700Bold as DMSansBold,
+  DMSans_500Medium as DMSansMedium,
+  DMSans_400Regular as DMSansRegular
+} from "@expo-google-fonts/dm-sans";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Home from "./app/Home";
@@ -7,6 +13,11 @@ export default function App() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
+  const [fontsLoaded] = useFonts({
+    DMSansRegular,
+    DMSansMedium,
+    DMSansBold
+  });
 
   async function handleAppleSignIn() {
     try {
@@ -20,6 +31,10 @@ export default function App() {
     } catch (e) {
       setIsAppleLoggedIn(false);
     }
+  }
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
@@ -45,7 +60,8 @@ export default function App() {
               fontSize: 44,
               fontWeight: "bold",
               marginBottom: 15,
-              paddingLeft: 30
+              paddingLeft: 30,
+              fontFamily: "DMSansBold"
             }}
           >
             Welcome to Couplet!
@@ -54,7 +70,8 @@ export default function App() {
             style={{
               fontSize: 18,
               paddingHorizontal: 30,
-              marginBottom: 20
+              marginBottom: 20,
+              fontFamily: "DMSansRegular"
             }}
           >
             Sign in with one of the providers below to get started.
@@ -83,7 +100,14 @@ export default function App() {
                 elevation: 5
               }}
             >
-              <Text style={{ color: "black", fontWeight: "500", fontSize: 20 }}>
+              <Text
+                style={{
+                  color: "black",
+                  fontWeight: "500",
+                  fontSize: 20,
+                  fontFamily: "DMSansMedium"
+                }}
+              >
                 Sign in with Google
               </Text>
             </TouchableOpacity>
