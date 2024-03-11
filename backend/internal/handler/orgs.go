@@ -11,7 +11,7 @@ import (
 
 // Creates a new organization.
 // POST /orgs
-func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPostRes, error) {
+func (h Handler) CreateOrg(ctx context.Context, req *api.CreateOrgReq) (api.CreateOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info("POST /orgs")
 
@@ -19,7 +19,7 @@ func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPo
 	orgToCreate.Name = req.Name
 	orgToCreate.Bio = req.Bio
 	if req.Image.Set {
-		orgToCreate.Image = org.OrgImage{Url: req.Image.Value.String()}
+		orgToCreate.Image = req.Image.Value.String()
 	}
 	orgToCreate.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {
@@ -37,7 +37,7 @@ func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPo
 		return nil, errors.New("failed to create organization")
 	}
 
-	res := api.OrgsPostCreated{
+	res := api.CreateOrgCreated{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -52,7 +52,7 @@ func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPo
 
 // Deletes an organization by its ID.
 // DELETE /orgs/{id}
-func (h Handler) OrgsIDDelete(ctx context.Context, params api.OrgsIDDeleteParams) (api.OrgsIDDeleteRes, error) {
+func (h Handler) DeleteOrg(ctx context.Context, params api.DeleteOrgParams) (api.DeleteOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("DELETE /orgs/%s", params.ID))
 	o, err := h.controller.DeleteOrg(org_id.Wrap(params.ID))
@@ -63,7 +63,7 @@ func (h Handler) OrgsIDDelete(ctx context.Context, params api.OrgsIDDeleteParams
 		}, nil
 	}
 
-	res := api.OrgsIDDeleteOK{
+	res := api.DeleteOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -77,7 +77,7 @@ func (h Handler) OrgsIDDelete(ctx context.Context, params api.OrgsIDDeleteParams
 
 // Gets an organization by its ID.
 // GET /orgs/{id}
-func (h Handler) OrgsIDGet(ctx context.Context, params api.OrgsIDGetParams) (api.OrgsIDGetRes, error) {
+func (h Handler) GetOrg(ctx context.Context, params api.GetOrgParams) (api.GetOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("GET /orgs/%s", params.ID))
 	o, err := h.controller.GetOrg(org_id.Wrap(params.ID))
@@ -88,7 +88,7 @@ func (h Handler) OrgsIDGet(ctx context.Context, params api.OrgsIDGetParams) (api
 		}, nil
 	}
 
-	res := api.OrgsIDGetOK{
+	res := api.GetOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -102,15 +102,15 @@ func (h Handler) OrgsIDGet(ctx context.Context, params api.OrgsIDGetParams) (api
 
 // Gets multiple organizations.
 // GET /orgs
-func (h Handler) OrgsGet(ctx context.Context, params api.OrgsGetParams) ([]api.OrgsGetOKItem, error) {
+func (h Handler) GetOrgs(ctx context.Context, params api.GetOrgsParams) ([]api.GetOrgsOKItem, error) {
 	// TODO: Write tests
 	h.logger.Info("GET /orgs")
 	limit := params.Limit.Value   // default value makes this safe
 	offset := params.Offset.Value // default value makes this safe
 	orgs, err := h.controller.GetOrgs(limit, offset)
-	res := []api.OrgsGetOKItem{}
+	res := []api.GetOrgsOKItem{}
 	for _, o := range orgs {
-		item := api.OrgsGetOKItem{
+		item := api.GetOrgsOKItem{
 			ID:   o.ID.Unwrap(),
 			Name: o.Name,
 			Bio:  o.Bio,
@@ -126,14 +126,14 @@ func (h Handler) OrgsGet(ctx context.Context, params api.OrgsGetParams) ([]api.O
 
 // Partially updates an organization by its ID.
 // PATCH /orgs/{id}
-func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsIDPatchParams) (api.OrgsIDPatchRes, error) {
+func (h Handler) PatchOrg(ctx context.Context, req *api.Org, params api.PatchOrgParams) (api.PatchOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("PATCH /orgs/%s", params.ID))
 
 	_, getErr := h.controller.GetOrg(org_id.Wrap(params.ID))
 	doesNotExist := getErr != nil
 	if doesNotExist {
-		return &api.OrgsIDPatchNotFound{
+		return &api.PatchOrgNotFound{
 			Code:    404,
 			Message: getErr.Error(),
 		}, nil
@@ -148,7 +148,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 		reqOrg.Bio = req.Bio.Value
 	}
 	if req.Image.Set {
-		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
+		reqOrg.Image = req.Image.Value.String()
 	}
 	if len(req.Tags) > 0 {
 		reqOrg.OrgTags = []org.OrgTag{}
@@ -159,7 +159,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 
 	o, valErr, txErr := h.controller.UpdateOrg(reqOrg)
 	if valErr != nil {
-		return &api.OrgsIDPatchBadRequest{
+		return &api.PatchOrgBadRequest{
 			Code:    400,
 			Message: valErr.Error(),
 		}, nil
@@ -167,7 +167,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 	if txErr != nil {
 		return nil, errors.New("failed to update organization")
 	}
-	res := api.OrgsIDPatchOK{
+	res := api.PatchOrgOK{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,
@@ -181,7 +181,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 
 // Updates an organization by its ID.
 // PUT /orgs/{id}
-func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params api.OrgsIDPutParams) (api.OrgsIDPutRes, error) {
+func (h Handler) PutOrg(ctx context.Context, req *api.PutOrgReq, params api.PutOrgParams) (api.PutOrgRes, error) {
 	// TODO: Write tests
 	h.logger.Info(fmt.Sprintf("PUT /orgs/%s", params.ID))
 
@@ -193,7 +193,7 @@ func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params ap
 	reqOrg.Name = req.Name
 	reqOrg.Bio = req.Bio
 	if req.Image.Set {
-		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
+		reqOrg.Image = req.Image.Value.String()
 	}
 	reqOrg.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {
@@ -211,7 +211,7 @@ func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params ap
 		if txErr != nil {
 			return nil, errors.New("failed to update organization")
 		}
-		res := api.OrgsIDPutOK{
+		res := api.PutOrgOK{
 			ID:   o.ID.Unwrap(),
 			Name: o.Name,
 			Bio:  o.Bio,
@@ -234,7 +234,7 @@ func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params ap
 		return nil, errors.New("failed to create organization")
 	}
 
-	res := api.OrgsIDPutCreated{
+	res := api.PutOrgCreated{
 		ID:   o.ID.Unwrap(),
 		Name: o.Name,
 		Bio:  o.Bio,

@@ -2,6 +2,7 @@ package org_test
 
 import (
 	"couplet/internal/database/event"
+	"couplet/internal/database/event_id"
 	"couplet/internal/database/org"
 	"couplet/internal/database/org_id"
 	"testing"
@@ -9,38 +10,36 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestOrgValidate(t *testing.T) {
-	id := org_id.Wrap(uuid.New())
 	validOrg := org.Org{
-		ID:        id,
+		ID:        org_id.Wrap(uuid.New()),
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Image:     org.OrgImage{Url: "https://example.com/image.png", OrgID: id},
+		Image:     "https://example.com/image.png",
 		OrgTags:   []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}},
-		Events:    []event.Event{{OrgID: id}},
+		Events:    []event.Event{{ID: event_id.Wrap(uuid.New())}},
 	}
 	assert.Nil(t, validOrg.Validate())
-	assert.Nil(t, (&validOrg).BeforeSave(nil))
+
+	idCheck := validOrg
+	idCheck.ID = org_id.OrgID{}
+	assert.NotNil(t, idCheck.Validate())
 
 	timesCheck := validOrg
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())
-	assert.NotNil(t, (&timesCheck).BeforeSave(nil))
 
 	nameLengthCheck := validOrg
 	nameLengthCheck.Name = ""
 	for i := 0; i <= 256; i++ {
 		if i < 1 || i > 255 {
 			assert.NotNil(t, nameLengthCheck.Validate())
-			assert.NotNil(t, (&nameLengthCheck).BeforeSave(nil))
 		} else {
 			assert.Nil(t, nameLengthCheck.Validate())
-			assert.Nil(t, (&nameLengthCheck).BeforeSave(nil))
 		}
 		nameLengthCheck.Name = nameLengthCheck.Name + "a"
 	}
@@ -50,40 +49,46 @@ func TestOrgValidate(t *testing.T) {
 	for i := 0; i <= 256; i++ {
 		if i < 1 || i > 255 {
 			assert.NotNil(t, bioLengthCheck.Validate())
-			assert.NotNil(t, (&bioLengthCheck).BeforeSave(nil))
 		} else {
 			assert.Nil(t, bioLengthCheck.Validate())
-			assert.Nil(t, (&bioLengthCheck).BeforeSave(nil))
 		}
 		bioLengthCheck.Bio = bioLengthCheck.Bio + "a"
 	}
 
 	noImageCheck := validOrg
-	noImageCheck.Image = org.OrgImage{}
+	noImageCheck.Image = ""
 	assert.Nil(t, noImageCheck.Validate())
-	assert.Nil(t, (&noImageCheck).BeforeSave(nil))
+
+	imageUrlCheck := validOrg
+	imageUrlCheck.Image = "invalid"
+	assert.NotNil(t, imageUrlCheck.Validate())
 
 	orgTagsCheck := validOrg
 	orgTagsCheck.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}
 	assert.NotNil(t, orgTagsCheck.Validate())
-	assert.NotNil(t, (&orgTagsCheck).BeforeSave(nil))
 }
 
-func TestOrgBeforeCreate(t *testing.T) {
-	noIdOrg := org.Org{
-		ID:        org_id.OrgID{},
+func TestOrgTagValidate(t *testing.T) {
+	validOrgTag := org.OrgTag{
+		ID:        "tag",
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
-		Name:      "The Events Company",
-		Bio:       "At The Events Company, we connect people through events",
-		Image:     org.OrgImage{},
-		OrgTags:   []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}},
-		Events:    []event.Event{},
+		Orgs:      []org.Org{{ID: org_id.Wrap(uuid.New())}, {ID: org_id.Wrap(uuid.New())}},
 	}
-	require.Nil(t, (&noIdOrg).BeforeCreate(nil))
-	assert.NotEmpty(t, noIdOrg.ID)
-	id := noIdOrg.ID
+	assert.Nil(t, validOrgTag.Validate())
 
-	require.Nil(t, (&noIdOrg).BeforeCreate(nil))
-	assert.Equal(t, id, noIdOrg.ID)
+	idLengthCheck := validOrgTag
+	idLengthCheck.ID = ""
+	for i := 0; i <= 256; i++ {
+		if i < 1 || i > 255 {
+			assert.NotNil(t, idLengthCheck.Validate())
+		} else {
+			assert.Nil(t, idLengthCheck.Validate())
+		}
+		idLengthCheck.ID = idLengthCheck.ID + "a"
+	}
+
+	timesCheck := validOrgTag
+	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
+	assert.NotNil(t, timesCheck.Validate())
 }
