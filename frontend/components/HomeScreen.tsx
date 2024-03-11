@@ -1,10 +1,8 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import Header from "./Header";
 import HomePageSection from "./HomePageSection";
 import LinkButton from "./LinkButton";
@@ -19,9 +17,9 @@ export default function HomeScreen() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
-  
+
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
       {/* Header View */}

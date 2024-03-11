@@ -1,11 +1,11 @@
+import {
+  DMSans_500Medium as DMSansMedium,
+  DMSans_400Regular as DMSansRegular
+} from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Text, View } from "react-native";
 import { Icon } from "react-native-paper";
-import {
-  DMSans_400Regular as DMSansRegular,
-  DMSans_500Medium as DMSansMedium
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import { EventCardProps } from "./EventProps";
 
 export default function EventCard({
@@ -18,12 +18,12 @@ export default function EventCard({
   location
 }: EventCardProps) {
   const [fontsLoaded] = useFonts({
-    DMSansRegular, 
+    DMSansRegular,
     DMSansMedium
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
   return (
     <View
@@ -40,13 +40,21 @@ export default function EventCard({
 
       <View style={{ flexDirection: "row" }}>
         <Icon source="pin-outline" size={24} />
-        <Text style={{ fontSize: 18, marginRight: 24, fontFamily: "DMSansRegular" }}>{location}</Text>
+        <Text style={{ fontSize: 18, marginRight: 24, fontFamily: "DMSansRegular" }}>
+          {location}
+        </Text>
         <Icon source="cash" size={24} />
-        <Text style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}>{`$${price}`}</Text>
+        <Text
+          style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}
+        >{`$${price}`}</Text>
       </View>
 
-      <Text style={{ fontSize: 18, marginVertical: 10, fontFamily: "DMSansRegular" }}>{description}</Text>
-      <Text style={{ fontSize: 18, marginVertical: 10, fontFamily: "DMSansRegular" }}>{description}</Text>
+      <Text style={{ fontSize: 18, marginVertical: 10, fontFamily: "DMSansRegular" }}>
+        {description}
+      </Text>
+      <Text style={{ fontSize: 18, marginVertical: 10, fontFamily: "DMSansRegular" }}>
+        {description}
+      </Text>
 
       <Text style={{ fontSize: 24, fontFamily: "DMSansRegular" }}>Location</Text>
       <Text style={{ fontSize: 18, fontFamily: "DMSansRegular" }}>{location}</Text>

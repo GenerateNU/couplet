@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import { MatchesUser } from "./MatchesUserSection";
 
 type MatchesUserCardProps = {
@@ -24,9 +22,9 @@ function MatchesUserCard({ profile }: MatchesUserCardProps) {
     DMSansRegular
   });
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
-  
+
   return (
     <TouchableOpacity onPress={toggleModal}>
       <View style={styles.cardContainer}>
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
   },
   cardName: {
     padding: 10,
-    fontSize: 18, 
+    fontSize: 18,
     fontFamily: "DMSansRegular"
   },
   modalContainer: {
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 36,
-    fontWeight: "bold", 
+    fontWeight: "bold",
     fontFamily: "DMSansRegular"
   },
   modalValues: {
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   valueText: {
-    fontSize: 16, 
+    fontSize: 16,
     fontFamily: "DMSansRegular"
   },
   modalName: {

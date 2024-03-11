@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 
 type EventCardItemProps = {
   title: string;
@@ -17,7 +15,7 @@ export function EventCardItem({ title, description, imageUrl }: EventCardItemPro
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (
@@ -50,12 +48,12 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 18,
     fontWeight: "bold",
-    paddingLeft: 6, 
+    paddingLeft: 6,
     fontFamily: "DMSansRegular"
   },
   cardDescription: {
     fontSize: 14,
-    paddingLeft: 6, 
+    paddingLeft: 6,
     fontFamily: "DMSansRegular"
   }
 });

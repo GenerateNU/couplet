@@ -1,12 +1,12 @@
+import {
+  DMSans_700Bold as DMSansBold,
+  DMSans_500Medium as DMSansMedium,
+  DMSans_400Regular as DMSansRegular
+} from "@expo-google-fonts/dm-sans";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular,
-  DMSans_500Medium as DMSansMedium,
-  DMSans_700Bold as DMSansBold
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import Home from "./app/Home";
 
 export default function App() {
@@ -34,7 +34,7 @@ export default function App() {
   }
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (
@@ -100,7 +100,14 @@ export default function App() {
                 elevation: 5
               }}
             >
-              <Text style={{ color: "black", fontWeight: "500", fontSize: 20, fontFamily: "DMSansMedium"}}>
+              <Text
+                style={{
+                  color: "black",
+                  fontWeight: "500",
+                  fontSize: 20,
+                  fontFamily: "DMSansMedium"
+                }}
+              >
                 Sign in with Google
               </Text>
             </TouchableOpacity>

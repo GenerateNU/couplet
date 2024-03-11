@@ -1,10 +1,8 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import { Link } from "expo-router";
 import React from "react";
 import { Pressable, Text } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 
 export default function LinkButton({ text }: { text: string }) {
   const [fontsLoaded] = useFonts({
@@ -12,7 +10,7 @@ export default function LinkButton({ text }: { text: string }) {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (

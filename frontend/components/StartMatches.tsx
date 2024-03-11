@@ -1,10 +1,8 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EventCardItem } from "./EventCardItem";
 
@@ -25,7 +23,7 @@ export default function StartMatches() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (
@@ -70,14 +68,14 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: "#898A8D",
-    marginTop: 29, 
-    fontFamily: "DMSansRegular" 
+    marginTop: 29,
+    fontFamily: "DMSansRegular"
   },
   matchMessage: {
     textAlign: "center",
     marginTop: 30,
     fontFamily: "DMSansRegular",
-    fontSize: 24, 
+    fontSize: 24
   },
   phoneNumberContainer: {
     justifyContent: "center",
@@ -126,6 +124,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     fontSize: 24,
     lineHeight: 44,
-    fontFamily: "DMSansRegular",
+    fontFamily: "DMSansRegular"
   }
 });

@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Text, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import Navbar from "../components/Navbar";
 
 export default function People() {
@@ -12,7 +10,7 @@ export default function People() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>

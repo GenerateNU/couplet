@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Text, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 
 export default function Header() {
   const [fontsLoaded] = useFonts({
@@ -11,9 +9,9 @@ export default function Header() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
-  
+
   return (
     <View
       style={{
@@ -30,7 +28,7 @@ export default function Header() {
           justifyContent: "center",
           textAlign: "left",
           width: "100%",
-          fontSize: 20, 
+          fontSize: 20,
           fontFamily: "DMSansRegular"
         }}
       >

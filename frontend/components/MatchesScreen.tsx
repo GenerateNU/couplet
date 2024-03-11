@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React /* { useState } */ from "react";
 import { ScrollView, Text, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 import ConvosDropdown, { ConvoUser } from "./ConvosDropdown";
 import MatchesUserSection, { MatchesUser } from "./MatchesUserSection";
 
@@ -108,7 +106,7 @@ export default function MatchesScreen() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (
@@ -125,10 +123,16 @@ export default function MatchesScreen() {
             alignItems: "center"
           }}
         >
-          <Text style={{ marginTop: 56, fontSize: 32, marginBottom: 9, fontFamily: "DMSansRegular" }}>Matches</Text>
+          <Text
+            style={{ marginTop: 56, fontSize: 32, marginBottom: 9, fontFamily: "DMSansRegular" }}
+          >
+            Matches
+          </Text>
         </View>
         <View style={{ flex: 1, width: "100%" }}>
-          <Text style={{ fontSize: 22, lineHeight: 32, paddingLeft: "5%", fontFamily: "DMSansRegular" }}>
+          <Text
+            style={{ fontSize: 22, lineHeight: 32, paddingLeft: "5%", fontFamily: "DMSansRegular" }}
+          >
             Make the first move!
           </Text>
           <MatchesUserSection matches={dummyUserData} />

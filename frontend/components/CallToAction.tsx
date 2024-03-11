@@ -1,9 +1,7 @@
+import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
+import { useFonts } from "expo-font";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import {
-  DMSans_400Regular as DMSansRegular
-} from '@expo-google-fonts/dm-sans';
-import { useFonts } from "expo-font";
 
 export default function CallToAction() {
   const [fontsLoaded] = useFonts({
@@ -11,7 +9,7 @@ export default function CallToAction() {
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
   return (
     <View
@@ -39,7 +37,7 @@ export default function CallToAction() {
         <Text
           style={{
             color: "white",
-            textAlign: "center", 
+            textAlign: "center",
             fontFamily: "DMSansRegular"
           }}
         >
