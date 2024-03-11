@@ -20,9 +20,9 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 	if req.Age < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
-	images := []user.UserImage{}
-	for _, v := range req.Images {
-		images = append(images, user.UserImage{Url: v.String()})
+	images := make([]user.UserImage, len(req.Images))
+	for i, v := range req.Images {
+ 		images[i] = user.UserImage{Url: v.String()}
 	}
 
 	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age, images)
@@ -116,12 +116,12 @@ func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq,
 	_, err := h.controller.GetUser(user_id.Wrap(params.ID))
 	alreadyExists := err == nil
 
+	images := make([]user.UserImage, len(updatedUser.Images))
+	for i, v := range updatedUser.Images {
+		images[i] = user.UserImage{Url: v.String()}
+	}
 	// TODO: Validate parameters
 	if alreadyExists {
-		images := []user.UserImage{}
-		for _, v := range updatedUser.Images {
-			images = append(images, user.UserImage{Url: v.String()})
-		}
 		responseUser, err := h.controller.SaveUser(user.User{FirstName: updatedUser.FirstName, LastName: updatedUser.LastName, Age: updatedUser.Age, Images: images}, user_id.Wrap(params.ID))
 		if err != nil {
 			return &api.Error{
@@ -136,11 +136,6 @@ func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq,
 			Age:       responseUser.Age,
 		}
 		return &updatedUser, nil
-	}
-
-	images := []user.UserImage{}
-	for _, v := range updatedUser.Images {
-		images = append(images, user.UserImage{Url: v.String()})
 	}
 
 	responseUser, _ := h.controller.CreateUser(updatedUser.FirstName, updatedUser.LastName, updatedUser.Age, images)
@@ -180,9 +175,9 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 	}
 
 	if req.Images != nil {
-		images := []user.UserImage{}
-		for _, v := range req.Images {
-			images = append(images, user.UserImage{Url: v.String()})
+		images := make([]user.UserImage, len(req.Images))
+		for i, v := range req.Images {
+			images[i] = user.UserImage{Url: v.String()}
 		}
 		reqUser.Images = images
 	}
