@@ -22,7 +22,7 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 	}
 	images := make([]user.UserImage, len(req.Images))
 	for i, v := range req.Images {
- 		images[i] = user.UserImage{Url: v.String()}
+		images[i] = user.UserImage{Url: v.String()}
 	}
 
 	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age, images)
