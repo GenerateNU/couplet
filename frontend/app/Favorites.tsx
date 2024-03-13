@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import LikesScreen from "../components/Matches/LikesScreen";
 import Navbar from "../components/Layout/Navbar";
+import LikesScreen from "../components/Matches/LikesScreen";
 
 export default function Favorites() {
   return (

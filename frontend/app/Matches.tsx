@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import MatchesScreen from "../components/Matches/MatchesScreen";
 import Navbar from "../components/Layout/Navbar";
+import MatchesScreen from "../components/Matches/MatchesScreen";
 
 export default function Matches() {
   return (
