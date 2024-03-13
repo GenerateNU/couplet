@@ -2,10 +2,10 @@ import React from "react";
 import { View } from "react-native";
 import NavButton from "./NavButton";
 
-const CHAT = require("../assets/chat.png");
-const HEART = require("../assets/heart.png");
-const HOME = require("../assets/home.png");
-const PERSON = require("../assets/person.png");
+const CHAT = require("../../assets/chat.png");
+const HEART = require("../../assets/heart.png");
+const HOME = require("../../assets/home.png");
+const PERSON = require("../../assets/person.png");
 
 export default function Navbar() {
   return (

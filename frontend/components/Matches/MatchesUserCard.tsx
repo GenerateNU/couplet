@@ -8,8 +8,8 @@ type MatchesUserCardProps = {
   profile: MatchesUser;
 };
 
-const AGE = require("../assets/birthday.png");
-const LOCATION = require("../assets/location.png");
+const AGE = require("../../assets/birthday.png");
+const LOCATION = require("../../assets/location.png");
 
 function MatchesUserCard({ profile }: MatchesUserCardProps) {
   const [modalVisible, setModalVisible] = useState(false);

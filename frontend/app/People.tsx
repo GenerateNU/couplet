@@ -2,7 +2,7 @@ import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
 import React from "react";
 import { Text, View } from "react-native";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Layout/Navbar";
 
 export default function People() {
   const [fontsLoaded] = useFonts({

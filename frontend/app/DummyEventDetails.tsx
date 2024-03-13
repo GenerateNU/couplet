@@ -5,7 +5,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import EventPage from "../components/EventPage";
+import EventPage from "../components/Event/EventPage";
 
 export default function DummyEventDetails() {
   const router = useRouter();

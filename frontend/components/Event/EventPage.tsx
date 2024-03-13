@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
-import Reaction from "./Reaction";
 
 function EventPage() {
   const dummyImages: string[] = [

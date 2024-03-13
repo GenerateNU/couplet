@@ -4,7 +4,7 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { EventCardItem } from "./EventCardItem";
+import { EventCardItem } from "../Event/EventCardItem";
 
 export default function StartMatches() {
   const [data, setData] = React.useState([...new Array(6).keys()]); // Change this data to match users events

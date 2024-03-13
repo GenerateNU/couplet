@@ -4,8 +4,8 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-const PIN = require("../assets/pin.png");
-const COIN = require("../assets/coin.png");
+const PIN = require("../../assets/pin.png");
+const COIN = require("../../assets/coin.png");
 
 export default function HomeEventCard() {
   const router = useRouter();
