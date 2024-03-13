@@ -14,7 +14,7 @@ type ConvosDropdownProps = {
   convoType: string;
 };
 
-const PROFILE = require("../assets/profile.png");
+const PROFILE = require("../../assets/profile.png");
 
 function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
   const [open, setOpen] = useState(false);

@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import React /* {useState} */ from "react";
 import { Image, Text, View } from "react-native";
 
-const LIKE_IMAGE = require("../assets/likes.png");
+const LIKE_IMAGE = require("../../assets/likes.png");
 
 export default function LikesScreen() {
   // Code for figuring out if they have any Likes

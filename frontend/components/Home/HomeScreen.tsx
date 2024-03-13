@@ -3,12 +3,12 @@ import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Header from "./Header";
+import Header from "../Layout/Header";
+import LinkButton from "../Layout/LinkButton";
+import TagButton from "../Layout/TagButton";
 import HomePageSection from "./HomePageSection";
-import LinkButton from "./LinkButton";
-import TagButton from "./TagButton";
 
-const DUMMY_IMAGE = require("../assets/blankProfile.jpg");
+const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
   const [filter, setFilter] = useState(0);
