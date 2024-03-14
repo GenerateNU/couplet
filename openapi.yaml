@@ -789,7 +789,7 @@ paths:
                         - id
                         - firstName
                         - lastName
-                        - age 
+                        - age
 
 
 components:
