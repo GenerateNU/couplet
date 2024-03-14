@@ -21,6 +21,7 @@ type User struct {
 	Images      []UserImage `validate:"max=5"`
 	UserSwipes  []UserSwipe
 	EventSwipes []EventSwipe
+	Matches     []*User `gorm:"many2many:user_matches;"`
 }
 
 // Automatically generates a random ID if unset before creating
