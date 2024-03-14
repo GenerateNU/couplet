@@ -758,6 +758,39 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+  /matches/{id}:
+    get:
+      summary: Get a user's matches
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to get matches of
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: "#/components/schemas/User"
+                    - required:
+                        - id
+                        - firstName
+                        - lastName
+                        - age 
+
 
 components:
   responses:
