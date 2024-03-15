@@ -1,8 +1,9 @@
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import getAllEvents from "../../api/events";
 import Header from "../Layout/Header";
 import LinkButton from "../Layout/LinkButton";
 import TagButton from "../Layout/TagButton";
@@ -12,9 +13,15 @@ const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
   const [filter, setFilter] = useState(0);
+  const [events, setEvents] = useState<any[]>([]); // ik any is a sin we will remove this
+
   const [fontsLoaded] = useFonts({
     DMSansRegular
   });
+
+  useEffect(() => {
+    getAllEvents().then((fetchedEvents: any) => setEvents(fetchedEvents || []));
+  }, []);
 
   if (!fontsLoaded) {
     return null;
@@ -55,10 +62,7 @@ export default function HomeScreen() {
       {/* Pintrestesque Section Views */}
       {filter === 0 ? (
         <View style={styles.sectionContainer}>
-          <HomePageSection
-            title="This weekend in Boston"
-            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
-          />
+          <HomePageSection title="This weekend in Boston" events={events} />
           <HomePageSection
             title="Live music and concerts"
             events={[1, 2, 3].map((n) => ({ id: n }))}
