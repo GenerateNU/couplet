@@ -34,7 +34,7 @@ function EventPage() {
             title="Winter Ice Skating"
             description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
             date="1/2/24"
-            price={20}
+            price={21}
             location="Frog Pond"
             handleReact={handleReact}
           />

@@ -59,6 +59,5 @@ export default function EventCard({
       <Text style={{ fontSize: 24, fontFamily: "DMSansRegular" }}>Location</Text>
       <Text style={{ fontSize: 18, fontFamily: "DMSansRegular" }}>{location}</Text>
     </View>
-    // </ScrollView>
   );
 }

@@ -1,6 +1,6 @@
 import client from "./client";
 
-export default async function getAllEvents() {
+export async function getAllEvents() {
   const req = {
     limit: 5,
     offset: 0
@@ -16,4 +16,19 @@ export default async function getAllEvents() {
   }
 
   return data;
+}
+
+export async function getEventById(uuid: string) {
+  console.log(uuid);
+  try {
+    await client.GET("/events/", {
+      params: {
+        path: {
+          id: uuid
+        }
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }

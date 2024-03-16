@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import getAllEvents from "../../api/events";
+import  { getAllEvents } from "../../api/events";
 import Header from "../Layout/Header";
 import LinkButton from "../Layout/LinkButton";
 import TagButton from "../Layout/TagButton";
