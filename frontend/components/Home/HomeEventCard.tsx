@@ -9,31 +9,32 @@ const PIN = require("../../assets/pin.png");
 const COIN = require("../../assets/coin.png");
 
 type HomeEventCarpProps = {
-  id : string
-
+  id: string;
 };
 
-export default function HomeEventCard( { id } : HomeEventCarpProps ) {
+export default function HomeEventCard({ id }: HomeEventCarpProps) {
   const [filter, setFilter] = useState<any>();
   const [event, setEvent] = useState<any>();
 
   const router = useRouter();
   useEffect(() => {
-    console.log("Id:" + id);
-    getEventById(id).then(
-      (fetchedEvent) => {
+    console.log(`Id:${  id}`);
+    getEventById(id)
+      .then((fetchedEvent) => {
         console.log("Here");
         console.log(fetchedEvent);
-        setEvent(fetchedEvent)
-      }
-    ).catch((e) => { console.log(e)});
+        setEvent(fetchedEvent);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
   const [fontsLoaded] = useFonts({
     DMSansRegular
   });
   if (!fontsLoaded) {
     return null;
-  } 
+  }
 
   return (
     <Pressable onPress={() => router.push("DummyEventDetails")}>
