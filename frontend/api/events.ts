@@ -21,7 +21,7 @@ export async function getAllEvents() {
 export async function getEventById(uuid: string) {
   console.log(uuid);
   try {
-    await client.GET("/events/", {
+    await client.GET("/events/{id}", {
       params: {
         path: {
           id: uuid

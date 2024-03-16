@@ -20,7 +20,10 @@ export default function HomeScreen() {
   });
 
   useEffect(() => {
-    getAllEvents().then((fetchedEvents: any) => { console.log("FetchedAllEvents" ,fetchedEvents); setEvents(fetchedEvents || []) });
+    getAllEvents().then((fetchedEvents: any) => {
+      console.log("FetchedAllEvents", fetchedEvents);
+      setEvents(fetchedEvents || []);
+    });
   }, []);
 
   if (!fontsLoaded) {

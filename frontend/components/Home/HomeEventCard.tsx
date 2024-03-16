@@ -13,12 +13,12 @@ type HomeEventCarpProps = {
 };
 
 export default function HomeEventCard({ id }: HomeEventCarpProps) {
-  const [filter, setFilter] = useState<any>();
   const [event, setEvent] = useState<any>();
+  console.log(event);
 
   const router = useRouter();
   useEffect(() => {
-    console.log(`Id:${  id}`);
+    console.log(`Id:${id}`);
     getEventById(id)
       .then((fetchedEvent) => {
         console.log("Here");
@@ -28,7 +28,7 @@ export default function HomeEventCard({ id }: HomeEventCarpProps) {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, [id]);
   const [fontsLoaded] = useFonts({
     DMSansRegular
   });
