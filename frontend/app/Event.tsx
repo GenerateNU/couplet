@@ -1,13 +1,17 @@
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventPage from "../components/Event/EventPage";
 
-export default function DummyEventDetails() {
+export default function Event() {
+  const {
+    // The route parameter
+    eventId
+  } = useLocalSearchParams<{ eventId: string }>();
   const router = useRouter();
   const [fontsLoaded] = useFonts({
     DMSansRegular
@@ -25,7 +29,7 @@ export default function DummyEventDetails() {
         </Button>
       </View>
       <View style={styles.cardContainer}>
-        <EventPage />
+        <EventPage id={eventId || ""} />
       </View>
     </SafeAreaView>
   );

@@ -21,7 +21,6 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getAllEvents().then((fetchedEvents: any) => {
-      console.log("FetchedAllEvents", fetchedEvents);
       setEvents(fetchedEvents || []);
     });
   }, []);
@@ -66,11 +65,8 @@ export default function HomeScreen() {
       {filter === 0 ? (
         <View style={styles.sectionContainer}>
           <HomePageSection title="This weekend in Boston" events={events} />
-          <HomePageSection
-            title="Live music and concerts"
-            events={[1, 2, 3].map((n) => ({ id: n }))}
-          />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
+          <HomePageSection title="Live music and concerts" events={events} />
+          <HomePageSection title="Other events" events={events} />
         </View>
       ) : (
         // Eventually replace this with a different event browsing screen

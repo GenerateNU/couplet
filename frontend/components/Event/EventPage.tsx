@@ -4,7 +4,11 @@ import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 
-function EventPage() {
+interface EventPageProps {
+  id: string;
+}
+
+function EventPage({ id }: EventPageProps) {
   const dummyImages: string[] = [
     "https://marvel-b1-cdn.bc0a.com/f00000000283318/home.dartmouth.edu/sites/home/files/styles/max_width_720px/public/2023-12/20220127_around_campus_eb_157.jpg?itok=bJJ9L7nZ",
     "https://www.lawnstarter.com/blog/wp-content/uploads/2022/12/iStock-1423384637-2-feature-image-1.jpg",
@@ -29,15 +33,7 @@ function EventPage() {
           <EventImageCarousel images={dummyImages} />
         </View>
         <View style={styles.EventCardContainer}>
-          <EventCard
-            id={1}
-            title="Winter Ice Skating"
-            description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
-            date="1/2/24"
-            price={21}
-            location="Frog Pond"
-            handleReact={handleReact}
-          />
+          <EventCard id={id} handleReact={handleReact} />
         </View>
       </ScrollView>
       <Reaction handleReact={handleReact} />

@@ -19,16 +19,17 @@ export async function getAllEvents() {
 }
 
 export async function getEventById(uuid: string) {
-  console.log(uuid);
-  try {
-    await client.GET("/events/{id}", {
-      params: {
-        path: {
-          id: uuid
-        }
+  const { data, error } = await client.GET("/events/{id}", {
+    params: {
+      path: {
+        id: uuid
       }
-    });
-  } catch (e) {
-    console.log(e);
+    }
+  });
+  if (error) {
+    console.error(error);
+    return [];
   }
+
+  return data;
 }

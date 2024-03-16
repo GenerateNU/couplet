@@ -1,10 +1,5 @@
 export type EventCardProps = {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  price: number;
-  location: string;
+  id: string;
   handleReact: (like: boolean) => void;
 };
 

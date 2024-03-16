@@ -1,34 +1,21 @@
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { getEventById } from "../../api/events";
 
 const PIN = require("../../assets/pin.png");
 const COIN = require("../../assets/coin.png");
 
-type HomeEventCarpProps = {
+type HomeEventCardProps = {
   id: string;
+  name: string;
+  // TODO: we need Location and Cost, but these aren't in the endpoint response yet
 };
 
-export default function HomeEventCard({ id }: HomeEventCarpProps) {
-  const [event, setEvent] = useState<any>();
-  console.log(event);
-
+export default function HomeEventCard({ id, name }: HomeEventCardProps) {
   const router = useRouter();
-  useEffect(() => {
-    console.log(`Id:${id}`);
-    getEventById(id)
-      .then((fetchedEvent) => {
-        console.log("Here");
-        console.log(fetchedEvent);
-        setEvent(fetchedEvent);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [id]);
+
   const [fontsLoaded] = useFonts({
     DMSansRegular
   });
@@ -37,7 +24,12 @@ export default function HomeEventCard({ id }: HomeEventCarpProps) {
   }
 
   return (
-    <Pressable onPress={() => router.push("DummyEventDetails")}>
+    <Pressable
+      onPress={() => {
+        router.push("Event");
+        router.setParams({ eventId: id });
+      }}
+    >
       <View
         style={{
           borderStyle: "solid",
@@ -61,7 +53,7 @@ export default function HomeEventCard({ id }: HomeEventCarpProps) {
           <Text
             style={{ textAlign: "center", padding: 10, fontSize: 14, fontFamily: "DMSansRegular" }}
           >
-            Winter Ice Skating
+            {name}
           </Text>
           <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>
             <Image source={PIN} style={{ width: 20, height: 20 }} />
@@ -75,6 +67,7 @@ export default function HomeEventCard({ id }: HomeEventCarpProps) {
               }}
             >
               Frog Pond
+              {/* TODO - replace with actual location */}
             </Text>
             <Image source={COIN} style={{ width: 20, height: 20, marginLeft: 10 }} />
             <Text
@@ -87,7 +80,8 @@ export default function HomeEventCard({ id }: HomeEventCarpProps) {
                 fontFamily: "DMSansRegular"
               }}
             >
-              Cost
+              $$
+              {/* TODO - replace with actual cost */}
             </Text>
             <View />
           </View>
