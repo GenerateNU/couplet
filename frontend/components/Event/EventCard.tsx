@@ -7,7 +7,11 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Icon } from "react-native-paper";
 import { getEventById } from "../../api/events";
-import { EventCardProps } from "./EventProps";
+
+export type EventCardProps = {
+  id: string;
+  handleReact: (like: boolean) => void;
+};
 
 export default function EventCard({ handleReact, id }: EventCardProps) {
   const [fontsLoaded] = useFonts({

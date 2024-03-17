@@ -13,7 +13,7 @@ function Reaction({ handleReact }: ReactionProps) {
         paddingTop: "5%"
       }}
     >
-      <ReactionButton like={false} icon="share" label="Share" handleReact={handleReact} />
+      <ReactionButton like={false} icon="cancel" label="Nope" handleReact={handleReact} />
       <ReactionButton like icon="heart" label="Save" handleReact={handleReact} />
     </View>
   );

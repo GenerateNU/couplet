@@ -1,31 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
-import EventCard from "./EventCard";
+import { eventSwipe, getAllEvents } from "../../api/events";
+import EventPage from "./EventPage";
 
 function CardStack() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [cards, setCards] = useState<React.JSX.Element[]>([]);
-  const cardLength = useRef(cards.length);
+  const [events, setEvents] = useState<any[]>([]);
+  const [currentEventId, setCurrentEventId] = useState("");
 
-  const handleReact = useCallback((like: boolean): boolean => {
-    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardLength.current);
-    return like;
-    // TODO: Add logic to update the database with the user's reaction to the event
-  }, []);
+  const handleReact = useCallback(
+    (like: boolean) => {
+      const userId = "c69626f1-f73d-4045-87d8-40e28f136c62"; // HARDCODED FROM MY DB
+      eventSwipe(userId, currentEventId, like).then();
+      const nextIndex = (currentCardIndex + 1) % events.length;
+      setCurrentCardIndex(nextIndex);
+      setCurrentEventId(events[nextIndex]?.id);
+    },
+    [events, currentCardIndex, currentEventId]
+  );
 
   useEffect(() => {
-    const dummyStack = [
-      <EventCard id="123e4567-e89b-12d3-a456-426614174000" handleReact={handleReact} />,
-      <EventCard id="123e4567-e89b-12d3-a456-426614174000" handleReact={handleReact} />,
-      <EventCard id="123e4567-e89b-12d3-a456-426614174000" handleReact={handleReact} />
-    ];
-    cardLength.current = dummyStack.length;
-    setCards(dummyStack);
-  }, [handleReact]);
+    getAllEvents().then((fetchedEvents: any) => {
+      setEvents(fetchedEvents || []);
+      console.log(fetchedEvents);
+      setCurrentEventId(fetchedEvents[0].id);
+    });
+  }, []);
 
-  const CurrentCard = cards[currentCardIndex];
-
-  return <View>{CurrentCard}</View>;
+  return (
+    <View>
+      <EventPage id={currentEventId} handleReact={handleReact} />
+    </View>
+  );
 }
 
 export default CardStack;
