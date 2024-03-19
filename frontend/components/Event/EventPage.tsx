@@ -4,7 +4,7 @@ import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 
-const { height , width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 interface EventPageProps {
   id: string;
@@ -30,20 +30,20 @@ function EventPage({ id, handleReact }: EventPageProps) {
         </View>
       </ScrollView>
       <View style={styles.reactionContainer}>
-      <Reaction handleReact={handleReact} />
+        <Reaction handleReact={handleReact} />
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   EventPageContainer: {
-    height : height
+    height
   },
   EventImageContainer: {
-    flex : 1
+    flex: 1
   },
-  reactionContainer : {
-    flex : 1
+  reactionContainer: {
+    flex: 1
   }
 });
 export default EventPage;
