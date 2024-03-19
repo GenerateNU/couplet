@@ -5,7 +5,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { RNS3 } from "react-native-aws3";
 
 export default function PhotoPicker() {
-  const [images, setImages] = useState<string>([]);
+  const [images, setImages] = useState<string[]>([]);
 
   const pick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -78,9 +78,11 @@ export default function PhotoPicker() {
         });
     });
 
-    const response = fetch("http://localhost:8080/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6", {
+    fetch("http://localhost:8080/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6", {
       method: "PATCH",
       body: JSON.stringify({ images })
+    }).catch((e) => {
+      console.log(e)
     });
   };
   return (
@@ -110,9 +112,9 @@ export default function PhotoPicker() {
       </TouchableOpacity>
 
       <Text>Image:</Text>
-      {images.map((i) => (
+      {/* {images && images.map((i) => (
         <Image src={i} style={{ width: 300, height: 300 }} />
-      ))}
+      ))} */}
     </View>
   );
 }
