@@ -5,10 +5,10 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { RNS3 } from "react-native-aws3";
 
 export default function PhotoPicker() {
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState<string>([]);
 
   const pick = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       allowsMultipleSelection: true,
@@ -23,7 +23,7 @@ export default function PhotoPicker() {
   const openPicker = async () => {
     const { status } = await MediaLibrary.getPermissionsAsync();
     console.log(status);
-    if (status != "granted") {
+    if (status !== "granted") {
       // TODO: say we cant get their photos bc no permissions
       const newPerms = await MediaLibrary.requestPermissionsAsync();
       if (newPerms.granted) {
@@ -34,25 +34,25 @@ export default function PhotoPicker() {
     }
   };
   const onDone = (passedImages: ImagePicker.ImagePickerAsset[]) => {
-    if (typeof passedImages != "object") return;
-    if (!passedImages.hasOwnProperty("length")) return;
+    if (typeof passedImages !== "object") return;
+    if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
     passedImages.forEach(async (img) => {
       let assetInfo;
-      if (img.hasOwnProperty("assetId") && img.assetId != null)
+      if (Object.prototype.hasOwnProperty.call(img, "assetId") && img.assetId != null)
         assetInfo = await MediaLibrary.getAssetInfoAsync(img.assetId);
       else return;
       if (assetInfo.localUri == null || img.fileName == null) return;
       const extension = assetInfo.localUri.substring(assetInfo.localUri.lastIndexOf(".") + 1);
 
-      let type = img.type + "/" + extension.toLowerCase();
-      let uri = assetInfo.localUri;
-      let name = img.fileName + new Date().getTime();
+      const type = `${img.type  }/${  extension.toLowerCase()}`;
+      const uri = assetInfo.localUri;
+      const name = img.fileName + new Date().getTime();
 
       const file = {
-        uri: uri,
-        name: name,
-        type: type
+        uri,
+        name,
+        type
       };
 
       const options = {
@@ -70,13 +70,17 @@ export default function PhotoPicker() {
           // @ts-ignore
           console.log(res.body.postResponse.location);
           // @ts-ignore
-          setImage(res.body.postResponse.location);
+          setImages([...images, res.body.postResponse.location]);
           // TODO: Backend call with the image we just uploaded
         })
         .catch((e) => {
           console.log(e);
         });
+      
     });
+    
+    const response = fetch("http://localhost:8080/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6", {method: "PATCH", body: JSON.stringify({images})})
+
   };
   return (
     <View>
@@ -105,7 +109,7 @@ export default function PhotoPicker() {
       </TouchableOpacity>
 
       <Text>Image:</Text>
-      {image && <Image src={image} style={{ width: 300, height: 300 }} />}
+      {images.map((i) => <Image src={i} style={{ width: 300, height: 300 }} />)}
     </View>
   );
 }
