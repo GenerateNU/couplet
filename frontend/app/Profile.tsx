@@ -16,7 +16,7 @@ export default function Profile() {
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>
       <Text style={{ fontFamily: "DMSansRegular" }}>Profile</Text>
-      <PhotoPicker/>
+      <PhotoPicker />
       <Navbar />
     </View>
   );

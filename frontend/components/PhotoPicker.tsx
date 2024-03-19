@@ -45,7 +45,7 @@ export default function PhotoPicker() {
       if (assetInfo.localUri == null || img.fileName == null) return;
       const extension = assetInfo.localUri.substring(assetInfo.localUri.lastIndexOf(".") + 1);
 
-      const type = `${img.type  }/${  extension.toLowerCase()}`;
+      const type = `${img.type}/${extension.toLowerCase()}`;
       const uri = assetInfo.localUri;
       const name = img.fileName + new Date().getTime();
 
@@ -76,11 +76,12 @@ export default function PhotoPicker() {
         .catch((e) => {
           console.log(e);
         });
-      
     });
-    
-    const response = fetch("http://localhost:8080/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6", {method: "PATCH", body: JSON.stringify({images})})
 
+    const response = fetch("http://localhost:8080/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6", {
+      method: "PATCH",
+      body: JSON.stringify({ images })
+    });
   };
   return (
     <View>
@@ -109,7 +110,9 @@ export default function PhotoPicker() {
       </TouchableOpacity>
 
       <Text>Image:</Text>
-      {images.map((i) => <Image src={i} style={{ width: 300, height: 300 }} />)}
+      {images.map((i) => (
+        <Image src={i} style={{ width: 300, height: 300 }} />
+      ))}
     </View>
   );
 }
