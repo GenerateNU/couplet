@@ -1,7 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { RNS3 } from "react-native-aws3";
 
 export default function PhotoPicker() {
@@ -82,7 +82,7 @@ export default function PhotoPicker() {
       method: "PATCH",
       body: JSON.stringify({ images })
     }).catch((e) => {
-      console.log(e)
+      console.log(e);
     });
   };
   return (
