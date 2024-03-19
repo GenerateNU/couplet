@@ -7,10 +7,7 @@ function Reaction({ handleReact }: ReactionProps) {
   return (
     <View
       style={{
-        flexDirection: "row",
-        marginHorizontal: "5%",
-        justifyContent: "space-between",
-        paddingTop: "5%"
+        flexDirection: "row"
       }}
     >
       <ReactionButton like={false} icon="cancel" label="Nope" handleReact={handleReact} />
