@@ -19,7 +19,7 @@ func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPo
 	orgToCreate.Name = req.Name
 	orgToCreate.Bio = req.Bio
 	if req.Image.Set {
-		orgToCreate.Image = req.Image.Value.String()
+		orgToCreate.Image = org.OrgImage{Url: req.Image.Value.String()}
 	}
 	orgToCreate.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {
@@ -148,7 +148,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 		reqOrg.Bio = req.Bio.Value
 	}
 	if req.Image.Set {
-		reqOrg.Image = req.Image.Value.String()
+		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
 	}
 	if len(req.Tags) > 0 {
 		reqOrg.OrgTags = []org.OrgTag{}
@@ -193,7 +193,7 @@ func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params ap
 	reqOrg.Name = req.Name
 	reqOrg.Bio = req.Bio
 	if req.Image.Set {
-		reqOrg.Image = req.Image.Value.String()
+		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
 	}
 	reqOrg.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {

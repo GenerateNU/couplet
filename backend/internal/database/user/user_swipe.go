@@ -8,21 +8,20 @@ import (
 )
 
 type UserSwipe struct {
-	UserID      user_id.UserID `gorm:"primaryKey" validate:"required"` // Swipe sender
-	OtherUserID user_id.UserID `gorm:"primaryKey" validate:"required"` // Swipe receiver
-	OtherUser   User           `gorm:"foreignKey:OtherUserID"`
-	Liked       bool
+	ID          uint `gorm:"primaryKey"`
 	CreatedAt   time.Time
-	UpdatedAt   time.Time `validate:"gtefield=CreatedAt"`
+	UpdatedAt   time.Time      `validate:"gtefield=CreatedAt"`
+	UserID      user_id.UserID `gorm:"index:pair,unique" validate:"required"` // Swipe sender
+	OtherUserID user_id.UserID `gorm:"index:pair,unique" validate:"required"` // Swipe receiver
+	Liked       bool
 }
 
 // Automatically rolls back transactions that save invalid data to the database
-func (u *UserSwipe) AfterSave(tx *gorm.DB) error {
-	return u.Validate()
+func (us *UserSwipe) BeforeSave(tx *gorm.DB) error {
+	return us.Validate()
 }
 
 // Ensures the event swipe and its fields are valid
-func (u UserSwipe) Validate() error {
-	// TODO: Write tests
-	return validate.Struct(u)
+func (us UserSwipe) Validate() error {
+	return validate.Struct(us)
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import HomeScreen from "../components/HomeScreen";
-import Navbar from "../components/Navbar";
+import HomeScreen from "../components/Home/HomeScreen";
+import Navbar from "../components/Layout/Navbar";
 
 export default function Home() {
   return (

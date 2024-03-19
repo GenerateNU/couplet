@@ -3,126 +3,79 @@ package controller_test
 import (
 	"couplet/internal/controller"
 	"couplet/internal/database"
-	"couplet/internal/database/event_id"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
-
 	"testing"
 
-	"regexp"
-
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/arsham/dbtools/dbtesting"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateEventSwipe(t *testing.T) {
-	// set up mock database
+func TestCreateUserSwipeWithNoLike(t *testing.T) {
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db, nil)
-	assert.NotEmpty(t, c)
-	assert.Nil(t, err)
+	c, _ := controller.NewController(db, nil)
 
-	// set up recorder to keep track of the auto-generated eventID
-	rec := dbtesting.NewValueRecorder()
+	// Define test data
+	user1ID := user_id.Wrap(uuid.New())
+	user2ID := user_id.Wrap(uuid.New())
+	userSwipe1 := user.UserSwipe{UserID: user1ID, OtherUserID: user2ID, Liked: true}
 
-	// set up example event data
-	event_id := event_id.Wrap(uuid.New())
-	user_id := user_id.Wrap(uuid.New())
-
-	// set up example event data
-	// orgId := org_id.Wrap(uuid.New())
-	// exampleEvent := event.Event{
-	// 	Name:  "Big event",
-	// 	Bio:   "Event description",
-	// 	OrgID: orgId,
-	// }
-
-	exampleEventSwipe := user.EventSwipe{
-		UserID:  user_id,
-		EventID: event_id,
-		Liked:   true,
-	}
-
-	// expect the insert statement and create the event
+	// Mock database interactions
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "events" ("id","created_at","updated_at","user_id","event_id","liked")
-		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventSwipe.UserID, exampleEventSwipe.EventID, exampleEventSwipe.Liked).
-		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	// Expectation: insert the first user swipe
+	mock.ExpectQuery(`^INSERT INTO "user_swipes"`).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), userSwipe1.UserID, userSwipe1.OtherUserID, userSwipe1.Liked).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+
+	// Expectation: check if there's a swipe from the other user
+	// Return no rows to simulate "record not found"
+	mock.ExpectQuery(`^SELECT \* FROM "user_swipes" WHERE user_id = \$1 AND other_user_id = \$2 AND liked = \$3`).
+		WithArgs(user2ID, user1ID, true).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "user_id", "other_user_id", "liked"}))
+
 	mock.ExpectCommit()
 
-	insertedEventSwipe, valErr, txErr := c.CreateEventSwipe(exampleEventSwipe)
+	// Execute the function being tested
+	_, valErr, txErr := c.CreateUserSwipe(userSwipe1)
+
+	// Assertions
 	assert.Nil(t, valErr)
 	assert.Nil(t, txErr)
-
-	// ensure that all fields were set properly on the Event object
-	assert.Equal(t, insertedEventSwipe.UserID, exampleEventSwipe.UserID)
-	assert.Equal(t, insertedEventSwipe.EventID, exampleEventSwipe.EventID)
-	assert.Equal(t, insertedEventSwipe.Liked, exampleEventSwipe.Liked)
-
-	// // create a second event with the same data to show that repeated POST calls always creates new events
-	// mock.ExpectBegin()
-	// mock.ExpectExec(regexp.QuoteMeta(`
-	// INSERT INTO "events" ("id","created_at","updated_at","name","bio","org_id")
-	// 	VALUES ($1,$2,$3,$4,$5,$6)`)).
-	// 	WithArgs(rec.Record("idTwo"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleEventTwo.Name, exampleEventTwo.Bio, exampleEventTwo.OrgID).
-	// 	WillReturnResult(sqlmock.NewResult(1, 1))
-	// mock.ExpectCommit()
-
-	// insertedEventTwo, err := c.CreateEvent(exampleEventTwo)
-	// assert.Nil(t, err)
-
-	// assert.Equal(t, insertedEventTwo.Name, exampleEventTwo.Name)
-	// assert.Equal(t, insertedEventTwo.Bio, exampleEventTwo.Bio)
-
-	// // IMPORTANT! assert that internally, the second event id is not the same as the first event id
-	// assert.NotEqual(t, insertedEventTwo.ID, insertedEventOne.ID)
-
-	// // ensure that all expectations are met in the mock
-	// errExpectations := mock.ExpectationsWereMet()
-	// assert.Nil(t, errExpectations)
+	assert.NoError(t, mock.ExpectationsWereMet(), "there were unfulfilled expectations")
 }
 
-func TestCreateUserSwipe(t *testing.T) {
-	// set up mock database
+func TestCreateUserSwipeWithReciprocalLike(t *testing.T) {
 	db, mock := database.NewMockDB()
-	c, err := controller.NewController(db, nil)
-	assert.NotEmpty(t, c)
-	assert.Nil(t, err)
+	c, _ := controller.NewController(db, nil)
 
-	// set up recorder to keep track of the auto-generated eventID
-	rec := dbtesting.NewValueRecorder()
+	// Define test data
+	user1ID := user_id.Wrap(uuid.New())
+	user2ID := user_id.Wrap(uuid.New())
+	userSwipe1 := user.UserSwipe{UserID: user1ID, OtherUserID: user2ID, Liked: true}
 
-	// set up example event data
-	other_user_id := user_id.Wrap(uuid.New())
-	user_id := user_id.Wrap(uuid.New())
-
-	// set up example event data
-	exampleUserSwipe := user.UserSwipe{
-		UserID:      user_id,
-		OtherUserID: other_user_id,
-		Liked:       true,
-	}
-
-	// expect the insert statement and create the event
+	// Mock database interactions
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`
-		INSERT INTO "user_swipes" ("id","created_at","updated_at","user_id","user_swipe_id","liked")
-		VALUES ($1,$2,$3,$4,$5,$6)`)).
-		WithArgs(rec.Record("idOne"), sqlmock.AnyArg(), sqlmock.AnyArg(), exampleUserSwipe.UserID, exampleUserSwipe.OtherUserID, exampleUserSwipe.Liked).
-		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	// Expectation: insert the first user swipe
+	mock.ExpectQuery(`^INSERT INTO "user_swipes"`).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), userSwipe1.UserID, userSwipe1.OtherUserID, userSwipe1.Liked).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+
+	// Expectation: check if there's a reciprocal swipe from the other user
+	// Return a row to simulate that the other user has already liked the first user
+	mock.ExpectQuery(`^SELECT \* FROM "user_swipes" WHERE user_id = \$1 AND other_user_id = \$2 AND liked = \$3`).
+		WithArgs(user2ID, user1ID, true).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "user_id", "other_user_id", "liked"}).AddRow(1, user2ID, user1ID, true))
+
 	mock.ExpectCommit()
 
-	insertedUserSwipe, valErr, txErr := c.CreateUserSwipe(exampleUserSwipe)
+	// Execute the function being tested
+	_, valErr, txErr := c.CreateUserSwipe(userSwipe1)
+
+	// Assertions
 	assert.Nil(t, valErr)
 	assert.Nil(t, txErr)
-
-	// ensure that all fields were set properly on the Event object
-	assert.Equal(t, insertedUserSwipe.UserID, exampleUserSwipe.UserID)
-	assert.Equal(t, insertedUserSwipe.OtherUserID, exampleUserSwipe.OtherUserID)
-	assert.Equal(t, insertedUserSwipe.Liked, exampleUserSwipe.Liked)
-
+	assert.NoError(t, mock.ExpectationsWereMet(), "there were unfulfilled expectations")
 }

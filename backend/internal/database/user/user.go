@@ -12,14 +12,16 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type User struct {
-	ID          user_id.UserID `gorm:"primaryKey" validate:"required"`
+	ID          user_id.UserID `gorm:"primaryKey"`
 	CreatedAt   time.Time
-	UpdatedAt   time.Time `validate:"gtefield=CreatedAt"`
-	FirstName   string    `validate:"required,min=1,max=255"`
-	LastName    string    `validate:"required,min=1,max=255"`
-	Age         uint8     `validate:"required,min=18"`
+	UpdatedAt   time.Time   `validate:"gtefield=CreatedAt"`
+	FirstName   string      `validate:"required,min=1,max=255"`
+	LastName    string      `validate:"required,min=1,max=255"`
+	Age         uint8       `validate:"required,min=18"`
+	Images      []UserImage `validate:"max=5"`
 	UserSwipes  []UserSwipe
 	EventSwipes []EventSwipe
+	Matches     []*User `gorm:"many2many:user_matches;"`
 }
 
 // Automatically generates a random ID if unset before creating
@@ -31,7 +33,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 }
 
 // Automatically rolls back transactions that save invalid data to the database
-func (u *User) AfterSave(tx *gorm.DB) error {
+func (u *User) BeforeSave(tx *gorm.DB) error {
 	return u.Validate()
 }
 

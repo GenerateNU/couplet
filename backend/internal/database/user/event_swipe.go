@@ -1,7 +1,6 @@
 package user
 
 import (
-	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/user_id"
 	"time"
@@ -10,21 +9,20 @@ import (
 )
 
 type EventSwipe struct {
-	UserID    user_id.UserID   `gorm:"primaryKey" validate:"required"`
-	EventID   event_id.EventID `gorm:"primaryKey" validate:"required"`
-	Event     event.Event      `gorm:"foreignKey:EventID"`
-	Liked     bool
+	ID        uint `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time `validate:"gtefield=CreatedAt"`
+	UpdatedAt time.Time        `validate:"gtefield=CreatedAt"`
+	UserID    user_id.UserID   `gorm:"index:pair,unique" validate:"required"`
+	EventID   event_id.EventID `gorm:"index:pair,unique" validate:"required"`
+	Liked     bool
 }
 
 // Automatically rolls back transactions that save invalid data to the database
-func (e *EventSwipe) AfterSave(tx *gorm.DB) error {
-	return e.Validate()
+func (es *EventSwipe) BeforeSave(tx *gorm.DB) error {
+	return es.Validate()
 }
 
 // Ensures the user and its fields are valid
-func (e EventSwipe) Validate() error {
-	// TODO: Write tests
-	return validate.Struct(e)
+func (es EventSwipe) Validate() error {
+	return validate.Struct(es)
 }

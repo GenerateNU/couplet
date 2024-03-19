@@ -20,16 +20,20 @@ func TestEventSwipeValidate(t *testing.T) {
 		UpdatedAt: time.Time{},
 	}
 	assert.Nil(t, validEventSwipe.Validate())
+	assert.Nil(t, (&validEventSwipe).BeforeSave(nil))
 
 	userIDCheck := validEventSwipe
 	userIDCheck.UserID = user_id.UserID{}
 	assert.NotNil(t, userIDCheck.Validate())
+	assert.NotNil(t, (&userIDCheck).BeforeSave(nil))
 
 	eventIDCheck := validEventSwipe
 	eventIDCheck.EventID = event_id.EventID{}
 	assert.NotNil(t, eventIDCheck.Validate())
+	assert.NotNil(t, (&eventIDCheck).BeforeSave(nil))
 
 	timesCheck := validEventSwipe
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())
+	assert.NotNil(t, (&timesCheck).BeforeSave(nil))
 }

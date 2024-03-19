@@ -19,16 +19,20 @@ func TestUserSwipeValidate(t *testing.T) {
 		UpdatedAt:   time.Time{},
 	}
 	assert.Nil(t, validUserSwipe.Validate())
+	assert.Nil(t, (&validUserSwipe).BeforeSave(nil))
 
 	userIDCheck := validUserSwipe
 	userIDCheck.UserID = user_id.UserID{}
 	assert.NotNil(t, userIDCheck.Validate())
+	assert.NotNil(t, (&userIDCheck).BeforeSave(nil))
 
 	otherUserIDCheck := validUserSwipe
 	otherUserIDCheck.OtherUserID = user_id.UserID{}
 	assert.NotNil(t, otherUserIDCheck.Validate())
+	assert.NotNil(t, (&otherUserIDCheck).BeforeSave(nil))
 
 	timesCheck := validUserSwipe
 	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
 	assert.NotNil(t, timesCheck.Validate())
+	assert.NotNil(t, (&timesCheck).BeforeSave(nil))
 }

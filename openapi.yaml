@@ -62,6 +62,7 @@ paths:
                 - required:
                     - name
                     - bio
+                    - orgId
       responses:
         "201":
           description: Successfully created event
@@ -880,6 +881,14 @@ components:
           type: string
           format: uri
           example: https://example.com
+        tags:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255
+            example: arts
         orgId:
           type: string
           format: uuid
@@ -905,6 +914,7 @@ components:
           items:
             type: string
             minLength: 1
+            maxLength: 255
             example: nonprofit
     User:
       type: object
