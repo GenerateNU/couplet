@@ -14,16 +14,15 @@ export default function PhotoPicker() {
       allowsEditing: false,
       allowsMultipleSelection: true,
       quality: 1,
-      orderedSelection: true
+      orderedSelection: true,
+      selectionLimit: 4,
     });
-    console.log(result);
     if (!result.canceled) {
       onDone(result.assets);
     }
   };
   const openPicker = async () => {
     const { status } = await MediaLibrary.getPermissionsAsync();
-    console.log(status);
     if (status !== "granted") {
       // TODO: say we cant get their photos bc no permissions
       const newPerms = await MediaLibrary.requestPermissionsAsync();
@@ -41,7 +40,6 @@ export default function PhotoPicker() {
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
     passedImages.forEach((img) => {
-      console.log("hi", img.fileName);
       setImages((imgs) => [...imgs, img.uri]);
     });
 
