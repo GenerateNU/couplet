@@ -200,3 +200,8 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 	}
 	return &res, nil
 }
+
+// RecommendationsUsersGet implements api.Handler.
+func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.RecommendationsUsersGetOKItem, error) {
+	panic("unimplemented")
+}
