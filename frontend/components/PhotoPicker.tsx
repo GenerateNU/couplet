@@ -1,8 +1,9 @@
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { RNS3 } from "react-native-aws3";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+// import { RNS3 } from "react-native-aws3";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function PhotoPicker() {
   const [images, setImages] = useState<string[]>([]);
@@ -34,59 +35,66 @@ export default function PhotoPicker() {
     }
   };
   const onDone = (passedImages: ImagePicker.ImagePickerAsset[]) => {
+    setImages([])
+
     if (typeof passedImages !== "object") return;
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
-    passedImages.forEach(async (img) => {
-      let assetInfo;
-      if (Object.prototype.hasOwnProperty.call(img, "assetId") && img.assetId != null)
-        assetInfo = await MediaLibrary.getAssetInfoAsync(img.assetId);
-      else return;
-      if (assetInfo.localUri == null || img.fileName == null) return;
-      const extension = assetInfo.localUri.substring(assetInfo.localUri.lastIndexOf(".") + 1);
+    passedImages.forEach((img) => {
+      console.log("hi", img.fileName)
+      setImages(imgs => [...imgs, img.uri])
+    })
 
-      const type = `${img.type}/${extension.toLowerCase()}`;
-      const uri = assetInfo.localUri;
-      const name = img.fileName + new Date().getTime();
+    // passedImages.forEach(async (img) => {
+    //   let assetInfo;
+    //   if (Object.prototype.hasOwnProperty.call(img, "assetId") && img.assetId != null)
+    //     assetInfo = await MediaLibrary.getAssetInfoAsync(img.assetId);
+    //   else return;
+    //   if (assetInfo.localUri == null || img.fileName == null) return;
+    //   const extension = assetInfo.localUri.substring(assetInfo.localUri.lastIndexOf(".") + 1);
 
-      const file = {
-        uri,
-        name,
-        type
-      };
+    //   const type = `${img.type}/${extension.toLowerCase()}`;
+    //   const uri = assetInfo.localUri;
+    //   const name = img.fileName + new Date().getTime();
 
-      const options = {
-        bucket: "relay-file-upload",
-        region: "us-east-2",
-        accessKey: process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID || "",
-        secretKey: process.env.EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-        successActionStatus: 201
-      };
+    //   const file = {
+    //     uri,
+    //     name,
+    //     type
+    //   };
 
-      RNS3.put(file, options)
-        .then((res) => {
-          if (res.status !== 201) throw new Error("Failed to upload image to S3");
-          // We uploaded it yay! Now we can do something with the URL
-          // @ts-ignore
-          console.log(res.body.postResponse.location);
-          // @ts-ignore
-          setImages([...images, res.body.postResponse.location]);
-          // TODO: Backend call with the image we just uploaded
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    });
+    //   const options = {
+    //     bucket: "relay-file-upload",
+    //     region: "us-east-2",
+    //     accessKey: process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID || "",
+    //     secretKey: process.env.EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
+    //     successActionStatus: 201
+    //   };
 
-    fetch(`http://${process.env.BACKEND_ADDRESS}/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6`, {
-      method: "PATCH",
-      body: JSON.stringify({ images })
-    }).catch((e) => {
-      console.log(e);
-    });
+    //   RNS3.put(file, options)
+    //     .then((res) => {
+    //       if (res.status !== 201) throw new Error("Failed to upload image to S3");
+    //       // We uploaded it yay! Now we can do something with the URL
+    //       // @ts-ignore
+    //       console.log(res.body.postResponse.location);
+    //       // @ts-ignore
+    //       setImages([...images, res.body.postResponse.location]);
+    //       // TODO: Backend call with the image we just uploaded
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // });
+
+    // fetch(`http://${process.env.BACKEND_ADDRESS}/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6`, {
+    //   method: "PATCH",
+    //   body: JSON.stringify({ images })
+    // }).catch((e) => {
+    //   console.log(e);
+    // });
   };
   return (
-    <View>
+    <ScrollView>
       <Text>PhotoPicker</Text>
       <TouchableOpacity
         onPress={openPicker}
@@ -112,9 +120,11 @@ export default function PhotoPicker() {
       </TouchableOpacity>
 
       <Text>Image:</Text>
-      {/* {images && images.map((i) => (
-        <Image src={i} style={{ width: 300, height: 300 }} />
-      ))} */}
-    </View>
+      <View>
+        {images.map((img) => (
+          <Image key={img} source={{uri: img}} style={{ width: 300, height: 300 }} />
+        ))}
+      </View>
+    </ScrollView>
   );
 }
