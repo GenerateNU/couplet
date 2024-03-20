@@ -766,7 +766,7 @@ paths:
           in: query
           required : true
           description : The ID of the user for whom to get event recommendations
-          schema : 
+          schema :
             type : string
             format : uuid
         - name : limit
