@@ -65,6 +65,11 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 	return &res, nil
 }
 
+// RecommendationEventsGet implements api.Handler.
+func (h Handler) RecommendationEventsGet(ctx context.Context, params api.RecommendationEventsGetParams) ([]api.Event, error) {
+	panic("unimplemented")
+}
+
 // Gets an event by its ID.
 // GET /events/{id}
 func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) (api.EventsIDGetRes, error) {

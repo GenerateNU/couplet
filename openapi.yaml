@@ -758,6 +758,44 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+  /recommendation/events:
+    get:
+      summary: "Get recommended events for a user"
+      parameters:
+        - name: userId
+          in: query
+          required : true
+          description : The ID of the user for whom to get event recommendations
+          schema : 
+            type : string
+            format : uuid
+        - name : limit
+          in: query
+          required : false
+          description : Limit the number of event recommendations
+          schema :
+            type : integer
+            format : int
+            minimum : 1
+            default : 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of events to skip
+          schema:
+            type: integer
+            format: int
+            default: 0
+      responses:
+        '200':
+          description: Successfully retrieved event recommendations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
 
 components:
   responses:
