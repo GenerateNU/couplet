@@ -15,7 +15,7 @@ export default function PhotoPicker() {
       allowsMultipleSelection: true,
       quality: 1,
       orderedSelection: true,
-      selectionLimit: 4,
+      selectionLimit: 4
     });
     if (!result.canceled) {
       onDone(result.assets);
