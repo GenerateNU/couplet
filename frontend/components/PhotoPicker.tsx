@@ -35,15 +35,15 @@ export default function PhotoPicker() {
     }
   };
   const onDone = (passedImages: ImagePicker.ImagePickerAsset[]) => {
-    setImages([])
+    setImages([]);
 
     if (typeof passedImages !== "object") return;
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
     passedImages.forEach((img) => {
-      console.log("hi", img.fileName)
-      setImages(imgs => [...imgs, img.uri])
-    })
+      console.log("hi", img.fileName);
+      setImages((imgs) => [...imgs, img.uri]);
+    });
 
     // passedImages.forEach(async (img) => {
     //   let assetInfo;
@@ -122,7 +122,7 @@ export default function PhotoPicker() {
       <Text>Image:</Text>
       <View>
         {images.map((img) => (
-          <Image key={img} source={{uri: img}} style={{ width: 300, height: 300 }} />
+          <Image key={img} source={{ uri: img }} style={{ width: 300, height: 300 }} />
         ))}
       </View>
     </ScrollView>
