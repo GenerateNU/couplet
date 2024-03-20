@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"couplet/internal/api"
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"fmt"
@@ -123,4 +124,15 @@ func (c Controller) PatchEvent(id event_id.EventID, params event.Event) (event.E
 
 	tx.Commit()
 	return event, nil
+}
+
+func (c Controller) GetRandomEvents(limit api.OptInt, offset api.OptInt) ([]event.Event, error) {
+	var events []event.Event
+	tx := c.database.Begin()
+	result := tx.Order("random()").Offset(offset.Value).Limit(limit.Value).Find(&events)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	tx.Commit()
+	return events, nil
 }

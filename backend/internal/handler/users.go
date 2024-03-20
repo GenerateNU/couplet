@@ -203,19 +203,19 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 
 // RecommendationsUsersGet implements api.Handler.
 func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.RecommendationsUsersGetOKItem, error) {
-	limit := params.Limit.Value   // default value makes this safe
-	offset := params.Offset.Value // default value makes this safe
-	users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
+	//limit := params.Limit.Value   // default value makes this safe
+	//offset := params.Offset.Value // default value makes this safe
+	//users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
 	res := []api.RecommendationsUsersGetOKItem{}
-	for _, u := range users {
-		item := api.RecommendationsUsersGetOKItem{
-			ID:        u.ID.Unwrap(),
-			FirstName: u.FirstName,
-			LastName:  u.LastName,
-			Age:       u.Age,
-			Images:    u.Images,
-		}
-		res = append(res, item)
-	}
-	return res, err
+	// for _, u := range users {
+	// 	item := api.RecommendationsUsersGetOKItem{
+	// 		ID:        u.ID,
+	// 		FirstName: u.FirstName,
+	// 		LastName:  u.LastName,
+	// 		Age:       u.Age,
+	// 		Images:    u.Images,
+	// 	}
+	// 	res = append(res, item)
+	// }
+	return res, nil
 }

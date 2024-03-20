@@ -66,8 +66,23 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 }
 
 // RecommendationEventsGet implements api.Handler.
-func (h Handler) RecommendationEventsGet(ctx context.Context, params api.RecommendationEventsGetParams) ([]api.Event, error) {
-	panic("unimplemented")
+func (h Handler) RecommendationEventsGet(ctx context.Context, params api.RecommendationEventsGetParams) ([]api.RecommendationEventsGetOKItem, error) {
+	events, err := h.controller.GetRandomEvents(params.Limit, params.Offset)
+
+	if err != nil {
+		return nil, err
+	}
+	var res []api.RecommendationEventsGetOKItem
+
+	for _, e := range events {
+		res = append(res, api.RecommendationEventsGetOKItem{
+			ID:   e.ID.Unwrap(),
+			Name: e.Name,
+			Bio:  e.Bio,
+		})
+	}
+	return res, nil
+
 }
 
 // Gets an event by its ID.
