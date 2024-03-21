@@ -1,24 +1,24 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
-import { COLORS } from "../../colors";
+import COLORS from "../../colors";
 
 interface ContinueBottonProps extends TouchableOpacityProps {
   title: string;
   isDisabled: boolean;
 }
 
-const ContinueButton: React.FC<ContinueBottonProps> = ({ title, isDisabled, onPress }) => {
+function ContinueButton(props: ContinueBottonProps) {
   return (
     <View style={styles.centeringContainer}>
       <TouchableOpacity
-        onPress={onPress}
-        disabled={isDisabled}
+        onPress={props.onPress}
+        disabled={props.isDisabled}
         style={[
           styles.button,
-          isDisabled ? styles.buttonDisabled : styles.buttonEnabled
+          props.isDisabled ? styles.buttonDisabled : styles.buttonEnabled
         ]}
       >
-        <Text style={styles.text}>{title}</Text>
+        <Text style={styles.text}>{props.title}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../../colors';
+import COLORS from '../../colors';
 
 interface ButtonProps {
   title: string;
   onButtonClick: () => void; 
 }
 
-const OnboardingButton: React.FC<ButtonProps> = ({ title, onButtonClick }) => {
+function OnboardingButton(props: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    onButtonClick(); 
+    props.onButtonClick(); 
     setIsPressed(!isPressed);
   };
 
@@ -21,7 +21,7 @@ const OnboardingButton: React.FC<ButtonProps> = ({ title, onButtonClick }) => {
         onPress={handlePress}
         style={[styles.button, isPressed ? styles.buttonPressed : null]}
       >
-        <Text style={styles.text}>{title}</Text>
+        <Text style={styles.text}>{props.title}</Text>
       </TouchableOpacity>
     </View>
   );

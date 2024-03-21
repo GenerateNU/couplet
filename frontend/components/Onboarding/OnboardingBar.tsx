@@ -1,22 +1,21 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { COLORS } from '../../colors';
+import COLORS from '../../colors';
 
 interface OnboardingBarProps {
   selectedCount: number;
 }
 
-const OnboardingBar: React.FC<OnboardingBarProps> = ({ selectedCount }) => {
+function OnboardingBar(props: OnboardingBarProps) {
 
   return (
     <View style={[styles.container, {justifyContent: 'center'}]}>
       <View style={{ flexDirection: 'row', width: 346 }}>
         {Array.from({ length: 5 }).map((_, index) => (
           <View
-            key={index}
             style={[
               styles.segment,
-              index === selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
+              index === props.selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
               { marginRight: index < 4 ? 8 : 0 }, 
             ]}
           />

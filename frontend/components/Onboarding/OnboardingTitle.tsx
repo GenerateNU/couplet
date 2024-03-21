@@ -1,16 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { COLORS } from "../../colors";
+import COLORS from "../../colors";
 
 type Props = {
   text: string;
 };
 
-const OnboardingTitle: React.FC<Props> = ({ text }) => {
+function OnboardingTitle(props: Props) {
   return (
     <View style={styles.centeringContainer}>
       <View style={styles.container}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.text}>{props.text}</Text>
       </View>
     </View>
   );

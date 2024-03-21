@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import BackButton from './BackButton'; 
 import OnboardingBar from './OnboardingBar'; 
-import { COLORS } from '../../colors'; 
+import COLORS from '../../colors'; 
 
 type TopBarProps = {
   onBackPress: () => void;
@@ -10,13 +10,13 @@ type TopBarProps = {
   selectedCount: number;
 };
 
-const TopBar: React.FC<TopBarProps> = ({ onBackPress, text, selectedCount }) => {
+function TopBar(props: TopBarProps) {
   return (
     <View style={styles.container}>
-      <BackButton onPress={onBackPress} />
+      <BackButton onPress={props.onBackPress} />
       <View style={styles.textBarContainer}>
-        <Text style={styles.informationText}>{text}</Text>
-        <OnboardingBar selectedCount={selectedCount} />
+        <Text style={styles.informationText}>{props.text}</Text>
+        <OnboardingBar selectedCount={props.selectedCount} />
       </View>
     </View>
   );
