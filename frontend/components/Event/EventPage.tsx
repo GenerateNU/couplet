@@ -1,10 +1,8 @@
 import React from "react";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
-
-const { height } = Dimensions.get("window");
 
 interface EventPageProps {
   id: string;
@@ -37,13 +35,16 @@ function EventPage({ id, handleReact }: EventPageProps) {
 }
 const styles = StyleSheet.create({
   EventPageContainer: {
-    height
+    height : '100%',
+    width : '100%',
   },
   EventImageContainer: {
-    flex: 1
+
   },
   reactionContainer: {
-    flex: 1
+    position : 'absolute',
+    width : '100%',
+    bottom: 0,
   }
 });
 export default EventPage;
