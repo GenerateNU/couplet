@@ -8,10 +8,6 @@ import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Home from "./app/Home";
-import MyButton from "./components/General/OnboardingButton";
-import OnboardingBar from "./components/General/ProgressBar";
-import BackButton from "./components/General/BackButton";
-import ContinueButton from "./components/General/ContinueButton";
 
 export default function App() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
@@ -74,11 +70,6 @@ export default function App() {
           >
             Welcome to Couplet!
           </Text>
-          <BackButton onPress={handleClick} />
-          <ContinueButton title={"Continue"} isDisabled={true} />     
-          <OnboardingBar totalCount={5} selectedCount={4} />
-          {/* <MyButton title="Click Me" onButtonClick={handleClick} /> */}
-
           <Text
             style={{
               fontSize: 18,

@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from './colors';
+import { COLORS } from '../../colors';
 
-// Defining props for the component
-interface MyButtonProps {
-  title: string; // Prop for the button title
-  onButtonClick: () => void; // Prop for the button click action
+interface ButtonProps {
+  title: string;
+  onButtonClick: () => void; 
 }
 
-const MyButton: React.FC<MyButtonProps> = ({ title, onButtonClick }) => {
+const OnboardingButton: React.FC<ButtonProps> = ({ title, onButtonClick }) => {
   const [isPressed, setIsPressed] = useState(false);
 
-  // Function to handle press action
   const handlePress = () => {
-    onButtonClick(); // Call the passed onButtonClick function
-    setIsPressed(!isPressed); // Toggle the isPressed state
+    onButtonClick(); 
+    setIsPressed(!isPressed);
   };
 
   return (
@@ -23,18 +21,24 @@ const MyButton: React.FC<MyButtonProps> = ({ title, onButtonClick }) => {
         onPress={handlePress}
         style={[styles.button, isPressed ? styles.buttonPressed : null]}
       >
-        <Text>{title}</Text>
+        <Text style={styles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-// Stylesheet for the button
 const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     top: 402,
     left: 236,
+  },
+  text: {
+    fontFamily: 'DMSansMedium', 
+    fontSize: 12,
+    fontWeight: 'bold',
+    lineHeight: 15.62,
+    textAlign: 'center',
   },
   button: {
     width: 73,
@@ -49,8 +53,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   buttonPressed: {
-    backgroundColor: COLORS.secondary, // Button background color when pressed
+    backgroundColor: COLORS.secondary,
   },
 });
 
-export default MyButton;
+export default OnboardingButton;

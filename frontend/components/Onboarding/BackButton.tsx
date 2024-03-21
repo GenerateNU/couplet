@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { COLORS } from './colors';
+import { COLORS } from '../../colors';
 
 type BackButtonProps = {
   onPress: () => void; 

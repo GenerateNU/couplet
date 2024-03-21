@@ -1,26 +1,23 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { COLORS } from './colors';
+import { COLORS } from '../../colors';
 
-interface ProgressBarProps {
-  totalCount: number;
+interface OnboardingBarProps {
   selectedCount: number;
 }
 
-const OnboardingBar: React.FC<ProgressBarProps> = ({ totalCount, selectedCount }) => {
-  const totalWidth = totalCount * 62.8 + (totalCount - 1) * 8;
-  const screenWidth = Dimensions.get('window').width;
+const OnboardingBar: React.FC<OnboardingBarProps> = ({ selectedCount }) => {
 
   return (
     <View style={[styles.container, {justifyContent: 'center'}]}>
-      <View style={{ flexDirection: 'row', width: totalWidth }}>
-        {Array.from({ length: totalCount }).map((_, index) => (
+      <View style={{ flexDirection: 'row', width: 346 }}>
+        {Array.from({ length: 5 }).map((_, index) => (
           <View
             key={index}
             style={[
               styles.segment,
               index === selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
-              { marginRight: index < totalCount - 1 ? 8 : 0 }, // Apply marginRight to all but the last segment
+              { marginRight: index < 4 ? 8 : 0 }, 
             ]}
           />
         ))}
