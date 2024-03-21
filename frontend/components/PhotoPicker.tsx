@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 // import { RNS3 } from "react-native-aws3";
 import { ScrollView } from "react-native-gesture-handler";
+import client from "../api/client";
 
 export default function PhotoPicker() {
   const [images, setImages] = useState<string[]>([]);
@@ -18,7 +19,26 @@ export default function PhotoPicker() {
       selectionLimit: 4
     });
     if (!result.canceled) {
-      onDone(result.assets);
+      console.log("HERE");
+
+      // client.PATCH("/users/{id}", {
+      //   params: {
+      //     path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
+      //   }, 
+      //   body: { 
+      //     "images": [
+      //     "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"], 
+      //     "firstName": "karyna", 
+      //     "lastName": "yen",
+      //     "age": 19 
+      //   }
+      // }).then((res) => {
+      //   console.log("SUCCESS", res);
+      // }
+      // ).catch((e) => {
+      //   console.log("ERROR", e);
+      // });
+     onDone(result.assets);
     }
   };
   const openPicker = async () => {
@@ -90,6 +110,8 @@ export default function PhotoPicker() {
     // }).catch((e) => {
     //   console.log(e);
     // });
+
+  
   };
   return (
     <ScrollView>
