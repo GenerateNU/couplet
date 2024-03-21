@@ -35,16 +35,14 @@ function EventPage({ id, handleReact }: EventPageProps) {
 }
 const styles = StyleSheet.create({
   EventPageContainer: {
-    height : '100%',
-    width : '100%',
+    height: "100%",
+    width: "100%"
   },
-  EventImageContainer: {
-
-  },
+  EventImageContainer: {},
   reactionContainer: {
-    position : 'absolute',
-    width : '100%',
-    bottom: 0,
+    position: "absolute",
+    width: "100%",
+    bottom: 0
   }
 });
 export default EventPage;
