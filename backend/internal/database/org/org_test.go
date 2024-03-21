@@ -60,10 +60,10 @@ func TestOrgValidate(t *testing.T) {
 		bioLengthCheck.Bio = bioLengthCheck.Bio + "a"
 	}
 
-	noImageCheck := validOrg
-	noImageCheck.Images = url_slice.UrlSlice{}
-	assert.NotNil(t, noImageCheck.Validate())
-	assert.NotNil(t, (&noImageCheck).BeforeSave(nil))
+	imageCountCheck := validOrg
+	imageCountCheck.Images = url_slice.UrlSlice{}
+	assert.NotNil(t, imageCountCheck.Validate())
+	assert.NotNil(t, (&imageCountCheck).BeforeSave(nil))
 
 	orgTagsCheck := validOrg
 	orgTagsCheck.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}

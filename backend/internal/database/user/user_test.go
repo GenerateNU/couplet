@@ -22,6 +22,7 @@ func TestUserValidate(t *testing.T) {
 		FirstName: "First",
 		LastName:  "Last",
 		Age:       21,
+		Bio:       "Hey everyone! I can't wait to go to an exciting event!",
 		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 	}
 	assert.Nil(t, validUser.Validate())
@@ -70,6 +71,24 @@ func TestUserValidate(t *testing.T) {
 		}
 		legalAgeCheck.Age = legalAgeCheck.Age + 1
 	}
+
+	bioLengthCheck := validUser
+	bioLengthCheck.Bio = ""
+	for i := 0; i <= 256; i++ {
+		if i < 1 || i > 255 {
+			assert.NotNil(t, bioLengthCheck.Validate())
+			assert.NotNil(t, (&bioLengthCheck).BeforeSave(nil))
+		} else {
+			assert.Nil(t, bioLengthCheck.Validate())
+			assert.Nil(t, (&bioLengthCheck).BeforeSave(nil))
+		}
+		bioLengthCheck.Bio = bioLengthCheck.Bio + "a"
+	}
+
+	imageCountCheck := validUser
+	imageCountCheck.Images = url_slice.UrlSlice{}
+	assert.NotNil(t, imageCountCheck.Validate())
+	assert.NotNil(t, (&imageCountCheck).BeforeSave(nil))
 }
 
 func TestUserBeforeCreate(t *testing.T) {
