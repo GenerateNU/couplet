@@ -3,6 +3,7 @@ package org
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -15,12 +16,12 @@ var validate = validator.New(validator.WithRequiredStructEnabled())
 type Org struct {
 	ID        org_id.OrgID `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time     `validate:"gtefield=CreatedAt"`
-	Name      string        `validate:"required,min=1,max=255"`
-	Bio       string        `validate:"required,min=1,max=255"`
-	Image     OrgImage      `validate:"omitempty"`
-	OrgTags   []OrgTag      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags" validate:"max=5"`
-	Events    []event.Event `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
+	UpdatedAt time.Time          `validate:"gtefield=CreatedAt"`
+	Name      string             `validate:"required,min=1,max=255"`
+	Bio       string             `validate:"required,min=1,max=255"`
+	Images    url_slice.UrlSlice `validate:"min=1,max=4"`
+	OrgTags   []OrgTag           `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags" validate:"max=5"`
+	Events    []event.Event      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 }
 
 // Automatically generates a random ID if unset before creating

@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"couplet/internal/api"
+	"couplet/internal/database/url_slice"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
 	"errors"
@@ -20,10 +21,7 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 	if req.Age < 18 {
 		return nil, errors.New("must be at least 18 years old")
 	}
-	images := make([]user.UserImage, len(req.Images))
-	for i, v := range req.Images {
-		images[i] = user.UserImage{Url: v.String()}
-	}
+	images := url_slice.Wrap(req.Images)
 
 	u, err := h.controller.CreateUser(req.FirstName, req.LastName, req.Age, images)
 	// TODO: check for validation error from the controller and return 400
@@ -116,10 +114,7 @@ func (h Handler) UsersIDPut(ctx context.Context, updatedUser *api.UsersIDPutReq,
 	_, err := h.controller.GetUser(user_id.Wrap(params.ID))
 	alreadyExists := err == nil
 
-	images := make([]user.UserImage, len(updatedUser.Images))
-	for i, v := range updatedUser.Images {
-		images[i] = user.UserImage{Url: v.String()}
-	}
+	images := url_slice.Wrap(updatedUser.Images)
 	// TODO: Validate parameters
 	if alreadyExists {
 		responseUser, err := h.controller.SaveUser(user.User{FirstName: updatedUser.FirstName, LastName: updatedUser.LastName, Age: updatedUser.Age, Images: images}, user_id.Wrap(params.ID))
@@ -174,13 +169,7 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 		reqUser.Age = req.Age.Value
 	}
 
-	if req.Images != nil {
-		images := make([]user.UserImage, len(req.Images))
-		for i, v := range req.Images {
-			images[i] = user.UserImage{Url: v.String()}
-		}
-		reqUser.Images = images
-	}
+	reqUser.Images = url_slice.Wrap(req.Images)
 
 	u, valErr, txErr := h.controller.UpdateUser(reqUser)
 	if valErr != nil {

@@ -4,6 +4,8 @@ import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
+	"couplet/internal/util"
 	"testing"
 	"time"
 
@@ -20,7 +22,7 @@ func TestEventValidate(t *testing.T) {
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Images:    []event.EventImage{{Url: "https://example.com/image.png", EventID: id}},
+		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 		OrgID:     org_id.Wrap(uuid.New()),
 	}
 	assert.Nil(t, validEvent.Validate())
@@ -75,7 +77,7 @@ func TestEventBeforeCreate(t *testing.T) {
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Images:    []event.EventImage{},
+		Images:    url_slice.UrlSlice{},
 		OrgID:     org_id.Wrap(uuid.New()),
 	}
 	require.Nil(t, (&noIdEvent).BeforeCreate(nil))

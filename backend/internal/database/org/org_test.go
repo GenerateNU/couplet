@@ -4,6 +4,8 @@ import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
+	"couplet/internal/util"
 	"testing"
 	"time"
 
@@ -20,7 +22,7 @@ func TestOrgValidate(t *testing.T) {
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Image:     org.OrgImage{Url: "https://example.com/image.png", OrgID: id},
+		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgTags:   []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}},
 		Events:    []event.Event{{OrgID: id}},
 	}
@@ -59,9 +61,9 @@ func TestOrgValidate(t *testing.T) {
 	}
 
 	noImageCheck := validOrg
-	noImageCheck.Image = org.OrgImage{}
-	assert.Nil(t, noImageCheck.Validate())
-	assert.Nil(t, (&noImageCheck).BeforeSave(nil))
+	noImageCheck.Images = url_slice.UrlSlice{}
+	assert.NotNil(t, noImageCheck.Validate())
+	assert.NotNil(t, (&noImageCheck).BeforeSave(nil))
 
 	orgTagsCheck := validOrg
 	orgTagsCheck.OrgTags = []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}, {ID: "tag6"}}
@@ -76,7 +78,7 @@ func TestOrgBeforeCreate(t *testing.T) {
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
 		Bio:       "At The Events Company, we connect people through events",
-		Image:     org.OrgImage{},
+		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgTags:   []org.OrgTag{{ID: "tag1"}, {ID: "tag2"}},
 		Events:    []event.Event{},
 	}

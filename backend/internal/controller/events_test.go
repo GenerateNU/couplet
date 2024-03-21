@@ -6,6 +6,8 @@ import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
+	"couplet/internal/util"
 
 	"testing"
 
@@ -32,7 +34,7 @@ func TestCreateEvent(t *testing.T) {
 	exampleEventOne := event.Event{
 		Name:   "Big event",
 		Bio:    "Event description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 	exampleEventTwo := exampleEventOne
@@ -189,7 +191,7 @@ func TestGetEvent(t *testing.T) {
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Sample Event",
 		Bio:    "A brief description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 
@@ -228,35 +230,35 @@ func TestGetEvents(t *testing.T) {
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Sample Event",
 		Bio:    "A brief description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 	mockEventTwo := event.Event{
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Another Event",
 		Bio:    "A different description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 	mockEventThree := event.Event{
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Third Event",
 		Bio:    "A third description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 	mockEventFour := event.Event{
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Fourth Event",
 		Bio:    "A fourth description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 	mockEventFive := event.Event{
 		ID:     event_id.Wrap(uuid.New()),
 		Name:   "Fifth Event",
 		Bio:    "A fifth description",
-		Images: []event.EventImage{{Url: "https://example.com/image.png"}},
+		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
 		OrgID:  orgId,
 	}
 

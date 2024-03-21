@@ -1,8 +1,10 @@
 package user_test
 
 import (
+	"couplet/internal/database/url_slice"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
+	"couplet/internal/util"
 	"testing"
 	"time"
 
@@ -20,7 +22,7 @@ func TestUserValidate(t *testing.T) {
 		FirstName: "First",
 		LastName:  "Last",
 		Age:       21,
-		Images:    []user.UserImage{{Url: "https://example.com/image.png", UserID: id}},
+		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 	}
 	assert.Nil(t, validUser.Validate())
 	assert.Nil(t, (&validUser).BeforeSave(nil))
@@ -78,6 +80,7 @@ func TestUserBeforeCreate(t *testing.T) {
 		FirstName: "First",
 		LastName:  "Last",
 		Age:       21,
+		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 	}
 	require.Nil(t, (&noIdUser).BeforeCreate(nil))
 	assert.NotEmpty(t, noIdUser.ID)

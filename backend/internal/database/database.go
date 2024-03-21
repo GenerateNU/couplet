@@ -71,7 +71,7 @@ func Migrate(db *gorm.DB) error {
 		}
 	}
 	// Add new models here to ensure they are migrated on startup
-	allModels := []interface{}{&user.UserImage{}, &user.User{}, &org.OrgImage{}, &org.OrgTag{}, &org.Org{}, &event.EventImage{}, &event.EventTag{}, &event.Event{}, &user.EventSwipe{}, &user.UserSwipe{}}
+	allModels := []interface{}{&user.User{}, &org.OrgTag{}, &org.Org{}, &event.EventTag{}, &event.Event{}, &user.EventSwipe{}, &user.UserSwipe{}}
 	return db.Debug().AutoMigrate(allModels...)
 }
 

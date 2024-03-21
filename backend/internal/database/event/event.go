@@ -3,6 +3,7 @@ package event
 import (
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 
 	"time"
 
@@ -16,12 +17,12 @@ var validate = validator.New(validator.WithRequiredStructEnabled())
 type Event struct {
 	ID        event_id.EventID `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time    `validate:"gtefield=CreatedAt"`
-	Name      string       `validate:"required,min=1,max=255"`
-	Bio       string       `validate:"required,min=1,max=255"`
-	Images    []EventImage `validate:"max=5"`
-	EventTags []EventTag   `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags" validate:"max=5"`
-	OrgID     org_id.OrgID `validate:"required"`
+	UpdatedAt time.Time          `validate:"gtefield=CreatedAt"`
+	Name      string             `validate:"required,min=1,max=255"`
+	Bio       string             `validate:"required,min=1,max=255"`
+	Images    url_slice.UrlSlice `validate:"len=4"`
+	EventTags []EventTag         `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags" validate:"max=5"`
+	OrgID     org_id.OrgID       `validate:"required"`
 }
 
 // Automatically generates a random ID if unset before creating

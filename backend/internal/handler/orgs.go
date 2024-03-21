@@ -5,6 +5,7 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/database/org"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 	"errors"
 	"fmt"
 )
@@ -18,9 +19,7 @@ func (h Handler) OrgsPost(ctx context.Context, req *api.OrgsPostReq) (api.OrgsPo
 	var orgToCreate org.Org
 	orgToCreate.Name = req.Name
 	orgToCreate.Bio = req.Bio
-	if req.Image.Set {
-		orgToCreate.Image = org.OrgImage{Url: req.Image.Value.String()}
-	}
+	orgToCreate.Images = url_slice.Wrap(req.Images)
 	orgToCreate.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {
 		orgToCreate.OrgTags = append(orgToCreate.OrgTags, org.OrgTag{ID: v})
@@ -147,9 +146,7 @@ func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsI
 	if req.Bio.Set {
 		reqOrg.Bio = req.Bio.Value
 	}
-	if req.Image.Set {
-		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
-	}
+	reqOrg.Images = url_slice.Wrap(req.Images)
 	if len(req.Tags) > 0 {
 		reqOrg.OrgTags = []org.OrgTag{}
 		for _, v := range req.Tags {
@@ -192,9 +189,7 @@ func (h Handler) OrgsIDPut(ctx context.Context, req *api.OrgsIDPutReq, params ap
 	reqOrg.ID = org_id.Wrap(params.ID)
 	reqOrg.Name = req.Name
 	reqOrg.Bio = req.Bio
-	if req.Image.Set {
-		reqOrg.Image = org.OrgImage{Url: req.Image.Value.String()}
-	}
+	reqOrg.Images = url_slice.Wrap(req.Images)
 	reqOrg.OrgTags = []org.OrgTag{}
 	for _, v := range req.Tags {
 		reqOrg.OrgTags = append(reqOrg.OrgTags, org.OrgTag{ID: v})

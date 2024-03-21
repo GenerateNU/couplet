@@ -915,8 +915,8 @@ components:
             type: string
             format: uri
             example: https://example.com/image.png
-          minItems: 1
-          maxItems: 5
+          minItems: 4
+          maxItems: 4
         externalLink:
           type: string
           format: uri
@@ -944,10 +944,14 @@ components:
           type: string
           minLength: 1
           example: At The Events Company, we connect people through events
-        image:
-          type: string
-          format: uri
-          example: https://example.com/image.png
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+          maxItems: 4
         tags:
           type: array
           maxItems: 5
@@ -978,8 +982,8 @@ components:
             type: string
             format: uri
             example: https://example.com/image.png
-          minItems: 1
-          maxItems: 5
+          minItems: 4
+          maxItems: 4
     EventSwipe:
       type: object
       required:

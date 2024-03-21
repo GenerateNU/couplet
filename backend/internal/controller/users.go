@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"couplet/internal/database/url_slice"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
 	"fmt"
@@ -20,7 +21,7 @@ func (c Controller) GetUsers(limit uint8, offset uint32) ([]user.User, error) {
 }
 
 // Creates a new user.
-func (c Controller) CreateUser(firstName string, lastName string, age uint8, images []user.UserImage) (user.User, error) {
+func (c Controller) CreateUser(firstName string, lastName string, age uint8, images url_slice.UrlSlice) (user.User, error) {
 	u := user.User{
 		ID:        user_id.Wrap(uuid.New()),
 		FirstName: firstName,
