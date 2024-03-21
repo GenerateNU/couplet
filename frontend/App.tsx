@@ -33,10 +33,6 @@ export default function App() {
     }
   }
 
-  const handleClick = () => {
-    console.log('Button was clicked!');
-  };
-
   if (!fontsLoaded) {
     return null;
   }
