@@ -6,11 +6,11 @@ type Props = {
   text: string;
 };
 
-function OnboardingTitle(props: Props) {
+function OnboardingTitle({text}: Props) {
   return (
     <View style={styles.centeringContainer}>
       <View style={styles.container}>
-        <Text style={styles.text}>{props.text}</Text>
+        <Text style={styles.text}>{text}</Text>
       </View>
     </View>
   );

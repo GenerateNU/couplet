@@ -10,13 +10,13 @@ type TopBarProps = {
   selectedCount: number;
 };
 
-function TopBar(props: TopBarProps) {
+function TopBar({ onBackPress, text, selectedCount }: TopBarProps) {
   return (
     <View style={styles.container}>
-      <BackButton onPress={props.onBackPress} />
+      <BackButton onPress={onBackPress} />
       <View style={styles.textBarContainer}>
-        <Text style={styles.informationText}>{props.text}</Text>
-        <OnboardingBar selectedCount={props.selectedCount} />
+        <Text style={styles.informationText}>{text}</Text>
+        <OnboardingBar selectedCount={selectedCount} />
       </View>
     </View>
   );

@@ -7,11 +7,11 @@ interface ButtonProps {
   onButtonClick: () => void; 
 }
 
-function OnboardingButton(props: ButtonProps) {
+function OnboardingButton({title, onButtonClick}: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    props.onButtonClick(); 
+    onButtonClick(); 
     setIsPressed(!isPressed);
   };
 
@@ -21,7 +21,7 @@ function OnboardingButton(props: ButtonProps) {
         onPress={handlePress}
         style={[styles.button, isPressed ? styles.buttonPressed : null]}
       >
-        <Text style={styles.text}>{props.title}</Text>
+        <Text style={styles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );

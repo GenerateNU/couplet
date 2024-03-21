@@ -7,9 +7,9 @@ type BackButtonProps = {
   onPress: () => void; 
 };
 
-function BackButton(props: BackButtonProps) {
+function BackButton({onPress}: BackButtonProps) {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.button}>
+    <TouchableOpacity onPress={onPress} style={styles.button}>
       <Icon
         name="leftcircle" 
         size={24} 

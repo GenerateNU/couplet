@@ -6,7 +6,7 @@ interface OnboardingBarProps {
   selectedCount: number;
 }
 
-function OnboardingBar(props: OnboardingBarProps) {
+function OnboardingBar({selectedCount}: OnboardingBarProps) {
 
   return (
     <View style={[styles.container, {justifyContent: 'center'}]}>
@@ -15,7 +15,7 @@ function OnboardingBar(props: OnboardingBarProps) {
           <View
             style={[
               styles.segment,
-              index === props.selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
+              index === selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
               { marginRight: index < 4 ? 8 : 0 }, 
             ]}
           />
