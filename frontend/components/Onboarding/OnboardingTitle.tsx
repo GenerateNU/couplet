@@ -6,7 +6,7 @@ type Props = {
   text: string;
 };
 
-function OnboardingTitle({text}: Props) {
+function OnboardingTitle({ text }: Props) {
   return (
     <View style={styles.centeringContainer}>
       <View style={styles.container}>
@@ -14,19 +14,19 @@ function OnboardingTitle({text}: Props) {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeringContainer: {
-    alignItems: "center", 
-    width: "100%" 
+    alignItems: "center",
+    width: "100%"
   },
   container: {
     width: 346,
     height: 61,
-    justifyContent: "center", 
-    alignItems: "flex-start", 
-    opacity: 1 
+    justifyContent: "center",
+    alignItems: "flex-start",
+    opacity: 1
   },
   text: {
     fontFamily: "DMSansBold",
