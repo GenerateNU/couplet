@@ -15,28 +15,31 @@ export default function PhotoPicker() {
       allowsMultipleSelection: true,
       quality: 1,
       orderedSelection: true,
-      selectionLimit: 4,
+      selectionLimit: 4
     });
     if (!result.canceled) {
       console.log("HERE");
 
-      client.PATCH("/users/{id}", {
-        params: {
-          path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
-        },
-        body: {
-          "images": [
-          "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"],
-          "firstName": "karyna",
-          "lastName": "yen",
-          "age": 19
-        }
-      }).then((res) => {
-        console.log("SUCCESS", res);
-      }
-      ).catch((e) => {
-        console.log("ERROR", e);
-      });
+      client
+        .PATCH("/users/{id}", {
+          params: {
+            path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
+          },
+          body: {
+            images: [
+              "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"
+            ],
+            firstName: "karyna",
+            lastName: "yen",
+            age: 19
+          }
+        })
+        .then((res) => {
+          console.log("SUCCESS", res);
+        })
+        .catch((e) => {
+          console.log("ERROR", e);
+        });
       onDone(result.assets);
     }
   };
@@ -117,8 +120,8 @@ export default function PhotoPicker() {
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "light gray",
-    margin: 5,
-  }
+    margin: 5
+  };
 
   return (
     <View>
@@ -126,18 +129,33 @@ export default function PhotoPicker() {
         onPress={openPicker}
         style={{
           alignSelf: "center",
-          minHeight: '55%',
-          width: '80%',
+          minHeight: "55%",
+          width: "80%",
           justifyContent: "center",
           borderRadius: 10,
           borderStyle: "solid",
-          borderWidth: 1,
+          borderWidth: 1
         }}
       >
-        <View style={{width: "100%", flexWrap: "wrap", flexDirection: "row", justifyContent: "center"}}>
-        {[0, 1, 2, 3].map((i) => (
-            i >= images.length ? <View style={{...photoBoxStyling, borderStyle: "dashed"}}/> : <Image key={images[i]} source={{ uri: images[i] }} style={{...photoBoxStyling, borderColor: "black" }} />
-          ))}
+        <View
+          style={{
+            width: "100%",
+            flexWrap: "wrap",
+            flexDirection: "row",
+            justifyContent: "center"
+          }}
+        >
+          {[0, 1, 2, 3].map((i) =>
+            i >= images.length ? (
+              <View style={{ ...photoBoxStyling, borderStyle: "dashed" }} />
+            ) : (
+              <Image
+                key={images[i]}
+                source={{ uri: images[i] }}
+                style={{ ...photoBoxStyling, borderColor: "black" }}
+              />
+            )
+          )}
         </View>
       </TouchableOpacity>
     </View>
