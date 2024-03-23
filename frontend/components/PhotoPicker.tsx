@@ -1,11 +1,15 @@
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View, Text } from "react-native";
 // import { RNS3 } from "react-native-aws3";
-import client from "../api/client";
+// import client from "../api/client";
 
-export default function PhotoPicker() {
+interface PhotoPickerProps {
+  onPick: (imgs: string[]) => void
+}
+
+export default function PhotoPicker({onPick}: PhotoPickerProps) {
   const [images, setImages] = useState<string[]>([]);
 
   const pick = async () => {
@@ -18,28 +22,26 @@ export default function PhotoPicker() {
       selectionLimit: 4
     });
     if (!result.canceled) {
-      console.log("HERE");
-
-      client
-        .PATCH("/users/{id}", {
-          params: {
-            path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
-          },
-          body: {
-            images: [
-              "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"
-            ],
-            firstName: "karyna",
-            lastName: "yen",
-            age: 19
-          }
-        })
-        .then((res) => {
-          console.log("SUCCESS", res);
-        })
-        .catch((e) => {
-          console.log("ERROR", e);
-        });
+      // client
+      //   .PATCH("/users/{id}", {
+      //     params: {
+      //       path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
+      //     },
+      //     body: {
+      //       images: [
+      //         "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"
+      //       ],
+      //       firstName: "karyna",
+      //       lastName: "yen",
+      //       age: 19
+      //     }
+      //   })
+      //   .then((res) => {
+      //     console.log("SUCCESS", res);
+      //   })
+      //   .catch((e) => {
+      //     console.log("ERROR", e);
+      //   });
       onDone(result.assets);
     }
   };
@@ -56,14 +58,10 @@ export default function PhotoPicker() {
     }
   };
   const onDone = (passedImages: ImagePicker.ImagePickerAsset[]) => {
-    setImages([]);
-
     if (typeof passedImages !== "object") return;
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
-    passedImages.forEach((img) => {
-      setImages((imgs) => [...imgs, img.uri]);
-    });
+    setImages(passedImages.map(img => img.uri))
 
     // passedImages.forEach(async (img) => {
     //   let assetInfo;
@@ -112,14 +110,16 @@ export default function PhotoPicker() {
     // }).catch((e) => {
     //   console.log(e);
     // });
+    
+    onPick(passedImages.map(img => img.uri))
   };
 
   const photoBoxStyling = {
-    height: 200,
+    height: 150,
     width: 150,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "light gray",
+    borderColor: "#CDCDCD",
     margin: 5
   };
 
@@ -129,12 +129,13 @@ export default function PhotoPicker() {
         onPress={openPicker}
         style={{
           alignSelf: "center",
-          minHeight: "55%",
-          width: "80%",
+          width: 335,
+          height: 335,
           justifyContent: "center",
           borderRadius: 10,
           borderStyle: "solid",
-          borderWidth: 1
+          borderWidth: 1,
+          borderColor: "#CDCDCD",
         }}
       >
         <View
@@ -147,12 +148,14 @@ export default function PhotoPicker() {
         >
           {[0, 1, 2, 3].map((i) =>
             i >= images.length ? (
-              <View style={{ ...photoBoxStyling, borderStyle: "dashed" }} />
+              <View style={{ ...photoBoxStyling, borderStyle: "dashed", justifyContent: "center" }}>
+                <Text style={{alignSelf: "center", fontSize: 50, color: "#CDCDCD"}}>+</Text>
+              </View>
             ) : (
               <Image
                 key={images[i]}
                 source={{ uri: images[i] }}
-                style={{ ...photoBoxStyling, borderColor: "black" }}
+                style={{ ...photoBoxStyling }}
               />
             )
           )}
