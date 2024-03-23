@@ -18,7 +18,7 @@ export default function HomeEventCard({ id, name }: HomeEventCardProps) {
     <Pressable
       onPress={() => {
         router.push("Event");
-        router.setParams({ eventId: id });
+        router.setParams({ collectionId: "", eventId: id });
       }}
     >
       <View

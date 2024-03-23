@@ -6,7 +6,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CardStack from "../components/Event/CardStack";
 
 export default function Event() {
-  const { collectionId } = useLocalSearchParams<{ collectionId: string }>();
+  const { collectionId, eventId } = useLocalSearchParams<{
+    collectionId: string;
+    eventId: string;
+  }>();
   const router = useRouter();
 
   // I'm thinking a collectionID can be how we separate events into HomePageSections (rows)
@@ -24,7 +27,7 @@ export default function Event() {
         </Button>
       </View>
       <View style={styles.cardContainer}>
-        <CardStack />
+        <CardStack startingEventId={eventId || ""} />
       </View>
     </SafeAreaView>
   );

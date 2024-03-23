@@ -11,22 +11,23 @@ export type EventCardProps = {
 export default function EventCard({ handleReact, id }: EventCardProps) {
   const [event, setEvent] = useState<any>();
   useEffect(() => {
-    getEventById(id)
-      .then((fetchedEvent) => {
-        console.log("Here");
-        console.log(fetchedEvent);
-        setEvent(fetchedEvent);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (id) {
+      getEventById(id)
+        .then((fetchedEvent) => {
+          setEvent(fetchedEvent);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }, [id]);
 
   return (
     <View
       style={{
         flexGrow: 1,
-        marginHorizontal: "10%"
+        marginHorizontal: "10%",
+        paddingTop: 10
       }}
     >
       <Text style={{ fontSize: 32, marginBottom: 10, fontFamily: "DMSansMedium" }}>
