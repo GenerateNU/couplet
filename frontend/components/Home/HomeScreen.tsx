@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -12,13 +10,6 @@ const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
   const [filter, setFilter] = useState(0);
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
