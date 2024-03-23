@@ -28,7 +28,6 @@ export default function HomeScreen() {
           style={{
             display: "flex",
             flexDirection: "row",
-            backgroundColor: "white",
             paddingBottom: 10
           }}
         >

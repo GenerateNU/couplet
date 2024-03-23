@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 const PIN = require("../../assets/pin.png");
 const COIN = require("../../assets/coin.png");
@@ -21,63 +21,53 @@ export default function HomeEventCard({ id, name }: HomeEventCardProps) {
         router.setParams({ collectionId: "", eventId: id });
       }}
     >
-      <View
-        style={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "black",
-          borderRadius: 10,
-          marginRight: 10
-        }}
-      >
-        {/* <Image source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} style={{width: 150, height: 150}} /> */}
-        <View
-          style={{
-            width: "100%",
-            height: 150,
-            backgroundColor: "rgb(200,200,200)",
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10
-          }}
-        />
+      <View style={styles.card}>
+        <View style={styles.imageContainer}>
+          {/* <Image
+            source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+            style={{ width: 150, height: 150 }}
+          /> */}
+        </View>
         <View>
-          <Text
-            style={{ textAlign: "center", padding: 10, fontSize: 14, fontFamily: "DMSansRegular" }}
-          >
-            {name}
-          </Text>
-          <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>
+          <Text style={{ padding: 10, fontSize: 14, fontFamily: "DMSansMedium" }}>{name}</Text>
+          <View style={styles.row}>
             <Image source={PIN} style={{ width: 20, height: 20 }} />
-            <Text
-              style={{
-                textAlign: "center",
-                justifyContent: "center",
-                verticalAlign: "middle",
-                marginTop: 2,
-                fontFamily: "DMSansRegular"
-              }}
-            >
-              Frog Pond
-              {/* TODO - replace with actual location */}
-            </Text>
-            <Image source={COIN} style={{ width: 20, height: 20, marginLeft: 10 }} />
-            <Text
-              style={{
-                textAlign: "center",
-                justifyContent: "center",
-                verticalAlign: "middle",
-                marginTop: 2,
-                marginHorizontal: 2,
-                fontFamily: "DMSansRegular"
-              }}
-            >
-              $$
-              {/* TODO - replace with actual cost */}
-            </Text>
-            <View />
+            <Text style={styles.text}>Frog Pond</Text>
+          </View>
+          <View style={styles.row}>
+            <Image source={COIN} style={{ width: 20, height: 20 }} />
+            <Text style={[styles.text, { marginHorizontal: 2 }]}>$$</Text>
           </View>
         </View>
       </View>
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    width: 175,
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 10,
+    marginRight: 10
+  },
+  imageContainer: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "rgb(200,200,200)",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+  },
+  row: {
+    flexDirection: "row",
+    padding: 10,
+    borderRadius: 20,
+    paddingTop: 0
+  },
+  text: {
+    marginTop: 2,
+    fontFamily: "DMSansRegular"
+  }
+});
