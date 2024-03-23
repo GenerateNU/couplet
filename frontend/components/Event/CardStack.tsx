@@ -1,22 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { eventSwipe, getAllEvents } from "../../api/events";
+import type { components } from "../../api/schema";
 import EventPage from "./EventPage";
+
+type Event = components["schemas"]["Event"];
 
 export type CardStackProps = {
   startingEventId: string;
 };
 
 export default function CardStack({ startingEventId }: CardStackProps) {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleReact = useCallback(
     (like: boolean) => {
       const userId = "c69626f1-f73d-4045-87d8-40e28f136c62"; // HARDCODED FROM MY DB. TODO: switch to logged-in user
-      const currentEventId = events[currentCardIndex]?.id;
+      const currentEventId = events[currentCardIndex].id;
+
       eventSwipe(userId, currentEventId, like).then();
+
       const nextIndex = (currentCardIndex + 1) % events.length;
       setCurrentCardIndex(nextIndex);
     },
@@ -24,7 +29,7 @@ export default function CardStack({ startingEventId }: CardStackProps) {
   );
 
   useEffect(() => {
-    getAllEvents().then((fetchedEvents: any) => {
+    getAllEvents().then((fetchedEvents: Event[]) => {
       setEvents(fetchedEvents || []);
       const index = fetchedEvents.findIndex((event: any) => event.id === startingEventId);
 

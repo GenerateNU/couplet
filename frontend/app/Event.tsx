@@ -12,11 +12,8 @@ export default function Event() {
   }>();
   const router = useRouter();
 
-  // I'm thinking a collectionID can be how we separate events into HomePageSections (rows)
-  // example "This weekend in Boston"
-  // I don't think this is a concept we have yet though
-  // ultimately we will probably want to pass collectionID to the CardStack so it can fetch that collection's items
-  // for now I'm logging it to make the linter happy
+  // TODO: I think we need a notion of collectionId, which can be how we separate events into HomePageSections (rows)
+  // We probably want to pass collectionId to the CardStack so it can fetch that collection's items
   console.log(collectionId);
 
   return (

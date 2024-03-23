@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Icon } from "react-native-paper";
 import { getEventById } from "../../api/events";
+import type { components } from "../../api/schema";
+
+type Event = components["schemas"]["Event"];
 
 export type EventCardProps = {
   id: string;
@@ -9,12 +12,16 @@ export type EventCardProps = {
 };
 
 export default function EventCard({ handleReact, id }: EventCardProps) {
-  const [event, setEvent] = useState<any>();
+  const [event, setEvent] = useState<Event>();
   useEffect(() => {
     if (id) {
       getEventById(id)
         .then((fetchedEvent) => {
-          setEvent(fetchedEvent);
+          if (Array.isArray(fetchedEvent)) {
+            console.log("Unexpected never[] array returned");
+          } else {
+            setEvent(fetchedEvent);
+          }
         })
         .catch((e) => {
           console.log(e);
