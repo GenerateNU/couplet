@@ -1,15 +1,15 @@
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
-import { Image, TouchableOpacity, View, Text } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 // import { RNS3 } from "react-native-aws3";
 // import client from "../api/client";
 
 interface PhotoPickerProps {
-  onPick: (imgs: string[]) => void
+  onPick: (imgs: string[]) => void;
 }
 
-export default function PhotoPicker({onPick}: PhotoPickerProps) {
+export default function PhotoPicker({ onPick }: PhotoPickerProps) {
   const [images, setImages] = useState<string[]>([]);
 
   const pick = async () => {
@@ -61,7 +61,7 @@ export default function PhotoPicker({onPick}: PhotoPickerProps) {
     if (typeof passedImages !== "object") return;
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
-    setImages(passedImages.map(img => img.uri))
+    setImages(passedImages.map((img) => img.uri));
 
     // passedImages.forEach(async (img) => {
     //   let assetInfo;
@@ -110,8 +110,8 @@ export default function PhotoPicker({onPick}: PhotoPickerProps) {
     // }).catch((e) => {
     //   console.log(e);
     // });
-    
-    onPick(passedImages.map(img => img.uri))
+
+    onPick(passedImages.map((img) => img.uri));
   };
 
   const photoBoxStyling = {
@@ -135,7 +135,7 @@ export default function PhotoPicker({onPick}: PhotoPickerProps) {
           borderRadius: 10,
           borderStyle: "solid",
           borderWidth: 1,
-          borderColor: "#CDCDCD",
+          borderColor: "#CDCDCD"
         }}
       >
         <View
@@ -149,14 +149,10 @@ export default function PhotoPicker({onPick}: PhotoPickerProps) {
           {[0, 1, 2, 3].map((i) =>
             i >= images.length ? (
               <View style={{ ...photoBoxStyling, borderStyle: "dashed", justifyContent: "center" }}>
-                <Text style={{alignSelf: "center", fontSize: 50, color: "#CDCDCD"}}>+</Text>
+                <Text style={{ alignSelf: "center", fontSize: 50, color: "#CDCDCD" }}>+</Text>
               </View>
             ) : (
-              <Image
-                key={images[i]}
-                source={{ uri: images[i] }}
-                style={{ ...photoBoxStyling }}
-              />
+              <Image key={images[i]} source={{ uri: images[i] }} style={{ ...photoBoxStyling }} />
             )
           )}
         </View>
