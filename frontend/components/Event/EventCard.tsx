@@ -1,8 +1,3 @@
-import {
-  DMSans_500Medium as DMSansMedium,
-  DMSans_400Regular as DMSansRegular
-} from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React from "react";
 import { Text, View } from "react-native";
 import { Icon } from "react-native-paper";
@@ -17,14 +12,6 @@ export default function EventCard({
   date,
   location
 }: EventCardProps) {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular,
-    DMSansMedium
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <View
       style={{
@@ -59,6 +46,5 @@ export default function EventCard({
       <Text style={{ fontSize: 24, fontFamily: "DMSansRegular" }}>Location</Text>
       <Text style={{ fontSize: 18, fontFamily: "DMSansRegular" }}>{location}</Text>
     </View>
-    // </ScrollView>
   );
 }

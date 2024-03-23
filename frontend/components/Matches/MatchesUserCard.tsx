@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MatchesUser } from "./MatchesUserSection";
@@ -17,13 +15,6 @@ function MatchesUserCard({ profile }: MatchesUserCardProps) {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <TouchableOpacity onPress={toggleModal}>
