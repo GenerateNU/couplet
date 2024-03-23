@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -15,19 +13,11 @@ export default function HomeScreen() {
   const [filter, setFilter] = useState(0);
   const [events, setEvents] = useState<any[]>([]); // ik any is a sin we will remove this
 
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
   useEffect(() => {
     getAllEvents().then((fetchedEvents: any) => {
       setEvents(fetchedEvents || []);
     });
   }, []);
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
