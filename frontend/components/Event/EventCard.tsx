@@ -17,11 +17,7 @@ export default function EventCard({ handleReact, id }: EventCardProps) {
     if (id) {
       getEventById(id)
         .then((fetchedEvent) => {
-          if (Array.isArray(fetchedEvent)) {
-            console.log("Unexpected never[] array returned");
-          } else {
-            setEvent(fetchedEvent);
-          }
+          setEvent(fetchedEvent);
         })
         .catch((e) => {
           console.log(e);
