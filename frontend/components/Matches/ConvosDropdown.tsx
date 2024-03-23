@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
 
@@ -22,14 +20,6 @@ function ConvosDropdown({ convos, convoType }: ConvosDropdownProps) {
   const toggleItems = () => {
     setOpen(!open);
   };
-
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <View style={{ marginTop: 10 }}>

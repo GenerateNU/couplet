@@ -1,16 +1,7 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 
 export default function CallToAction() {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <View
       style={{

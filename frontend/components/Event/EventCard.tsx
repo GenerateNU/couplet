@@ -1,8 +1,3 @@
-import {
-  DMSans_500Medium as DMSansMedium,
-  DMSans_400Regular as DMSansRegular
-} from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Icon } from "react-native-paper";
@@ -14,10 +9,6 @@ export type EventCardProps = {
 };
 
 export default function EventCard({ handleReact, id }: EventCardProps) {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular,
-    DMSansMedium
-  });
   const [event, setEvent] = useState<any>();
   useEffect(() => {
     getEventById(id)
@@ -30,9 +21,7 @@ export default function EventCard({ handleReact, id }: EventCardProps) {
         console.log(e);
       });
   }, [id]);
-  if (!fontsLoaded) {
-    return null;
-  }
+
   return (
     <View
       style={{

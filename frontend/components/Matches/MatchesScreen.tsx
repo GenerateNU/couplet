@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React /* { useState } */ from "react";
 import { ScrollView, Text, View } from "react-native";
 import ConvosDropdown, { ConvoUser } from "./ConvosDropdown";
@@ -101,13 +99,6 @@ export default function MatchesScreen() {
   // const [activeConvos, setActiveConvos] = useState(dummyActiveData);
   // const [archiveConvos, setArchiveConvos] = useState(dummyArchiveData);
   // const [activeUsers, setActiveUsers] = useState(dummyUserData);
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <ScrollView

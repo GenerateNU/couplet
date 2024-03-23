@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -15,13 +13,6 @@ type HomeEventCardProps = {
 
 export default function HomeEventCard({ id, name }: HomeEventCardProps) {
   const router = useRouter();
-
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <Pressable
