@@ -1,9 +1,9 @@
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-// import { RNS3 } from "react-native-aws3";
-// import client from "../api/client";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+
+const ADDBUTTON = require("../assets/addbutton.png");
 
 interface PhotoPickerProps {
   onPick: (imgs: string[]) => void;
@@ -22,26 +22,6 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
       selectionLimit: 4
     });
     if (!result.canceled) {
-      // client
-      //   .PATCH("/users/{id}", {
-      //     params: {
-      //       path: { id: "5e91507e-5630-4efd-9fd4-799178870b11" }
-      //     },
-      //     body: {
-      //       images: [
-      //         "https://relay-file-upload.s3.amazonaws.com/06268d2f-715e-45b5-9a60-902e4bcc6456.jpg1710974218654"
-      //       ],
-      //       firstName: "karyna",
-      //       lastName: "yen",
-      //       age: 19
-      //     }
-      //   })
-      //   .then((res) => {
-      //     console.log("SUCCESS", res);
-      //   })
-      //   .catch((e) => {
-      //     console.log("ERROR", e);
-      //   });
       onDone(result.assets);
     }
   };
@@ -62,101 +42,64 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
     setImages(passedImages.map((img) => img.uri));
-
-    // passedImages.forEach(async (img) => {
-    //   let assetInfo;
-    //   if (Object.prototype.hasOwnProperty.call(img, "assetId") && img.assetId != null)
-    //     assetInfo = await MediaLibrary.getAssetInfoAsync(img.assetId);
-    //   else return;
-    //   if (assetInfo.localUri == null || img.fileName == null) return;
-    //   const extension = assetInfo.localUri.substring(assetInfo.localUri.lastIndexOf(".") + 1);
-
-    //   const type = `${img.type}/${extension.toLowerCase()}`;
-    //   const uri = assetInfo.localUri;
-    //   const name = img.fileName + new Date().getTime();
-
-    //   const file = {
-    //     uri,
-    //     name,
-    //     type
-    //   };
-
-    //   const options = {
-    //     bucket: "relay-file-upload",
-    //     region: "us-east-2",
-    //     accessKey: process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID || "",
-    //     secretKey: process.env.EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-    //     successActionStatus: 201
-    //   };
-
-    //   RNS3.put(file, options)
-    //     .then((res) => {
-    //       if (res.status !== 201) throw new Error("Failed to upload image to S3");
-    //       // We uploaded it yay! Now we can do something with the URL
-    //       // @ts-ignore
-    //       console.log(res.body.postResponse.location);
-    //       // @ts-ignore
-    //       setImages([...images, res.body.postResponse.location]);
-    //       // TODO: Backend call with the image we just uploaded
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // });
-
-    // fetch(`http://${process.env.BACKEND_ADDRESS}/users/050565f3-f71d-4baa-9dcc-d6d822f03dd6`, {
-    //   method: "PATCH",
-    //   body: JSON.stringify({ images })
-    // }).catch((e) => {
-    //   console.log(e);
-    // });
-
     onPick(passedImages.map((img) => img.uri));
-  };
-
-  const photoBoxStyling = {
-    height: 150,
-    width: 150,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#CDCDCD",
-    margin: 5
   };
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={openPicker}
-        style={{
-          alignSelf: "center",
-          width: 335,
-          height: 335,
-          justifyContent: "center",
-          borderRadius: 10,
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "#CDCDCD"
-        }}
-      >
-        <View
-          style={{
-            width: "100%",
-            flexWrap: "wrap",
-            flexDirection: "row",
-            justifyContent: "center"
-          }}
-        >
-          {[0, 1, 2, 3].map((i) =>
-            i >= images.length ? (
-              <View style={{ ...photoBoxStyling, borderStyle: "dashed", justifyContent: "center" }}>
-                <Text style={{ alignSelf: "center", fontSize: 50, color: "#CDCDCD" }}>+</Text>
-              </View>
-            ) : (
-              <Image key={images[i]} source={{ uri: images[i] }} style={{ ...photoBoxStyling }} />
-            )
-          )}
+      <TouchableOpacity onPress={openPicker} style={styles.pressableContainer}>
+        <View style={styles.pickerContainer}>
+          {[0, 1, 2, 3].map((i) => (
+            <View style={styles.photoContainer}>
+              {i >= images.length ? (
+                <View style={{ ...styles.photoBox, ...styles.emptyBox }}>
+                  <Image source={ADDBUTTON} style={styles.addButton} />
+                </View>
+              ) : (
+                <Image key={images[i]} source={{ uri: images[i] }} style={styles.photoBox} />
+              )}
+            </View>
+          ))}
         </View>
       </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  pressableContainer: {
+    alignSelf: "center",
+    width: 335,
+    height: 335,
+    justifyContent: "center"
+  },
+  pickerContainer: {
+    width: "100%",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center"
+  },
+  photoContainer: {
+    height: 160,
+    width: 160
+  },
+  photoBox: {
+    height: 140,
+    width: 140,
+    left: 0,
+    top: 0,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#CDCDCD",
+    margin: 5
+  },
+  emptyBox: {
+    borderStyle: "dashed",
+    justifyContent: "center"
+  },
+  addButton: {
+    position: "absolute",
+    right: "-15%",
+    bottom: "-15%"
+  }
+});
