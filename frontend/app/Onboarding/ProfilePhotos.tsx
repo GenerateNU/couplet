@@ -11,6 +11,11 @@ const CAMERA_IMAGE = require("../../assets/profilecamera.png");
 export default function ProfilePhotos() {
   const [images, setImages] = useState<string[]>([]);
 
+  const onContinue = () => {
+    // TODO: Save images into form state
+    router.push("Onboarding/ProfileInsta");
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -22,11 +27,7 @@ export default function ProfilePhotos() {
         <PhotoPicker onPick={setImages} />
       </View>
       <View>
-        <ContinueButton
-          title="Continue"
-          isDisabled={images.length !== 4}
-          onPress={() => router.push("Onboarding/ProfileInsta")}
-        />
+        <ContinueButton title="Continue" isDisabled={images.length !== 4} onPress={onContinue} />
       </View>
     </View>
   );

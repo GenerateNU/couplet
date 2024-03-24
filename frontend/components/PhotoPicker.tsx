@@ -3,7 +3,7 @@ import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-const ADDBUTTON = require("../assets/addbutton.png");
+const ADD_BUTTON = require("../assets/addbutton.png");
 
 interface PhotoPickerProps {
   onPick: (imgs: string[]) => void;
@@ -53,7 +53,7 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
             <View style={styles.photoContainer}>
               {i >= images.length ? (
                 <View style={{ ...styles.photoBox, ...styles.emptyBox }}>
-                  <Image source={ADDBUTTON} style={styles.addButton} />
+                  <Image source={ADD_BUTTON} style={styles.addButton} />
                 </View>
               ) : (
                 <Image key={images[i]} source={{ uri: images[i] }} style={styles.photoBox} />
