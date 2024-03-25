@@ -1,20 +1,16 @@
 import React from "react";
 import { Dimensions, Image, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import { EventImageCarouselProps } from "./EventProps";
+
+export type EventImageCarouselProps = {
+  images: string[];
+};
 
 function EventImageCarousel({ images }: EventImageCarouselProps) {
   const { width } = Dimensions.get("window");
 
   return (
-    <View
-      style={{
-        width: "100%",
-        borderRadius: 12,
-        alignSelf: "center",
-        height: "31%"
-      }}
-    >
+    <View>
       <Carousel
         loop
         width={width}
@@ -28,7 +24,7 @@ function EventImageCarousel({ images }: EventImageCarouselProps) {
               justifyContent: "center"
             }}
           >
-            <Image source={{ uri: images[index], height: 350 }} />
+            <Image source={{ uri: images[index], height: width }} />
           </View>
         )}
       />

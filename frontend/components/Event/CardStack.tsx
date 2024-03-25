@@ -1,55 +1,60 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
-import EventCard from "./EventCard";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import { eventSwipe, getAllEvents } from "../../api/events";
+import type { components } from "../../api/schema";
+import EventPage from "./EventPage";
 
-function CardStack() {
+type Event = components["schemas"]["Event"];
+
+export type CardStackProps = {
+  startingEventId: string;
+};
+
+export default function CardStack({ startingEventId }: CardStackProps) {
+  const [events, setEvents] = useState<Event[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [cards, setCards] = useState<React.JSX.Element[]>([]);
-  const cardLength = useRef(cards.length);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleReact = useCallback((like: boolean): boolean => {
-    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardLength.current);
-    return like;
-    // TODO: Add logic to update the database with the user's reaction to the event
-  }, []);
+  const handleReact = useCallback(
+    (like: boolean) => {
+      const userId = "c69626f1-f73d-4045-87d8-40e28f136c62"; // HARDCODED FROM MY DB. TODO: switch to logged-in user
+      const currentEventId = events[currentCardIndex].id;
+
+      eventSwipe(userId, currentEventId, like).then();
+
+      const nextIndex = (currentCardIndex + 1) % events.length;
+      setCurrentCardIndex(nextIndex);
+    },
+    [events, currentCardIndex]
+  );
 
   useEffect(() => {
-    const dummyStack = [
-      <EventCard
-        id={1}
-        title="Winter Ice Skating"
-        description="The best place to skate outdoors in Boston. Whether you are a first-time skater or an aspiring Olympian, Frog Pond enables you to take pleasure in the sport of ice skating. Frog Pond offers public ice skating, skate rentals, and skate sharpening."
-        date="1/2/24"
-        price={20}
-        location="Frog Pond"
-        handleReact={handleReact}
-      />,
-      <EventCard
-        id={2}
-        title="Movie"
-        description="Watch a movie at the theater"
-        date="2/2/24"
-        price={40}
-        location="AMC"
-        handleReact={handleReact}
-      />,
-      <EventCard
-        id={3}
-        title="Hockey"
-        description=""
-        date="3/2/24"
-        price={30}
-        location="TD Garden"
-        handleReact={handleReact}
-      />
-    ];
-    cardLength.current = dummyStack.length;
-    setCards(dummyStack);
-  }, [handleReact]);
+    getAllEvents().then((fetchedEvents: Event[]) => {
+      setEvents(fetchedEvents || []);
+      const index = fetchedEvents.findIndex((event: any) => event.id === startingEventId);
 
-  const CurrentCard = cards[currentCardIndex];
+      if (index !== -1) {
+        setCurrentCardIndex(index);
+      } else {
+        console.log(`No event found with ID ${startingEventId}`);
+        setCurrentCardIndex(0);
+      }
 
-  return <View>{CurrentCard}</View>;
+      setIsLoading(false);
+    });
+  }, [startingEventId]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <View>
+      <EventPage id={events[currentCardIndex]?.id} handleReact={handleReact} />
+    </View>
+  );
 }
-
-export default CardStack;

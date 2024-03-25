@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { getAllEvents } from "../../api/events";
+import type { components } from "../../api/schema";
 import Header from "../Layout/Header";
 import LinkButton from "../Layout/LinkButton";
 import TagButton from "../Layout/TagButton";
 import HomePageSection from "./HomePageSection";
 
+type Event = components["schemas"]["Event"];
+
 const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
 
 export default function HomeScreen() {
   const [filter, setFilter] = useState(0);
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    getAllEvents().then((fetchedEvents: any) => {
+      setEvents(fetchedEvents || []);
+    });
+  }, []);
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
@@ -20,7 +31,6 @@ export default function HomeScreen() {
           style={{
             display: "flex",
             flexDirection: "row",
-            backgroundColor: "white",
             paddingBottom: 10
           }}
         >
@@ -46,15 +56,9 @@ export default function HomeScreen() {
       {/* Pintrestesque Section Views */}
       {filter === 0 ? (
         <View style={styles.sectionContainer}>
-          <HomePageSection
-            title="This weekend in Boston"
-            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
-          />
-          <HomePageSection
-            title="Live music and concerts"
-            events={[1, 2, 3].map((n) => ({ id: n }))}
-          />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
+          <HomePageSection title="This weekend in Boston" events={events} />
+          <HomePageSection title="Live music and concerts" events={events} />
+          <HomePageSection title="Other events" events={events} />
         </View>
       ) : (
         // Eventually replace this with a different event browsing screen
