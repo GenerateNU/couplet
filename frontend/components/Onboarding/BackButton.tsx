@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import COLORS from '../../colors';
+import scaleStyleSheet from '../../scaleStyles';
 
 type BackButtonProps = {
   onPress: () => void; 
@@ -9,7 +10,7 @@ type BackButtonProps = {
 
 function BackButton({onPress}: BackButtonProps) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity onPress={onPress} style={scaledStyles.button}>
       <Icon
         name="leftcircle" 
         size={24} 
@@ -36,5 +37,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default BackButton;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../colors';
+import scaleStyleSheet from '../../scaleStyles';
 
 interface ButtonProps {
   title: string;
@@ -16,12 +17,12 @@ function OnboardingButton({title, onButtonClick}: ButtonProps) {
   };
 
   return (
-    <View style={styles.buttonContainer}>
+    <View style={scaledStyles.buttonContainer}>
       <TouchableOpacity
         onPress={handlePress}
-        style={[styles.button, isPressed ? styles.buttonPressed : null]}
+        style={[scaledStyles.button, isPressed ? scaledStyles.buttonPressed : null]}
       >
-        <Text style={styles.text}>{title}</Text>
+        <Text style={scaledStyles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -39,9 +40,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 15.62,
     textAlign: 'center',
+    paddingHorizontal: 8
   },
   button: {
-    width: 73,
     height: 24,
     alignItems: 'center',
     justifyContent: 'center',
@@ -56,5 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
   },
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default OnboardingButton;

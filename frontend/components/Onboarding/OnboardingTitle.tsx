@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
 type Props = {
   text: string;
@@ -8,9 +9,9 @@ type Props = {
 
 function OnboardingTitle({text}: Props) {
   return (
-    <View style={styles.centeringContainer}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{text}</Text>
+    <View style={scaledStyles.centeringContainer}>
+      <View style={scaledStyles.container}>
+        <Text style={scaledStyles.text}>{text}</Text>
       </View>
     </View>
   );
@@ -37,5 +38,7 @@ const styles = StyleSheet.create({
     color: COLORS.black
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default OnboardingTitle;
