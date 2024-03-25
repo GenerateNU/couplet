@@ -1,25 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
 interface ContinueBottonProps extends TouchableOpacityProps {
   title: string;
   isDisabled: boolean;
 }
 
-function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
+function ContinueButton({title, isDisabled, onPress}: ContinueBottonProps) {
   return (
-    <View style={styles.centeringContainer}>
+    <View style={scaledStyles.centeringContainer}>
       <TouchableOpacity
         onPress={onPress}
         disabled={isDisabled}
-        style={[styles.button, isDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
+        style={[
+          scaledStyles.button,
+          isDisabled ? scaledStyles.buttonDisabled : scaledStyles.buttonEnabled
+        ]}
       >
-        <Text style={styles.text}>{title}</Text>
+        <Text style={scaledStyles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   centeringContainer: {
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.disabled,
     backgroundColor: COLORS.disabled,
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 2
@@ -62,5 +66,7 @@ const styles = StyleSheet.create({
     height: 21
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default ContinueButton;
