@@ -16,6 +16,7 @@ export default function UserDetails(props: UserDetailsProps) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.profileNameContainer}>
+        {/* // eslint-disable-next-line global-require */}
         <Image source={require("../assets/stockProPic.png")} style={styles.imageContainer} />
         <View style={styles.nameAndEditContainer}>
           <Text style={styles.name}>{name}</Text>
