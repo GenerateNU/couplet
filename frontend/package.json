@@ -5,6 +5,7 @@
     "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.17",
+    "@react-navigation/stack": "^6.3.29",
     "expo": "~49.0.15",
     "expo-app-loading": "^2.1.1",
     "expo-apple-authentication": "~6.1.0",
