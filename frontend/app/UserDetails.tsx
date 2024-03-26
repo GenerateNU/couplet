@@ -11,6 +11,7 @@ interface UserDetailsProps {
 
 export default function UserDetails(props: UserDetailsProps) {
   const { onPress, profileImageSource, name, editDetailsText, chevronColor } = props;
+  console.log(profileImageSource); // Make this the source of the Image component when images are available
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>

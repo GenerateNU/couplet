@@ -9,30 +9,24 @@ export default function Profile() {
     <View style={{ flex: 1 }}>
       <Text style={{ fontFamily: "DMSansRegular" }}>ProfileA</Text>
       <UserDetails
-        onPress={function (): void {
-          console.log("Edit Profile");
-        }}
+        onPress={() => console.log("Edit Account Details")}
         profileImageSource={undefined}
-        name={"Tiffany"}
-        editDetailsText={"Edit Account Details"}
-        chevronColor={""}
+        name="Tiffany"
+        editDetailsText="Edit Account Details"
+        chevronColor=""
       />
       <View style={styles.purpleCardsContainer}>
         <PurpleProfileCard
-          imageUrl={"../assets/ProfilePurple.png"}
-          name={"My Profile"}
-          detailText={"View and make changes to your profile"}
-          onPress={function (): void {
-            console.log("My Profile");
-          }}
+          imageUrl="../assets/ProfilePurple.png"
+          name="My Profile"
+          detailText="View and make changes to your profile"
+          onPress={() => console.log("Edit Account Details")}
         />
         <PurpleProfileCard
-          imageUrl={"../assets/ProfilePurple.png"}
-          name={"My Preferences"}
-          detailText={"Manage what you are looking for"}
-          onPress={function (): void {
-            console.log("My Preferences");
-          }}
+          imageUrl="../assets/ProfilePurple.png"
+          name="My Preferences"
+          detailText="Manage what you are looking for"
+          onPress={() => console.log("Edit Account Details")}
         />
       </View>
 

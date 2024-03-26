@@ -10,7 +10,7 @@ interface PurpleProfileCardProps {
 
 export default function PurpleProfileCard(props: PurpleProfileCardProps) {
   const { imageUrl, name, detailText, onPress } = props;
-
+  console.log(imageUrl); // Make this the source of the Image component when images are available
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={require("../assets/ProfilePurple.png")} style={styles.imageContainer} />
