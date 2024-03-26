@@ -13,7 +13,7 @@ export default function ProfileConfirm() {
         <Text style={styles.welcomeHeader}>Welcome to Couplet</Text>
         <Text style={styles.welcomeText}>Like 5 Events you want to go to</Text>
         <TouchableOpacity onPress={() => {}} disabled={false} style={styles.button}>
-          <Text style={styles.buttonText}>Let's Get Started</Text>
+          <Text style={styles.buttonText}>Let`&apos;`s Get Started</Text>
         </TouchableOpacity>
       </View>
       {/* </LinearGradient> */}
