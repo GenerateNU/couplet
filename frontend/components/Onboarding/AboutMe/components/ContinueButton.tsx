@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Link } from "expo-router";
 
-const ContinueButton = ({ route, Component }) => {
-  const [showComponent, setShowComponent] = useState(false);
-
-  const handlePress = () => {
-    if (Component) {
-      setShowComponent(true);
-    }
-  };
+const ContinueButton = () => {
 
   return (
     <View>
-      <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Link href={`/${route}`}>
+      <TouchableOpacity style={styles.button} >
           <Text style={styles.text}>Continue</Text>
-        </Link>
       </TouchableOpacity>
-      {showComponent && <Component />}
     </View>
   );
 };

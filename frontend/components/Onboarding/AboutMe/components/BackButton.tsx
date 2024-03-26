@@ -1,21 +1,23 @@
-import React from 'react';
-import { Image, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Image, TouchableOpacity } from "react-native";
 
-const BackButton = () => {
+function BackButton() {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => {
+    <TouchableOpacity
+      onPress={() => {
         if (navigation.canGoBack()) {
-            navigation.goBack()
+          navigation.goBack();
         } else {
-            //navigation.navigate('index');
-            console.log("Back")
+          // navigation.navigate('index');
+          console.log("Back");
         }
-    }}>
+      }}
+    >
       <Image source={require("../../../../assets/Arrows.png")} />
     </TouchableOpacity>
   );
-};
+}
 
 export default BackButton;

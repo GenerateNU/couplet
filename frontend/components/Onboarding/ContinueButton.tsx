@@ -7,22 +7,19 @@ interface ContinueBottonProps extends TouchableOpacityProps {
   isDisabled: boolean;
 }
 
-function ContinueButton({title, isDisabled, onPress}: ContinueBottonProps) {
+function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
   return (
     <View style={styles.centeringContainer}>
       <TouchableOpacity
         onPress={onPress}
         disabled={isDisabled}
-        style={[
-          styles.button,
-          isDisabled ? styles.buttonDisabled : styles.buttonEnabled
-        ]}
+        style={[styles.button, isDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
       >
         <Text style={styles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeringContainer: {

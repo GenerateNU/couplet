@@ -1,16 +1,16 @@
-import React from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import React from "react";
+import { Image, StyleSheet, View } from "react-native";
 
-const ProgressBar = () => {
+function ProgressBar() {
   return (
-    <View style={styles.barContainer} >
-        <Image source={require("../../../../assets/ProgressBar.png")} />
+    <View style={styles.barContainer}>
+      <Image source={require("../../../../assets/ProgressBar.png")} />
     </View>
   );
-};
+}
 const styles = StyleSheet.create({
   barContainer: {
-    alignItems : 'center'
+    alignItems: "center"
   }
 });
 export default ProgressBar;

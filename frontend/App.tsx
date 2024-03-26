@@ -7,10 +7,7 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Home from "./app/Home";
 import AboutName from "./components/Onboarding/AboutMe/AboutName";
-import AboutBirthday from "./components/Onboarding/AboutMe/AboutBirthday";
-import AboutGender from "./components/Onboarding/AboutMe/AboutGender";
 
 export default function App() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
@@ -43,7 +40,7 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       {isSignedIn ? (
-        <AboutName/>
+        <AboutName />
       ) : (
         <View
           style={{

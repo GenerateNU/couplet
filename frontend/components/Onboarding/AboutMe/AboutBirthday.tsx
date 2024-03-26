@@ -1,12 +1,12 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Icon } from "react-native-paper";
 import BackButton from "./components/BackButton";
 import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
-import { Icon } from "react-native-paper";
 
-const AboutBirthday = () => (
-  <View style={styles.container}>
+function AboutBirthday() {
+  return <View style={styles.container}>
     <View style={styles.mainContainer}>
       <View style={styles.TopUiContainer}>
         <BackButton />
@@ -20,32 +20,30 @@ const AboutBirthday = () => (
         <View style={styles.inputWrapper}>
           <TextInput style={styles.inputContainer} placeholder="DD/MM/YYYY" />
           <View style={styles.icon}>
-          <Icon source={require("../../../assets/calendar.png")} size = {15} />
+            <Icon source={require("../../../assets/calendar.png")} size={15} />
           </View>
         </View>
-        <Text style={styles.textHelper}>
-          You won't be able to change this
-        </Text>
+        <Text style={styles.textHelper}>You won't be able to change this</Text>
       </View>
       <View style={styles.ContinueButtonContainer}>
         <ContinueButton />
       </View>
     </View>
   </View>
-);
+}
 
 export default AboutBirthday;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
     flex: 0.15,
-    marginTop : 10
+    marginTop: 10
   },
   mainContainer: {
     flex: 1,
     marginLeft: 20,
     marginRight: 20,
-    justifyContent : 'space-between'
+    justifyContent: "space-between"
   },
   headerContainer: {
     fontSize: 32,
@@ -74,11 +72,11 @@ const styles = StyleSheet.create({
     flex: 1
   },
   ContinueButtonContainer: {
-    marginBottom : 10
+    marginBottom: 10
   },
-  icon : {
-    position: 'absolute',
+  icon: {
+    position: "absolute",
     right: 10,
-    bottom : 10
+    bottom: 10
   }
 });

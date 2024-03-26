@@ -4,8 +4,8 @@ import BackButton from "./components/BackButton";
 import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
 
-const AboutGender = () => (
-  <View style={styles.container}>
+function AboutGender() {
+  return <View style={styles.container}>
     <View style={styles.mainContainer}>
       <View style={styles.TopUiContainer}>
         <BackButton />
@@ -35,7 +35,7 @@ const AboutGender = () => (
       </View>
     </View>
   </View>
-);
+}
 
 export default AboutGender;
 
@@ -86,6 +86,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     letterSpacing: -0.17
   },
-  buttonContainer: {
-  }
+  buttonContainer: {}
 });

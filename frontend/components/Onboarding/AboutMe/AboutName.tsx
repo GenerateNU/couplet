@@ -1,12 +1,12 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import AboutBirthday from "./AboutBirthday";
 import BackButton from "./components/BackButton";
 import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
-import AboutBirthday from "./AboutBirthday";
 
-const AboutName = () => (
-  <View style={styles.container}>
+function AboutName() {
+  return <View style={styles.container}>
     <View style={styles.mainContainer}>
       <View style={styles.TopUiContainer}>
         <BackButton />
@@ -25,24 +25,27 @@ const AboutName = () => (
         </Text>
       </View>
       <View style={styles.ContinueButtonContainer}>
-        <ContinueButton route="/components/Onboarding/AboutMe/AboutBirthday" Component={AboutBirthday} />
+        <ContinueButton
+          route="/components/Onboarding/AboutMe/AboutBirthday"
+          Component={AboutBirthday}
+        />
       </View>
     </View>
   </View>
-);
+}
 
 export default AboutName;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
     flex: 0.15,
-    marginTop : 10
+    marginTop: 10
   },
   mainContainer: {
     flex: 1,
     marginLeft: 20,
     marginRight: 20,
-    justifyContent : 'space-between'
+    justifyContent: "space-between"
   },
   headerContainer: {
     fontSize: 32,
@@ -71,6 +74,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   ContinueButtonContainer: {
-    marginBottom : 10
+    marginBottom: 10
   }
 });
