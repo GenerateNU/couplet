@@ -27,8 +27,6 @@ function AboutName() {
         </View>
         <View style={styles.ContinueButtonContainer}>
           <ContinueButton
-            route="/components/Onboarding/AboutMe/AboutBirthday"
-            Component={AboutBirthday}
           />
         </View>
       </View>
