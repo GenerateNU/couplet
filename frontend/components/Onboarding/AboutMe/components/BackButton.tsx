@@ -10,8 +10,6 @@ function BackButton() {
         if (navigation.canGoBack()) {
           navigation.goBack();
         } else {
-          // navigation.navigate('index');
-          console.log("Back");
         }
       }}
     >

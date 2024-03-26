@@ -1,24 +1,23 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const ContinueButton = () => {
-
+function ContinueButton() {
   return (
     <View>
-      <TouchableOpacity style={styles.button} >
-          <Text style={styles.text}>Continue</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.text}>Continue</Text>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FBA4A4",
-    borderRadius: 25, 
-    height: 50, 
-    justifyContent: "center", 
-    alignItems: "center", 
+    borderRadius: 25,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center"
   },
   text: {
     color: "white", // choose your color

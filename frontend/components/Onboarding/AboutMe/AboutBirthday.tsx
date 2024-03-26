@@ -6,30 +6,32 @@ import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
 
 function AboutBirthday() {
-  return <View style={styles.container}>
-    <View style={styles.mainContainer}>
-      <View style={styles.TopUiContainer}>
-        <BackButton />
-        <ProgressBar />
-      </View>
-      <View>
-        <Image source={require("../../../assets/calendarBirthday.png")} />
+  return (
+    <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <View style={styles.TopUiContainer}>
+          <BackButton />
+          <ProgressBar />
+        </View>
         <View>
-          <Text style={styles.headerContainer}>My birthday is...</Text>
-        </View>
-        <View style={styles.inputWrapper}>
-          <TextInput style={styles.inputContainer} placeholder="DD/MM/YYYY" />
-          <View style={styles.icon}>
-            <Icon source={require("../../../assets/calendar.png")} size={15} />
+          <Image source={require("../../../assets/calendarBirthday.png")} />
+          <View>
+            <Text style={styles.headerContainer}>My birthday is...</Text>
           </View>
+          <View style={styles.inputWrapper}>
+            <TextInput style={styles.inputContainer} placeholder="DD/MM/YYYY" />
+            <View style={styles.icon}>
+              <Icon source={require("../../../assets/calendar.png")} size={15} />
+            </View>
+          </View>
+          <Text style={styles.textHelper}>You won't be able to change this</Text>
         </View>
-        <Text style={styles.textHelper}>You won't be able to change this</Text>
-      </View>
-      <View style={styles.ContinueButtonContainer}>
-        <ContinueButton />
+        <View style={styles.ContinueButtonContainer}>
+          <ContinueButton />
+        </View>
       </View>
     </View>
-  </View>
+  );
 }
 
 export default AboutBirthday;

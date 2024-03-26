@@ -5,36 +5,38 @@ import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
 
 function AboutGender() {
-  return <View style={styles.container}>
-    <View style={styles.mainContainer}>
-      <View style={styles.TopUiContainer}>
-        <BackButton />
-        <ProgressBar />
-      </View>
-      <View>
-        <Image source={require("../../../assets/lightningBolt.png")} />
-        <View>
-          <Text style={styles.headerContainer}>I am a...</Text>
+  return (
+    <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <View style={styles.TopUiContainer}>
+          <BackButton />
+          <ProgressBar />
         </View>
         <View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Man</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Woman</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Other</Text>
-            </TouchableOpacity>
+          <Image source={require("../../../assets/lightningBolt.png")} />
+          <View>
+            <Text style={styles.headerContainer}>I am a...</Text>
+          </View>
+          <View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Man</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Woman</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Other</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.ContinueButtonContainer}>
-        <ContinueButton />
+        <View style={styles.ContinueButtonContainer}>
+          <ContinueButton />
+        </View>
       </View>
     </View>
-  </View>
+  );
 }
 
 export default AboutGender;

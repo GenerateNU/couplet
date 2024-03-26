@@ -6,32 +6,34 @@ import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
 
 function AboutName() {
-  return <View style={styles.container}>
-    <View style={styles.mainContainer}>
-      <View style={styles.TopUiContainer}>
-        <BackButton />
-        <ProgressBar />
-      </View>
-      <View>
-        <Image source={require("../../../assets/3dicons.png")} />
+  return (
+    <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <View style={styles.TopUiContainer}>
+          <BackButton />
+          <ProgressBar />
+        </View>
         <View>
-          <Text style={styles.headerContainer}>My first name is...</Text>
+          <Image source={require("../../../assets/3dicons.png")} />
+          <View>
+            <Text style={styles.headerContainer}>My first name is...</Text>
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput style={styles.inputContainer} placeholder="First Name" />
+          </View>
+          <Text style={styles.textHelper}>
+            This is how it will permanently appear on your profile
+          </Text>
         </View>
-        <View style={styles.inputWrapper}>
-          <TextInput style={styles.inputContainer} placeholder="First Name" />
+        <View style={styles.ContinueButtonContainer}>
+          <ContinueButton
+            route="/components/Onboarding/AboutMe/AboutBirthday"
+            Component={AboutBirthday}
+          />
         </View>
-        <Text style={styles.textHelper}>
-          This is how it will permanently appear on your profile
-        </Text>
-      </View>
-      <View style={styles.ContinueButtonContainer}>
-        <ContinueButton
-          route="/components/Onboarding/AboutMe/AboutBirthday"
-          Component={AboutBirthday}
-        />
       </View>
     </View>
-  </View>
+  );
 }
 
 export default AboutName;
