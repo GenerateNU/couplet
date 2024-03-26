@@ -1,38 +1,26 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React from "react";
-import { Text } from "react-native";
-import { Button } from "react-native-paper";
-import { ReactionButtonProps } from "./ReactionButtonProps";
+import { IconButton } from "react-native-paper";
+import COLORS from "../../colors";
 
 /* eslint-disable react/no-children-prop */
 
-function ReactionButton({ like, icon, label, handleReact }: ReactionButtonProps) {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
+export type ReactionButtonProps = {
+  like: boolean;
+  icon: string;
+  handleReact: (like: boolean) => void;
+};
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
+function ReactionButton({ like, icon, handleReact }: ReactionButtonProps) {
   return (
-    <Button
-      style={{
-        paddingVertical: 10,
-        marginHorizontal: 10,
-        borderRadius: 30,
-        backgroundColor: like ? "black" : "white",
-        flex: 1,
-        alignSelf: "center" // This will center the button horizontally
-      }}
-      labelStyle={{ fontSize: 20, alignSelf: "flex-start", color: like ? "white" : "black" }}
+    <IconButton
       icon={icon}
-      mode="elevated"
+      containerColor={like ? COLORS.primary : "#f3f6f4"}
+      iconColor={like ? "white" : "black"}
+      mode="contained"
+      size={36}
+      accessibilityLabel={like ? "Not interested" : "Like"}
       onPress={() => handleReact(like)}
-    >
-      <Text style={{ fontFamily: "DMSansRegular" }}>{label}</Text>
-    </Button>
+    />
   );
 }
 

@@ -1,21 +1,20 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import EventPage from "../components/Event/EventPage";
+import CardStack from "../components/Event/CardStack";
 
-export default function DummyEventDetails() {
+export default function Event() {
+  const { collectionId, eventId } = useLocalSearchParams<{
+    collectionId: string;
+    eventId: string;
+  }>();
   const router = useRouter();
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // TODO: I think we need a notion of collectionId, which can be how we separate events into HomePageSections (rows)
+  // We probably want to pass collectionId to the CardStack so it can fetch that collection's items
+  console.log(collectionId);
 
   return (
     <SafeAreaView>
@@ -25,7 +24,7 @@ export default function DummyEventDetails() {
         </Button>
       </View>
       <View style={styles.cardContainer}>
-        <EventPage />
+        <CardStack startingEventId={eventId || ""} />
       </View>
     </SafeAreaView>
   );

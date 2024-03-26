@@ -1,8 +1,9 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import COLORS from "../../colors";
-import BackButton from "./BackButton";
-import OnboardingBar from "./OnboardingBar";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import BackButton from './BackButton'; 
+import OnboardingBar from './OnboardingBar'; 
+import COLORS from '../../colors'; 
+import scaleStyleSheet from '../../scaleStyles';
 
 type TopBarProps = {
   onBackPress: () => void;
@@ -12,10 +13,10 @@ type TopBarProps = {
 
 function TopBar({ onBackPress, text, selectedCount }: TopBarProps) {
   return (
-    <View style={styles.container}>
+    <View style={scaledStyles.container}>
       <BackButton onPress={onBackPress} />
-      <View style={styles.textBarContainer}>
-        <Text style={styles.informationText}>{text}</Text>
+      <View style={scaledStyles.textBarContainer}>
+        <Text style={scaledStyles.informationText}>{text}</Text>
         <OnboardingBar selectedCount={selectedCount} />
       </View>
     </View>
@@ -39,16 +40,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   informationText: {
-    width: 46,
-    height: 10,
-    fontFamily: "DMSansRegular",
-    fontSize: 10,
-    fontWeight: "400",
-    lineHeight: 10,
-    textAlign: "left",
+    height: 18,
+    fontFamily: "DMSansMedium",
+    fontSize: 14,
+    fontWeight: '500',
+    lineHeight: 18.23,
+    textAlign: 'center',
     color: COLORS.darkGray,
     marginBottom: 2
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default TopBar;
