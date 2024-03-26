@@ -7,4 +7,4 @@ const COLORS = {
   darkGray: "#8A8A8A"
 };
 
-export default COLORS;
+export default COLORS

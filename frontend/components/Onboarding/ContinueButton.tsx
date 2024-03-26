@@ -8,7 +8,7 @@ interface ContinueBottonProps extends TouchableOpacityProps {
   isDisabled: boolean;
 }
 
-function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
+function ContinueButton({title, isDisabled, onPress}: ContinueBottonProps) {
   return (
     <View style={scaledStyles.centeringContainer}>
       <TouchableOpacity
@@ -23,7 +23,7 @@ function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   centeringContainer: {
