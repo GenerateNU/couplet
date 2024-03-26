@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import COLORS from '../../colors';
-import scaleStyleSheet from '../../scaleStyles';
-import { scaleWidth } from '../../ratio';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import COLORS from "../../colors";
+import { scaleWidth } from "../../ratio";
+import scaleStyleSheet from "../../scaleStyles";
 
 interface OnboardingBarProps {
   selectedCount: number;
@@ -10,14 +10,16 @@ interface OnboardingBarProps {
 
 function OnboardingBar({ selectedCount }: OnboardingBarProps) {
   return (
-    <View style={[scaledStyles.container, {justifyContent: 'center'}]}>
-      <View style={{ flexDirection: 'row', width: scaleWidth(346) }}>
+    <View style={[scaledStyles.container, { justifyContent: "center" }]}>
+      <View style={{ flexDirection: "row", width: scaleWidth(346) }}>
         {Array.from({ length: 4 }).map((_, index) => (
           <View
             style={[
               scaledStyles.segment,
-              index === selectedCount - 1 ? scaledStyles.segmentSelected : scaledStyles.segmentUnselected,
-              { marginRight: index < 3 ? 8 : 0 }, 
+              index === selectedCount - 1
+                ? scaledStyles.segmentSelected
+                : scaledStyles.segmentUnselected,
+              { marginRight: index < 3 ? 8 : 0 }
             ]}
           />
         ))}
