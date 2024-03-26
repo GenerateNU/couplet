@@ -1,6 +1,5 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import AboutBirthday from "./AboutBirthday";
 import BackButton from "./components/BackButton";
 import ContinueButton from "./components/ContinueButton";
 import ProgressBar from "./components/ProgressBar";
@@ -26,8 +25,7 @@ function AboutName() {
           </Text>
         </View>
         <View style={styles.ContinueButtonContainer}>
-          <ContinueButton
-          />
+          <ContinueButton />
         </View>
       </View>
     </View>
