@@ -1,30 +1,22 @@
-import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import LinearGradient from 'react-native-linear-gradient'
 import COLORS from "../../colors";
 
-
 export default function ProfileConfirm() {
-
   return (
-    <View style={{ flex: 1,  margin: 0, top: "40%" }}>
+    <View style={{ flex: 1, margin: 0, top: "40%" }}>
       {/* <LinearGradient
           colors={['red', 'yellow', 'green' ]}
           style={styles.linearGradient}
         > */}
-          <View style={{ alignItems: "center", width: "100%" }}>
-              <Text style={styles.welcomeHeader}>Welcome to Couplet</Text>
-              <Text style={styles.welcomeText}>Like 5 Events you want to go to</Text>
-              <TouchableOpacity
-                  onPress={()=>{}}
-                  disabled={false}
-                  style={styles.button}
-              >
-                  <Text style={styles.buttonText}>Let's Get Started</Text>
-              </TouchableOpacity>
-          </View>
-        {/* </LinearGradient> */}
+      <View style={{ alignItems: "center", width: "100%" }}>
+        <Text style={styles.welcomeHeader}>Welcome to Couplet</Text>
+        <Text style={styles.welcomeText}>Like 5 Events you want to go to</Text>
+        <TouchableOpacity onPress={() => {}} disabled={false} style={styles.button}>
+          <Text style={styles.buttonText}>Let's Get Started</Text>
+        </TouchableOpacity>
+      </View>
+      {/* </LinearGradient> */}
     </View>
   );
 }
@@ -34,14 +26,14 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansBold",
     textAlign: "center",
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 10
   },
-  welcomeText:{
+  welcomeText: {
     fontFamily: "DMSansRegular",
     textAlign: "center",
     fontSize: 16,
-    marginBottom: 10,
-  }, 
+    marginBottom: 10
+  },
   button: {
     width: 330,
     height: 41,
@@ -61,7 +53,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     justifyContent: "center",
     alignItems: "center"
-
   },
   buttonText: {
     fontFamily: "DMSansMedium",
@@ -72,12 +63,12 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     width: 200,
     height: 21
-  }, 
+  },
   linearGradient: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 5,
     height: 200,
-    width: 350,
-  },
+    width: 350
+  }
 });
