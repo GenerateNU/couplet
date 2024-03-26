@@ -9,7 +9,7 @@ import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 const NOTIFICATION_TOGGLE = require("../../assets/notification-toggle.png");
 const NOTIFICATION_ICON = require("../../assets/notification-icon.png");
 
-export default function Profile() {
+export default function ProfileNotifications() {
   function goToNextPage() {
     console.log("Go to next page");
     router.push("Profile");
