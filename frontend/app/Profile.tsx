@@ -11,7 +11,7 @@ export default function Profile() {
       <UserDetails
         onPress={() => console.log("Edit Account Details")}
         profileImageSource={undefined}
-        name="Tiffany"
+        name="TiffanyA"
         editDetailsText="Edit Account Details"
         chevronColor=""
       />
