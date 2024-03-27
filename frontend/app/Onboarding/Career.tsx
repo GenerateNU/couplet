@@ -29,7 +29,7 @@ export default function Career() {
         <TopBar onBackPress={() => goBack()} text="Education and Career" selectedCount={2} />
       </View>
       <View>
-        <Image source={JOB} style={{ height: 250, width: 250 }} resizeMode="contain" />
+        <Image source={JOB} style={{ height: 200, width: 200 }} resizeMode="contain" />
         <OnboardingTitle text="My job is..." />
         <TextInput
           editable
