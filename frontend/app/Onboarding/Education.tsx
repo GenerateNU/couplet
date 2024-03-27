@@ -1,6 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  View
+} from "react-native";
 
 import { router } from "expo-router";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
@@ -22,37 +30,39 @@ export default function Education() {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={scaledStyles.container}
-    >
-      <View>
-        <TopBar
-          onBackPress={() => goBack()}
-          text="Education and Career"
-          selectedCount={2}
-          skipToRoute={nextRoute}
-        />
-      </View>
-      <View>
-        <Image source={SCHOOL} style={{ height: 200, width: 200 }} resizeMode="contain" />
-        <OnboardingTitle text="My school is..." />
-        <TextInput
-          editable
-          value={school}
-          onChangeText={setSchool}
-          style={scaledStyles.textInput}
-          placeholder="Name of School"
-        />
-      </View>
-      <View style={scaledStyles.ContinueButtonContainer}>
-        <ContinueButton
-          onPress={() => router.push(nextRoute)}
-          title="Continue"
-          isDisabled={school.length === 0}
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={{ height: "100%" }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={scaledStyles.container}
+      >
+        <View>
+          <TopBar
+            onBackPress={() => goBack()}
+            text="Education and Career"
+            selectedCount={2}
+            skipToRoute={nextRoute}
+          />
+        </View>
+        <View>
+          <Image source={SCHOOL} style={{ height: 200, width: 200 }} resizeMode="contain" />
+          <OnboardingTitle text="My school is..." />
+          <TextInput
+            editable
+            value={school}
+            onChangeText={setSchool}
+            style={scaledStyles.textInput}
+            placeholder="Name of School"
+          />
+        </View>
+        <View style={scaledStyles.ContinueButtonContainer}>
+          <ContinueButton
+            onPress={() => router.push(nextRoute)}
+            title="Continue"
+            isDisabled={school.length === 0}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 

@@ -1,6 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  View
+} from "react-native";
 
 import { router } from "expo-router";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
@@ -22,37 +30,39 @@ export default function Career() {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={scaledStyles.container}
-    >
-      <View>
-        <TopBar
-          onBackPress={() => goBack()}
-          text="Education and Career"
-          selectedCount={2}
-          skipToRoute={nextRoute}
-        />
-      </View>
-      <View>
-        <Image source={JOB} style={{ height: 200, width: 200 }} resizeMode="contain" />
-        <OnboardingTitle text="My job is..." />
-        <TextInput
-          editable
-          value={career}
-          onChangeText={setCareer}
-          style={scaledStyles.textInput}
-          placeholder="Job title"
-        />
-      </View>
-      <View style={scaledStyles.ContinueButtonContainer}>
-        <ContinueButton
-          onPress={() => router.push(nextRoute)}
-          title="Continue"
-          isDisabled={career.length === 0}
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={{ height: "100%" }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={scaledStyles.container}
+      >
+        <View>
+          <TopBar
+            onBackPress={() => goBack()}
+            text="Education and Career"
+            selectedCount={2}
+            skipToRoute={nextRoute}
+          />
+        </View>
+        <View>
+          <Image source={JOB} style={{ height: 200, width: 200 }} resizeMode="contain" />
+          <OnboardingTitle text="My job is..." />
+          <TextInput
+            editable
+            value={career}
+            onChangeText={setCareer}
+            style={scaledStyles.textInput}
+            placeholder="Job title"
+          />
+        </View>
+        <View style={scaledStyles.ContinueButtonContainer}>
+          <ContinueButton
+            onPress={() => router.push(nextRoute)}
+            title="Continue"
+            isDisabled={career.length === 0}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
