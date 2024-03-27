@@ -1,14 +1,30 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import { Icon } from "react-native-paper";
+import { useForm, useWatch } from "react-hook-form";
+import { Image, StyleSheet, Text, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import TopBar from "../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../scaleStyles";
 
 function AboutBirthday() {
+  
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: ""
+    }
+  });
+  const name = useWatch({
+    control,
+    name: "name",
+    defaultValue: ""
+  });
+  const onSubmit = (data: Object) => {
+    router.push("/AboutMe/AboutBirthday");
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.TopUiContainer}>
+    <View style={scaledStyles.container}>
+      <View style={scaledStyles.TopUiContainer}>
         <TopBar
           onBackPress={() => {
             router.back();
@@ -17,26 +33,23 @@ function AboutBirthday() {
           selectedCount={1}
         />
       </View>
-      <View style={styles.mainContainer}>
+      <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={require("../../assets/calendarBirthday.png")} />
-          <View>
-            <Text style={styles.headerContainer}>My birthday is...</Text>
+          <Text style={scaledStyles.headerContainer}>My birthday is...</Text>
+          <View style={scaledStyles.inputWrapper}></View>
+          <DropDownCalendar />
+          <View style={scaledStyles.helperContainer}>
+          <Text style={scaledStyles.textHelper}>You won't be able to change this</Text>
           </View>
-          <View style={styles.inputWrapper}>
-            <TextInput style={styles.inputContainer} placeholder="DD/MM/YYYY" />
-            <View style={styles.icon}>
-              <Icon source={require("../../assets/calendar.png")} size={15} />
-            </View>
-          </View>
-          <Text style={styles.textHelper}>You won't be able to change this</Text>
         </View>
-        <View style={styles.ContinueButtonContainer}>
+
+        <View style={scaledStyles.ContinueButtonContainer}>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={true}
             onPress={() => {
-              router.push("/AboutMe/AboutGender");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -49,7 +62,7 @@ export default AboutBirthday;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.3,
+    flex: 0.3
   },
   mainContainer: {
     flex: 1,
@@ -66,15 +79,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontFamily: "DMSansMedium"
   },
-  inputContainer: {
-    padding: 8
-  },
-  inputWrapper: {
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "grey",
-    marginBottom: 8
-  },
   textHelper: {
     fontSize: 12,
     fontWeight: "400",
@@ -85,12 +89,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  ContinueButtonContainer: {
-    marginBottom: 10
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
-    bottom: 10
+  helperContainer: {
+    marginTop : 16
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);

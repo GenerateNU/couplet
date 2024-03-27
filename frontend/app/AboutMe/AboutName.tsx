@@ -1,23 +1,28 @@
 import { router } from "expo-router";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch} from "react-hook-form";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 function AboutName() {
-  const isReady = false;
   const {
     control,
     handleSubmit,
-    formState: { errors }
   } = useForm({
     defaultValues: {
       name: ""
     }
   });
-  const onSubmit = (data: any) => console.log(data);
+  const name = useWatch({
+    control,
+    name: "name",
+    defaultValue: ""
+  })
+  const onSubmit = (data: Object) => { 
+    router.push("/AboutMe/AboutBirthday")
+  }
   return (
     <View style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -59,9 +64,9 @@ function AboutName() {
         <View style={scaledStyles.ContinueButtonContainer}>
           <ContinueButton
             title="Continue"
-            isDisabled={isReady}
+            isDisabled={!name}
             onPress={() => {
-              router.push("/AboutMe/AboutBirthday");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
