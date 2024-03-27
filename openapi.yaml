@@ -31,7 +31,7 @@ paths:
             default: 0
             example: 13
       responses:
-        '200':
+        "200":
           description: Successfully retrieved events
           content:
             application/json:
@@ -44,7 +44,7 @@ paths:
                           type: string
                           format: uuid
                           example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    - $ref: '#/components/schemas/Event'
+                    - $ref: "#/components/schemas/Event"
                     - required:
                         - id
                         - name
@@ -125,7 +125,7 @@ paths:
             format: uuid
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
-        '200':
+        "200":
           description: Successfully retrieved event
           content:
             application/json:
@@ -136,13 +136,13 @@ paths:
                         type: string
                         format: uuid
                         example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
+                  - $ref: "#/components/schemas/Event"
                   - required:
                       - id
                       - name
                       - bio
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       summary: Partially update an event by its ID
       parameters:
@@ -160,9 +160,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Event'
+              $ref: "#/components/schemas/Event"
       responses:
-        '200':
+        "200":
           description: Successfully updated event
           content:
             application/json:
@@ -173,15 +173,15 @@ paths:
                         type: string
                         format: uuid
                         example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
+                  - $ref: "#/components/schemas/Event"
                   - required:
                       - id
                       - name
                       - bio
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update an event by its ID if it exists, else create it
       parameters:
@@ -200,12 +200,12 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/Event'
+                - $ref: "#/components/schemas/Event"
                 - required:
                     - name
                     - bio
       responses:
-        '200':
+        "200":
           description: Successfully updated event
           content:
             application/json:
@@ -216,12 +216,12 @@ paths:
                         type: string
                         format: uuid
                         example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
+                  - $ref: "#/components/schemas/Event"
                   - required:
                       - id
                       - name
                       - bio
-        '201':
+        "201":
           description: Successfully created event
           content:
             application/json:
@@ -232,13 +232,13 @@ paths:
                         type: string
                         format: uuid
                         example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
+                  - $ref: "#/components/schemas/Event"
                   - required:
                       - id
                       - name
                       - bio
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /events/swipes:
     post:
       summary: Create a swipe between a user and an event
@@ -858,7 +858,14 @@ components:
           example: Internal server error
     Event:
       type: object
+      required:
+        - id
+        - name
       properties:
+        id:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
         name:
           type: string
           minLength: 1
@@ -976,4 +983,3 @@ components:
         liked:
           type: boolean
           example: true
-...

@@ -23,7 +23,7 @@ export default function SettingsCard({
     <TouchableOpacity>
       <View
         style={{
-          padding: 20,
+          padding: 15,
           width: "100%",
           alignSelf: "center",
           backgroundColor: "#ffffff",

@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React /* {useState} */ from "react";
 import { Image, Text, View } from "react-native";
 
@@ -8,13 +6,6 @@ const LIKE_IMAGE = require("../../assets/likes.png");
 export default function LikesScreen() {
   // Code for figuring out if they have any Likes
   // const [likes, setLikes] = useState([]);
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   return (
     <View style={{ flexDirection: "column", alignItems: "center" }}>
