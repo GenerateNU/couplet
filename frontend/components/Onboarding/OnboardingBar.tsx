@@ -1,6 +1,8 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import COLORS from "../../colors";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import COLORS from '../../colors';
+import scaleStyleSheet from '../../scaleStyles';
+import { scaleWidth } from '../../ratio';
 
 interface OnboardingBarProps {
   selectedCount: number;
@@ -8,14 +10,14 @@ interface OnboardingBarProps {
 
 function OnboardingBar({ selectedCount }: OnboardingBarProps) {
   return (
-    <View style={[styles.container, { justifyContent: "center" }]}>
-      <View style={{ flexDirection: "row", width: 346 }}>
-        {Array.from({ length: 5 }).map((_, index) => (
+    <View style={[scaledStyles.container, {justifyContent: 'center'}]}>
+      <View style={{ flexDirection: 'row', width: scaleWidth(346) }}>
+        {Array.from({ length: 4 }).map((_, index) => (
           <View
             style={[
-              styles.segment,
-              index === selectedCount - 1 ? styles.segmentSelected : styles.segmentUnselected,
-              { marginRight: index < 4 ? 8 : 0 }
+              scaledStyles.segment,
+              index === selectedCount - 1 ? scaledStyles.segmentSelected : scaledStyles.segmentUnselected,
+              { marginRight: index < 3 ? 8 : 0 }, 
             ]}
           />
         ))}
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   segment: {
-    width: 62.8,
+    width: 80.5,
     height: 3,
     borderRadius: 100
   },
@@ -42,5 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.disabled
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
 
 export default OnboardingBar;
