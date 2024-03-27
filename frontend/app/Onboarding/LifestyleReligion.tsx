@@ -1,9 +1,8 @@
-import { router } from 'expo-router';
+import { useNavigation, router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
-  ScrollView,
   View
 } from 'react-native';
 import ContinueButton from '../../components/Onboarding/ContinueButton';
@@ -15,6 +14,7 @@ import scaleStyleSheet from '../../scaleStyles';
 const RELIGION_IMAGE = require('../../assets/OnboardingReligion.png');
 
 export default function LifestyleReligion() {
+    const navigation = useNavigation();
   const [religion, setReligion] = useState<string | null>(null);
   const listOfReligions = [
     'Christianity', 
@@ -41,74 +41,58 @@ export default function LifestyleReligion() {
     return religion !== null;
   }
 
-  const onContinue = () => {
-    router.push('Onboarding/LifestylePolitics');
-  };
+  function goBack() {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  }
 
   return (
-    <ScrollView contentContainerStyle={scaledStyles.scrollContainer}>
-        <View style={scaledStyles.container}>
-            <View>
-                <TopBar onBackPress={() => router.back()} text='Lifestyle' selectedCount={3} />
-            </View>
-            <View style={scaledStyles.contentContainer}>
-                <Image source={RELIGION_IMAGE} />
-                <OnboardingTitle text='I believe in...' />
-                <View style={scaledStyles.buttonContainer}>
-                {listOfReligions.map((option, index) => 
-                    <OnboardingPillButton
-                    key={index}
-                    label={option}
-                    onPress={() => handlePillPress(option)}
-                    isSelected={religion === option}
-                    />
-                )}
-                </View>
-            </View>
-            <View style={scaledStyles.continueContainer}>
-                <ContinueButton
-                title='Continue'
-                isDisabled={!isContinueButtonEnabled()}
-                onPress={onContinue}
-                />
+    <View style={scaledStyles.container}>
+        <View>
+            <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
+        </View>
+        <View>
+            <Image source={RELIGION_IMAGE} />
+            <OnboardingTitle text='I believe in...' />
+            <View style={scaledStyles.buttonContainer}>
+            {listOfReligions.map((option, index) => 
+                <OnboardingPillButton
+                key={index}
+                label={option}
+                onPress={() => handlePillPress(option)}
+                isSelected={religion === option}
+            />
+            )}
             </View>
         </View>
-    </ScrollView>
+        <View style={scaledStyles.ContinueButtonContainer}>
+        <ContinueButton
+          onPress={() => router.push("Onboarding/LifestylePolitics")}
+          title={"Continue"}
+          isDisabled={!isContinueButtonEnabled()}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  contentContainer: {
-    paddingTop: 100,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    marginTop: 20,
-  },
-  continueContainer: {
-    display: 'flex',
-    width: '100%',
-    height: 41,
-    paddingTop: 10,
-    paddingRight: 130,
-    marginBottom: 30,
-    paddingLeft: 130,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-    flexShrink: 0,
-  },
+    buttonContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        marginTop: 20,
+      },
+    container: {
+      flex: 1,
+      justifyContent: "space-between",
+      alignItems: "center",
+      margin: 30
+    },
+    ContinueButtonContainer: {
+        marginTop: 10,
+    }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

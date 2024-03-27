@@ -8,7 +8,7 @@ type Props = {
 };
 
 function OnboardingSmallTitle({text}: Props) {
-    return <Text style={styles.smallHeadingContainer}>{text}</Text>;
+    return <Text style={scaledStyles.smallHeadingContainer}>{text}</Text>;
 };
 
 const styles = StyleSheet.create({

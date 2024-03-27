@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Image,
@@ -17,6 +17,7 @@ import OnboardingSmallTitle from '../../components/Onboarding/OnboardingSmallTit
 const HABITS_IMAGE = require("../../assets/OnboardingHabits.png");
 
 export default function LifestyleHabits() {
+  const navigation = useNavigation();
   const [drink, setDrink] = useState<string | null>(null);
   const [smoke, setSmoke] = useState<string | null>(null);
   const [weed, setWeed] = useState<string | null>(null);
@@ -70,91 +71,85 @@ export default function LifestyleHabits() {
     return drink !== null && smoke !== null && weed !== null && drugs !== null;
   }
 
-  const onContinue = () => {
-    router.push('Onboarding/LifestylePassions');
-  };
+  function goBack() {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  }
 
   return (
-    <ScrollView contentContainerStyle={scaledStyles.scrollContainer}>
-        <View style={scaledStyles.container}>
-            <View>
-                <TopBar onBackPress={() => router.back()} text='Lifestyle' selectedCount={3} />
-            </View>
-            <View style={scaledStyles.contentContainer}>
-                <Image source={HABITS_IMAGE} />
-                <OnboardingTitle text='What are your habits?' />
-                <OnboardingSmallTitle text='Do you drink?' />
-                <View style={scaledStyles.buttonContainer}>
-                {listOfChoices.map((option, index) => 
-                    <OnboardingPillButton
-                    key={index}
-                    label={option}
-                    onPress={() => handleDrinkChoice(option)}
-                    isSelected={drink === option}
-                    />
-                )}
-                </View>
-                <View style={scaledStyles.separator} />
-                <OnboardingSmallTitle text='Do you smoke?' />
-                <View style={scaledStyles.buttonContainer}>
-                {listOfChoices.map((option, index) => 
-                    <OnboardingPillButton
-                    key={index}
-                    label={option}
-                    onPress={() => handleSmokeChoice(option)}
-                    isSelected={smoke === option}
-                    />
-                )}
-                </View>
-                <View style={scaledStyles.separator} />
-                <OnboardingSmallTitle text='Do you smoke weed?' />
-                <View style={scaledStyles.buttonContainer}>
-                {listOfChoices.map((option, index) => 
-                    <OnboardingPillButton
-                    key={index}
-                    label={option}
-                    onPress={() => handleWeedChoice(option)}
-                    isSelected={weed === option}
-                    />
-                )}
-                </View>
-                <View style={scaledStyles.separator} />
-                <OnboardingSmallTitle text='Do you do drugs?' />
-                <View style={scaledStyles.buttonContainer}>
-                {drugList.map((option, index) => 
-                    <OnboardingPillButton
-                    key={index}
-                    label={option}
-                    onPress={() => handleDrugsChoice(option)}
-                    isSelected={drugs === option}
-                    />
-                )}
-                </View>
-            </View>
-            <View style={scaledStyles.continueContainer}>
-                <ContinueButton
-                title='Continue'
-                isDisabled={!isContinueButtonEnabled()}
-                onPress={onContinue}
-                />
-            </View>
+    <ScrollView contentContainerStyle={scaledStyles.container}>
+      <View>
+        <TopBar onBackPress={() => router.back()} text='Lifestyle' selectedCount={3} />
+      </View>
+      <View>
+        <Image source={HABITS_IMAGE} />
+        <OnboardingTitle text='What are your habits?' />
+        <OnboardingSmallTitle text='Do you drink?' />
+        <View style={scaledStyles.buttonContainer}>
+        {listOfChoices.map((option, index) => 
+            <OnboardingPillButton
+            key={index}
+            label={option}
+            onPress={() => handleDrinkChoice(option)}
+            isSelected={drink === option}
+            />
+        )}
         </View>
+        <View style={scaledStyles.separator} />
+        <OnboardingSmallTitle text='Do you smoke?' />
+        <View style={scaledStyles.buttonContainer}>
+        {listOfChoices.map((option, index) => 
+            <OnboardingPillButton
+            key={index}
+            label={option}
+            onPress={() => handleSmokeChoice(option)}
+            isSelected={smoke === option}
+            />
+        )}
+        </View>
+        <View style={scaledStyles.separator} />
+        <OnboardingSmallTitle text='Do you smoke weed?' />
+        <View style={scaledStyles.buttonContainer}>
+        {listOfChoices.map((option, index) => 
+            <OnboardingPillButton
+            key={index}
+            label={option}
+            onPress={() => handleWeedChoice(option)}
+            isSelected={weed === option}
+            />
+        )}
+        </View>
+        <View style={scaledStyles.separator} />
+        <OnboardingSmallTitle text='Do you do drugs?' />
+        <View style={scaledStyles.buttonContainer}>
+        {drugList.map((option, index) => 
+            <OnboardingPillButton
+            key={index}
+            label={option}
+            onPress={() => handleDrugsChoice(option)}
+            isSelected={drugs === option}
+            />
+        )}
+        </View>
+      </View>
+      <View style={scaledStyles.ContinueButtonContainer}>
+        <ContinueButton
+          onPress={() => router.push("Onboarding/LifestylePassions")}
+          title={"Continue"}
+          isDisabled={!isContinueButtonEnabled()}
+        />
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-  },
   container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  contentContainer: {
-    paddingTop: 100,
-    paddingLeft: 10,
-    paddingRight: 10,
+    flexgrow: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: 30
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -162,17 +157,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginTop: 20,
   },
-  continueContainer: {
-    display: 'flex',
-    width: '100%',
-    height: 41,
-    paddingTop: 30,
-    paddingRight: 130,
-    marginBottom: 30,
-    paddingLeft: 130,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
+  ContinueButtonContainer: {
+    marginTop: 20,
+    marginBottom: 50,
   },
   separator: {
     borderBottomColor: COLORS.lightGray, 

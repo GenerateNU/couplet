@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Image,
@@ -13,9 +13,11 @@ import OnboardingPillButton from '../../components/Onboarding/OnboardingPillButt
 import scaleStyleSheet from '../../scaleStyles';
 import OnboardingSmallTitle from '../../components/Onboarding/OnboardingSmallTitle';
 
+
 const PASSIONS_IMAGE = require("../../assets/OnboardingPassions.png");
 
 export default function LifestylePassions() {
+    const navigation = useNavigation();
     const [interests, setInterests] = useState<string[]>([]);
     const listOfPassions = [
       'Acting', 
@@ -78,18 +80,23 @@ export default function LifestylePassions() {
     const onContinue = () => {
       router.push('Onboarding/ProfileBio');
     };
+
+    function goBack() {
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        }
+      }
   
     return (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.container}>
+      <ScrollView contentContainerStyle={scaledStyles.container}>
+          <View>
+            <TopBar onBackPress={() => goBack()} text='Lifestyle' selectedCount={3} />
+        </View>
               <View>
-                  <TopBar onBackPress={() => router.back()} text='Lifestyle' selectedCount={3} />
-              </View>
-              <View style={styles.contentContainer}>
-                  <Image source={PASSIONS_IMAGE} style={styles.imageContainer}/>
+                  <Image source={PASSIONS_IMAGE}/>
                   <OnboardingTitle text='What are you passionate about?' />
                   <OnboardingSmallTitle text='Select your top five interests!'/>
-                  <View style={styles.buttonContainer}>
+                  <View style={scaledStyles.buttonContainer}>
                   {listOfPassions.map((option, index) => 
                       <OnboardingPillButton
                       key={index}
@@ -100,35 +107,23 @@ export default function LifestylePassions() {
                   )}
                   </View>
               </View>
-              <View style={styles.continueContainer}>
+              <View style={scaledStyles.ContinueButtonContainer}>
                   <ContinueButton
                   title={(interests.length === 0 || interests.length == 5) ? 'Continue' : 'Continue ' + interests.length + '/5'}
                   isDisabled={!isContinueButtonEnabled()}
-                  onPress={onContinue}
+                  onPress={() => router.push("Onboarding/ProfileBio")}
                   />
               </View>
-          </View>
       </ScrollView>
     );
   }
   
   const styles = StyleSheet.create({
-    scrollContainer: {
-      flexGrow: 1,
-    },
     container: {
-      flex: 1,
-      justifyContent: 'space-between',
-    },
-    contentContainer: {
-      paddingTop: 100,
-      paddingLeft: 10,
-      paddingRight: 10,
-    },
-    imageContainer: {
-      width: 200,
-      height: 200,
-      flexShrink: 0,
+        flexgrow: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        margin: 30
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -136,19 +131,10 @@ export default function LifestylePassions() {
       alignItems: 'flex-start',
       marginTop: 20,
     },
-    continueContainer: {
-      display: 'flex',
-      width: '100%',
-      height: 41,
-      paddingTop: 10,
-      paddingRight: 130,
-      marginBottom: 30,
-      paddingLeft: 130,
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: 10,
-      flexShrink: 0,
-    },
+    ContinueButtonContainer: {
+        marginTop: 10,
+        marginBottom: 50,
+      },
   });
   
   const scaledStyles = scaleStyleSheet(styles);

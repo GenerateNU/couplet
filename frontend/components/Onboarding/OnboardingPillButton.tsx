@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import COLORS from '../../colors';
+import scaleStyleSheet from '../../scaleStyles';
 
 interface OnboardPillButtonProps {
   label: string;
@@ -20,10 +21,10 @@ const OnboardingPillButton: React.FC<OnboardPillButtonProps> = ({ label, onPress
 
   return (
     <TouchableOpacity
-      style={[styles.pillButton, isSelected && styles.selected]}
+      style={[scaledStyles.pillButton, isSelected && scaledStyles.selected]}
       onPress={handlePress}
     >
-      <Text style={styles.buttonText}>{label}</Text>
+      <Text style={scaledStyles.buttonText}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -47,3 +48,5 @@ const styles = StyleSheet.create({
 });
 
 export default OnboardingPillButton;
+
+const scaledStyles = scaleStyleSheet(styles);
