@@ -2,7 +2,6 @@
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.2.3",
     "@expo/webpack-config": "^19.0.0",
-    "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.17",
     "expo": "~49.0.15",
