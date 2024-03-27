@@ -2,6 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import COLORS from "../colors";
 
 const ADD_BUTTON = require("../assets/addbutton.png");
 
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     top: 0,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#CDCDCD",
+    borderColor: COLORS.darkGray,
     margin: 5
   },
   emptyBox: {

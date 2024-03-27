@@ -1,10 +1,20 @@
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
-import { Image, Keyboard, StyleSheet, TextInput, View } from "react-native";
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInput,
+  View
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import COLORS from "../../colors";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../scaleStyles";
 
 const BIO_IMAGE = require("../../assets/profilebio.png");
 
@@ -19,7 +29,7 @@ export default function ProfileBio() {
     { label: "One thing you should know about me", value: 4 }
   ]);
   const [response, setResponse] = useState<string>("");
-  const [inputStyle, setInputStyle] = useState(styles.unfocusedResponse);
+  const [inputStyle, setInputStyle] = useState(scaledStyles.unfocusedResponse);
   const inputRef = useRef(null);
 
   const onContinue = () => {
@@ -28,7 +38,10 @@ export default function ProfileBio() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={scaledStyles.container}
+    >
       <View>
         <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
       </View>
@@ -36,7 +49,7 @@ export default function ProfileBio() {
         <Image source={BIO_IMAGE} />
         <OnboardingTitle text="What's your bio?" />
         <DropDownPicker
-          style={prompt !== null ? styles.chosenPrompt : styles.unchosenPrompt}
+          style={scaledStyles.promptBox}
           placeholder="Select a prompt"
           open={open}
           value={prompt}
@@ -47,8 +60,8 @@ export default function ProfileBio() {
         />
         <TextInput
           ref={inputRef}
-          onFocus={() => setInputStyle(styles.focusedResponse)}
-          onBlur={() => setInputStyle(styles.unfocusedResponse)}
+          onFocus={() => setInputStyle(scaledStyles.focusedResponse)}
+          onBlur={() => setInputStyle(scaledStyles.unfocusedResponse)}
           onSubmitEditing={() => Keyboard.dismiss()}
           style={inputStyle}
           onChangeText={setResponse}
@@ -64,7 +77,7 @@ export default function ProfileBio() {
           onPress={onContinue}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -75,11 +88,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 30
   },
-  chosenPrompt: {
-    marginBottom: 10
-  },
-  unchosenPrompt: {
-    marginBottom: 10
+  promptBox: {
+    marginBottom: 10,
+    borderRadius: 10
   },
   focusedResponse: {
     padding: 10,
@@ -90,7 +101,9 @@ const styles = StyleSheet.create({
   unfocusedResponse: {
     padding: 10,
     borderWidth: 1,
-    borderColor: "#CDCDCD",
+    borderColor: COLORS.darkGray,
     borderRadius: 10
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);

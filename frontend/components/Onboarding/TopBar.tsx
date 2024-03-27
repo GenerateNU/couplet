@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import BackButton from './BackButton'; 
-import OnboardingBar from './OnboardingBar'; 
-import COLORS from '../../colors'; 
-import scaleStyleSheet from '../../scaleStyles';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
+import BackButton from "./BackButton";
+import OnboardingBar from "./OnboardingBar";
 
 type TopBarProps = {
   onBackPress: () => void;
@@ -40,9 +40,9 @@ const styles = StyleSheet.create({
     height: 18,
     fontFamily: "DMSansMedium",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     lineHeight: 18.23,
-    textAlign: 'center',
+    textAlign: "center",
     color: COLORS.darkGray,
     marginBottom: 2
   }

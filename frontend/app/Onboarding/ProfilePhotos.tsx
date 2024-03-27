@@ -5,6 +5,7 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import PhotoPicker from "../../components/PhotoPicker";
+import scaleStyleSheet from "../../scaleStyles";
 
 const CAMERA_IMAGE = require("../../assets/profilecamera.png");
 
@@ -17,7 +18,7 @@ export default function ProfilePhotos() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={scaledStyles.container}>
       <View>
         <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
       </View>
@@ -41,3 +42,5 @@ const styles = StyleSheet.create({
     margin: 30
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);

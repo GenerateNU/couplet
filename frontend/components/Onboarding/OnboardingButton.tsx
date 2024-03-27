@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import COLORS from '../../colors';
-import scaleStyleSheet from '../../scaleStyles';
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
 interface ButtonProps {
   title: string;
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     lineHeight: 15.62,
-    textAlign: 'center',
+    textAlign: "center",
     paddingHorizontal: 8
   },
   button: {
