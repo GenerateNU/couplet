@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Text,
   TextInput,
   View
 } from "react-native";
@@ -63,17 +64,21 @@ export default function ProfileBio() {
           onFocus={() => setInputStyle(scaledStyles.focusedResponse)}
           onBlur={() => setInputStyle(scaledStyles.unfocusedResponse)}
           onSubmitEditing={() => Keyboard.dismiss()}
+          blurOnSubmit
+          multiline
+          maxLength={250}
           style={inputStyle}
           onChangeText={setResponse}
           value={response}
           placeholder="Your response here"
         />
+        <Text style={scaledStyles.charCount}>{response.length}/250</Text>
       </View>
       <View />
       <View>
         <ContinueButton
           title="Continue"
-          isDisabled={!(prompt !== null && response !== "")}
+          isDisabled={prompt === null && response === ""}
           onPress={onContinue}
         />
       </View>
@@ -87,6 +92,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     margin: 30
+  },
+  charCount: {
+    textAlign: "right"
   },
   promptBox: {
     marginBottom: 10,
