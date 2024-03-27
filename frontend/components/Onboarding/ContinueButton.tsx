@@ -60,9 +60,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     lineHeight: 21,
-    textAlign: "left",
+    textAlign: "center",
     color: COLORS.white,
-    width: 70,
+    width: 100,
     height: 21
   }
 });
