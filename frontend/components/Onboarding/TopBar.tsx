@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import BackButton from "./BackButton";
+import OnboardingBar from "./OnboardingBar";
 
 type TopBarProps = {
   onBackPress: () => void;
