@@ -35,12 +35,6 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>&lt;FROM DEVELOPER CONSOLE&gt;</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
 				<string>com.anonymous.couplet</string>
 			</array>
 		</dict>
@@ -64,6 +58,7 @@
 	</dict>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
 	</array>

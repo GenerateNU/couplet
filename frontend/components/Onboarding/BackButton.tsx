@@ -5,16 +5,16 @@ import COLORS from '../../colors';
 import scaleStyleSheet from '../../scaleStyles';
 
 type BackButtonProps = {
-  onPress: () => void; 
+  onPress: () => void;
 };
 
 function BackButton({onPress}: BackButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} style={scaledStyles.button}>
       <Icon
-        name="leftcircle" 
-        size={24} 
-        color={COLORS.primary} 
+        name="leftcircle"
+        size={24}
+        color={COLORS.primary}
       />
     </TouchableOpacity>
   );
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
-    backgroundColor: COLORS.white, 
+    backgroundColor: COLORS.white,
     shadowOffset: {
       width: 0,
       height: 2,

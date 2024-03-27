@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
-import { scaleWidth, scaleHeight } from "./ratio"; 
+import { scaleWidth, scaleHeight } from "./ratio";
 
 type StyleObject = {
-  [key: string]: any; 
+  [key: string]: any;
 };
 
 export default function scaleStyleSheet(rawStyles: { [key: string]: StyleObject }): any {
@@ -10,7 +10,7 @@ export default function scaleStyleSheet(rawStyles: { [key: string]: StyleObject 
     const style = rawStyles[key];
     const scaledStyle = Object.keys(style).reduce((accStyle: StyleObject, styleProp: string) => {
       const value = style[styleProp];
-      const newAccStyle = { ...accStyle }; 
+      const newAccStyle = { ...accStyle };
 
       const widthProperties = ['width', 'paddingHorizontal', 'marginHorizontal', 'left', 'right'];
       const heightProperties = ['height', 'paddingVertical', 'marginVertical', 'top', 'bottom', 'fontSize', 'lineHeight'];

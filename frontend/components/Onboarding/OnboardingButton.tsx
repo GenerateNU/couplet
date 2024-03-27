@@ -5,14 +5,14 @@ import scaleStyleSheet from '../../scaleStyles';
 
 interface ButtonProps {
   title: string;
-  onButtonClick: () => void; 
+  onButtonClick: () => void;
 }
 
 function OnboardingButton({title, onButtonClick}: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    onButtonClick(); 
+    onButtonClick();
     setIsPressed(!isPressed);
   };
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     left: 236,
   },
   text: {
-    fontFamily: 'DMSansMedium', 
+    fontFamily: 'DMSansMedium',
     fontSize: 12,
     fontWeight: 'bold',
     lineHeight: 15.62,

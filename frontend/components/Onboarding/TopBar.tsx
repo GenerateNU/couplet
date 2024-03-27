@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import BackButton from './BackButton'; 
-import OnboardingBar from './OnboardingBar'; 
-import COLORS from '../../colors'; 
+import BackButton from './BackButton';
+import OnboardingBar from './OnboardingBar';
+import COLORS from '../../colors';
 import scaleStyleSheet from '../../scaleStyles';
 
 type TopBarProps = {
@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
     top: 68,
     left: 24,
     position: 'absolute',
-    flexDirection: 'column', 
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
   textBarContainer: {
     paddingTop: 8,
-    width: 346, 
-    height: 21, 
+    width: 346,
+    height: 21,
     justifyContent: 'flex-end',
   },
   informationText: {

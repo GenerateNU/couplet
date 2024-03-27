@@ -19,15 +19,15 @@ function OnboardingTitle({text}: Props) {
 
 const styles = StyleSheet.create({
   centeringContainer: {
-    alignItems: "center", 
-    width: "100%" 
+    alignItems: "center",
+    width: "100%"
   },
   container: {
     width: 346,
     height: 61,
-    justifyContent: "center", 
-    alignItems: "flex-start", 
-    opacity: 1 
+    justifyContent: "center",
+    alignItems: "flex-start",
+    opacity: 1
   },
   text: {
     fontFamily: "DMSansBold",

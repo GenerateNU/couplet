@@ -18,7 +18,7 @@ function OnboardingBar({selectedCount}: OnboardingBarProps) {
             style={[
               scaledStyles.segment,
               index === selectedCount - 1 ? scaledStyles.segmentSelected : scaledStyles.segmentUnselected,
-              { marginRight: index < 3 ? 8 : 0 }, 
+              { marginRight: index < 3 ? 8 : 0 },
             ]}
           />
         ))}
@@ -29,8 +29,8 @@ function OnboardingBar({selectedCount}: OnboardingBarProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%', 
-    height: 21, 
+    width: '100%',
+    height: 21,
     alignItems: 'center',
   },
   segment: {
