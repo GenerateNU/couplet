@@ -20,8 +20,6 @@ export default function Layout() {
   }
 
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      <Slot />
-    </SafeAreaView>
+    <Slot />
   );
 }
