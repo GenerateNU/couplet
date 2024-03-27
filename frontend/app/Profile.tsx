@@ -8,7 +8,7 @@ import UserDetails from "./UserDetails";
 
 export default function Profile() {
   return (
-    <View style={{ flex: 1, gap: 10 }}>
+    <View style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
         <UserDetails
           onPress={() => console.log("Edit Account Details")}

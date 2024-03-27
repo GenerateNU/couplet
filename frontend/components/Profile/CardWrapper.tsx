@@ -4,7 +4,7 @@ export default function CardWrapper({ children }: { children: React.ReactNode })
   return (
     <View
       style={{
-        padding: 15,
+        padding: 5,
         borderRadius: 20,
         width: "90%",
         alignSelf: "center",
