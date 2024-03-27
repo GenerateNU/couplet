@@ -13,6 +13,7 @@ const JOB = require("../../assets/job.png");
 export default function Career() {
   const [career, setCareer] = useState("");
   const navigation = useNavigation();
+  const nextRoute = "Onboarding/LifestyleReligion";
 
   function goBack() {
     if (navigation.canGoBack()) {
@@ -26,7 +27,12 @@ export default function Career() {
       style={scaledStyles.container}
     >
       <View>
-        <TopBar onBackPress={() => goBack()} text="Education and Career" selectedCount={2} />
+        <TopBar
+          onBackPress={() => goBack()}
+          text="Education and Career"
+          selectedCount={2}
+          skipToRoute={nextRoute}
+        />
       </View>
       <View>
         <Image source={JOB} style={{ height: 200, width: 200 }} resizeMode="contain" />
@@ -41,9 +47,9 @@ export default function Career() {
       </View>
       <View style={scaledStyles.ContinueButtonContainer}>
         <ContinueButton
-          onPress={() => router.push("Onboarding/LifestyleReligion")}
+          onPress={() => router.push(nextRoute)}
           title="Continue"
-          isDisabled={false}
+          isDisabled={career.length === 0}
         />
       </View>
     </KeyboardAvoidingView>

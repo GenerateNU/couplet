@@ -8,11 +8,12 @@ import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
-const SCHOOL = require("../../assets/school.png");
+const SCHOOL = require("../../assets/lightbulb.png");
 
 export default function Education() {
   const [school, setSchool] = useState("");
   const navigation = useNavigation();
+  const nextRoute = "Onboarding/Career";
 
   function goBack() {
     if (navigation.canGoBack()) {
@@ -26,7 +27,12 @@ export default function Education() {
       style={scaledStyles.container}
     >
       <View>
-        <TopBar onBackPress={() => goBack()} text="Education and Career" selectedCount={2} />
+        <TopBar
+          onBackPress={() => goBack()}
+          text="Education and Career"
+          selectedCount={2}
+          skipToRoute={nextRoute}
+        />
       </View>
       <View>
         <Image source={SCHOOL} style={{ height: 200, width: 200 }} resizeMode="contain" />
@@ -41,9 +47,9 @@ export default function Education() {
       </View>
       <View style={scaledStyles.ContinueButtonContainer}>
         <ContinueButton
-          onPress={() => router.push("Onboarding/Career")}
+          onPress={() => router.push(nextRoute)}
           title="Continue"
-          isDisabled={false}
+          isDisabled={school.length === 0}
         />
       </View>
     </KeyboardAvoidingView>
