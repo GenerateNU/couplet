@@ -3,15 +3,35 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import COLORS from '../../colors';
 import scaleStyleSheet from '../../scaleStyles';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import Config from 'react-native-config';
+
+GoogleSignin.configure({
+  scopes: ['https://www.googleapis.com/auth/drive.readonly'], 
+  webClientId: Config.GOOGLE_WEB_CLIENT_ID,
+  iosClientId: Config.IOS_CLIENT_ID,  
+});
+
 
 export default function Login() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
-  async function handleAppleSignIn() {
-    console.log("HEY");
+  async function handleGoogleSignIn() {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      setIsGoogleLoggedIn(true);
+      console.log("HEY")
+    } catch (error) {
+      console.error(error);
+      setIsGoogleLoggedIn(false);
+    }
+  }
+  
 
+  async function handleAppleSignIn() {
     try {
       await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -47,7 +67,7 @@ export default function Login() {
             <Image source={require('./AppleLogo.png')} style={scaledStyles.appleLogo} />
             <Text style={scaledStyles.buttonText}>Sign up with Apple</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={scaledStyles.button}>
+          <TouchableOpacity style={scaledStyles.button}  onPress={handleGoogleSignIn}>
           <Image source={require('./GoogleLogo.png')} style={scaledStyles.googleLogo} />
             <Text style={scaledStyles.buttonText}>Sign up with Google</Text>
           </TouchableOpacity>
