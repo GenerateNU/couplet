@@ -3,7 +3,6 @@ package controller
 import (
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -107,8 +106,6 @@ func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 
 // Updates a user in the database
 func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
-	fmt.Println("TEST")
-
 	// TODO: Write tests
 	u = params
 	valErr = u.Validate()

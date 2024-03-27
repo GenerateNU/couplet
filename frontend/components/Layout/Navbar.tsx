@@ -20,7 +20,7 @@ export default function Navbar() {
       <NavButton route="Home" icon={HOME} />
       <NavButton route="Favorites" icon={HEART} />
       <NavButton route="Matches" icon={CHAT} />
-      <NavButton route="Onboarding/ProfileBio" icon={PERSON} />
+      <NavButton route="Profile" icon={PERSON} />
     </View>
   );
 }
