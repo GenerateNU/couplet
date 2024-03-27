@@ -98,49 +98,6 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
     // });
   };
   return (
-    <ScrollView>
-      <Text>PhotoPicker</Text>
-      <TouchableOpacity
-        onPress={openPicker}
-        style={{
-          width: 300,
-          height: 100,
-          backgroundColor: "white",
-          justifyContent: "center",
-          borderRadius: 10,
-          borderStyle: "solid",
-          borderWidth: 1
-        }}
-      >
-        <Text
-          style={{
-            color: "black",
-            fontSize: 24,
-            textAlign: "center"
-          }}
-        >
-          upload !!!!!!!
-        </Text>
-      </TouchableOpacity>
-
-      <Text>Image:</Text>
-      <View>
-        {images.map((img) => (
-          <Image key={img} source={{ uri: img }} style={{ width: 300, height: 300 }} />
-        ))}
-      </View>
-    </ScrollView>
-  );
-}
-
-    if (typeof passedImages !== "object") return;
-    if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
-
-    setImages(passedImages.map((img) => img.uri));
-    onPick(passedImages.map((img) => img.uri));
-  };
-
-  return (
     <View>
       <TouchableOpacity onPress={openPicker} style={styles.pressableContainer}>
         <View style={styles.pickerContainer}>

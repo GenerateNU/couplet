@@ -47,7 +47,7 @@ export default function SettingsCard({
             alignSelf: "center",
             padding: 10,
             fontFamily: "DMSansRegular",
-            fontWeight: 800,
+            fontWeight: "800",
             fontSize: 16
           }}
         >

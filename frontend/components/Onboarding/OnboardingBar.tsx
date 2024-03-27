@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
 
 const scaledStyles = scaleStyleSheet(styles);
 
-export default OnboardingTitle;
+export default OnboardingBar;
