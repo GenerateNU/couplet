@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   textsView: {
     width: 346,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 8,
   },
   headerText: {
@@ -145,15 +145,16 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     fontFamily: 'DMSansBold',
     color: COLORS.white,
-    textAlign: 'left',
+    alignItems: 'center',
+    textAlign: 'center',
   },
   bodyText: {
-    width: 311,
+    width: 330,
     fontSize: 15,
     lineHeight: 19.53,
     fontFamily: 'DMSansRegular',
     color: COLORS.white,
-    textAlign: 'left',
+    textAlign: 'center',
   },
   buttonsView: {
     width: 346,
