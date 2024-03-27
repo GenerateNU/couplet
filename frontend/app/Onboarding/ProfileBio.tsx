@@ -5,6 +5,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -39,50 +40,52 @@ export default function ProfileBio() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={scaledStyles.container}
-    >
-      <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
-      </View>
-      <View>
-        <Image source={BIO_IMAGE} />
-        <OnboardingTitle text="What's your bio?" />
-        <DropDownPicker
-          style={scaledStyles.promptBox}
-          placeholder="Select a prompt"
-          open={open}
-          value={prompt}
-          items={options}
-          setOpen={setOpen}
-          setValue={setPrompt}
-          setItems={setOptions}
-        />
-        <TextInput
-          ref={inputRef}
-          onFocus={() => setInputStyle(scaledStyles.focusedResponse)}
-          onBlur={() => setInputStyle(scaledStyles.unfocusedResponse)}
-          onSubmitEditing={() => Keyboard.dismiss()}
-          blurOnSubmit
-          multiline
-          maxLength={250}
-          style={inputStyle}
-          onChangeText={setResponse}
-          value={response}
-          placeholder="Your response here"
-        />
-        <Text style={scaledStyles.charCount}>{response.length}/250</Text>
-      </View>
-      <View />
-      <View>
-        <ContinueButton
-          title="Continue"
-          isDisabled={prompt === null && response === ""}
-          onPress={onContinue}
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={{ height: "100%" }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={scaledStyles.container}
+      >
+        <View>
+          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
+        </View>
+        <View>
+          <Image source={BIO_IMAGE} />
+          <OnboardingTitle text="What's your bio?" />
+          <DropDownPicker
+            style={scaledStyles.promptBox}
+            placeholder="Select a prompt"
+            open={open}
+            value={prompt}
+            items={options}
+            setOpen={setOpen}
+            setValue={setPrompt}
+            setItems={setOptions}
+          />
+          <TextInput
+            ref={inputRef}
+            onFocus={() => setInputStyle(scaledStyles.focusedResponse)}
+            onBlur={() => setInputStyle(scaledStyles.unfocusedResponse)}
+            onSubmitEditing={() => Keyboard.dismiss()}
+            blurOnSubmit
+            multiline
+            maxLength={250}
+            style={inputStyle}
+            onChangeText={setResponse}
+            value={response}
+            placeholder="Your response here"
+          />
+          <Text style={scaledStyles.charCount}>{response.length}/250</Text>
+        </View>
+        <View />
+        <View>
+          <ContinueButton
+            title="Continue"
+            isDisabled={prompt === null || response === ""}
+            onPress={onContinue}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
