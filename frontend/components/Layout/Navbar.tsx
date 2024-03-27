@@ -17,7 +17,7 @@ export default function Navbar() {
         bottom: 0
       }}
     >
-      <NavButton route="Onboarding/ProfileBio" icon={HOME} />
+      <NavButton route="Home" icon={HOME} />
       <NavButton route="Favorites" icon={HEART} />
       <NavButton route="Matches" icon={CHAT} />
       <NavButton route="Profile" icon={PERSON} />
