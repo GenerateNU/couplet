@@ -1,33 +1,44 @@
+import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { Icon } from "react-native-paper";
-import BackButton from "./components/BackButton";
-import ContinueButton from "./components/ContinueButton";
-import ProgressBar from "./components/ProgressBar";
+import ContinueButton from "../../components/Onboarding/ContinueButton";
+import TopBar from "../../components/Onboarding/TopBar";
 
 function AboutBirthday() {
   return (
     <View style={styles.container}>
+      <View style={styles.TopUiContainer}>
+        <TopBar
+          onBackPress={() => {
+            router.back();
+          }}
+          text="About Me"
+          selectedCount={1}
+        />
+      </View>
       <View style={styles.mainContainer}>
-        <View style={styles.TopUiContainer}>
-          <BackButton />
-          <ProgressBar />
-        </View>
         <View>
-          <Image source={require("../../../assets/calendarBirthday.png")} />
+          <Image source={require("../../assets/calendarBirthday.png")} />
           <View>
             <Text style={styles.headerContainer}>My birthday is...</Text>
           </View>
           <View style={styles.inputWrapper}>
             <TextInput style={styles.inputContainer} placeholder="DD/MM/YYYY" />
             <View style={styles.icon}>
-              <Icon source={require("../../../assets/calendar.png")} size={15} />
+              <Icon source={require("../../assets/calendar.png")} size={15} />
             </View>
           </View>
           <Text style={styles.textHelper}>You won't be able to change this</Text>
         </View>
         <View style={styles.ContinueButtonContainer}>
-          <ContinueButton />
+          <ContinueButton
+            title="Continue"
+            isDisabled={false}
+            onPress={() => {
+              router.push("/AboutMe/AboutGender");
+            }}
+          />
         </View>
       </View>
     </View>
@@ -38,8 +49,7 @@ export default AboutBirthday;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.15,
-    marginTop: 10
+    flex: 0.3,
   },
   mainContainer: {
     flex: 1,
@@ -53,7 +63,8 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     letterSpacing: -0.32,
     marginTop: 16,
-    marginBottom: 16
+    marginBottom: 16,
+    fontFamily: "DMSansMedium"
   },
   inputContainer: {
     padding: 8
@@ -68,7 +79,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "400",
     lineHeight: 12,
-    letterSpacing: -0.12
+    letterSpacing: -0.12,
+    fontFamily: "DMSansMedium"
   },
   container: {
     flex: 1

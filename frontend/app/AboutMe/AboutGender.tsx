@@ -1,19 +1,24 @@
+import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import BackButton from "./components/BackButton";
-import ContinueButton from "./components/ContinueButton";
-import ProgressBar from "./components/ProgressBar";
+import TopBar from "../../components/Onboarding/TopBar";
+import ContinueButton from "../../components/Onboarding/ContinueButton";
 
 function AboutGender() {
   return (
     <View style={styles.container}>
+      <View style={styles.TopUiContainer}>
+        <TopBar
+          onBackPress={() => {
+            router.back();
+          }}
+          text="About Me"
+          selectedCount={1}
+        />
+      </View>
       <View style={styles.mainContainer}>
-        <View style={styles.TopUiContainer}>
-          <BackButton />
-          <ProgressBar />
-        </View>
         <View>
-          <Image source={require("../../../assets/lightningBolt.png")} />
+          <Image source={require("../../assets/lightningBolt.png")} />
           <View>
             <Text style={styles.headerContainer}>I am a...</Text>
           </View>
@@ -32,7 +37,13 @@ function AboutGender() {
           </View>
         </View>
         <View style={styles.ContinueButtonContainer}>
-          <ContinueButton />
+        <ContinueButton
+            title="Continue"
+            isDisabled={false}
+            onPress={() => {
+              router.push("/Home");
+            }}
+          />
         </View>
       </View>
     </View>
@@ -43,8 +54,7 @@ export default AboutGender;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.15,
-    marginTop: 10
+    flex: 0.3,
   },
   mainContainer: {
     flex: 1,
@@ -58,13 +68,15 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     letterSpacing: -0.32,
     marginTop: 16,
-    marginBottom: 16
+    marginBottom: 16,
+    fontFamily: "DMSansMedium"
   },
   textHelper: {
     fontSize: 12,
     fontWeight: "400",
     lineHeight: 12,
-    letterSpacing: -0.12
+    letterSpacing: -0.12,
+    fontFamily: "DMSansMedium"
   },
   container: {
     flex: 1
@@ -86,7 +98,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 17,
     fontWeight: "500",
-    letterSpacing: -0.17
+    letterSpacing: -0.17,
+    fontFamily: "DMSansMedium"
   },
   buttonContainer: {}
 });
