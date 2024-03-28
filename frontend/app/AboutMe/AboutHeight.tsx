@@ -6,6 +6,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const heightPicture = require("../../assets/height.png");
+
 function AboutHeight() {
   const [openFeet, setOpenFeet] = useState(false);
   const [openInches, setOpenInches] = useState(false);
@@ -32,7 +34,7 @@ function AboutHeight() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/height.png")} />
+          <Image source={heightPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>My height is...</Text>
           </View>

@@ -7,6 +7,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const aboutNamePicture = require("../../assets/aboutName.png");
+
 function AboutName() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -35,7 +37,7 @@ function AboutName() {
         </View>
 
         <View style={scaledStyles.inputContainer}>
-          <Image source={require("../../assets/aboutName.png")} />
+          <Image source={aboutNamePicture} />
           <Text style={scaledStyles.headerContainer}>My first name is...</Text>
           <View style={scaledStyles.inputWrapper}>
             <Controller
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   inputContainer: {
-    flex: 0.55
+    flex: 0.65
   },
   textContainer: {
     padding: 8

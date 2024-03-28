@@ -8,6 +8,8 @@ import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
+
 function AboutBirthday() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -36,7 +38,7 @@ function AboutBirthday() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/calendarBirthday.png")} />
+          <Image source={aboutBirthdayPicture} />
           <Text style={scaledStyles.headerContainer}>My birthday is...</Text>
           <View style={scaledStyles.inputWrapper} />
           <DropDownCalendar />

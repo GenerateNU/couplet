@@ -5,6 +5,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const aboutLookingPicture = require("../../assets/lookingfor.png");
+
 function AboutLooking() {
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -19,7 +21,7 @@ function AboutLooking() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lookingfor.png")} />
+          <Image source={aboutLookingPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>I'm looking for...</Text>
           </View>

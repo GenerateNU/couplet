@@ -5,6 +5,9 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+
+const aboutGenderPicture = require("../../assets/lightningBolt.png");
+
 function AboutGender() {
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -19,7 +22,7 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lightningBolt.png")} />
+          <Image source={aboutGenderPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>I am a...</Text>
           </View>

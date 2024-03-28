@@ -5,6 +5,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const pronounPicture = require("../../assets/pronouns.png");
+
 function AboutPronouns() {
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -19,7 +21,7 @@ function AboutPronouns() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/pronouns.png")} />
+          <Image source={pronounPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>My pronouns are...</Text>
           </View>

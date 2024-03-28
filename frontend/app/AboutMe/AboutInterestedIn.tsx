@@ -5,6 +5,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const aboutInterestedInPicture = require("../../assets/interestedin.png");
+
 function AboutInterestedIn() {
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -19,7 +21,7 @@ function AboutInterestedIn() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/interestedin.png")} />
+          <Image source={aboutInterestedInPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>I'm interested in...</Text>
           </View>

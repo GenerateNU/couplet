@@ -6,6 +6,8 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
+const aboutLocationPicture = require("../../assets/aboutlocation.png");
+
 function AboutHeight() {
   const [openLocation, setOpenLocation] = useState(false);
   const [location, setLocation] = useState(null);
@@ -22,7 +24,7 @@ function AboutHeight() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/aboutlocation.png")} />
+          <Image source={aboutLocationPicture} />
           <View>
             <Text style={scaledStyles.headerContainer}>I live in...</Text>
           </View>
