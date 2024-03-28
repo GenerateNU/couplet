@@ -20,6 +20,7 @@ function AboutBirthday() {
     defaultValue: ""
   });
   const onSubmit = (data: Object) => {
+    console.log(name);
     router.push("/AboutMe/AboutGender");
   };
   return (
@@ -37,7 +38,7 @@ function AboutBirthday() {
         <View>
           <Image source={require("../../assets/calendarBirthday.png")} />
           <Text style={scaledStyles.headerContainer}>My birthday is...</Text>
-          <View style={scaledStyles.inputWrapper}></View>
+          <View style={scaledStyles.inputWrapper} />
           <DropDownCalendar />
           <View style={scaledStyles.helperContainer}>
             <Text style={scaledStyles.textHelper}>You won't be able to change this</Text>
@@ -63,7 +64,7 @@ export default AboutBirthday;
 const styles = StyleSheet.create({
   TopUiContainer: {
     alignItems: "center",
-    flex : 0.3
+    flex: 0.3
   },
   mainContainer: {
     flex: 1,

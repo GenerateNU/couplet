@@ -11,12 +11,12 @@ function AboutHeight() {
   const [openInches, setOpenInches] = useState(false);
   const [foot, setFoot] = useState(null);
   const [inch, setInch] = useState(null);
-  const feet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((feet, index) => ({
-    label: `${feet}`,
+  const feet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((feetParam, index) => ({
+    label: `${feetParam}`,
     value: index + 1
   }));
-  const inches = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((inch, index) => ({
-    label: `${inch}`,
+  const inches = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((inchParam, index) => ({
+    label: `${inchParam}`,
     value: index + 1
   }));
   return (
@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   dropDownContainer: {
-    flexDirection : 'row',
+    flexDirection: "row"
   },
   dropdown: {
     flex: 1,
-    marginRight : 5,
+    marginRight: 5
   }
 });
 

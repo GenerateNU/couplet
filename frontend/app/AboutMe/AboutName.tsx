@@ -24,7 +24,6 @@ function AboutName() {
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.mainContainer}>
-
         <View style={scaledStyles.ProgressBarContainer}>
           <TopBar
             onBackPress={() => {
@@ -39,24 +38,23 @@ function AboutName() {
           <Image source={require("../../assets/aboutName.png")} />
           <Text style={scaledStyles.headerContainer}>My first name is...</Text>
           <View style={scaledStyles.inputWrapper}>
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={scaledStyles.textContainer}
-                placeholder="First Name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="name"
-          />
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={scaledStyles.textContainer}
+                  placeholder="First Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="name"
+            />
           </View>
           <Text style={scaledStyles.textHelper}>
             This is how it will permanently appear on your profile
           </Text>
-
         </View>
 
         <View>
@@ -77,10 +75,10 @@ export default AboutName;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   ProgressBarContainer: {
-    justifyContent : 'center'
+    justifyContent: "center"
   },
   mainContainer: {
     marginLeft: 20,
@@ -97,8 +95,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontFamily: "DMSansMedium"
   },
-  inputContainer : {
-    flex : 0.55
+  inputContainer: {
+    flex: 0.55
   },
   textContainer: {
     padding: 8
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     marginBottom: 8
-  },
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

@@ -1,8 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import TopBar from "../../components/Onboarding/TopBar";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 function AboutGender() {
@@ -38,7 +38,7 @@ function AboutGender() {
           </View>
         </View>
         <View style={scaledStyles.ContinueButtonContainer}>
-        <ContinueButton
+          <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
@@ -56,7 +56,7 @@ export default AboutGender;
 const styles = StyleSheet.create({
   TopUiContainer: {
     flex: 0.3,
-    alignItems : 'center'
+    alignItems: "center"
   },
   mainContainer: {
     flex: 1,

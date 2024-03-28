@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
@@ -26,7 +26,7 @@ function DropDownCalendar() {
     "October",
     "November",
     "December"
-  ].map((month, index) => ({ label: month, value: index + 1 }));
+  ].map((monthParam, index) => ({ label: monthParam, value: index + 1 }));
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, i) => ({
     label: `${currentYear - i}`,
@@ -65,11 +65,11 @@ function DropDownCalendar() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   dropdown: {
     flex: 1,
-    marginRight : 5,
+    marginRight: 5
   }
 });
 

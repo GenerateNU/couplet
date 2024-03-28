@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 12,
     marginRight: 8,
-    marginBottom : 8,
+    marginBottom: 8
   },
   buttonText: {
     color: "black",
@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    alignItems : 'center',
-    justifyContent : 'flex-start'
+    alignItems: "center",
+    justifyContent: "flex-start"
   }
 });
 

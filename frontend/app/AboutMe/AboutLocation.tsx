@@ -7,8 +7,8 @@ import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 function AboutHeight() {
-    const [openLocation, setOpenLocation] = useState(false);
-    const [location, setLocation] = useState(null);
+  const [openLocation, setOpenLocation] = useState(false);
+  const [location, setLocation] = useState(null);
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -27,7 +27,7 @@ function AboutHeight() {
             <Text style={scaledStyles.headerContainer}>I live in...</Text>
           </View>
           <View>
-          <DropDownPicker
+            <DropDownPicker
               open={openLocation}
               value={location}
               items={[]}
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   dropDownContainer: {
-    flexDirection : 'row',
+    flexDirection: "row"
   },
   dropdown: {
     flex: 1,
-    marginRight : 5,
+    marginRight: 5
   }
 });
 
