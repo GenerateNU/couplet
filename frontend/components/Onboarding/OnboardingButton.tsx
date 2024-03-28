@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: COLORS.secondary,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white
   },
   buttonPressed: {
     backgroundColor: COLORS.secondary
