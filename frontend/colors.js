@@ -8,4 +8,4 @@ const COLORS = {
   lightGray: "#CDCDCD"
 };
 
-export default COLORS
+export default COLORS;
