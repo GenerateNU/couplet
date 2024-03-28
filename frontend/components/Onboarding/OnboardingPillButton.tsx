@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import COLORS from '../../colors';
-import scaleStyleSheet from '../../scaleStyles';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
 interface OnboardPillButtonProps {
   label: string;
@@ -9,8 +9,11 @@ interface OnboardPillButtonProps {
   isSelected: boolean;
 }
 
-const OnboardingPillButton: React.FC<OnboardPillButtonProps> = ({ label, onPress, isSelected }) => {
-
+export default function OnboardingPillButton({
+  label,
+  onPress,
+  isSelected
+}: OnboardPillButtonProps) {
   const handlePress = () => {
     if (isSelected) {
       onPress(null);
@@ -27,26 +30,24 @@ const OnboardingPillButton: React.FC<OnboardPillButtonProps> = ({ label, onPress
       <Text style={scaledStyles.buttonText}>{label}</Text>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   pillButton: {
-    borderRadius: 100, 
+    borderRadius: 100,
     borderWidth: 1.5,
-    borderColor: COLORS.secondary, 
+    borderColor: COLORS.secondary,
     backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    margin: 5,
+    margin: 5
   },
   selected: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.secondary
   },
   buttonText: {
-    fontSize: 15,
-  },
+    fontSize: 15
+  }
 });
-
-export default OnboardingPillButton;
 
 const scaledStyles = scaleStyleSheet(styles);

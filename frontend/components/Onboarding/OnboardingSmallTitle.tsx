@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
@@ -7,22 +7,22 @@ type Props = {
   text: string;
 };
 
-function OnboardingSmallTitle({text}: Props) {
-    return <Text style={scaledStyles.smallHeadingContainer}>{text}</Text>;
-};
+function OnboardingSmallTitle({ text }: Props) {
+  return <Text style={scaledStyles.smallHeadingContainer}>{text}</Text>;
+}
 
 const styles = StyleSheet.create({
   smallHeadingContainer: {
-    fontFamily: 'DMSansBold',
+    fontFamily: "DMSansBold",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     lineHeight: 20,
-    textAlign: 'left',
+    textAlign: "left",
     color: COLORS.black,
-    paddingLeft: 10,
-  },
+    paddingLeft: 10
+  }
 });
-  
-  const scaledStyles = scaleStyleSheet(styles);
-  
-  export default OnboardingSmallTitle;
+
+const scaledStyles = scaleStyleSheet(styles);
+
+export default OnboardingSmallTitle;

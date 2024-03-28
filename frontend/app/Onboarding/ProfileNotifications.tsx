@@ -11,17 +11,17 @@ const NOTIFICATION_ICON = require("../../assets/notification-icon.png");
 
 export default function ProfileNotifications() {
   function goToNextPage() {
-    console.log("Go to next page");
+    // console.log("Go to next page");
     router.push("Onboarding/ProfileConfirm");
   }
 
   function onAllowNotifactionsPressed() {
-    console.log("Notify me pressed");
+    // console.log("Notify me pressed");
     goToNextPage();
   }
 
   function onDisableNotificationsPressed() {
-    console.log("Disable notificationspressed");
+    // console.log("Disable notificationspressed");
     goToNextPage();
   }
 
