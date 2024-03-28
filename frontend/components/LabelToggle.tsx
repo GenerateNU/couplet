@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 2.5,
-    backgroundColor: "#F95D5D",
+    backgroundColor: "#F95D5D"
   },
   chosenLabel: {
     borderWidth: 1,
