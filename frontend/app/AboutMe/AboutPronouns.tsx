@@ -1,11 +1,11 @@
 import { router } from "expo-router";
 import React from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import TopBar from "../../components/Onboarding/TopBar";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
-function AboutGender() {
+function AboutPronouns() {
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -19,30 +19,46 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lightningBolt.png")} />
+          <Image source={require("../../assets/pronouns.png")} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I am a...</Text>
+            <Text style={scaledStyles.headerContainer}>My pronouns are...</Text>
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Man</Text>
+              <TouchableOpacity style={styles.button}>
+                <Text style={scaledStyles.buttonText}> He/Him </Text>
               </TouchableOpacity>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Woman</Text>
+                <Text style={scaledStyles.buttonText}> She/Her </Text>
               </TouchableOpacity>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Other</Text>
+                <Text style={scaledStyles.buttonText}> They/Them </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={scaledStyles.buttonContainer}>
+              <TouchableOpacity style={scaledStyles.button}>
+                <Text style={scaledStyles.buttonText}> He/They </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={scaledStyles.button}>
+                <Text style={scaledStyles.buttonText}> She/They </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={scaledStyles.button}>
+                <Text style={scaledStyles.buttonText}> Xe/Xem </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={scaledStyles.buttonContainer}>
+              <TouchableOpacity style={scaledStyles.button}>
+                <Text style={scaledStyles.buttonText}> Ze/Zir </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
         <View style={scaledStyles.ContinueButtonContainer}>
-        <ContinueButton
+          <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutInterestedIn");
+              router.push("/AboutMe/AboutHeight");
             }}
           />
         </View>
@@ -51,12 +67,12 @@ function AboutGender() {
   );
 }
 
-export default AboutGender;
+export default AboutPronouns;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
     flex: 0.3,
-    alignItems : 'center'
+    alignItems: "center"
   },
   mainContainer: {
     flex: 1,
@@ -89,21 +105,26 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FFF",
     borderWidth: 1,
-    borderColor: "#D1AAF6",
+    borderColor: "#E7D4FA",
     borderRadius: 25,
-    height: 40,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16
+    padding: 12,
+    marginRight: 8,
+    marginBottom : 8,
   },
   buttonText: {
     color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
+    fontSize: 15,
+    fontWeight: "400",
+    letterSpacing: -0.15,
     fontFamily: "DMSansMedium"
   },
-  buttonContainer: {}
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems : 'center',
+    justifyContent : 'flex-start'
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

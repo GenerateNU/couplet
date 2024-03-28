@@ -1,11 +1,14 @@
 import { router } from "expo-router";
-import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import TopBar from "../../components/Onboarding/TopBar";
+import React, { useState } from "react";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
-function AboutGender() {
+function AboutHeight() {
+    const [openLocation, setOpenLocation] = useState(false);
+    const [location, setLocation] = useState(null);
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -19,30 +22,28 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lightningBolt.png")} />
+          <Image source={require("../../assets/aboutlocation.png")} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I am a...</Text>
+            <Text style={scaledStyles.headerContainer}>I live in...</Text>
           </View>
           <View>
-            <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Man</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Woman</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Other</Text>
-              </TouchableOpacity>
-            </View>
+          <DropDownPicker
+              open={openLocation}
+              value={location}
+              items={[]}
+              setOpen={setOpenLocation}
+              setValue={setLocation}
+              placeholder="Select Your Location"
+              containerStyle={scaledStyles.dropdown}
+            />
           </View>
         </View>
         <View style={scaledStyles.ContinueButtonContainer}>
-        <ContinueButton
+          <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutInterestedIn");
+              router.push("/Home");
             }}
           />
         </View>
@@ -51,12 +52,12 @@ function AboutGender() {
   );
 }
 
-export default AboutGender;
+export default AboutHeight;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
     flex: 0.3,
-    alignItems : 'center'
+    alignItems: "center"
   },
   mainContainer: {
     flex: 1,
@@ -103,7 +104,13 @@ const styles = StyleSheet.create({
     letterSpacing: -0.17,
     fontFamily: "DMSansMedium"
   },
-  buttonContainer: {}
+  dropDownContainer: {
+    flexDirection : 'row',
+  },
+  dropdown: {
+    flex: 1,
+    marginRight : 5,
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

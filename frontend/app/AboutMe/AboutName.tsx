@@ -1,16 +1,14 @@
 import { router } from "expo-router";
 import React from "react";
-import { Controller, useForm, useWatch} from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 function AboutName() {
-  const {
-    control,
-    handleSubmit,
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
     }
@@ -19,49 +17,49 @@ function AboutName() {
     control,
     name: "name",
     defaultValue: ""
-  })
-  const onSubmit = (data: Object) => { 
-    router.push("/AboutMe/AboutBirthday")
-  }
+  });
+  const onSubmit = (data: Object) => {
+    router.push("/AboutMe/AboutBirthday");
+  };
   return (
-    <View style={scaledStyles.container}>
-      <View style={scaledStyles.TopUiContainer}>
-        <TopBar
-          onBackPress={() => {
-            router.back();
-          }}
-          text="About Me"
-          selectedCount={1}
-        />
-      </View>
+    <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.mainContainer}>
-        <View>
+
+        <View style={scaledStyles.ProgressBarContainer}>
+          <TopBar
+            onBackPress={() => {
+              router.back();
+            }}
+            text="About Me"
+            selectedCount={1}
+          />
+        </View>
+
+        <View style={scaledStyles.inputContainer}>
           <Image source={require("../../assets/aboutName.png")} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>My first name is...</Text>
-          </View>
-
+          <Text style={scaledStyles.headerContainer}>My first name is...</Text>
           <View style={scaledStyles.inputWrapper}>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={scaledStyles.inputContainer}
-                  placeholder="First Name"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-              name="name"
-            />
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={scaledStyles.textContainer}
+                placeholder="First Name"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="name"
+          />
           </View>
-
           <Text style={scaledStyles.textHelper}>
             This is how it will permanently appear on your profile
           </Text>
+
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={!name}
@@ -71,21 +69,24 @@ function AboutName() {
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 export default AboutName;
 
 const styles = StyleSheet.create({
-  TopUiContainer: {
-    flex: 0.3
+  container: {
+    flex: 1,
+  },
+  ProgressBarContainer: {
+    justifyContent : 'center'
   },
   mainContainer: {
-    flex: 1,
     marginLeft: 20,
     marginRight: 20,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    flex: 1
   },
   headerContainer: {
     fontSize: 32,
@@ -96,7 +97,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontFamily: "DMSansMedium"
   },
-  inputContainer: {
+  inputContainer : {
+    flex : 0.55
+  },
+  textContainer: {
     padding: 8
   },
   inputWrapper: {
@@ -105,19 +109,6 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     marginBottom: 8
   },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1
-  },
-  ContinueButtonContainer: {
-    marginBottom: 10
-  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

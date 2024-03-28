@@ -2,13 +2,13 @@ import { router } from "expo-router";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 function AboutBirthday() {
-  
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
@@ -20,10 +20,10 @@ function AboutBirthday() {
     defaultValue: ""
   });
   const onSubmit = (data: Object) => {
-    router.push("/AboutMe/AboutBirthday");
+    router.push("/AboutMe/AboutGender");
   };
   return (
-    <View style={scaledStyles.container}>
+    <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
         <TopBar
           onBackPress={() => {
@@ -40,21 +40,21 @@ function AboutBirthday() {
           <View style={scaledStyles.inputWrapper}></View>
           <DropDownCalendar />
           <View style={scaledStyles.helperContainer}>
-          <Text style={scaledStyles.textHelper}>You won't be able to change this</Text>
+            <Text style={scaledStyles.textHelper}>You won't be able to change this</Text>
           </View>
         </View>
 
         <View style={scaledStyles.ContinueButtonContainer}>
           <ContinueButton
             title="Continue"
-            isDisabled={true}
+            isDisabled={false}
             onPress={() => {
               handleSubmit(onSubmit)();
             }}
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -62,7 +62,8 @@ export default AboutBirthday;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.3
+    alignItems: "center",
+    flex : 0.3
   },
   mainContainer: {
     flex: 1,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   helperContainer: {
-    marginTop : 16
+    marginTop: 16
   }
 });
 

@@ -5,7 +5,7 @@ import TopBar from "../../components/Onboarding/TopBar";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import scaleStyleSheet from "../../scaleStyles";
 
-function AboutGender() {
+function AboutInterestedIn() {
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -19,9 +19,9 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lightningBolt.png")} />
+          <Image source={require("../../assets/interestedin.png")} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I am a...</Text>
+            <Text style={scaledStyles.headerContainer}>I'm interested in...</Text>
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>
@@ -32,7 +32,7 @@ function AboutGender() {
                 <Text style={scaledStyles.buttonText}>Woman</Text>
               </TouchableOpacity>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Other</Text>
+                <Text style={scaledStyles.buttonText}>All</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -42,7 +42,7 @@ function AboutGender() {
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutInterestedIn");
+              router.push("/AboutMe/AboutLooking");
             }}
           />
         </View>
@@ -51,7 +51,7 @@ function AboutGender() {
   );
 }
 
-export default AboutGender;
+export default AboutInterestedIn;
 
 const styles = StyleSheet.create({
   TopUiContainer: {

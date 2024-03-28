@@ -5,7 +5,7 @@ import TopBar from "../../components/Onboarding/TopBar";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import scaleStyleSheet from "../../scaleStyles";
 
-function AboutGender() {
+function AboutLooking() {
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -19,20 +19,23 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={require("../../assets/lightningBolt.png")} />
+          <Image source={require("../../assets/lookingfor.png")} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I am a...</Text>
+            <Text style={scaledStyles.headerContainer}>I'm looking for...</Text>
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Man</Text>
+                <Text style={scaledStyles.buttonText}>Long term relationship</Text>
               </TouchableOpacity>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Woman</Text>
+                <Text style={scaledStyles.buttonText}>Short term relationship</Text>
               </TouchableOpacity>
               <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Other</Text>
+                <Text style={scaledStyles.buttonText}>Seeing where things go</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={scaledStyles.button}>
+                <Text style={scaledStyles.buttonText}>Friends</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -42,7 +45,7 @@ function AboutGender() {
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutInterestedIn");
+              router.push("/AboutMe/AboutPronouns");
             }}
           />
         </View>
@@ -51,7 +54,7 @@ function AboutGender() {
   );
 }
 
-export default AboutGender;
+export default AboutLooking;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
