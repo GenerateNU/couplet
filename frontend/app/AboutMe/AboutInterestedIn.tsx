@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
@@ -27,15 +28,15 @@ function AboutInterestedIn() {
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Man</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>Woman</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}>All</Text>
-              </TouchableOpacity>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="Man" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="Woman" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="All" onButtonClick={() => {}} />
+              </View>
             </View>
           </View>
         </View>
@@ -89,13 +90,6 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    backgroundColor: "#FFF",
-    borderWidth: 1,
-    borderColor: "#D1AAF6",
-    borderRadius: 25,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
     marginBottom: 16
   },
   buttonText: {

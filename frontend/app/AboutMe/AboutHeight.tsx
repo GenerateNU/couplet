@@ -13,11 +13,11 @@ function AboutHeight() {
   const [openInches, setOpenInches] = useState(false);
   const [foot, setFoot] = useState(null);
   const [inch, setInch] = useState(null);
-  const feet = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((feetParam, index) => ({
+  const feet = [1, 2, 3, 4, 5, 6, 7, 8].map((feetParam, index) => ({
     label: `${feetParam}`,
     value: index + 1
   }));
-  const inches = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((inchParam, index) => ({
+  const inches = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((inchParam, index) => ({
     label: `${inchParam}`,
     value: index + 1
   }));
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    backgroundColor: "#FFF",
+    backgroundColor: "white",
     borderWidth: 1,
     borderColor: "#D1AAF6",
     borderRadius: 25,

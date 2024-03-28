@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
@@ -27,31 +28,31 @@ function AboutPronouns() {
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={styles.button}>
-                <Text style={scaledStyles.buttonText}> He/Him </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> She/Her </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> They/Them </Text>
-              </TouchableOpacity>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="He/Him" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="She/Her" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="They/them" onButtonClick={() => {}} />
+              </View>
             </View>
             <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> He/They </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> She/They </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> Xe/Xem </Text>
-              </TouchableOpacity>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="He/They" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="She/They" onButtonClick={() => {}} />
+              </View>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="Xe/Xem" onButtonClick={() => {}} />
+              </View>
             </View>
             <View style={scaledStyles.buttonContainer}>
-              <TouchableOpacity style={scaledStyles.button}>
-                <Text style={scaledStyles.buttonText}> Ze/Zir </Text>
-              </TouchableOpacity>
+              <View style={scaledStyles.button}>
+                <OnboardingButton title="Ze/Zir" onButtonClick={() => {}} />
+              </View>
             </View>
           </View>
         </View>
@@ -105,22 +106,8 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    backgroundColor: "#FFF",
-    borderWidth: 1,
-    borderColor: "#E7D4FA",
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 12,
     marginRight: 8,
     marginBottom: 8
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 15,
-    fontWeight: "400",
-    letterSpacing: -0.15,
-    fontFamily: "DMSansMedium"
   },
   buttonContainer: {
     flexDirection: "row",
