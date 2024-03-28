@@ -40,7 +40,6 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
   };
   const onDone = (passedImages: ImagePicker.ImagePickerAsset[]) => {
     setImages([]);
-
     if (typeof passedImages !== "object") return;
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
