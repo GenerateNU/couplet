@@ -20,10 +20,10 @@ export default function ProfilePhotos() {
     );
 
     const imgCount = images.filter((img) => img !== "").length;
-    if (imgCount > 0) {
-      setContinueText(`${imgCount}/4 Continue`);
-    } else {
+    if (imgCount === 4) {
       setContinueText("Continue");
+    } else {
+      setContinueText(`${imgCount}/4 Added`);
     }
   }, [images]);
 
