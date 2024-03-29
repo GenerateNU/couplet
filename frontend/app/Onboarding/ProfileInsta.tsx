@@ -25,7 +25,7 @@ export default function Profile() {
       style={scaledStyles.container}
     >
       <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
+        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
       </View>
       <View>
         <Image source={AT_ICON} style={{ height: 250, width: 250 }} resizeMode="contain" />

@@ -43,7 +43,7 @@ export default function ProfileBio() {
       style={scaledStyles.container}
     >
       <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
+        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
       </View>
       <View>
         <Image source={BIO_IMAGE} />

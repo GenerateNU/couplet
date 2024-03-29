@@ -28,7 +28,7 @@ export default function ProfileNotifications() {
   return (
     <View style={scaledStyles.container}>
       <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
+        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
       </View>
       <View>
         <Image
