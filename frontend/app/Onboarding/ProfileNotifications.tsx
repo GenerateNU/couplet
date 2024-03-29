@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
@@ -26,35 +26,37 @@ export default function ProfileNotifications() {
   }
 
   return (
-    <View style={scaledStyles.container}>
-      <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
-      </View>
-      <View>
-        <Image
-          source={NOTIFICATION_TOGGLE}
-          style={{ height: 250, width: 250 }}
-          resizeMode="contain"
-        />
-        <View style={scaledStyles.titleMessage}>
-          <Image source={NOTIFICATION_ICON} style={scaledStyles.bellIcon} resizeMode="contain" />
-          <OnboardingTitle text="Turn on notifications" />
-        </View>
-        <Text style={scaledStyles.notificationMessage}> Know when you get a match! </Text>
+    <SafeAreaView style={{ height: "100%" }}>
+      <View style={scaledStyles.container}>
         <View>
-          <ContinueButton
-            onPress={() => onAllowNotifactionsPressed()}
-            title="Notify Me"
-            isDisabled={false}
-          />
+          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
         </View>
-        <TouchableOpacity onPress={() => onDisableNotificationsPressed()} disabled={false}>
-          <Text style={scaledStyles.disableNotificationsButton}>Disable Notifications</Text>
-        </TouchableOpacity>
+        <View>
+          <Image
+            source={NOTIFICATION_TOGGLE}
+            style={{ height: 250, width: 250 }}
+            resizeMode="contain"
+          />
+          <View style={scaledStyles.titleMessage}>
+            <Image source={NOTIFICATION_ICON} style={scaledStyles.bellIcon} resizeMode="contain" />
+            <OnboardingTitle text="Turn on notifications" />
+          </View>
+          <Text style={scaledStyles.notificationMessage}> Know when you get a match! </Text>
+          <View>
+            <ContinueButton
+              onPress={() => onAllowNotifactionsPressed()}
+              title="Notify Me"
+              isDisabled={false}
+            />
+          </View>
+          <TouchableOpacity onPress={() => onDisableNotificationsPressed()} disabled={false}>
+            <Text style={scaledStyles.disableNotificationsButton}>Disable Notifications</Text>
+          </TouchableOpacity>
+        </View>
+        <View />
+        <View />
       </View>
-      <View />
-      <View />
-    </View>
+    </SafeAreaView>
   );
 }
 
