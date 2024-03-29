@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
@@ -33,19 +33,21 @@ export default function ProfilePhotos() {
   };
 
   return (
-    <View style={scaledStyles.container}>
-      <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
+    <SafeAreaView style={{ height: "100%" }}>
+      <View style={scaledStyles.container}>
+        <View>
+          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
+        </View>
+        <View>
+          <Image source={CAMERA_IMAGE} style={{ alignSelf: "center" }} />
+          <OnboardingTitle text="Show your best angles" />
+          <PhotoPicker onPick={setImages} />
+        </View>
+        <View>
+          <ContinueButton title={continueText} isDisabled={continueEnabled} onPress={onContinue} />
+        </View>
       </View>
-      <View>
-        <Image source={CAMERA_IMAGE} style={{ alignSelf: "center" }} />
-        <OnboardingTitle text="Show your best angles" />
-        <PhotoPicker onPick={setImages} />
-      </View>
-      <View>
-        <ContinueButton title={continueText} isDisabled={continueEnabled} onPress={onContinue} />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

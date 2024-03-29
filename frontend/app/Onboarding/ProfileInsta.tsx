@@ -4,6 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -20,34 +21,38 @@ export default function Profile() {
   const [instagram, setInstagram] = useState("");
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={scaledStyles.container}
-    >
-      <View>
-        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
-      </View>
-      <View>
-        <Image source={AT_ICON} style={{ height: 250, width: 250 }} resizeMode="contain" />
+    <SafeAreaView style={{ height: "100%" }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={scaledStyles.container}
+      >
         <View>
-          <OnboardingTitle text="What’s your Instagram?" />
-          <Text style={{ marginLeft: 0, top: 0 }}>This is how you will message your matches.</Text>
-          <TextInput
-            style={scaledStyles.textInput}
-            editable
-            onChangeText={setInstagram}
-            placeholder="@couplet"
+          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
+        </View>
+        <View>
+          <Image source={AT_ICON} style={{ height: 250, width: 250 }} resizeMode="contain" />
+          <View>
+            <OnboardingTitle text="What’s your Instagram?" />
+            <Text style={{ marginLeft: 0, top: 0 }}>
+              This is how you will message your matches.
+            </Text>
+            <TextInput
+              style={scaledStyles.textInput}
+              editable
+              onChangeText={setInstagram}
+              placeholder="@couplet"
+            />
+          </View>
+        </View>
+        <View>
+          <ContinueButton
+            onPress={() => router.push("Onboarding/ProfileNotifications")}
+            title="Continue"
+            isDisabled={instagram.length === 0}
           />
         </View>
-      </View>
-      <View>
-        <ContinueButton
-          onPress={() => router.push("Onboarding/ProfileNotifications")}
-          title="Continue"
-          isDisabled={instagram.length === 0}
-        />
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
