@@ -101,8 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     letterSpacing: -0.17,
     fontFamily: "DMSansMedium"
-  },
-  buttonContainer: {}
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

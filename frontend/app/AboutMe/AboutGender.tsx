@@ -91,15 +91,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 16
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
-    fontFamily: "DMSansMedium"
-  },
-  buttonContainer: {}
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

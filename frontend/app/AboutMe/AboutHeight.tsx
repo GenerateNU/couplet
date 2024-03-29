@@ -108,23 +108,6 @@ const styles = StyleSheet.create({
   ContinueButtonContainer: {
     marginBottom: 10
   },
-  button: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#D1AAF6",
-    borderRadius: 25,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
-    fontFamily: "DMSansMedium"
-  },
   dropDownContainer: {
     flexDirection: "row"
   },
