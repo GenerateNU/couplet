@@ -7,7 +7,7 @@ type Props = {
   text: string;
 };
 
-function OnboardingTitle({text}: Props) {
+function OnboardingTitle({ text }: Props) {
   return (
     <View style={scaledStyles.centeringContainer}>
       <View style={scaledStyles.container}>
@@ -15,7 +15,7 @@ function OnboardingTitle({text}: Props) {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeringContainer: {

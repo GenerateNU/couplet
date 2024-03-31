@@ -7,9 +7,7 @@
       },
       "package": "com.anonymous.myApp"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "icon": "./assets/icon.png",
     "ios": {
       "supportsTablet": true,
@@ -17,9 +15,7 @@
     },
     "name": "myApp",
     "orientation": "portrait",
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "slug": "myApp",
     "splash": {
       "backgroundColor": "#ffffff",
