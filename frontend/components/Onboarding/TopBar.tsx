@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../colors";
@@ -9,12 +10,20 @@ type TopBarProps = {
   onBackPress: () => void;
   text: string;
   selectedCount: number;
+  skipToRoute?: string; // optional
 };
 
-function TopBar({ onBackPress, text, selectedCount }: TopBarProps) {
+function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) {
   return (
     <View style={scaledStyles.container}>
-      <BackButton onPress={onBackPress} />
+      <View style={scaledStyles.topContainer}>
+        <BackButton onPress={onBackPress} />
+        {skipToRoute && (
+          <Text style={scaledStyles.skipText} onPress={() => router.push(skipToRoute)}>
+            Skip
+          </Text>
+        )}
+      </View>
       <View style={scaledStyles.textBarContainer}>
         <Text style={scaledStyles.informationText}>{text}</Text>
         <OnboardingBar selectedCount={selectedCount} />
@@ -27,11 +36,19 @@ const styles = StyleSheet.create({
   container: {
     width: 346,
     height: 69,
-    top: 68,
-    left: 24,
-    position: "absolute",
     flexDirection: "column",
     justifyContent: "space-between"
+  },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  skipText: {
+    fontFamily: "DMSansRegular",
+    fontSize: 17,
+    fontWeight: "500",
+    color: COLORS.primary,
+    marginTop: 10
   },
   textBarContainer: {
     paddingTop: 8,
@@ -54,3 +71,7 @@ const styles = StyleSheet.create({
 const scaledStyles = scaleStyleSheet(styles);
 
 export default TopBar;
+
+TopBar.defaultProps = {
+  skipToRoute: ""
+};
