@@ -6,7 +6,7 @@ export default function Profile() {
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>
       <Text style={{ fontFamily: "DMSansRegular" }}>Profile</Text>
-      <Navbar />
+      <Navbar activePage="Profile" />
     </View>
   );
 }
