@@ -24,7 +24,7 @@ function AboutInterestedIn() {
         <View>
           <Image source={aboutInterestedInPicture} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I'm interested in...</Text>
+            <Text style={scaledStyles.headerContainer}>I&apos;m interested in...</Text>
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>

@@ -24,7 +24,7 @@ function AboutLooking() {
         <View>
           <Image source={aboutLookingPicture} />
           <View>
-            <Text style={scaledStyles.headerContainer}>I'm looking for...</Text>
+            <Text style={scaledStyles.headerContainer}>I&apos;m looking for...</Text>
           </View>
           <View>
             <View style={scaledStyles.buttonContainer}>

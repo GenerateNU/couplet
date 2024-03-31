@@ -43,7 +43,7 @@ function AboutBirthday() {
           <View style={scaledStyles.inputWrapper} />
           <DropDownCalendar />
           <View style={scaledStyles.helperContainer}>
-            <Text style={scaledStyles.textHelper}>You won't be able to change this</Text>
+            <Text style={scaledStyles.textHelper}>You won&apos;t be able to change this</Text>
           </View>
         </View>
 
