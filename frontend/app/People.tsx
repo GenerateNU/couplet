@@ -1,7 +1,7 @@
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Navbar from "../components/Layout/Navbar";
 import Person from "../components/Person/Person";
 import { PersonProps } from "../components/Person/PersonProps";
@@ -15,7 +15,7 @@ export default function People() {
     return null;
   }
   const person: PersonProps = {
-    id: 1, 
+    id: 1,
     firstName: "John",
     lastName: "Doe",
     age: 25,
@@ -33,22 +33,24 @@ export default function People() {
     instagram: "instagram.com",
     images: [
       {
-        image: "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        image:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         caption: "This is a caption"
-      }, 
+      },
       {
-        image: "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        image:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         caption: "This is a caption"
       }
     ]
-  }
+  };
   return (
-    // foreach ... add or... 
+    // foreach ... add or...
     <View style={{ flex: 1, justifyContent: "space-between" }}>
-      <Person 
+      <Person
         id={person.id}
         firstName={person.firstName}
-        lastName={person.lastName} 
+        lastName={person.lastName}
         age={person.age}
         pronouns={person.pronouns}
         location={person.location || ""}
@@ -62,7 +64,7 @@ export default function People() {
         images={person.images}
       />
       {/* <Text style={{ fontFamily: "DMSansRegular" }}>People</Text> */}
-      
+
       <Navbar />
     </View>
   );
