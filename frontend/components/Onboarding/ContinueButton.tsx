@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   button: {
     width: 330,
     height: 41,
-    paddingVertical: 10,
-    paddingHorizontal: 130,
     borderRadius: 65,
     borderWidth: 1,
     borderColor: COLORS.disabled,
@@ -63,6 +61,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: COLORS.white,
     width: 100,
+    color: COLORS.white,
     height: 21
   }
 });
