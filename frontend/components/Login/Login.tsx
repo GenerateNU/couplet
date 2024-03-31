@@ -138,13 +138,11 @@ const styles = StyleSheet.create({
   appleLogo: {
     width: 16,
     height: 20,
-    // background: COLORS.black,
     marginRight: 8
   },
   googleLogo: {
     width: 16,
     height: 16,
-    // background: COLORS.black,
     marginRight: 8
   },
   titleImageView: {
