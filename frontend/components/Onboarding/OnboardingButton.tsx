@@ -30,7 +30,7 @@ function OnboardingButton({ title, onButtonClick }: ButtonProps) {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: "DMSansMedium",
+    fontFamily: "DMSansRegular",
     fontSize: 12,
     fontWeight: "bold",
     lineHeight: 15.62,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   button: {
-    height: 40,
+    height: 36,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 4,

@@ -15,11 +15,9 @@ const styles = StyleSheet.create({
   smallHeadingContainer: {
     fontFamily: "DMSansBold",
     fontSize: 20,
-    fontWeight: "bold",
     lineHeight: 20,
     textAlign: "left",
-    color: COLORS.black,
-    paddingLeft: 10
+    color: COLORS.black
   }
 });
 

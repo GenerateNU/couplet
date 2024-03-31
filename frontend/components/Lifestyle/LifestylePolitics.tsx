@@ -1,11 +1,12 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingPillButton from "../../components/Onboarding/OnboardingPillButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../Onboarding/ContinueButton";
+import OnboardingButton from "../Onboarding/OnboardingButton";
+import OnboardingTitle from "../Onboarding/OnboardingTitle";
+import TopBar from "../Onboarding/TopBar";
 
 const POLITICS_IMAGE = require("../../assets/OnboardingPolitics.png");
 
@@ -31,7 +32,7 @@ export default function LifestylePolitics() {
   }
 
   return (
-    <View style={scaledStyles.container}>
+    <SafeAreaView style={scaledStyles.container}>
       <View>
         <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
       </View>
@@ -40,12 +41,13 @@ export default function LifestylePolitics() {
         <OnboardingTitle text="Politically, I am..." />
         <View style={scaledStyles.buttonContainer}>
           {listOfPolitics.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handlePillPress(option)}
-              isSelected={politics === option}
-            />
+            <View style={scaledStyles.onboardingButtonPadding}>
+              <OnboardingButton
+                key={option}
+                title={option}
+                onButtonClick={() => handlePillPress(option)}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -56,7 +58,7 @@ export default function LifestylePolitics() {
           onPress={() => router.push("Onboarding/LifestyleHabits")}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -67,14 +69,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginTop: 20
   },
+  onboardingButtonPadding: {
+    paddingRight: 8,
+    paddingBottom: 8
+  },
   container: {
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
     margin: 30
-  },
-  ContinueButtonContainer: {
-    marginBottom: 10
   }
 });
 
