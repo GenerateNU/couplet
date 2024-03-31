@@ -1,9 +1,10 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../colors";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingPillButton from "../../components/Onboarding/OnboardingPillButton";
+import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingSmallTitle from "../../components/Onboarding/OnboardingSmallTitle";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
@@ -62,61 +63,67 @@ export default function LifestyleHabits() {
   }
 
   return (
-    <ScrollView contentContainerStyle={scaledStyles.container}>
-      <View>
-        <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
-      </View>
-      <View>
-        <Image source={HABITS_IMAGE} />
-        <OnboardingTitle text="What are your habits?" />
-        <OnboardingSmallTitle text="Do you drink?" />
-        <View style={scaledStyles.buttonContainer}>
-          {listOfChoices.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handleDrinkChoice(option)}
-              isSelected={drink === option}
-            />
-          ))}
+    <SafeAreaView style={scaledStyles.container}>
+      <ScrollView>
+        <View>
+          <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
         </View>
-        <View style={scaledStyles.separator} />
-        <OnboardingSmallTitle text="Do you smoke?" />
-        <View style={scaledStyles.buttonContainer}>
-          {listOfChoices.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handleSmokeChoice(option)}
-              isSelected={smoke === option}
-            />
-          ))}
+        <View>
+          <Image source={HABITS_IMAGE} />
+          <OnboardingTitle text="What are your habits?" />
+          <OnboardingSmallTitle text="Do you drink?" />
+          <View style={scaledStyles.buttonContainer}>
+            {listOfChoices.map((option) => (
+              <View style={scaledStyles.onboardingButtonPadding}>
+                <OnboardingButton
+                  key={option}
+                  title={option}
+                  onButtonClick={() => handleDrinkChoice(option)}
+                />
+              </View>
+            ))}
+          </View>
+          <View style={scaledStyles.separator} />
+          <OnboardingSmallTitle text="Do you smoke?" />
+          <View style={scaledStyles.buttonContainer}>
+            {listOfChoices.map((option) => (
+              <View style={scaledStyles.onboardingButtonPadding}>
+                <OnboardingButton
+                  key={option}
+                  title={option}
+                  onButtonClick={() => handleSmokeChoice(option)}
+                />
+              </View>
+            ))}
+          </View>
+          <View style={scaledStyles.separator} />
+          <OnboardingSmallTitle text="Do you smoke weed?" />
+          <View style={scaledStyles.buttonContainer}>
+            {listOfChoices.map((option) => (
+              <View style={scaledStyles.onboardingButtonPadding}>
+                <OnboardingButton
+                  key={option}
+                  title={option}
+                  onButtonClick={() => handleWeedChoice(option)}
+                />
+              </View>
+            ))}
+          </View>
+          <View style={scaledStyles.separator} />
+          <OnboardingSmallTitle text="Do you do drugs?" />
+          <View style={scaledStyles.buttonContainer}>
+            {drugList.map((option) => (
+              <View style={scaledStyles.onboardingButtonPadding}>
+                <OnboardingButton
+                  key={option}
+                  title={option}
+                  onButtonClick={() => handleDrugsChoice(option)}
+                />
+              </View>
+            ))}
+          </View>
         </View>
-        <View style={scaledStyles.separator} />
-        <OnboardingSmallTitle text="Do you smoke weed?" />
-        <View style={scaledStyles.buttonContainer}>
-          {listOfChoices.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handleWeedChoice(option)}
-              isSelected={weed === option}
-            />
-          ))}
-        </View>
-        <View style={scaledStyles.separator} />
-        <OnboardingSmallTitle text="Do you do drugs?" />
-        <View style={scaledStyles.buttonContainer}>
-          {drugList.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handleDrugsChoice(option)}
-              isSelected={drugs === option}
-            />
-          ))}
-        </View>
-      </View>
+      </ScrollView>
       <View style={scaledStyles.ContinueButtonContainer}>
         <ContinueButton
           onPress={() => router.push("Onboarding/LifestylePassions")}
@@ -124,7 +131,7 @@ export default function LifestyleHabits() {
           isDisabled={!isContinueButtonEnabled()}
         />
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -133,7 +140,12 @@ const styles = StyleSheet.create({
     flexgrow: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    margin: 30
+    margin: 30,
+    flex: 1
+  },
+  onboardingButtonPadding: {
+    paddingRight: 14,
+    paddingBottom: 14
   },
   buttonContainer: {
     flexDirection: "row",
@@ -142,13 +154,15 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   ContinueButtonContainer: {
-    marginTop: 20,
-    marginBottom: 50
+    paddingTop: 30,
+    backgroundColor: COLORS.white,
+    marginBottom: -20
   },
   separator: {
     borderBottomColor: COLORS.lightGray,
     borderBottomWidth: 1,
-    marginVertical: 30
+    marginBottom: 30,
+    marginTop: 7
   }
 });
 

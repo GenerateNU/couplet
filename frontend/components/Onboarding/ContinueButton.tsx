@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: COLORS.white,
     width: 100,
-    color: COLORS.white,
     height: 21
   }
 });

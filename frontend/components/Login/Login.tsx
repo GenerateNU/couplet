@@ -1,4 +1,3 @@
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 import React, { useState } from "react";
 import {
@@ -10,7 +9,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import Config from "react-native-config";
 import appleLogo from "../../assets/appleLogo.png";
 import googleLogo from "../../assets/googleLogo.png";
 import gradient from "../../assets/gradient.png";
@@ -18,11 +16,11 @@ import logo from "../../assets/logo.png";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-GoogleSignin.configure({
-  scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-  webClientId: Config.GOOGLE_WEB_CLIENT_ID,
-  iosClientId: Config.IOS_CLIENT_ID
-});
+// GoogleSignin.configure({
+//   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+//   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
+//   iosClientId: Config.IOS_CLIENT_ID
+// });
 
 export default function Login() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
@@ -30,14 +28,14 @@ export default function Login() {
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
   async function handleGoogleSignIn() {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setIsGoogleLoggedIn(true);
-    } catch (error) {
-      console.error(error);
-      setIsGoogleLoggedIn(false);
-    }
+    // try {
+    //   await GoogleSignin.hasPlayServices();
+    //   const userInfo = await GoogleSignin.signIn();
+    //   setIsGoogleLoggedIn(true);
+    // } catch (error) {
+    //   console.error(error);
+    //   setIsGoogleLoggedIn(false);
+    // }
   }
 
   async function handleAppleSignIn() {

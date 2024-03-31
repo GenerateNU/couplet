@@ -1,9 +1,10 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../../colors";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingPillButton from "../../components/Onboarding/OnboardingPillButton";
-import OnboardingSmallTitle from "../../components/Onboarding/OnboardingSmallTitle";
+import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
@@ -74,25 +75,28 @@ export default function LifestylePassions() {
   }
 
   return (
-    <ScrollView contentContainerStyle={scaledStyles.container}>
-      <View>
-        <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
-      </View>
-      <View>
-        <Image source={PASSIONS_IMAGE} />
-        <OnboardingTitle text="What are you passionate about?" />
-        <OnboardingSmallTitle text="Select your top five interests!" />
-        <View style={scaledStyles.buttonContainer}>
-          {listOfPassions.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handleInterestsButton(option)}
-              isSelected={interests.includes(option)}
-            />
-          ))}
+    <SafeAreaView style={scaledStyles.container}>
+      <ScrollView>
+        <View>
+          <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
         </View>
-      </View>
+        <View>
+          <Image source={PASSIONS_IMAGE} />
+          <OnboardingTitle text="What are you passionate about?" />
+          <Text style={scaledStyles.subtitle}>Select your top five interests!</Text>
+          <View style={scaledStyles.buttonContainer}>
+            {listOfPassions.map((option) => (
+              <View style={scaledStyles.onboardingButtonPadding}>
+                <OnboardingButton
+                  key={option}
+                  title={option}
+                  onButtonClick={() => handleInterestsButton(option)}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
       <View style={scaledStyles.ContinueButtonContainer}>
         <ContinueButton
           title={
@@ -104,7 +108,7 @@ export default function LifestylePassions() {
           onPress={() => router.push("Onboarding/ProfileBio")}
         />
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -113,7 +117,16 @@ const styles = StyleSheet.create({
     flexgrow: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    margin: 30
+    margin: 30,
+    flex: 1
+  },
+  onboardingButtonPadding: {
+    paddingRight: 8,
+    paddingBottom: 8
+  },
+  subtitle: {
+    fontFamily: "DMSansRegular",
+    color: COLORS.darkGray
   },
   buttonContainer: {
     flexDirection: "row",
@@ -122,8 +135,9 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   ContinueButtonContainer: {
-    marginTop: 10,
-    marginBottom: 50
+    paddingTop: 30,
+    marginBottom: -20,
+    backgroundColor: COLORS.white
   }
 });
 

@@ -1,8 +1,8 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingPillButton from "../../components/Onboarding/OnboardingPillButton";
+import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
@@ -42,21 +42,22 @@ export default function LifestyleReligion() {
   }
 
   return (
-    <View style={scaledStyles.container}>
+    <SafeAreaView style={scaledStyles.container}>
       <View>
         <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
       </View>
-      <View>
+      <View style={scaledStyles.innerContainer}>
         <Image source={RELIGION_IMAGE} />
         <OnboardingTitle text="I believe in..." />
         <View style={scaledStyles.buttonContainer}>
           {listOfReligions.map((option) => (
-            <OnboardingPillButton
-              key={option}
-              label={option}
-              onPress={() => handlePillPress(option)}
-              isSelected={religion === option}
-            />
+            <View style={scaledStyles.onboardingButtonPadding}>
+              <OnboardingButton
+                key={option}
+                title={option}
+                onButtonClick={() => handlePillPress(option)}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -67,7 +68,7 @@ export default function LifestyleReligion() {
           isDisabled={!isContinueButtonEnabled()}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -78,11 +79,18 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginTop: 20
   },
+  onboardingButtonPadding: {
+    paddingRight: 8,
+    paddingBottom: 8
+  },
   container: {
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
     margin: 30
+  },
+  innerContainer: {
+    top: 50
   },
   ContinueButtonContainer: {
     marginTop: 10

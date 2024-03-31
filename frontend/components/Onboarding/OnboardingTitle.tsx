@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
   },
   container: {
     width: 346,
-    height: 61,
+    height: 64,
     justifyContent: "center",
     alignItems: "flex-start",
     opacity: 1
   },
   text: {
-    fontFamily: "DMSansBold",
+    fontFamily: "DMSansMedium",
     fontSize: 32,
     fontWeight: "bold",
     lineHeight: 32,
