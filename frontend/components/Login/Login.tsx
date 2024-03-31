@@ -11,6 +11,10 @@ import {
   View
 } from "react-native";
 import Config from "react-native-config";
+import appleLogo from "../../assets/appleLogo.png";
+import googleLogo from "../../assets/googleLogo.png";
+import gradient from "../../assets/gradient.png";
+import logo from "../../assets/logo.png";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
@@ -51,11 +55,11 @@ export default function Login() {
   }
 
   return (
-    <ImageBackground source={require("./Gradient.png")} style={{ flex: 1 }} resizeMode="cover">
+    <ImageBackground source={gradient} style={{ flex: 1 }} resizeMode="cover">
       <SafeAreaView style={scaledStyles.outerView}>
         <View style={scaledStyles.innerView}>
           <View style={scaledStyles.titleImageView}>
-            <Image style={scaledStyles.coupletLogo} source={require("./Logo.png")} />
+            <Image style={scaledStyles.coupletLogo} source={logo} />
             <Text style={scaledStyles.coupletText}>Couplet</Text>
           </View>
 
@@ -70,11 +74,11 @@ export default function Login() {
           {/* Buttons */}
           <View style={scaledStyles.buttonsView}>
             <TouchableOpacity style={scaledStyles.button} onPress={handleAppleSignIn}>
-              <Image source={require("./AppleLogo.png")} style={scaledStyles.appleLogo} />
+              <Image source={appleLogo} style={scaledStyles.appleLogo} />
               <Text style={scaledStyles.buttonText}>Sign up with Apple</Text>
             </TouchableOpacity>
             <TouchableOpacity style={scaledStyles.button} onPress={handleGoogleSignIn}>
-              <Image source={require("./GoogleLogo.png")} style={scaledStyles.googleLogo} />
+              <Image source={googleLogo} style={scaledStyles.googleLogo} />
               <Text style={scaledStyles.buttonText}>Sign up with Google</Text>
             </TouchableOpacity>
           </View>
