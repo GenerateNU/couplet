@@ -4,12 +4,14 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/adaptive-icon.png"
-      }
+      },
+      "package": "com.anonymous.myApp"
     },
     "assetBundlePatterns": ["**/*"],
     "icon": "./assets/icon.png",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.myApp"
     },
     "name": "myApp",
     "orientation": "portrait",
