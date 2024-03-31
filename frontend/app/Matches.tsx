@@ -9,7 +9,7 @@ export default function Matches() {
       <View style={{ flex: 1, marginBottom: 35 }}>
         <MatchesScreen />
       </View>
-      <Navbar activePage="Matches"/>
+      <Navbar activePage="Matches" />
     </View>
   );
 }

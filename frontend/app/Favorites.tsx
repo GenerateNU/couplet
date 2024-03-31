@@ -9,7 +9,7 @@ export default function Favorites() {
       <View style={{ flex: 1, marginBottom: 35 }}>
         <LikesScreen />
       </View>
-      <Navbar activePage="Likes"/>
+      <Navbar activePage="Likes" />
     </View>
   );
 }
