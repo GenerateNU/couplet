@@ -71,7 +71,7 @@ export default function Person({
           {/* PROBALY NEED TO CHANGE THIS>>>> */}
           {habits && <InfoChips items={habits} textColor="white" backgroundColor="purple" />}
           <View>
-            <Text style={styles.textStyle}>For our first date, let's go to...</Text>
+            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
             {/* REUSE THE ITEM */}
           </View>
         </View>
