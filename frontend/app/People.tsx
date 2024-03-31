@@ -6,7 +6,7 @@ export default function People() {
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>
       <Text style={{ fontFamily: "DMSansRegular" }}>People</Text>
-      <Navbar activePage=""/>
+      <Navbar activePage="" />
     </View>
   );
 }
