@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../colors";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingButton from "../../components/Onboarding/OnboardingButton";
-import OnboardingSmallTitle from "../../components/Onboarding/OnboardingSmallTitle";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../Onboarding/ContinueButton";
+import OnboardingButton from "../Onboarding/OnboardingButton";
+import OnboardingSmallTitle from "../Onboarding/OnboardingSmallTitle";
+import OnboardingTitle from "../Onboarding/OnboardingTitle";
+import TopBar from "../Onboarding/TopBar";
 
 const HABITS_IMAGE = require("../../assets/OnboardingHabits.png");
 

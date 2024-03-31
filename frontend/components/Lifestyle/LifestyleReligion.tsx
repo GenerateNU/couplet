@@ -1,29 +1,39 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingButton from "../../components/Onboarding/OnboardingButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
+import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../Onboarding/ContinueButton";
+import OnboardingButton from "../Onboarding/OnboardingButton";
+import OnboardingTitle from "../Onboarding/OnboardingTitle";
+import TopBar from "../Onboarding/TopBar";
 
-const POLITICS_IMAGE = require("../../assets/OnboardingPolitics.png");
+const RELIGION_IMAGE = require("../../assets/OnboardingReligion.png");
 
-export default function LifestylePolitics() {
+export default function LifestyleReligion() {
   const navigation = useNavigation();
-  const [politics, setPolitics] = useState<string | null>(null);
-  const listOfPolitics = ["Liberal", "Moderate", "Conservative", "Other", "Prefer not to say"];
+  const [religion, setReligion] = useState<string | null>(null);
+  const listOfReligions = [
+    "Christianity",
+    "Islam",
+    "Hindusim",
+    "Buddhism",
+    "Catholicism",
+    "Judaism",
+    "Agnosticisim",
+    "Atheism",
+    "Other",
+    "Prefer not to say"
+  ];
 
   const handlePillPress = (selection: string) => {
-    if (politics === selection) {
-      setPolitics(null);
+    if (religion === selection) {
+      setReligion(null);
     } else {
-      setPolitics(selection);
+      setReligion(selection);
     }
   };
 
-  const isContinueButtonEnabled = () => politics !== null;
+  const isContinueButtonEnabled = () => religion !== null;
 
   function goBack() {
     if (navigation.canGoBack()) {
@@ -36,11 +46,11 @@ export default function LifestylePolitics() {
       <View>
         <TopBar onBackPress={() => goBack()} text="Lifestyle" selectedCount={3} />
       </View>
-      <View>
-        <Image source={POLITICS_IMAGE} />
-        <OnboardingTitle text="Politically, I am..." />
+      <View style={scaledStyles.innerContainer}>
+        <Image source={RELIGION_IMAGE} />
+        <OnboardingTitle text="I believe in..." />
         <View style={scaledStyles.buttonContainer}>
-          {listOfPolitics.map((option) => (
+          {listOfReligions.map((option) => (
             <View style={scaledStyles.onboardingButtonPadding}>
               <OnboardingButton
                 key={option}
@@ -51,11 +61,11 @@ export default function LifestylePolitics() {
           ))}
         </View>
       </View>
-      <View style={scaledStyles.continueContainer}>
+      <View style={scaledStyles.ContinueButtonContainer}>
         <ContinueButton
+          onPress={() => router.push("Onboarding/LifestylePolitics")}
           title="Continue"
           isDisabled={!isContinueButtonEnabled()}
-          onPress={() => router.push("Onboarding/LifestyleHabits")}
         />
       </View>
     </SafeAreaView>
@@ -78,6 +88,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     margin: 30
+  },
+  innerContainer: {
+    top: 50
+  },
+  ContinueButtonContainer: {
+    marginTop: 10
   }
 });
 
