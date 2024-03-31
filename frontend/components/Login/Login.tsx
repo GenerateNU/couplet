@@ -40,7 +40,7 @@ export default function Login() {
       console.error(error);
       setIsGoogleLoggedIn(false);
     }
-  }
+  };
 
   const handleAppleSignIn = async () => {
     try {
@@ -54,7 +54,7 @@ export default function Login() {
     } catch (e) {
       setIsAppleLoggedIn(false);
     }
-  }
+  };
 
   return (
     <ImageBackground source={gradient} style={{ flex: 1 }} resizeMode="cover">
