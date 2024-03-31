@@ -14,6 +14,7 @@ function OnboardingBar({ selectedCount }: OnboardingBarProps) {
       <View style={{ flexDirection: "row", width: scaleWidth(346) }}>
         {Array.from({ length: 4 }).map((_, index) => (
           <View
+            key={index} // eslint-disable-line
             style={[
               scaledStyles.segment,
               index === selectedCount - 1
