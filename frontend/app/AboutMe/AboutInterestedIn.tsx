@@ -107,13 +107,13 @@
 import { router } from "expo-router";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../scaleStyles";
 
 const aboutInterestedInPicture = require("../../assets/interestedin.png");
 
@@ -146,20 +146,19 @@ function AboutInterestedIn() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutInterestedInPicture} />
-          <OnboardingTitle text="I&apos;m interested in..."/>
+          <OnboardingTitle text="I'm interested in..." />
           <View style={scaledStyles.inputWrapper} />
           <View style={scaledStyles.buttonContainer}>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Man" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Woman" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="All" onButtonClick={() => {}} />
-              </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Man" onButtonClick={() => {}} />
             </View>
-
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Woman" onButtonClick={() => {}} />
+            </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="All" onButtonClick={() => {}} />
+            </View>
+          </View>
         </View>
 
         <View>

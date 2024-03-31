@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansRegular",
     fontSize: 17,
     fontWeight: "500",
-    color: COLORS.primary,
+    color: COLORS.primary
   },
   textBarContainer: {
     paddingTop: 8,

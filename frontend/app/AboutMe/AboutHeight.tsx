@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
-import DropDownPicker from "react-native-dropdown-picker";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const heightPicture = require("../../assets/height.png");
 
@@ -52,7 +52,7 @@ function AboutHeight() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={heightPicture} />
-          <OnboardingTitle text="My height is..."/>
+          <OnboardingTitle text="My height is..." />
           <View style={scaledStyles.dropDownContainer}>
             <DropDownPicker
               open={openFeet}
@@ -73,8 +73,6 @@ function AboutHeight() {
               containerStyle={scaledStyles.dropdown}
             />
           </View>
-
-
         </View>
 
         <View>

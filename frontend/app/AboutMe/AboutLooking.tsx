@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const aboutLookingPicture = require("../../assets/lookingfor.png");
 
@@ -40,7 +40,7 @@ function AboutLooking() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutLookingPicture} />
-          <OnboardingTitle text="I&apos;m looking for..."/>
+          <OnboardingTitle text="I'm looking for..." />
           <View style={scaledStyles.inputWrapper} />
           <View style={scaledStyles.buttonContainer}>
             <View style={scaledStyles.button}>

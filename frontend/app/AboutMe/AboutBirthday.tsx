@@ -5,14 +5,14 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
 
 function AboutBirthday() {
-  const user = useLocalSearchParams<{user : string }>()
+  const user = useLocalSearchParams<{ user: string }>();
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
@@ -24,9 +24,8 @@ function AboutBirthday() {
     defaultValue: ""
   });
   const onSubmit = (data: Object) => {
-    console.log(user);
+    console.log(user, name);
     router.push("/AboutMe/AboutGender");
-    
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -42,7 +41,7 @@ function AboutBirthday() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutBirthdayPicture} />
-          <OnboardingTitle text="My birthday is..."/>
+          <OnboardingTitle text="My birthday is..." />
           <View style={scaledStyles.inputWrapper} />
           <DropDownCalendar />
           <View style={scaledStyles.helperContainer}>

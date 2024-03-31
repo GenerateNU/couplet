@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../scaleStyles";
 
 const aboutGender = require("../../assets/lightningBolt.png");
 
@@ -40,20 +40,19 @@ function AboutGender() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutGender} />
-          <OnboardingTitle text="I am a..."/>
+          <OnboardingTitle text="I am a..." />
           <View style={scaledStyles.inputWrapper} />
           <View style={scaledStyles.buttonContainer}>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Man" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Woman" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Other" onButtonClick={() => {}} />
-              </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Man" onButtonClick={() => {}} />
             </View>
-
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Woman" onButtonClick={() => {}} />
+            </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Other" onButtonClick={() => {}} />
+            </View>
+          </View>
         </View>
 
         <View>

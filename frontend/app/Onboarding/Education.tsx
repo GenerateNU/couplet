@@ -37,10 +37,10 @@
 //   >
 //     <View style={scaledStyles.TopUiContainer}>
 //       <TopBar
-        // onBackPress={() => goBack()}
-        // text="Education and Career"
-        // selectedCount={2}
-        // skipToRoute={nextRoute}
+// onBackPress={() => goBack()}
+// text="Education and Career"
+// selectedCount={2}
+// skipToRoute={nextRoute}
 //       />
 //     </View>
 //     <View style={scaledStyles.mainContainer}>
@@ -98,7 +98,7 @@
 
 // const scaledStyles = scaleStyleSheet(styles);
 
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native";
@@ -109,6 +109,7 @@ import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 
 const SCHOOL = require("../../assets/lightbulb.png");
+
 function Education() {
   const [school, setSchool] = useState("");
   const nextRoute = "Onboarding/Career";
@@ -130,37 +131,37 @@ function Education() {
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
         <TopBar
-        onBackPress={() => router.back()}
-        text="Education and Career"
-        selectedCount={2}
-        skipToRoute={nextRoute}
+          onBackPress={() => router.back()}
+          text="Education and Career"
+          selectedCount={2}
+          skipToRoute={nextRoute}
         />
       </View>
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-      <View style={scaledStyles.mainContainer}>
-        <View>
-          <Image source={SCHOOL} />
-          <OnboardingTitle text="My school is..." />
-          <TextInput
-            editable
-            value={school}
-            onChangeText={setSchool}
-            style={scaledStyles.textInput}
-            placeholder="Name of School"
-          />
+        <View style={scaledStyles.mainContainer}>
+          <View>
+            <Image source={SCHOOL} />
+            <OnboardingTitle text="My school is..." />
+            <TextInput
+              editable
+              value={school}
+              onChangeText={setSchool}
+              style={scaledStyles.textInput}
+              placeholder="Name of School"
+            />
+          </View>
         </View>
-      </View>
       </KeyboardAvoidingView>
       <View>
-          <ContinueButton
-            onPress={() => router.push(nextRoute)}
-            title="Continue"
-            isDisabled={school.length === 0}
-          />
-        </View>
+        <ContinueButton
+          onPress={() => router.push(nextRoute)}
+          title="Continue"
+          isDisabled={school.length === 0}
+        />
+      </View>
     </SafeAreaView>
   );
 }

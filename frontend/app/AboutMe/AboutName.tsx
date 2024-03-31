@@ -30,6 +30,7 @@ function AboutName() {
     defaultValue: ""
   });
   const onSubmit = (data: { name: string }) => {
+    console.log(name)
     router.push({ pathname: "/AboutMe/AboutBirthday", params: data });
   };
   return (

@@ -37,7 +37,7 @@ export default function Login() {
     //   console.error(error);
     //   setIsGoogleLoggedIn(false);
     // }
-  }
+  };
 
   const handleAppleSignIn = async () => {
     try {
