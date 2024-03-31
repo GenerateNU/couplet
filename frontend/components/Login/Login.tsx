@@ -1,5 +1,7 @@
 import * as AppleAuthentication from "expo-apple-authentication";
-import React, { useState } from "react";
+import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   ImageBackground,
@@ -23,10 +25,12 @@ import scaleStyleSheet from "../../scaleStyles";
 // });
 
 export default function Login() {
+  // eslint-disable-next-line no-unused-vars
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
     // try {
@@ -37,51 +41,75 @@ export default function Login() {
     //   console.error(error);
     //   setIsGoogleLoggedIn(false);
     // }
-  }
+  };
 
   const handleAppleSignIn = async () => {
     try {
-      await AppleAuthentication.signInAsync({
+      const creds = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL
         ]
       });
+      await SecureStore.setItemAsync("appleAuth", creds.user);
+      router.push("Home");
       setIsAppleLoggedIn(true);
     } catch (e) {
       setIsAppleLoggedIn(false);
     }
   };
 
+  useEffect(() => {
+    const checkAppleAuth = async () => {
+      setIsLoading(true);
+      const appleAuth = await SecureStore.getItemAsync("appleAuth");
+
+      // TODO: check apple credentials against backend user table, route to either
+      // onboarding or home page based on whether we find a user
+
+      setIsLoading(false);
+      if (appleAuth !== null) {
+        router.push("Home");
+      }
+    };
+    checkAppleAuth();
+  }, []);
+
   return (
     <ImageBackground source={gradient} style={{ flex: 1 }} resizeMode="cover">
       <SafeAreaView style={scaledStyles.outerView}>
-        <View style={scaledStyles.innerView}>
-          <View style={scaledStyles.titleImageView}>
-            <Image style={scaledStyles.coupletLogo} source={logo} />
-            <Text style={scaledStyles.coupletText}>Couplet</Text>
+        {isLoading ? (
+          <View style={{ height: "100%" }}>
+            <Text>LOADING</Text>
           </View>
+        ) : (
+          <View style={scaledStyles.innerView}>
+            <View style={scaledStyles.titleImageView}>
+              <Image style={scaledStyles.coupletLogo} source={logo} />
+              <Text style={scaledStyles.coupletText}>Couplet</Text>
+            </View>
 
-          {/* Texts below the title/image */}
-          <View style={scaledStyles.textsView}>
-            <Text style={scaledStyles.headerText}>Create an account</Text>
-            <Text style={scaledStyles.bodyText}>
-              Linking your account makes it easier to sign in
-            </Text>
-          </View>
+            {/* Texts below the title/image */}
+            <View style={scaledStyles.textsView}>
+              <Text style={scaledStyles.headerText}>Create an account</Text>
+              <Text style={scaledStyles.bodyText}>
+                Linking your account makes it easier to sign in
+              </Text>
+            </View>
 
-          {/* Buttons */}
-          <View style={scaledStyles.buttonsView}>
-            <TouchableOpacity style={scaledStyles.button} onPress={handleAppleSignIn}>
-              <Image source={appleLogo} style={scaledStyles.appleLogo} />
-              <Text style={scaledStyles.buttonText}>Sign up with Apple</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={scaledStyles.button} onPress={handleGoogleSignIn}>
-              <Image source={googleLogo} style={scaledStyles.googleLogo} />
-              <Text style={scaledStyles.buttonText}>Sign up with Google</Text>
-            </TouchableOpacity>
+            {/* Buttons */}
+            <View style={scaledStyles.buttonsView}>
+              <TouchableOpacity style={scaledStyles.button} onPress={handleAppleSignIn}>
+                <Image source={appleLogo} style={scaledStyles.appleLogo} />
+                <Text style={scaledStyles.buttonText}>Sign up with Apple</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={scaledStyles.button} onPress={handleGoogleSignIn}>
+                <Image source={googleLogo} style={scaledStyles.googleLogo} />
+                <Text style={scaledStyles.buttonText}>Sign up with Google</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )}
       </SafeAreaView>
     </ImageBackground>
   );
@@ -110,13 +138,13 @@ const styles = StyleSheet.create({
   appleLogo: {
     width: 16,
     height: 20,
-    background: COLORS.black,
+    // background: COLORS.black,
     marginRight: 8
   },
   googleLogo: {
     width: 16,
     height: 16,
-    background: COLORS.black,
+    // background: COLORS.black,
     marginRight: 8
   },
   titleImageView: {
