@@ -1,14 +1,31 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useForm, useWatch } from "react-hook-form";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const aboutLookingPicture = require("../../assets/lookingfor.png");
 
 function AboutLooking() {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: ""
+    }
+  });
+  const name = useWatch({
+    control,
+    name: "name",
+    defaultValue: ""
+  });
+  const onSubmit = (data: Object) => {
+    console.log(name);
+    router.push("/AboutMe/AboutPronouns");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -23,32 +40,30 @@ function AboutLooking() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutLookingPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>I&apos;m looking for...</Text>
-          </View>
-          <View>
-            <View style={scaledStyles.buttonContainer}>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Long term relationship" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Short term relationship" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Seeing where things go" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Friends" onButtonClick={() => {}} />
-              </View>
+          <OnboardingTitle text="I&apos;m looking for..."/>
+          <View style={scaledStyles.inputWrapper} />
+          <View style={scaledStyles.buttonContainer}>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Long term relationship" onButtonClick={() => {}} />
+            </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Short term relationship" onButtonClick={() => {}} />
+            </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Seeing where things go" onButtonClick={() => {}} />
+            </View>
+            <View style={scaledStyles.button}>
+              <OnboardingButton title="Friends" onButtonClick={() => {}} />
             </View>
           </View>
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutPronouns");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -61,23 +76,14 @@ export default AboutLooking;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
+    alignItems: "center",
+    flex: 0.2
   },
   mainContainer: {
     flex: 1,
     marginLeft: 20,
     marginRight: 20,
     justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
   },
   textHelper: {
     fontSize: 12,
@@ -87,20 +93,15 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 34,
+    marginBottom: 36
   },
-  ContinueButtonContainer: {
-    marginBottom: 10
+  helperContainer: {
+    marginTop: 16
   },
   button: {
-    marginBottom: 16
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
-    fontFamily: "DMSansMedium"
+    marginBottom: 14
   }
 });
 

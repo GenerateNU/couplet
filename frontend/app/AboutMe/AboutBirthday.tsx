@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -7,10 +7,12 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
 
 function AboutBirthday() {
+  const user = useLocalSearchParams<{user : string }>()
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
@@ -22,8 +24,9 @@ function AboutBirthday() {
     defaultValue: ""
   });
   const onSubmit = (data: Object) => {
-    console.log(name);
+    console.log(user);
     router.push("/AboutMe/AboutGender");
+    
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -39,7 +42,7 @@ function AboutBirthday() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutBirthdayPicture} />
-          <Text style={scaledStyles.headerContainer}>My birthday is...</Text>
+          <OnboardingTitle text="My birthday is..."/>
           <View style={scaledStyles.inputWrapper} />
           <DropDownCalendar />
           <View style={scaledStyles.helperContainer}>
@@ -47,7 +50,7 @@ function AboutBirthday() {
           </View>
         </View>
 
-        <View style={scaledStyles.ContinueButtonContainer}>
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={false}
@@ -74,15 +77,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
     justifyContent: "space-between"
   },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
   textHelper: {
     fontSize: 12,
     fontWeight: "400",
@@ -91,7 +85,9 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 34,
+    marginBottom: 36
   },
   helperContainer: {
     marginTop: 16

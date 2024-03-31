@@ -1,14 +1,31 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useForm, useWatch } from "react-hook-form";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const pronounPicture = require("../../assets/pronouns.png");
 
 function AboutPronouns() {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: ""
+    }
+  });
+  const name = useWatch({
+    control,
+    name: "name",
+    defaultValue: ""
+  });
+  const onSubmit = (data: Object) => {
+    console.log(name);
+    router.push("/AboutMe/AboutHeight");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -23,11 +40,8 @@ function AboutPronouns() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={pronounPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>My pronouns are...</Text>
-          </View>
-          <View>
-            <View style={scaledStyles.buttonContainer}>
+          <OnboardingTitle text="My pronouns are..."/>
+          <View style={scaledStyles.buttonContainer}>
               <View style={scaledStyles.button}>
                 <OnboardingButton title="He/Him" onButtonClick={() => {}} />
               </View>
@@ -54,14 +68,17 @@ function AboutPronouns() {
                 <OnboardingButton title="Ze/Zir" onButtonClick={() => {}} />
               </View>
             </View>
-          </View>
+          
+          
+
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/AboutMe/AboutHeight");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -74,23 +91,14 @@ export default AboutPronouns;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
+    alignItems: "center",
+    flex: 0.3
   },
   mainContainer: {
     flex: 1,
     marginLeft: 20,
     marginRight: 20,
     justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
   },
   textHelper: {
     fontSize: 12,
@@ -100,10 +108,12 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 34,
+    marginBottom: 36
   },
-  ContinueButtonContainer: {
-    marginBottom: 10
+  helperContainer: {
+    marginTop: 16
   },
   button: {
     marginRight: 8,
@@ -114,6 +124,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start"
   }
+
 });
 
 const scaledStyles = scaleStyleSheet(styles);
+

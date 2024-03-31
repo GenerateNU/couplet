@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "500",
     color: COLORS.primary,
-    marginTop: 10
   },
   textBarContainer: {
     paddingTop: 8,

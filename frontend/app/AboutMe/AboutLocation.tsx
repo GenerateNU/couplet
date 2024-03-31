@@ -1,16 +1,30 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { useForm, useWatch } from "react-hook-form";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import DropDownPicker from "react-native-dropdown-picker";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 
 const aboutLocationPicture = require("../../assets/aboutlocation.png");
-
-function AboutHeight() {
-  const [openLocation, setOpenLocation] = useState(false);
-  const [location, setLocation] = useState(null);
+function AboutLocation() {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: ""
+    }
+  });
+  const name = useWatch({
+    control,
+    name: "name",
+    defaultValue: ""
+  });
+  const onSubmit = (data: Object) => {
+    console.log(name);
+    router.push("/Onboarding/Education");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -25,56 +39,36 @@ function AboutHeight() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutLocationPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>I live in...</Text>
-          </View>
-          <View>
-            <DropDownPicker
-              open={openLocation}
-              value={location}
-              items={[]}
-              setOpen={setOpenLocation}
-              setValue={setLocation}
-              placeholder="Select Your Location"
-              containerStyle={scaledStyles.dropdown}
-            />
-          </View>
+          <OnboardingTitle text="I live in..."/>
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={false}
             onPress={() => {
-              router.push("/Home");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
       </View>
+      
     </SafeAreaView>
   );
 }
 
-export default AboutHeight;
+export default AboutLocation;
 
 const styles = StyleSheet.create({
   TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
+    alignItems: "center",
+    flex: 0.3
   },
   mainContainer: {
     flex: 1,
     marginLeft: 20,
     marginRight: 20,
     justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
   },
   textHelper: {
     fontSize: 12,
@@ -84,17 +78,15 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansMedium"
   },
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 34,
+    marginBottom: 36
   },
-  ContinueButtonContainer: {
-    marginBottom: 10
+  helperContainer: {
+    marginTop: 16
   },
-  buttonText: {
-    color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
-    fontFamily: "DMSansMedium"
+  button: {
+    marginBottom: 14
   },
   dropDownContainer: {
     flexDirection: "row"
@@ -106,3 +98,4 @@ const styles = StyleSheet.create({
 });
 
 const scaledStyles = scaleStyleSheet(styles);
+
