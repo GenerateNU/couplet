@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start"
   }
+  
 });
 
 const scaledStyles = scaleStyleSheet(styles);
