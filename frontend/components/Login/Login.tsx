@@ -27,11 +27,13 @@ GoogleSignin.configure({
 export default function Login() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
-  async function handleGoogleSignIn() {
+  const handleGoogleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
+      // eslint-disable-next-line no-unused-vars
       const userInfo = await GoogleSignin.signIn();
       setIsGoogleLoggedIn(true);
     } catch (error) {
@@ -40,7 +42,7 @@ export default function Login() {
     }
   }
 
-  async function handleAppleSignIn() {
+  const handleAppleSignIn = async () => {
     try {
       await AppleAuthentication.signInAsync({
         requestedScopes: [
