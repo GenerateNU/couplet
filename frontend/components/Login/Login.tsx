@@ -1,7 +1,15 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 import React, { useState } from "react";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import Config from "react-native-config";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
@@ -44,7 +52,7 @@ export default function Login() {
 
   return (
     <ImageBackground source={require("./Gradient.png")} style={{ flex: 1 }} resizeMode="cover">
-      <View style={scaledStyles.outerView}>
+      <SafeAreaView style={scaledStyles.outerView}>
         <View style={scaledStyles.innerView}>
           <View style={scaledStyles.titleImageView}>
             <Image style={scaledStyles.coupletLogo} source={require("./Logo.png")} />
@@ -71,12 +79,11 @@ export default function Login() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
 
-// Define the styles
 const styles = StyleSheet.create({
   outerView: {
     width: 393,
@@ -85,9 +92,9 @@ const styles = StyleSheet.create({
   },
   innerView: {
     width: 356,
-    height: 450.34,
+    height: 438.34,
     position: "absolute",
-    top: 192,
+    top: 205,
     left: 24,
     gap: 24
   },
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
     left: -12,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 4
   },
   coupletText: {
     width: "100%",
