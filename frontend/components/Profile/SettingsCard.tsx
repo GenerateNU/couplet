@@ -6,7 +6,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function SettingsCard({
   text,
   img,
-  last = false
+  // es-lint-disable-next-line
+  last = false,
+  ...props
 }: {
   text: string;
   img: any;
@@ -19,6 +21,7 @@ export default function SettingsCard({
   if (!fontsLoaded) {
     return null;
   }
+
   return (
     <TouchableOpacity>
       <View style={{ ...styles.container, borderBottomWidth: last ? 1 : 0 }}>
@@ -62,6 +65,3 @@ const styles = StyleSheet.create({
     position: "absolute"
   }
 });
-function defaultProps(arg0: {}) {
-  throw new Error("Function not implemented.");
-}
