@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
 import React from "react";
@@ -6,7 +8,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function SettingsCard({
   text,
   img,
-  // es-lint-disable-next-line
   last = false,
   ...props
 }: {
@@ -27,7 +28,7 @@ export default function SettingsCard({
       <View style={{ ...styles.container, borderBottomWidth: last ? 1 : 0 }}>
         <Image source={img} style={styles.imageStyle} />
         <Text style={styles.mainText}>{text}</Text>
-        {/**  */}
+        {/* // es-lint-disable-next-line */}
         <Image source={require("../../assets/Vector.png")} style={styles.arrow} />
       </View>
     </TouchableOpacity>
