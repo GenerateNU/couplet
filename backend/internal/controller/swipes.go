@@ -51,14 +51,32 @@ func (c Controller) CreateUserSwipe(params user.UserSwipe) (us user.UserSwipe, v
 		var otherSwipe user.UserSwipe
 		// This query checks for a reciprocal like.
 		err := tx.Where("user_id = ? AND other_user_id = ? AND liked = ?", us.OtherUserID, us.UserID, true).First(&otherSwipe).Error
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				// Commit the creation of the user swipe, but don't continue
+				tx.Commit()
+				return
+			}
+			tx.Rollback()
+			return
+		}
 
-		if err == nil {
-			// Logic to handle a found reciprocal swipe, e.g., creating a match.
-		} else if err == gorm.ErrRecordNotFound {
-			// This is expected if the other user hasn't swiped yet.
-			// Handle this case appropriately, but it should not result in a function error.
-		} else {
-			// Handle unexpected errors.
+		// Logic to handle a found reciprocal swipe, e.g., creating a match.
+		// Grabs both users associated with the swipe, and inserts them into each other's matches list
+		var userOne *user.User
+		c.database.First(&userOne, otherSwipe.UserID)
+
+		var userTwo *user.User
+		c.database.First(&userTwo, otherSwipe.OtherUserID)
+
+		txErr = c.database.Model(&userOne).Association("Matches").Append(userTwo)
+		if txErr != nil {
+			tx.Rollback()
+			return
+		}
+
+		txErr = c.database.Model(&userTwo).Association("Matches").Append(userOne)
+		if txErr != nil {
 			tx.Rollback()
 			return
 		}
