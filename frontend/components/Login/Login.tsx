@@ -1,4 +1,5 @@
 import * as AppleAuthentication from "expo-apple-authentication";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -23,12 +24,14 @@ import scaleStyleSheet from "../../scaleStyles";
 // });
 
 export default function Login() {
+  // eslint-disable-next-line no-unused-vars
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
   const handleGoogleSignIn = async () => {
+    router.push("/Home");
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -37,7 +40,7 @@ export default function Login() {
     //   console.error(error);
     //   setIsGoogleLoggedIn(false);
     // }
-  }
+  };
 
   const handleAppleSignIn = async () => {
     try {
@@ -48,6 +51,7 @@ export default function Login() {
         ]
       });
       setIsAppleLoggedIn(true);
+      router.push("/Home");
     } catch (e) {
       setIsAppleLoggedIn(false);
     }

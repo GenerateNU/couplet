@@ -75,9 +75,10 @@ func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) 
 	}
 
 	res := api.EventsIDGetOK{
-		ID:   e.ID.Unwrap(),
-		Name: e.Name,
-		Bio:  e.Bio,
+		ID:    e.ID.Unwrap(),
+		Name:  e.Name,
+		Bio:   e.Bio,
+		OrgId: api.NewOptUUID(e.OrgID.Unwrap()),
 	}
 
 	return &res, nil
