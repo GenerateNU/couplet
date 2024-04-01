@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import BackButton from "./BackButton";
+import OnboardingBar from "./OnboardingBar";
 
 type TopBarProps = {
   onBackPress: () => void;
@@ -22,6 +23,7 @@ function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) 
             Skip
           </Text>
         )}
+        <OnboardingBar selectedCount={selectedCount} />
       </View>
       <View style={scaledStyles.textBarContainer}>
         <Text style={scaledStyles.informationText}>{text}</Text>
