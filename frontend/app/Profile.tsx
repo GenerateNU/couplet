@@ -35,9 +35,13 @@ export default function Profile() {
       </View>
       <View style={{ width: "100%" }}>
         <CardWrapper>
+          {/* // eslint-disable-next-line global-require */}
           <SettingsCard text="Settings" img={require("../assets/gear.png")} />
+          {/* // eslint-disable-next-line global-require */}
           <SettingsCard text="Help and Support" img={require("../assets/help.png")} />
+          {/* // eslint-disable-next-line global-require */}
           <SettingsCard text="About Couplet" img={require("../assets/info.png")} />
+          {/* // eslint-disable-next-line global-require */}
           <SettingsCard text="Log Out" img={require("../assets/lougout.png")} last />
         </CardWrapper>
       </View>
