@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -12,14 +12,9 @@ type HomeEventCardProps = {
 };
 
 export default function HomeEventCard({ id, name }: HomeEventCardProps) {
-  const router = useRouter();
-
   return (
     <Pressable
-      onPress={() => {
-        router.push("Event");
-        router.setParams({ collectionId: "", eventId: id });
-      }}
+      onPress={() => router.push({ pathname: "Event", params: { collectionId: "", eventId: id } })}
     >
       <View style={styles.card}>
         <View style={styles.imageContainer}>
