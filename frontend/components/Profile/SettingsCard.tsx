@@ -24,6 +24,7 @@ export default function SettingsCard({
       <View style={{ ...styles.container, borderBottomWidth: last ? 1 : 0 }}>
         <Image source={img} style={styles.imageStyle} />
         <Text style={styles.mainText}>{text}</Text>
+        {/**  */}
         <Image source={require("../../assets/Vector.png")} style={styles.arrow} />
       </View>
     </TouchableOpacity>
@@ -61,3 +62,6 @@ const styles = StyleSheet.create({
     position: "absolute"
   }
 });
+function defaultProps(arg0: {}) {
+  throw new Error("Function not implemented.");
+}

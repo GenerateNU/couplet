@@ -23,6 +23,7 @@ import scaleStyleSheet from "../../scaleStyles";
 // });
 
 export default function Login() {
+  // eslint-disable-next-line no-unused-vars
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
   const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -37,7 +38,7 @@ export default function Login() {
     //   console.error(error);
     //   setIsGoogleLoggedIn(false);
     // }
-  }
+  };
 
   const handleAppleSignIn = async () => {
     try {
