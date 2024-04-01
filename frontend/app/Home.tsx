@@ -9,7 +9,7 @@ export default function Home() {
       <View style={{ flex: 1 }}>
         <HomeScreen />
       </View>
-      <Navbar />
+      <Navbar activePage="Home" />
     </View>
   );
 }

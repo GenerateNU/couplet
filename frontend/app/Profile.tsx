@@ -40,7 +40,7 @@ export default function Profile() {
           <SettingsCard text="Log Out" img={require("../assets/lougout.png")} last />
         </CardWrapper>
       </View>
-      <Navbar />
+      <Navbar activePage="Profile" />
     </View>
   );
 }
