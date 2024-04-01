@@ -6,12 +6,13 @@ import SettingsCard from "../components/Profile/SettingsCard";
 import PurpleProfileCard from "./PurpleProfileCard";
 import UserDetails from "./UserDetails";
 
+/* // eslint-disable global-require */
 export default function Profile() {
   return (
     <View style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
         <UserDetails
-          onPress={() => console.log("Edit Account Details")}
+          onPress={() => "Placeholder"}
           profileImageSource={undefined}
           name="TiffanyA"
           editDetailsText="Edit Account Details"
@@ -23,13 +24,13 @@ export default function Profile() {
           imageUrl="../assets/ProfilePurple.png"
           name="My Profile"
           detailText="View and make changes to your profile"
-          onPress={() => console.log("Edit Account Details")}
+          onPress={() => "Placeholder"}
         />
         <PurpleProfileCard
           imageUrl="../assets/ProfilePurple.png"
           name="My Preferences"
           detailText="Manage what you are looking for"
-          onPress={() => console.log("Edit Account Details")}
+          onPress={() => "Placeholder"}
         />
       </View>
       <View style={{ width: "100%" }}>

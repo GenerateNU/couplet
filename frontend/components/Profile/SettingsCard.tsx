@@ -6,7 +6,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function SettingsCard({
   text,
   img,
-  last
+  last = false
 }: {
   text: string;
   img: any;
