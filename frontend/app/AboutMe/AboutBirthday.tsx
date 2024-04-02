@@ -8,23 +8,23 @@ import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { useAppSelector } from "../../state/hooks";
 
 const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
 
 function AboutBirthday() {
+  const state = useAppSelector((state) =>
+    state.form.name
+  );
   const user = useLocalSearchParams<{ user: string }>();
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
     }
   });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
   const onSubmit = (data: Object) => {
-    console.log(user, name);
+    console.log("Start");
+    console.log("From birthday:", state);
     router.push("/AboutMe/AboutGender");
   };
   return (

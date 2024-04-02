@@ -1,6 +1,8 @@
 import React from "react";
-import AboutName from "./AboutMe/AboutName";
+import App from "../App";
 
 export default function index() {
-  return <AboutName />;
+  return (
+      <App />
+  );
 }

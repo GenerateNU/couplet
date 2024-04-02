@@ -15,23 +15,29 @@ import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { useAppDispatch } from "../../state/hooks";
+import { setName } from "../../state/formSlice";
 
 const aboutNamePicture = require("../../assets/aboutName.png");
 
 function AboutName() {
+  const dispatch = useAppDispatch();
+  //Use Form from React-Hook-Form
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
     }
   });
+  //Watch any changes made to the input form
   const name = useWatch({
     control,
     name: "name",
     defaultValue: ""
   });
+  //On submit of the name form
   const onSubmit = (data: { name: string }) => {
-    console.log(name)
-    router.push({ pathname: "/AboutMe/AboutBirthday", params: data });
+    dispatch(setName(data.name));
+    router.push("/AboutMe/AboutBirthday");
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -76,7 +82,7 @@ function AboutName() {
       <View>
         <ContinueButton
           title="Continue"
-          isDisabled={false}
+          isDisabled={!name}
           onPress={() => {
             handleSubmit(onSubmit)();
           }}
