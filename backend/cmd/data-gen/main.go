@@ -152,9 +152,7 @@ func main() {
 		newEvent.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
 			image := eventImages[rand.Intn(len(eventImages))]
-			if !slices.Contains(newEvent.Images, image) {
-				newEvent.Images = append(newEvent.Images, image)
-			}
+			newEvent.Images = append(newEvent.Images, image)
 		}
 		if rand.Intn(2) == 0 {
 			newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
@@ -190,12 +188,11 @@ func main() {
 		newUser.FirstName = fmt.Sprintf("user-%d", i)
 		newUser.LastName = "lastname"
 		newUser.Age = uint8(18 + rand.Intn(23))
+		newUser.Bio = "Hey everyone! I can't wait to go to an exciting event!"
 		newUser.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
 			image := userImages[rand.Intn(len(userImages))]
-			if !slices.Contains(newUser.Images, image) {
-				newUser.Images = append(newUser.Images, image)
-			}
+			newUser.Images = append(newUser.Images, image)
 		}
 
 		// Create user
