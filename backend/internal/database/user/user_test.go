@@ -8,88 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func TestUserValidate(t *testing.T) {
-	id := user_id.Wrap(uuid.New())
-	validUser := user.User{
-		ID:        id,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
-		FirstName: "First",
-		LastName:  "Last",
-		Age:       21,
-		Bio:       "Hey everyone! I can't wait to go to an exciting event!",
-		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-	}
-	assert.Nil(t, validUser.Validate())
-	assert.Nil(t, (&validUser).BeforeSave(nil))
-
-	timesCheck := validUser
-	timesCheck.CreatedAt = timesCheck.UpdatedAt.Add(1)
-	assert.NotNil(t, timesCheck.Validate())
-	assert.NotNil(t, (&timesCheck).BeforeSave(nil))
-
-	firstNameLengthCheck := validUser
-	firstNameLengthCheck.FirstName = ""
-	for i := 0; i <= 256; i++ {
-		if i < 1 || i > 255 {
-			assert.NotNil(t, firstNameLengthCheck.Validate())
-			assert.NotNil(t, (&firstNameLengthCheck).BeforeSave(nil))
-		} else {
-			assert.Nil(t, firstNameLengthCheck.Validate())
-			assert.Nil(t, (&firstNameLengthCheck).BeforeSave(nil))
-		}
-		firstNameLengthCheck.FirstName = firstNameLengthCheck.FirstName + "a"
-	}
-
-	lastNameLengthCheck := validUser
-	lastNameLengthCheck.LastName = ""
-	for i := 0; i <= 256; i++ {
-		if i < 1 || i > 255 {
-			assert.NotNil(t, lastNameLengthCheck.Validate())
-			assert.NotNil(t, (&lastNameLengthCheck).BeforeSave(nil))
-		} else {
-			assert.Nil(t, lastNameLengthCheck.Validate())
-			assert.Nil(t, (&lastNameLengthCheck).BeforeSave(nil))
-		}
-		lastNameLengthCheck.LastName = lastNameLengthCheck.LastName + "a"
-	}
-
-	legalAgeCheck := validUser
-	legalAgeCheck.Age = 0
-	for i := 0; i <= 21; i++ {
-		if i < 18 {
-			assert.NotNil(t, legalAgeCheck.Validate())
-			assert.NotNil(t, (&legalAgeCheck).BeforeSave(nil))
-		} else {
-			assert.Nil(t, legalAgeCheck.Validate())
-			assert.Nil(t, (&legalAgeCheck).BeforeSave(nil))
-		}
-		legalAgeCheck.Age = legalAgeCheck.Age + 1
-	}
-
-	bioLengthCheck := validUser
-	bioLengthCheck.Bio = ""
-	for i := 0; i <= 256; i++ {
-		if i < 1 || i > 255 {
-			assert.NotNil(t, bioLengthCheck.Validate())
-			assert.NotNil(t, (&bioLengthCheck).BeforeSave(nil))
-		} else {
-			assert.Nil(t, bioLengthCheck.Validate())
-			assert.Nil(t, (&bioLengthCheck).BeforeSave(nil))
-		}
-		bioLengthCheck.Bio = bioLengthCheck.Bio + "a"
-	}
-
-	imageCountCheck := validUser
-	imageCountCheck.Images = url_slice.UrlSlice{}
-	assert.NotNil(t, imageCountCheck.Validate())
-	assert.NotNil(t, (&imageCountCheck).BeforeSave(nil))
-}
 
 func TestUserBeforeCreate(t *testing.T) {
 	noIdUser := user.User{

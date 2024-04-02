@@ -132,3 +132,7 @@ func TestString(t *testing.T) {
 		assert.Equal(t, v.output, s)
 	}
 }
+
+func TestGormDataType(t *testing.T) {
+	assert.IsType(t, "", url_slice.UrlSlice{}.GormDataType())
+}

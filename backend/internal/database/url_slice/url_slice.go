@@ -53,6 +53,11 @@ func (s UrlSlice) Value() (driver.Value, error) {
 	return s.String(), nil
 }
 
+// Implements GormDataTypeInterface to tell GORM to store as a string
+func (s UrlSlice) GormDataType() string {
+	return "string"
+}
+
 // Implements json.Unmarshaler to read from JSON
 func (s *UrlSlice) UnmarshalJSON(data []byte) error {
 	var strSlice []string
