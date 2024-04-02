@@ -6,61 +6,81 @@ import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 	"errors"
 	"fmt"
-
-	ht "github.com/ogen-go/ogen/http"
 )
 
 // Creates a new event.
 // POST /events
 func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.EventsPostRes, error) {
-	// TODO: Write tests
-	h.logger.Info("POST /events")
-
-	var eventToCreate event.Event
-	eventToCreate.Name = req.Name
-	eventToCreate.Bio = req.Bio
-	eventToCreate.Images = []event.EventImage{}
-	for _, v := range req.Images {
-		eventToCreate.Images = append(eventToCreate.Images, event.EventImage{Url: v.String()})
+	if h.logger != nil {
+		h.logger.Info("POST /events")
 	}
-	eventToCreate.OrgID = org_id.Wrap(req.OrgId)
 
-	e, err := h.controller.CreateEvent(eventToCreate)
-	// TODO: check for validation error from the controller and return 400
-	if err != nil {
+	eventTags := []event.EventTag{}
+	for _, v := range req.Tags {
+		eventTags = append(eventTags, event.EventTag{ID: v})
+	}
+
+	e, valErr, txErr := h.controller.CreateEvent(event.Event{
+		Name:      req.Name,
+		Bio:       req.Bio,
+		Images:    url_slice.Wrap(req.Images),
+		EventTags: eventTags,
+		OrgID:     org_id.Wrap(req.OrgId),
+	})
+	if valErr != nil {
+		return &api.Error{
+			Code:    400,
+			Message: "failed to validate event",
+		}, nil
+	}
+	if txErr != nil {
 		return nil, errors.New("failed to create event")
 	}
 
+	tags := []string{}
+	for _, eventTag := range e.EventTags {
+		tags = append(tags, eventTag.ID)
+	}
 	res := api.EventsPostCreated{
 		ID:     e.ID.Unwrap(),
 		Name:   e.Name,
 		Bio:    e.Bio,
-		Images: req.Images,
-		OrgId:  api.NewOptUUID(e.OrgID.Unwrap()),
+		Images: e.Images.Unwrap(),
+		Tags:   tags,
+		OrgId:  e.OrgID.Unwrap(),
 	}
-
 	return &res, nil
 }
 
 // Deletes an event by its ID.
 // DELETE /events/{id}
 func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeleteParams) (api.EventsIDDeleteRes, error) {
-	// TODO: Write tests
-	h.logger.Info(fmt.Sprintf("DELETE /events/%s", params.ID))
-	o, err := h.controller.DeleteEvent(event_id.Wrap(params.ID))
-	if err != nil {
+	if h.logger != nil {
+		h.logger.Info(fmt.Sprintf("DELETE /events/%s", params.ID))
+	}
+
+	e, txErr := h.controller.DeleteEvent(event_id.Wrap(params.ID))
+	if txErr != nil {
 		return &api.Error{
 			Code:    404,
-			Message: err.Error(),
+			Message: "event not found",
 		}, nil
 	}
 
+	tags := []string{}
+	for _, eventTag := range e.EventTags {
+		tags = append(tags, eventTag.ID)
+	}
 	res := api.EventsIDDeleteOK{
-		ID:   o.ID.Unwrap(),
-		Name: o.Name,
-		Bio:  o.Bio,
+		ID:     e.ID.Unwrap(),
+		Name:   e.Name,
+		Bio:    e.Bio,
+		Images: e.Images.Unwrap(),
+		Tags:   tags,
+		OrgId:  e.OrgID.Unwrap(),
 	}
 	return &res, nil
 }
@@ -68,68 +88,156 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 // Gets an event by its ID.
 // GET /events/{id}
 func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) (api.EventsIDGetRes, error) {
-	h.logger.Info(fmt.Sprintf("GET /events/%s", params.ID))
-	e, err := h.controller.GetEvent(event_id.Wrap(params.ID))
-	if err != nil {
-		return nil, errors.New("failed to get event")
+	if h.logger != nil {
+		h.logger.Info(fmt.Sprintf("GET /events/%s", params.ID))
 	}
 
+	e, txErr := h.controller.GetEvent(event_id.Wrap(params.ID))
+	if txErr != nil {
+		return &api.Error{
+			Code:    404,
+			Message: "event not found",
+		}, nil
+	}
+
+	tags := []string{}
+	for _, eventTag := range e.EventTags {
+		tags = append(tags, eventTag.ID)
+	}
 	res := api.EventsIDGetOK{
-		ID:    e.ID.Unwrap(),
-		Name:  e.Name,
-		Bio:   e.Bio,
-		OrgId: api.NewOptUUID(e.OrgID.Unwrap()),
+		ID:     e.ID.Unwrap(),
+		Name:   e.Name,
+		Bio:    e.Bio,
+		Images: e.Images.Unwrap(),
+		Tags:   tags,
+		OrgId:  e.OrgID.Unwrap(),
 	}
-
 	return &res, nil
 }
 
 // Gets all events with pagination.
 // GET /events
 func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]api.EventsGetOKItem, error) {
-	h.logger.Info("GET /events")
+	if h.logger != nil {
+		h.logger.Info("GET /events")
+	}
 
-	events, err := h.controller.GetEvents(params.Limit, params.Offset)
-	if err != nil {
+	limit := params.Limit.Value   // default value makes this safe
+	offset := params.Offset.Value // default value makes this safe
+	events, txErr := h.controller.GetEvents(limit, offset)
+	if txErr != nil {
 		return nil, errors.New("failed to get events")
 	}
-
-	var res []api.EventsGetOKItem
+	res := []api.EventsGetOKItem{}
 	for _, e := range events {
-		res = append(res, api.EventsGetOKItem{
-			ID:   e.ID.Unwrap(),
-			Name: e.Name,
-			Bio:  e.Bio,
-		})
+		tags := []string{}
+		for _, eventTag := range e.EventTags {
+			tags = append(tags, eventTag.ID)
+		}
+		item := api.EventsGetOKItem{
+			ID:     e.ID.Unwrap(),
+			Name:   e.Name,
+			Bio:    e.Bio,
+			Images: e.Images.Unwrap(),
+			Tags:   tags,
+			OrgId:  e.OrgID.Unwrap(),
+		}
+		res = append(res, item)
 	}
-
 	return res, nil
 }
 
-// Completely updates an existing event
-// PUT /events/{id}
-func (h Handler) EventsIDPut(ctx context.Context, updatedEvent *api.EventsIDPutReq, params api.EventsIDPutParams) (api.EventsIDPutRes, error) {
-	h.logger.Info(fmt.Sprintf("PUT /events/%s", params.ID))
-	e, err := h.controller.PutEvent(event_id.Wrap(params.ID), event.Event{
-		Name: updatedEvent.Name,
-		Bio:  updatedEvent.Bio,
-	})
-	if err != nil {
-		return nil, errors.New("failed to update event")
+// Partially updates an organization by its ID.
+// PATCH /events/{id}
+func (h Handler) EventsIDPatch(ctx context.Context, req *api.Event, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
+	if h.logger != nil {
+		h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
 	}
 
-	res := api.EventsIDPutOK{
-		ID:   e.ID.Unwrap(),
-		Name: e.Name,
-		Bio:  e.Bio,
+	var reqEvent event.Event
+	reqEvent.ID = event_id.Wrap(params.ID)
+	if req.Name.Set {
+		reqEvent.Name = req.Name.Value
+	}
+	if req.Bio.Set {
+		reqEvent.Bio = req.Bio.Value
+	}
+	reqEvent.Images = url_slice.Wrap(req.Images)
+	reqEvent.EventTags = []event.EventTag{}
+	for _, v := range req.Tags {
+		reqEvent.EventTags = append(reqEvent.EventTags, event.EventTag{ID: v})
 	}
 
+	e, valErr, txErr := h.controller.UpdateEvent(reqEvent)
+	if valErr != nil {
+		fmt.Println(valErr)
+		return &api.EventsIDPatchBadRequest{
+			Code:    400,
+			Message: "failed to validate event",
+		}, nil
+	}
+	if txErr != nil {
+		return &api.EventsIDPatchNotFound{
+			Code:    404,
+			Message: "event not found",
+		}, nil
+	}
+
+	tags := []string{}
+	for _, eventTag := range e.EventTags {
+		tags = append(tags, eventTag.ID)
+	}
+	res := api.EventsIDPatchOK{
+		ID:     e.ID.Unwrap(),
+		Name:   e.Name,
+		Bio:    e.Bio,
+		Images: e.Images.Unwrap(),
+		Tags:   tags,
+		OrgId:  e.OrgID.Unwrap(),
+	}
 	return &res, nil
 }
 
-// Partially update one or many fields of an existing event
-// PATCH /events/{id}
-func (h Handler) EventsIDPatch(ctx context.Context, req *api.Event, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
-	h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
-	return nil, ht.ErrNotImplemented
+// Creates a new event or updates an existing event.
+// PUT /events/{id}
+func (h Handler) EventsIDPut(ctx context.Context, req *api.EventsIDPutReq, params api.EventsIDPutParams) (api.EventsIDPutRes, error) {
+	if h.logger != nil {
+		h.logger.Info(fmt.Sprintf("PUT /events/%s", params.ID))
+	}
+
+	eventTags := []event.EventTag{}
+	for _, v := range req.Tags {
+		eventTags = append(eventTags, event.EventTag{ID: v})
+	}
+
+	e, valErr, txErr := h.controller.SaveEvent(event.Event{
+		Name:      req.Name,
+		Bio:       req.Bio,
+		Images:    url_slice.Wrap(req.Images),
+		EventTags: eventTags,
+		OrgID:     org_id.Wrap(req.OrgId),
+	})
+	if valErr != nil {
+		return &api.Error{
+			Code:    400,
+			Message: "failed to validate event",
+		}, nil
+	}
+	if txErr != nil {
+		return nil, errors.New("failed to save event")
+	}
+
+	tags := []string{}
+	for _, eventTag := range e.EventTags {
+		tags = append(tags, eventTag.ID)
+	}
+	res := api.EventsIDPutOK{
+		ID:     e.ID.Unwrap(),
+		Name:   e.Name,
+		Bio:    e.Bio,
+		Images: e.Images.Unwrap(),
+		Tags:   tags,
+		OrgId:  e.OrgID.Unwrap(),
+	}
+	return &res, nil
 }
