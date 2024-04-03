@@ -1,26 +1,35 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Controller, useForm } from "react-hook-form";
+import { Image, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import DropDownHeightPicker from "../../components/Onboarding/DropDownHeightPicker";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setHeight } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const heightPicture = require("../../assets/height.png");
 
 function AboutHeight() {
-  const [openFeet, setOpenFeet] = useState(false);
-  const [openInches, setOpenInches] = useState(false);
-  const [foot, setFoot] = useState(null);
-  const [inch, setInch] = useState(null);
-  const feet = [1, 2, 3, 4, 5, 6, 7, 8].map((feetParam, index) => ({
-    label: `${feetParam}`,
-    value: index + 1
-  }));
-  const inches = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((inchParam, index) => ({
-    label: `${inchParam}`,
-    value: index + 1
-  }));
+  const dispatch = useAppDispatch();
+  const [isHeightSelected, setIsHeightSelected] = useState(false);
+  const handleHeightChange = (foot: number, inch: number) => {
+    setIsHeightSelected(foot > 0 && inch >= 0);
+  };
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      height: { foot: 0, inch: 0 }
+    }
+  });
+  const onSubmit = (data: { height: { foot: number; inch: number } }) => {
+    console.log(data);
+    dispatch(setHeight(data.height));
+    router.push("/AboutMe/AboutLocation");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -35,36 +44,27 @@ function AboutHeight() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={heightPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>My height is...</Text>
-          </View>
-          <View style={scaledStyles.dropDownContainer}>
-            <DropDownPicker
-              open={openFeet}
-              value={foot}
-              items={feet}
-              setOpen={setOpenFeet}
-              setValue={setFoot}
-              placeholder="Feet"
-              containerStyle={scaledStyles.dropdown}
-            />
-            <DropDownPicker
-              open={openInches}
-              value={inch}
-              items={inches}
-              setOpen={setOpenInches}
-              setValue={setInch}
-              placeholder="Inches"
-              containerStyle={scaledStyles.dropdown}
-            />
-          </View>
+          <OnboardingTitle text="My height is..." />
+          <Controller
+            control={control}
+            name="height"
+            render={({ field: { onChange, value } }) => (
+              <DropDownHeightPicker
+                onHeightChange={(foot: number, inch: number) => {
+                  onChange({ foot, inch });
+                  handleHeightChange(foot, inch);
+                }}
+                selectedHeight={value}
+              />
+            )}
+          />
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+        <View>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={!isHeightSelected}
             onPress={() => {
-              router.push("/AboutMe/AboutLocation");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -75,46 +75,4 @@ function AboutHeight() {
 
 export default AboutHeight;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1
-  },
-  ContinueButtonContainer: {
-    marginBottom: 10
-  },
-  dropDownContainer: {
-    flexDirection: "row"
-  },
-  dropdown: {
-    flex: 1,
-    marginRight: 5
-  }
-});
-
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet(onboardingStyles);

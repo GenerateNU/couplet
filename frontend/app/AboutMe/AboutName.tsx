@@ -1,73 +1,85 @@
 import { router } from "expo-router";
 import React from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setName } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutNamePicture = require("../../assets/aboutName.png");
 
 function AboutName() {
+  const dispatch = useAppDispatch();
+  // Use Form from React-Hook-Form
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
     }
   });
+  // Watch any changes made to the input form
   const name = useWatch({
     control,
     name: "name",
     defaultValue: ""
   });
-  const onSubmit = (data: Object) => {
+  // On submit of the name form
+  const onSubmit = (data: { name: string }) => {
+    dispatch(setName(data.name));
     router.push("/AboutMe/AboutBirthday");
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
-      <View style={scaledStyles.mainContainer}>
-        <View style={scaledStyles.ProgressBarContainer}>
-          <TopBar
-            onBackPress={() => {
-              router.back();
-            }}
-            text="About Me"
-            selectedCount={1}
-          />
-        </View>
-
-        <View style={scaledStyles.inputContainer}>
-          <Image source={aboutNamePicture} />
-          <Text style={scaledStyles.headerContainer}>My first name is...</Text>
-          <View style={scaledStyles.inputWrapper}>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={scaledStyles.textContainer}
-                  placeholder="First Name"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-              name="name"
-            />
+      <View style={scaledStyles.TopUiContainer}>
+        <TopBar
+          onBackPress={() => {
+            router.back();
+          }}
+          text="About Me"
+          selectedCount={1}
+        />
+      </View>
+      <KeyboardAvoidingView
+        style={scaledStyles.avoidContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={scaledStyles.mainContainer}>
+          <View>
+            <Image source={aboutNamePicture} />
+            <OnboardingTitle text="My first name is..." />
+            <View style={scaledStyles.inputWrapper}>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={scaledStyles.textContainer}
+                    placeholder="First Name"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+                name="name"
+              />
+            </View>
+            <Text style={scaledStyles.textHelper}>
+              This is how it will permanently appear on your profile
+            </Text>
           </View>
-          <Text style={scaledStyles.textHelper}>
-            This is how it will permanently appear on your profile
-          </Text>
         </View>
-
-        <View>
-          <ContinueButton
-            title="Continue"
-            isDisabled={!name}
-            onPress={() => {
-              handleSubmit(onSubmit)();
-            }}
-          />
-        </View>
+      </KeyboardAvoidingView>
+      <View>
+        <ContinueButton
+          title="Continue"
+          isDisabled={!name}
+          onPress={() => {
+            handleSubmit(onSubmit)();
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -75,31 +87,7 @@ function AboutName() {
 
 export default AboutName;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  ProgressBarContainer: {
-    justifyContent: "center"
-  },
-  mainContainer: {
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between",
-    flex: 1
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
-  inputContainer: {
-    flex: 0.65
-  },
+const styles = {
   textContainer: {
     padding: 8
   },
@@ -108,7 +96,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     marginBottom: 8
+  },
+  avoidContainer: {
+    flex: 1
   }
-});
+};
 
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet({ ...styles, ...onboardingStyles });

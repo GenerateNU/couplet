@@ -30,10 +30,6 @@ function OnboardingBar({ selectedCount }: OnboardingBarProps) {
 }
 
 const styles = StyleSheet.create({
-  centeringContainer: {
-    alignItems: "center",
-    width: "100%"
-  },
   container: {
     width: 346,
     height: 61,

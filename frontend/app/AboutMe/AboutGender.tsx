@@ -1,14 +1,32 @@
 import { router } from "expo-router";
-import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setGender } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
+import onButtonClick from "../../utils/onButtonClick";
 
-const aboutGenderPicture = require("../../assets/lightningBolt.png");
+const aboutGender = require("../../assets/lightningBolt.png");
 
 function AboutGender() {
+  const dispatch = useAppDispatch();
+  const [selectedButton, setSelectedButton] = useState("");
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      gender: ""
+    }
+  });
+  const onSubmit = (data: { gender: string }) => {
+    dispatch(setGender(data.gender));
+    router.push("/AboutMe/AboutInterestedIn");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -22,30 +40,57 @@ function AboutGender() {
       </View>
       <View style={scaledStyles.mainContainer}>
         <View>
-          <Image source={aboutGenderPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>I am a...</Text>
-          </View>
-          <View>
-            <View style={scaledStyles.buttonContainer}>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Man" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Woman" onButtonClick={() => {}} />
-              </View>
-              <View style={scaledStyles.button}>
-                <OnboardingButton title="Other" onButtonClick={() => {}} />
-              </View>
+          <Image source={aboutGender} />
+          <OnboardingTitle text="I am a..." />
+          <View style={scaledStyles.inputWrapper} />
+          <View style={scaledStyles.buttonContainer}>
+            <View style={scaledStyles.button}>
+              <Controller
+                control={control}
+                name="gender"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title="Man"
+                    onButtonClick={() => onButtonClick(value, "Man", setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== "Man")}
+                  />
+                )}
+              />
+            </View>
+            <View style={scaledStyles.button}>
+              <Controller
+                control={control}
+                name="gender"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title="Woman"
+                    onButtonClick={() => onButtonClick(value, "Woman", setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== "Woman")}
+                  />
+                )}
+              />
+            </View>
+            <View style={scaledStyles.button}>
+              <Controller
+                control={control}
+                name="gender"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title="Other"
+                    onButtonClick={() => onButtonClick(value, "Other", setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== "Other")}
+                  />
+                )}
+              />
             </View>
           </View>
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+        <View>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={!selectedButton}
             onPress={() => {
-              router.push("/AboutMe/AboutInterestedIn");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -56,42 +101,6 @@ function AboutGender() {
 
 export default AboutGender;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1
-  },
-  ContinueButtonContainer: {
-    marginBottom: 10
-  },
-  button: {
-    marginBottom: 16
-  }
-});
+const styles = onboardingStyles;
 
 const scaledStyles = scaleStyleSheet(styles);

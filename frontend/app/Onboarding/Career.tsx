@@ -21,7 +21,7 @@ const JOB = require("../../assets/job.png");
 export default function Career() {
   const [career, setCareer] = useState("");
   const navigation = useNavigation();
-  const nextRoute = "Onboarding/LifestyleReligion";
+  const nextRoute = "Onboarding/Lifestyle/LifestyleReligion";
 
   function goBack() {
     if (navigation.canGoBack()) {

@@ -1,16 +1,34 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Controller, useForm } from "react-hook-form";
+import { Image, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import DropDownLocation from "../../components/Onboarding/DropDownLocation";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setLocation } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutLocationPicture = require("../../assets/aboutlocation.png");
 
-function AboutHeight() {
-  const [openLocation, setOpenLocation] = useState(false);
-  const [location, setLocation] = useState(null);
+function AboutLocation() {
+  const dispatch = useAppDispatch();
+  const [isLocationSelected, setIsLocationSelected] = useState(false);
+  const handleLocationChange = (location: string) => {
+    setIsLocationSelected(!!location);
+  };
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      location: ""
+    }
+  });
+  const onSubmit = (data: { location: string }) => {
+    dispatch(setLocation(data.location));
+    router.push("/Onboarding/Education");
+  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>
@@ -25,27 +43,28 @@ function AboutHeight() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutLocationPicture} />
-          <View>
-            <Text style={scaledStyles.headerContainer}>I live in...</Text>
-          </View>
-          <View>
-            <DropDownPicker
-              open={openLocation}
-              value={location}
-              items={[]}
-              setOpen={setOpenLocation}
-              setValue={setLocation}
-              placeholder="Select Your Location"
-              containerStyle={scaledStyles.dropdown}
-            />
-          </View>
+          <OnboardingTitle text="I live in..." />
+          <Controller
+            control={control}
+            name="location"
+            render={({ field: { onChange, value } }) => (
+              <DropDownLocation
+                onLocationChange={(location: string) => {
+                  onChange(location);
+                  handleLocationChange(location);
+                }}
+                selectedLocation={value}
+              />
+            )}
+          />
         </View>
-        <View style={scaledStyles.ContinueButtonContainer}>
+
+        <View>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={!isLocationSelected}
             onPress={() => {
-              router.push("/Home");
+              handleSubmit(onSubmit)();
             }}
           />
         </View>
@@ -54,55 +73,6 @@ function AboutHeight() {
   );
 }
 
-export default AboutHeight;
+export default AboutLocation;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    flex: 0.3,
-    alignItems: "center"
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1
-  },
-  ContinueButtonContainer: {
-    marginBottom: 10
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: -0.17,
-    fontFamily: "DMSansMedium"
-  },
-  dropDownContainer: {
-    flexDirection: "row"
-  },
-  dropdown: {
-    flex: 1,
-    marginRight: 5
-  }
-});
-
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet(onboardingStyles);

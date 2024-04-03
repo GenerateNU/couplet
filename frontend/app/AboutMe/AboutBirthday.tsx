@@ -1,28 +1,35 @@
 import { router } from "expo-router";
-import React from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
+import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setBirthday } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
 
 function AboutBirthday() {
+  const dispatch = useAppDispatch();
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: ""
+      birthday: new Date()
     }
   });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
-  const onSubmit = (data: Object) => {
-    console.log(name);
+  const handleDropDownOpen = (openDay: boolean, openMonth: boolean, openYear: boolean) => {
+    const isOpen = openDay || openMonth || openYear;
+    setIsDropDownOpen(isOpen);
+  };
+  const onSubmit = (data: { birthday: Date }) => {
+    console.log(data);
+    // Store it as a string to satisfy Redux's required serialization values
+    dispatch(setBirthday(data.birthday.toISOString()));
     router.push("/AboutMe/AboutGender");
   };
   return (
@@ -39,15 +46,26 @@ function AboutBirthday() {
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutBirthdayPicture} />
-          <Text style={scaledStyles.headerContainer}>My birthday is...</Text>
+          <OnboardingTitle text="My birthday is..." />
           <View style={scaledStyles.inputWrapper} />
-          <DropDownCalendar />
-          <View style={scaledStyles.helperContainer}>
-            <Text style={scaledStyles.textHelper}>You won&apos;t be able to change this</Text>
-          </View>
+          <Controller
+            control={control}
+            name="birthday"
+            render={({ field: { onChange, value } }) => (
+              <DropDownCalendar
+                onDateChange={(day, month, year) => onChange(new Date(year, month - 1, day))}
+                onDropDownOpen={handleDropDownOpen}
+                selectedDate={value}
+              />
+            )}
+          />
+          {!isDropDownOpen && (
+            <View style={scaledStyles.helperContainer}>
+              <Text style={scaledStyles.textHelper}>You won&apos;t be able to change this</Text>
+            </View>
+          )}
         </View>
-
-        <View style={scaledStyles.ContinueButtonContainer}>
+        <View>
           <ContinueButton
             title="Continue"
             isDisabled={false}
@@ -63,39 +81,4 @@ function AboutBirthday() {
 
 export default AboutBirthday;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    alignItems: "center",
-    flex: 0.3
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  headerContainer: {
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 32,
-    letterSpacing: -0.32,
-    marginTop: 16,
-    marginBottom: 16,
-    fontFamily: "DMSansMedium"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1
-  },
-  helperContainer: {
-    marginTop: 16
-  }
-});
-
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet(onboardingStyles);
