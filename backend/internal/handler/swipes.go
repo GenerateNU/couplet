@@ -4,22 +4,22 @@ import (
 	"context"
 	"couplet/internal/api"
 	"couplet/internal/database/event_id"
-	"couplet/internal/database/user"
+	"couplet/internal/database/event_swipe"
 	"couplet/internal/database/user_id"
+	"couplet/internal/database/user_swipe"
 	"errors"
 )
 
 func (h Handler) EventsSwipesPost(ctx context.Context, req *api.EventSwipe) (api.EventsSwipesPostRes, error) {
-	// TODO: Write tests
 	h.logger.Info("POST /events/swipes")
-	var eventSwipeToCreate user.EventSwipe
+	var eventSwipeToCreate event_swipe.EventSwipe
 	eventSwipeToCreate.UserID = user_id.UserID(req.UserId)
 	eventSwipeToCreate.EventID = event_id.EventID(req.EventId)
 	eventSwipeToCreate.Liked = req.Liked
 
 	es, valErr, txErr := h.controller.CreateEventSwipe(eventSwipeToCreate)
 	if valErr != nil || txErr != nil {
-		return nil, errors.New("failed to create event swipe") // TODO: Should return a specific HTTP error
+		return nil, errors.New("failed to create event swipe")
 	}
 
 	res := api.EventSwipe{
@@ -32,9 +32,8 @@ func (h Handler) EventsSwipesPost(ctx context.Context, req *api.EventSwipe) (api
 }
 
 func (h Handler) UsersSwipesPost(ctx context.Context, req *api.UserSwipe) (api.UsersSwipesPostRes, error) {
-	// TODO: Write tests
 	h.logger.Info("POST /users/swipes")
-	var userSwipeToCreate user.UserSwipe
+	var userSwipeToCreate user_swipe.UserSwipe
 	userSwipeToCreate.UserID = user_id.UserID(req.UserId)
 	userSwipeToCreate.OtherUserID = user_id.UserID(req.OtherUserId)
 	userSwipeToCreate.Liked = req.Liked
@@ -44,7 +43,7 @@ func (h Handler) UsersSwipesPost(ctx context.Context, req *api.UserSwipe) (api.U
 		if valErr != nil {
 			h.logger.Info(valErr.Error())
 		}
-		return nil, errors.New("failed to create user swipe") // TODO: should return a specific HTTP error
+		return nil, errors.New("failed to create user swipe")
 	}
 
 	res := api.UserSwipe{

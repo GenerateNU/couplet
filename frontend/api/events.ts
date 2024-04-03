@@ -11,7 +11,6 @@ export async function getAllEvents() {
   });
 
   if (error) {
-    console.error(error);
     return [];
   }
 
@@ -27,7 +26,6 @@ export async function getEventById(uuid: string) {
     }
   });
   if (error) {
-    console.error(error);
     throw new Error("Failed to get event by ID");
   }
 
@@ -44,7 +42,6 @@ export async function eventSwipe(userId: string, eventId: string, liked: boolean
   });
 
   if (error) {
-    console.error(error);
     throw new Error("Failed to swipe event");
   }
 
