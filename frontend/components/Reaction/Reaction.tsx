@@ -12,7 +12,8 @@ function Reaction({ handleReact }: ReactionProps) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        paddingVertical: 10
       }}
     >
       <ReactionButton like={false} icon="window-close" handleReact={handleReact} />

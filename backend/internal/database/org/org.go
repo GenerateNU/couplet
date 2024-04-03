@@ -3,40 +3,35 @@ package org
 import (
 	"couplet/internal/database/event"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-var validate = validator.New(validator.WithRequiredStructEnabled())
-
 type Org struct {
 	ID        org_id.OrgID `gorm:"primaryKey"`
 	CreatedAt time.Time
-	UpdatedAt time.Time     `validate:"gtefield=CreatedAt"`
-	Name      string        `validate:"required,min=1,max=255"`
-	Bio       string        `validate:"required,min=1,max=255"`
-	Image     OrgImage      `validate:"omitempty"`
-	OrgTags   []OrgTag      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags" validate:"max=5"`
+	UpdatedAt time.Time
+	Name      string
+	Bio       string
+	Images    url_slice.UrlSlice
+	OrgTags   []OrgTag      `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags"`
 	Events    []event.Event `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 }
 
 // Automatically generates a random ID if unset before creating
-func (o *Org) BeforeCreate(tx *gorm.DB) error {
+func (o *Org) BeforeCreate(tx *gorm.DB) (err error) {
 	if (o.ID == org_id.OrgID{}) {
 		o.ID = org_id.Wrap(uuid.New())
 	}
-	return nil
+	return
 }
 
-// Rolls back transactions that save invalid data to the database
-func (o *Org) BeforeSave(tx *gorm.DB) error {
-	return o.Validate()
-}
-
-// Ensures the organization and its fields are valid
-func (o Org) Validate() error {
-	return validate.Struct(o)
+type OrgTag struct {
+	ID        string `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Orgs      []Org `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:orgs2tags"`
 }
