@@ -1,9 +1,9 @@
 import { faBriefcase, faGraduationCap, faHouse, faRuler } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
+import HeaderScrollView from 'react-native-header-scroll-view';
 import InfoChips from "./InfoChips";
-import PersonHeader from "./PersonHeader";
 import { PersonProps } from "./PersonProps";
 
 export default function Person({
@@ -24,18 +24,24 @@ export default function Person({
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
-
+  
   return (
-    <ScrollView
-      style={{
-        width: "100%",
-        alignSelf: "center",
-        height: "90%"
+    <HeaderScrollView 
+      headerContainerStyle={{}}
+      containerStyle={{
+        flex: 1,
+
       }}
-    >
+      title={
+        <>
+          <Text style={{fontFamily: "DMSansBold", marginRight: 10}}>{firstName} </Text>
+          <Text id="hi" style={{fontFamily: "DMSansRegular"}}>{age}</Text>
+        </>
+      }>
+
+      <Text style={{fontFamily: "DMSansRegular", color: "gray", fontSize:14, marginLeft: 20, marginBottom: 10}}>{pronouns}</Text>
+    
       <View>
-        {/* can we assume there are 4 images.. does this structure make sense */}
-        <PersonHeader firstName={firstName} age={age} pronouns={pronouns} />
         <Image style={styles.imageStyle} source={{ uri: firstImage }} />
         <View style={styles.infoContainer}>
           <View style={styles.basicInfoContainer}>
@@ -72,22 +78,32 @@ export default function Person({
           {habits && <InfoChips items={habits} textColor="white" backgroundColor="purple" />}
           <View>
             <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+
+            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+
+            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+
+            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+
+            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
             {/* REUSE THE ITEM */}
           </View>
         </View>
       </View>
-    </ScrollView>
+    </HeaderScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: "white",
+  },
   imageStyle: {
     borderRadius: 10,
     width: "90%",
     height: 350,
     marginLeft: "auto",
     marginRight: "auto",
-    boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)"
   },
   textStyle: {
     fontFamily: "DMSansRegular"
