@@ -7,6 +7,7 @@ import (
 	"couplet/internal/database/user_id"
 	"errors"
 	"fmt"
+	"net/url"
 
 	"github.com/google/uuid"
 )
@@ -203,19 +204,32 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.Use
 
 // RecommendationsUsersGet implements api.Handler.
 func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.RecommendationsUsersGetOKItem, error) {
-	//limit := params.Limit.Value   // default value makes this safe
-	//offset := params.Offset.Value // default value makes this safe
-	//users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
+	limit := params.Limit.Value   // default value makes this safe
+	offset := params.Offset.Value // default value makes this safe
+	users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
+
+	if err != nil {
+		return nil, errors.New("Failed to get Recommended Users")
+	}
+
+
 	res := []api.RecommendationsUsersGetOKItem{}
-	// for _, u := range users {
-	// 	item := api.RecommendationsUsersGetOKItem{
-	// 		ID:        u.ID,
-	// 		FirstName: u.FirstName,
-	// 		LastName:  u.LastName,
-	// 		Age:       u.Age,
-	// 		Images:    u.Images,
-	// 	}
-	// 	res = append(res, item)
-	// }
+	for _, u := range users {
+		imagesUrl := []url.URL{}
+		if u.Images != nil {
+			for i := range u.Images {
+				imagesUrl = append(imagesUrl, url.URL{Path: u.Images[i].Url})
+			}
+		}
+
+		item := api.RecommendationsUsersGetOKItem{
+			FirstName: api.NewOptString(u.FirstName),
+			LastName:  api.NewOptString(u.LastName),
+			Age:       api.NewOptUint8(u.Age),
+			Images:    imagesUrl,
+		}
+		res = append(res, item)
+	}
+	
 	return res, nil
 }

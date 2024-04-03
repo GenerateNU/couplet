@@ -128,7 +128,7 @@ func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txE
 }
 
 // Get Recommended Users
-func (c Controller) GetRecommendationsUser(id user_id.UserID, limit uint8, offset uint32) ([]user.User, error) {
+func (c Controller) GetRecommendationsUser(id user_id.UserID, limit int, offset int) ([]user.User, error) {
 	// Return recommendedUsers
 	var recommendedUsers []user.User
 
