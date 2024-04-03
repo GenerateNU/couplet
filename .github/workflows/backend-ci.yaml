@@ -74,4 +74,7 @@ jobs:
 
       - name: Run tests
         run: task backend:test
+
+      - name: Run data-gen
+        run: ./backend/data-gen -orgs=100 -events=500 -users=1000 -eventSwipes=200 -userSwipes=100
 ...
