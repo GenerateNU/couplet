@@ -1,5 +1,3 @@
-import {Animated} from "react-native";
-
 export type ImageWithCaptionProps = {
   image: string;
   caption?: string;
@@ -8,13 +6,6 @@ export type ImageWithCaptionProps = {
 export type PersonHeightProps = {
   feet: number;
   inches: number;
-};
-
-export type PersonHeaderProps = {
-  firstName: string;
-  age: number;
-  pronouns?: string;
-  animHeaderValue: Animated.Value;
 };
 
 export type PersonProps = {

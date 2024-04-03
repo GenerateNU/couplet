@@ -2,7 +2,7 @@ import { faBriefcase, faGraduationCap, faHouse, faRuler } from "@fortawesome/fre
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import HeaderScrollView from 'react-native-header-scroll-view';
+import HeaderScrollView from "react-native-header-scroll-view";
 import InfoChips from "./InfoChips";
 import { PersonProps } from "./PersonProps";
 
@@ -24,23 +24,34 @@ export default function Person({
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
-  
+
   return (
-    <HeaderScrollView 
+    <HeaderScrollView
       headerContainerStyle={{}}
       containerStyle={{
-        flex: 1,
-
+        flex: 1
       }}
       title={
         <>
-          <Text style={{fontFamily: "DMSansBold", marginRight: 10}}>{firstName} </Text>
-          <Text id="hi" style={{fontFamily: "DMSansRegular"}}>{age}</Text>
+          <Text style={{ fontFamily: "DMSansBold", marginRight: 10 }}>{firstName} </Text>
+          <Text id="hi" style={{ fontFamily: "DMSansRegular" }}>
+            {age}
+          </Text>
         </>
-      }>
+      }
+    >
+      <Text
+        style={{
+          fontFamily: "DMSansRegular",
+          color: "gray",
+          fontSize: 14,
+          marginLeft: 20,
+          marginBottom: 10
+        }}
+      >
+        {pronouns}
+      </Text>
 
-      <Text style={{fontFamily: "DMSansRegular", color: "gray", fontSize:14, marginLeft: 20, marginBottom: 10}}>{pronouns}</Text>
-    
       <View>
         <Image style={styles.imageStyle} source={{ uri: firstImage }} />
         <View style={styles.infoContainer}>
@@ -96,14 +107,14 @@ export default function Person({
 
 const styles = StyleSheet.create({
   headerStyle: {
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   imageStyle: {
     borderRadius: 10,
     width: "90%",
     height: 350,
     marginLeft: "auto",
-    marginRight: "auto",
+    marginRight: "auto"
   },
   textStyle: {
     fontFamily: "DMSansRegular"
