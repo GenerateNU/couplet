@@ -148,7 +148,7 @@ func (c Controller) GetRecommendationsUser(id user_id.UserID, limit int, offset 
 	}
 
 	// Return all the Users that liked the same event as the current user
-	if err := c.database.Where("id != ?", currentUser.ID).
+	if err := c.database.Order("random()").Where("id != ?", currentUser.ID).
 		Joins("JOIN event_swipes ON users.id = event_swipes.user_id").
 		Where("event_swipes.liked = ?", true).
 		Where("event_swipes.event_id IN (?)", likedEventIDs).

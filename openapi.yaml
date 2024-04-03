@@ -786,6 +786,26 @@ paths:
             type: integer
             format: int
             default: 0
+        - name: likes 
+          in: query 
+          required: false
+          description: Don't know yet
+          schema:
+            type: boolean
+            deafult: false
+        - name: tags
+          in: query
+          required: false
+          description: The tags for events 
+          schema
+        - name: date
+          in: query
+          required: false
+          description: The upcoming date of events
+          schema:
+            type: string 
+            format: date
+            deafult: 
       responses:
         '200':
           description: Successfully retrieved events
