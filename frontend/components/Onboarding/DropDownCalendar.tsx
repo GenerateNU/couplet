@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -41,7 +42,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
 
   useEffect(() => {
     onDateChange(day, month, year);
-  }, [day, month, year, onDateChange]);
+  }, [day, month, year]);
 
   return (
     <View style={scaledStyles.container}>

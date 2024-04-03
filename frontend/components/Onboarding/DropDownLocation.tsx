@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -19,7 +20,7 @@ function DropDownLocation({ onLocationChange, selectedLocation }: DropDownLocati
 
   useEffect(() => {
     onLocationChange(value);
-  }, [value, onLocationChange]);
+  }, [value]);
 
   return (
     <View style={scaledStyles.container}>

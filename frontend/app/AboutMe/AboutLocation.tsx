@@ -9,14 +9,13 @@ import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
 import { setLocation } from "../../state/formSlice";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
+import { useAppDispatch } from "../../state/hooks";
 import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutLocationPicture = require("../../assets/aboutlocation.png");
 
 function AboutLocation() {
   const dispatch = useAppDispatch();
-  const state = useAppSelector((currentState) => currentState);
   const [isLocationSelected, setIsLocationSelected] = useState(false);
   const handleLocationChange = (location: string) => {
     setIsLocationSelected(!!location);
@@ -28,7 +27,6 @@ function AboutLocation() {
   });
   const onSubmit = (data: { location: string }) => {
     dispatch(setLocation(data.location));
-    console.log(state);
     router.push("/Onboarding/Education");
   };
   return (

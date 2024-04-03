@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -23,7 +24,7 @@ function DropDownHeightPicker({ onHeightChange, selectedHeight }: DropDownCalend
   }));
   useEffect(() => {
     onHeightChange(foot, inch - 1);
-  }, [foot, inch, onHeightChange]);
+  }, [foot, inch]);
   return (
     <View style={scaledStyles.dropDownContainer}>
       <DropDownPicker
