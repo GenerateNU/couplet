@@ -100,7 +100,6 @@
 
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
 import { Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
@@ -113,20 +112,6 @@ const SCHOOL = require("../../assets/lightbulb.png");
 function Education() {
   const [school, setSchool] = useState("");
   const nextRoute = "Onboarding/Career";
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      name: ""
-    }
-  });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
-  const onSubmit = (data: Object) => {
-    console.log(name);
-    router.push("/Onboarding/Education");
-  };
   return (
     <SafeAreaView style={scaledStyles.container}>
       <View style={scaledStyles.TopUiContainer}>

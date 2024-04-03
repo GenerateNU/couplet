@@ -5,16 +5,18 @@ import scaleStyleSheet from "../../scaleStyles";
 
 interface DropDownCalendarProps {
   onDateChange: (day: number, month: number, year: number) => void;
+  onDropDownOpen: (openDay: boolean, openMonth: boolean, openYear: boolean) => void;
+  selectedDate: Date;
 }
 
-function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
+function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDownCalendarProps) {
   const [openDay, setOpenDay] = useState(false);
   const [openMonth, setOpenMonth] = useState(false);
   const [openYear, setOpenYear] = useState(false);
 
-  const [day, setDay] = useState(1);
-  const [month, setMonth] = useState(1);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [day, setDay] = useState(selectedDate.getDate());
+  const [month, setMonth] = useState(selectedDate.getMonth() + 1); // JavaScript months are 0-indexed
+  const [year, setYear] = useState(selectedDate.getFullYear());
 
   const days = Array.from({ length: 31 }, (_, i) => ({ label: `${i + 1}`, value: i + 1 }));
   const months = [
@@ -36,9 +38,11 @@ function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
     label: `${currentYear - i}`,
     value: currentYear - i
   }));
+
   useEffect(() => {
     onDateChange(day, month, year);
-  }, [day, month, year]);
+  }, [day, month, year, onDateChange]);
+
   return (
     <View style={scaledStyles.container}>
       <DropDownPicker
@@ -48,6 +52,8 @@ function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
         setOpen={setOpenDay}
         setValue={setDay}
         containerStyle={scaledStyles.dropdown}
+        onOpen={() => onDropDownOpen(true, openMonth, openYear)}
+        onClose={() => onDropDownOpen(false, openMonth, openYear)}
       />
       <DropDownPicker
         open={openMonth}
@@ -56,6 +62,8 @@ function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
         setOpen={setOpenMonth}
         setValue={setMonth}
         containerStyle={scaledStyles.dropdown}
+        onOpen={() => onDropDownOpen(openDay, true, openYear)}
+        onClose={() => onDropDownOpen(openDay, false, openYear)}
       />
       <DropDownPicker
         open={openYear}
@@ -64,6 +72,9 @@ function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
         setOpen={setOpenYear}
         setValue={setYear}
         containerStyle={scaledStyles.dropdown}
+        // Can remove this
+        onOpen={() => onDropDownOpen(openDay, openMonth, true)}
+        onClose={() => onDropDownOpen(openDay, openMonth, false)}
       />
     </View>
   );

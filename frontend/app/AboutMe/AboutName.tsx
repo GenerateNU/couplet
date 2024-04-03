@@ -1,40 +1,33 @@
 import { router } from "expo-router";
 import React from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from "react-native";
+import { Image, KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
-import { useAppDispatch } from "../../state/hooks";
 import { setName } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutNamePicture = require("../../assets/aboutName.png");
 
 function AboutName() {
   const dispatch = useAppDispatch();
-  //Use Form from React-Hook-Form
+  // Use Form from React-Hook-Form
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: ""
     }
   });
-  //Watch any changes made to the input form
+  // Watch any changes made to the input form
   const name = useWatch({
     control,
     name: "name",
     defaultValue: ""
   });
-  //On submit of the name form
+  // On submit of the name form
   const onSubmit = (data: { name: string }) => {
     dispatch(setName(data.name));
     router.push("/AboutMe/AboutBirthday");
@@ -94,32 +87,7 @@ function AboutName() {
 
 export default AboutName;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    alignItems: "center",
-    flex: 0.35
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1,
-    marginTop: 34,
-    marginBottom: 36
-  },
-  helperContainer: {
-    marginTop: 16
-  },
+const styles = {
   textContainer: {
     padding: 8
   },
@@ -132,6 +100,6 @@ const styles = StyleSheet.create({
   avoidContainer: {
     flex: 1
   }
-});
+};
 
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet({ ...styles, ...onboardingStyles });

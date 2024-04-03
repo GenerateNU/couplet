@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as AppleAuthentication from "expo-apple-authentication";
 import React, { useState } from "react";
 import {

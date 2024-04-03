@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../../colors";
-import scaleStyleSheet from "../../../scaleStyles";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../../components/Onboarding/OnboardingButton";
 import OnboardingSmallTitle from "../../../components/Onboarding/OnboardingSmallTitle";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
 const HABITS_IMAGE = require("../../../assets/OnboardingHabits.png");
 
@@ -79,6 +79,7 @@ export default function LifestyleHabits() {
                   key={option}
                   title={option}
                   onButtonClick={() => handleDrinkChoice(option)}
+                  isDisabled={false}
                 />
               </View>
             ))}
@@ -92,6 +93,7 @@ export default function LifestyleHabits() {
                   key={option}
                   title={option}
                   onButtonClick={() => handleSmokeChoice(option)}
+                  isDisabled={false}
                 />
               </View>
             ))}
@@ -105,6 +107,7 @@ export default function LifestyleHabits() {
                   key={option}
                   title={option}
                   onButtonClick={() => handleWeedChoice(option)}
+                  isDisabled={false}
                 />
               </View>
             ))}
@@ -118,6 +121,7 @@ export default function LifestyleHabits() {
                   key={option}
                   title={option}
                   onButtonClick={() => handleDrugsChoice(option)}
+                  isDisabled={false}
                 />
               </View>
             ))}

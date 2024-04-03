@@ -1,11 +1,11 @@
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
-import scaleStyleSheet from "../../../scaleStyles";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
 const RELIGION_IMAGE = require("../../../assets/OnboardingReligion.png");
 
@@ -56,6 +56,7 @@ export default function LifestyleReligion() {
                 key={option}
                 title={option}
                 onButtonClick={() => handlePillPress(option)}
+                isDisabled={false}
               />
             </View>
           ))}

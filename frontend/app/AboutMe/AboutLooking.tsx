@@ -1,29 +1,34 @@
 import { router } from "expo-router";
-import React from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setLooking } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
+import onButtonClick from "../../utils/onButtonClick";
 
 const aboutLookingPicture = require("../../assets/lookingfor.png");
 
 function AboutLooking() {
+  const prompt1 = "Long term relationship";
+  const prompt2 = "Short term relationship";
+  const prompt3 = "Seeing where things go";
+  const prompt4 = "Friends";
+  const dispatch = useAppDispatch();
+  const [selectedButton, setSelectedButton] = useState("");
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: ""
+      looking: ""
     }
   });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
-  const onSubmit = (data: Object) => {
-    console.log(name);
+  const onSubmit = (data: { looking: string }) => {
+    dispatch(setLooking(data.looking));
     router.push("/AboutMe/AboutPronouns");
   };
   return (
@@ -44,29 +49,69 @@ function AboutLooking() {
           <View style={scaledStyles.inputWrapper} />
           <View style={scaledStyles.buttonContainer}>
             <View style={scaledStyles.button}>
-              <OnboardingButton title="Long term relationship" onButtonClick={() => {}} />
+              <Controller
+                control={control}
+                name="looking"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title={prompt1}
+                    onButtonClick={() => onButtonClick(value, prompt1, setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== prompt1)}
+                  />
+                )}
+              />
             </View>
             <View style={scaledStyles.button}>
-              <OnboardingButton title="Short term relationship" onButtonClick={() => {}} />
+              <Controller
+                control={control}
+                name="looking"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title={prompt2}
+                    onButtonClick={() => onButtonClick(value, prompt2, setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== prompt2)}
+                  />
+                )}
+              />
             </View>
             <View style={scaledStyles.button}>
-              <OnboardingButton title="Seeing where things go" onButtonClick={() => {}} />
+              <Controller
+                control={control}
+                name="looking"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title={prompt3}
+                    onButtonClick={() => onButtonClick(value, prompt3, setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== prompt3)}
+                  />
+                )}
+              />
             </View>
             <View style={scaledStyles.button}>
-              <OnboardingButton title="Friends" onButtonClick={() => {}} />
+              <Controller
+                control={control}
+                name="looking"
+                render={({ field: { onChange, value } }) => (
+                  <OnboardingButton
+                    title={prompt4}
+                    onButtonClick={() => onButtonClick(value, prompt4, setSelectedButton, onChange)}
+                    isDisabled={Boolean(value && value !== prompt4)}
+                  />
+                )}
+              />
             </View>
           </View>
         </View>
+      </View>
 
-        <View>
-          <ContinueButton
-            title="Continue"
-            isDisabled={false}
-            onPress={() => {
-              handleSubmit(onSubmit)();
-            }}
-          />
-        </View>
+      <View>
+        <ContinueButton
+          title="Continue"
+          isDisabled={!selectedButton}
+          onPress={() => {
+            handleSubmit(onSubmit)();
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -74,35 +119,14 @@ function AboutLooking() {
 
 export default AboutLooking;
 
-const styles = StyleSheet.create({
+const overrideStyles = {
   TopUiContainer: {
     alignItems: "center",
     flex: 0.2
   },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1,
-    marginTop: 34,
-    marginBottom: 36
-  },
-  helperContainer: {
-    marginTop: 16
-  },
   button: {
     marginBottom: 14
   }
-});
+};
 
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet({ ...onboardingStyles, ...overrideStyles });

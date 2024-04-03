@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../../colors";
-import scaleStyleSheet from "../../../scaleStyles";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
 const PASSIONS_IMAGE = require("../../../assets/OnboardingPassions.png");
 
@@ -91,6 +91,7 @@ export default function LifestylePassions() {
                   key={option}
                   title={option}
                   onButtonClick={() => handleInterestsButton(option)}
+                  isDisabled={false}
                 />
               </View>
             ))}

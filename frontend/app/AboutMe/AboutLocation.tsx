@@ -1,28 +1,34 @@
 import { router } from "expo-router";
-import React from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Image, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
+import DropDownLocation from "../../components/Onboarding/DropDownLocation";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
+import { setLocation } from "../../state/formSlice";
+import { useAppDispatch, useAppSelector } from "../../state/hooks";
+import onboardingStyles from "../../styles/Onboarding/styles";
 
 const aboutLocationPicture = require("../../assets/aboutlocation.png");
 
 function AboutLocation() {
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((currentState) => currentState);
+  const [isLocationSelected, setIsLocationSelected] = useState(false);
+  const handleLocationChange = (location: string) => {
+    setIsLocationSelected(!!location);
+  };
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: ""
+      location: ""
     }
   });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
-  const onSubmit = (data: Object) => {
-    console.log(name);
+  const onSubmit = (data: { location: string }) => {
+    dispatch(setLocation(data.location));
+    console.log(state);
     router.push("/Onboarding/Education");
   };
   return (
@@ -40,12 +46,25 @@ function AboutLocation() {
         <View>
           <Image source={aboutLocationPicture} />
           <OnboardingTitle text="I live in..." />
+          <Controller
+            control={control}
+            name="location"
+            render={({ field: { onChange, value } }) => (
+              <DropDownLocation
+                onLocationChange={(location: string) => {
+                  onChange(location);
+                  handleLocationChange(location);
+                }}
+                selectedLocation={value}
+              />
+            )}
+          />
         </View>
 
         <View>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={!isLocationSelected}
             onPress={() => {
               handleSubmit(onSubmit)();
             }}
@@ -58,42 +77,4 @@ function AboutLocation() {
 
 export default AboutLocation;
 
-const styles = StyleSheet.create({
-  TopUiContainer: {
-    alignItems: "center",
-    flex: 0.3
-  },
-  mainContainer: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    justifyContent: "space-between"
-  },
-  textHelper: {
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 12,
-    letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
-  },
-  container: {
-    flex: 1,
-    marginTop: 34,
-    marginBottom: 36
-  },
-  helperContainer: {
-    marginTop: 16
-  },
-  button: {
-    marginBottom: 14
-  },
-  dropDownContainer: {
-    flexDirection: "row"
-  },
-  dropdown: {
-    flex: 1,
-    marginRight: 5
-  }
-});
-
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet(onboardingStyles);

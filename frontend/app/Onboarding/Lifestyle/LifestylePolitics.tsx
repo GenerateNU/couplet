@@ -2,11 +2,11 @@ import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import scaleStyleSheet from "../../../scaleStyles";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingButton from "../../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
 const POLITICS_IMAGE = require("../../../assets/OnboardingPolitics.png");
 
@@ -46,6 +46,7 @@ export default function LifestylePolitics() {
                 key={option}
                 title={option}
                 onButtonClick={() => handlePillPress(option)}
+                isDisabled={false}
               />
             </View>
           ))}
