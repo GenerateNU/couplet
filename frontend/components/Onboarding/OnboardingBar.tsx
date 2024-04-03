@@ -30,10 +30,24 @@ function OnboardingBar({ selectedCount }: OnboardingBarProps) {
 }
 
 const styles = StyleSheet.create({
+  centeringContainer: {
+    alignItems: "center",
+    width: "100%"
+  },
   container: {
-    width: "100%",
-    height: 21,
-    alignItems: "center"
+    width: 346,
+    height: 61,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    opacity: 1
+  },
+  text: {
+    fontFamily: "DMSansBold",
+    fontSize: 32,
+    fontWeight: "bold",
+    lineHeight: 32,
+    textAlign: "left",
+    color: COLORS.black
   },
   segment: {
     width: 80.5,

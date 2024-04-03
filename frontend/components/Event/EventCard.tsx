@@ -1,56 +1,132 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
-import { Icon } from "react-native-paper";
-import { getEventById } from "../../api/events";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Button, Icon } from "react-native-paper";
+import getOrgById from "../../api/orgs";
 import type { components } from "../../api/schema";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
+import OrgTag from "./OrgTag";
 
 type Event = components["schemas"]["Event"];
+type Org = components["schemas"]["Org"];
+
+const IMAGE = require("../../assets/profile.png");
 
 export type EventCardProps = {
-  id: string;
+  event: Event;
   handleReact: (like: boolean) => void;
 };
 
-export default function EventCard({ handleReact, id }: EventCardProps) {
-  const [event, setEvent] = useState<Event>();
+export default function EventCard({ handleReact, event }: EventCardProps) {
+  const [org, setOrg] = useState<Org>();
+
   useEffect(() => {
-    if (id) {
-      getEventById(id)
-        .then((fetchedEvent) => {
-          setEvent(fetchedEvent);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-  }, [id]);
+    if (!event.orgId) return;
+    getOrgById(event.orgId)
+      .then((fetchedOrg) => setOrg(fetchedOrg))
+      .catch((e) => console.log(e));
+  }, [event]);
 
   return (
-    <View
-      style={{
-        flexGrow: 1,
-        marginHorizontal: "10%",
-        paddingTop: 10
-      }}
-    >
-      <Text style={{ fontSize: 32, marginBottom: 10, fontFamily: "DMSansMedium" }}>
-        {event?.name}
-      </Text>
-      <View style={{ flexDirection: "row" }}>
-        <Icon source="calendar" size={24} />
-        <Text style={{ fontSize: 18 }}>DATE</Text>
+    <View style={scaledStyles.container}>
+      <View style={scaledStyles.detail}>
+        <Icon source="map-marker" size={24} color={COLORS.darkPurple} />
+        <Text style={{ fontSize: 18, marginRight: 24, fontFamily: "DMSansRegular" }}>
+          Frog Pond
+        </Text>
+      </View>
+      <View style={scaledStyles.detail}>
+        <Icon source="calendar-blank" size={24} color={COLORS.darkPurple} />
+        <Text style={{ fontSize: 18 }}>Open today · Closes at 10:00 PM</Text>
       </View>
 
-      <View style={{ flexDirection: "row" }}>
-        <Icon source="pin-outline" size={24} />
-        <Text style={{ fontSize: 18, marginRight: 24, fontFamily: "DMSansRegular" }}>Boston</Text>
-        <Icon source="cash" size={24} />
-        <Text style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}>$20</Text>
+      <View style={scaledStyles.detail}>
+        <Icon source="currency-usd" size={24} color={COLORS.darkPurple} />
+        <Text style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}>30</Text>
       </View>
-
-      <Text style={{ fontSize: 18, marginVertical: 10, fontFamily: "DMSansRegular" }}>
-        {event?.bio}
-      </Text>
+      <Text style={scaledStyles.eventBio}>{event?.bio}</Text>
+      <View style={scaledStyles.viewShare}>
+        <Button
+          mode="outlined"
+          buttonColor={COLORS.white}
+          textColor={COLORS.primary}
+          labelStyle={scaledStyles.buttonLabel}
+          style={{ borderColor: COLORS.primary, borderWidth: 2 }}
+          onPress={() => console.log("View details")}
+        >
+          View details
+        </Button>
+        <Button
+          mode="contained"
+          icon="export-variant"
+          buttonColor={COLORS.primary}
+          textColor={COLORS.white}
+          labelStyle={{ ...scaledStyles.buttonLabel, paddingHorizontal: 8, fontWeight: "700" }}
+          contentStyle={{ flexDirection: "row-reverse" }}
+          onPress={() => console.log("Share event")}
+        >
+          Share event
+        </Button>
+      </View>
+      <View style={scaledStyles.orgSection}>
+        <View style={scaledStyles.orgNameSection}>
+          <Image source={IMAGE} />
+          <View>
+            <Text style={scaledStyles.orgNameText}>{org?.name}</Text>
+            <Text style={scaledStyles.orgHandleText}>@{org?.name?.replaceAll(" ", "")}</Text>
+          </View>
+        </View>
+        <View style={scaledStyles.tags}>
+          {org?.tags?.map((tag) => <OrgTag key={tag} text={tag} />)}
+        </View>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingTop: 10,
+    paddingBottom: 50
+  },
+  detail: {
+    flexDirection: "row",
+    columnGap: 8,
+    marginBottom: 5
+  },
+  eventBio: { fontSize: 18, fontFamily: "DMSansRegular", marginVertical: 10 },
+  orgSection: {
+    justifyContent: "space-between",
+    marginVertical: 10,
+    paddingVertical: 20,
+    borderColor: COLORS.lightGray,
+    borderTopWidth: 1
+  },
+  orgNameSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15
+  },
+  orgNameText: { marginLeft: 15, fontSize: 18, fontFamily: "DMSansMedium" },
+  orgHandleText: { marginLeft: 15, fontSize: 12, fontFamily: "DMSansRegular", weight: "400" },
+  tags: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignContent: "stretch",
+    columnGap: 15,
+    rowGap: 10
+  },
+  viewShare: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 10
+  },
+  buttonLabel: {
+    fontFamily: "DMSansMedium",
+    fontSize: 16,
+    paddingHorizontal: 16
+  }
+});
+
+const scaledStyles = scaleStyleSheet(styles);

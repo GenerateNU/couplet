@@ -33,6 +33,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
+    router.push("/Home");
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -54,6 +55,7 @@ export default function Login() {
       await SecureStore.setItemAsync("appleAuth", creds.user);
       router.push("Home");
       setIsAppleLoggedIn(true);
+      router.push("/Home");
     } catch (e) {
       setIsAppleLoggedIn(false);
     }

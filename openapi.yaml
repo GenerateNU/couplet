@@ -13,21 +13,19 @@ paths:
       parameters:
         - name: limit
           in: query
-          required: true
           description: The number of events to return
           schema:
             type: integer
-            format: int
+            format: uint8
             minimum: 1
             default: 10
             example: 20
         - name: offset
           in: query
-          required: true
           description: The number of events to skip
           schema:
             type: integer
-            format: int
+            format: uint32
             default: 0
             example: 13
       responses:
@@ -49,6 +47,9 @@ paths:
                         - id
                         - name
                         - bio
+                        - images
+                        - tags
+                        - orgId
     post:
       summary: Create a new event
       requestBody:
@@ -62,6 +63,8 @@ paths:
                 - required:
                     - name
                     - bio
+                    - images
+                    - tags
                     - orgId
       responses:
         "201":
@@ -80,6 +83,9 @@ paths:
                       - id
                       - name
                       - bio
+                      - images
+                      - tags
+                      - orgId
         "400":
           $ref: "#/components/responses/BadRequest"
   /events/{id}:
@@ -111,6 +117,9 @@ paths:
                       - id
                       - name
                       - bio
+                      - images
+                      - tags
+                      - orgId
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -141,6 +150,9 @@ paths:
                       - id
                       - name
                       - bio
+                      - images
+                      - tags
+                      - orgId
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -178,6 +190,9 @@ paths:
                       - id
                       - name
                       - bio
+                      - images
+                      - tags
+                      - orgId
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -204,9 +219,12 @@ paths:
                 - required:
                     - name
                     - bio
+                    - images
+                    - tags
+                    - orgId
       responses:
         "200":
-          description: Successfully updated event
+          description: Successfully saved event
           content:
             application/json:
               schema:
@@ -221,6 +239,7 @@ paths:
                       - id
                       - name
                       - bio
+                      - orgId
         "201":
           description: Successfully created event
           content:
@@ -237,6 +256,9 @@ paths:
                       - id
                       - name
                       - bio
+                      - images
+                      - tags
+                      - orgId
         "400":
           $ref: "#/components/responses/BadRequest"
   /events/swipes:
@@ -466,24 +488,7 @@ paths:
                     - tags
       responses:
         "200":
-          description: Successfully updated organization
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
-        "201":
-          description: Successfully created organization
+          description: Successfully saved organization
           content:
             application/json:
               schema:
@@ -542,6 +547,8 @@ paths:
                         - firstName
                         - lastName
                         - age
+                        - bio
+                        - images
     post:
       summary: Create a new user
       requestBody:
@@ -556,6 +563,8 @@ paths:
                     - firstName
                     - lastName
                     - age
+                    - bio
+                    - images
       responses:
         "201":
           description: Successfully created user
@@ -574,6 +583,8 @@ paths:
                       - firstName
                       - lastName
                       - age
+                      - bio
+                      - images
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/{id}:
@@ -606,6 +617,8 @@ paths:
                       - firstName
                       - lastName
                       - age
+                      - bio
+                      - images
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -637,6 +650,8 @@ paths:
                       - firstName
                       - lastName
                       - age
+                      - bio
+                      - images
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -675,6 +690,8 @@ paths:
                       - firstName
                       - lastName
                       - age
+                      - bio
+                      - images
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -702,9 +719,11 @@ paths:
                     - firstName
                     - lastName
                     - age
+                    - bio
+                    - images
       responses:
         "200":
-          description: Successfully updated user
+          description: Successfully saved user
           content:
             application/json:
               schema:
@@ -720,23 +739,8 @@ paths:
                       - firstName
                       - lastName
                       - age
-        "201":
-          description: Successfully created user
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                      - bio
+                      - images
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/swipes:
@@ -758,6 +762,39 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+  /matches/{id}:
+    get:
+      summary: Get a user's matches
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to get matches of
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: "#/components/schemas/User"
+                    - required:
+                        - id
+                        - firstName
+                        - lastName
+                        - age
+
 
 components:
   responses:
@@ -859,13 +896,7 @@ components:
     Event:
       type: object
       required:
-        - id
-        - name
       properties:
-        id:
-          type: string
-          format: uuid
-          example: 5e91507e-5630-4efd-9fd4-799178870b10
         name:
           type: string
           minLength: 1
@@ -873,6 +904,7 @@ components:
         bio:
           type: string
           minLength: 1
+          maxLength: 255
           example: Come to the Big Event and have the best night of your life!
         address:
           $ref: "#/components/schemas/Address"
@@ -882,8 +914,8 @@ components:
             type: string
             format: uri
             example: https://example.com/image.png
-          minItems: 1
-          maxItems: 5
+          minItems: 4
+          maxItems: 4
         externalLink:
           type: string
           format: uri
@@ -910,11 +942,16 @@ components:
         bio:
           type: string
           minLength: 1
+          maxLength: 255
           example: At The Events Company, we connect people through events
-        image:
-          type: string
-          format: uri
-          example: https://example.com/image.png
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+          maxItems: 4
         tags:
           type: array
           maxItems: 5
@@ -939,14 +976,19 @@ components:
           format: uint8
           minimum: 18
           example: 22
+        bio:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Hello! I'm excited to experience events!
         images:
           type: array
           items:
             type: string
             format: uri
             example: https://example.com/image.png
-          minItems: 1
-          maxItems: 5
+          minItems: 4
+          maxItems: 4
     EventSwipe:
       type: object
       required:
