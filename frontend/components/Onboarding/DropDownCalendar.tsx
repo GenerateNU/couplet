@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
 
-function DropDownCalendar() {
+interface DropDownCalendarProps {
+  onDateChange: (day: number, month: number, year: number) => void;
+}
+
+function DropDownCalendar({ onDateChange } : DropDownCalendarProps) {
   const [openDay, setOpenDay] = useState(false);
   const [openMonth, setOpenMonth] = useState(false);
   const [openYear, setOpenYear] = useState(false);
@@ -32,7 +36,9 @@ function DropDownCalendar() {
     label: `${currentYear - i}`,
     value: currentYear - i
   }));
-
+  useEffect(() => {
+    onDateChange(day, month, year);
+  }, [day, month, year]);
   return (
     <View style={scaledStyles.container}>
       <DropDownPicker

@@ -12,18 +12,12 @@ import scaleStyleSheet from "../../scaleStyles";
 const aboutGender = require("../../assets/lightningBolt.png");
 
 function AboutGender() {
-  const { control, handleSubmit } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: {
-      name: ""
+      genderPreference: ""
     }
   });
-  const name = useWatch({
-    control,
-    name: "name",
-    defaultValue: ""
-  });
   const onSubmit = (data: Object) => {
-    console.log(name);
     router.push("/AboutMe/AboutInterestedIn");
   };
   return (

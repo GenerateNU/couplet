@@ -1,6 +1,6 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../components/Onboarding/ContinueButton";
@@ -8,23 +8,24 @@ import DropDownCalendar from "../../components/Onboarding/DropDownCalendar";
 import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../scaleStyles";
-import { useAppSelector } from "../../state/hooks";
+import { setBirthday } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
 
 const aboutBirthdayPicture = require("../../assets/calendarBirthday.png");
 
 function AboutBirthday() {
-  const state = useAppSelector((state) =>
-    state.form.name
-  );
-  const user = useLocalSearchParams<{ user: string }>();
-  const { control, handleSubmit } = useForm({
+  const dispatch = useAppDispatch();
+  const { handleSubmit, setValue } = useForm({
     defaultValues: {
-      name: ""
+      birthday: new Date()
     }
   });
-  const onSubmit = (data: Object) => {
-    console.log("Start");
-    console.log("From birthday:", state);
+  const handleDateChange = (day: number, month: number, year: number) => {
+    setValue("birthday", new Date(year, month - 1, day));
+  };
+  const onSubmit = (data: { birthday: Date }) => {
+    //Store it as a string to satisfy Redux's required serialization values
+    dispatch(setBirthday(data.birthday.toISOString()));
     router.push("/AboutMe/AboutGender");
   };
   return (
@@ -43,12 +44,11 @@ function AboutBirthday() {
           <Image source={aboutBirthdayPicture} />
           <OnboardingTitle text="My birthday is..." />
           <View style={scaledStyles.inputWrapper} />
-          <DropDownCalendar />
+          <DropDownCalendar onDateChange={handleDateChange} />
           <View style={scaledStyles.helperContainer}>
             <Text style={scaledStyles.textHelper}>You won&apos;t be able to change this</Text>
           </View>
         </View>
-
         <View>
           <ContinueButton
             title="Continue"
