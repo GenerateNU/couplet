@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import COLORS from "../colors";
 import scaleStyleSheet from "../scaleStyles";
 
 interface LabelToggleProps {
   labels: string[];
+  onChange: (label: string) => void;
 }
 
-export default function LabelToggle({ labels }: LabelToggleProps) {
-  const [chosen, setChosen] = useState<number>(0);
+export default function LabelToggle({ labels, onChange }: LabelToggleProps) {
+  const [chosen, setChosen] = useState<string>(labels[0]);
+
+  useEffect(() => {
+    onChange(chosen)
+  }, [chosen, onChange])
 
   return (
     <View style={scaledStyles.container}>
       {labels.map((label, i) => (
         <TouchableOpacity
-          onPress={() => setChosen(i)}
-          style={chosen === i ? scaledStyles.chosenLabel : scaledStyles.unchosenLabel}
+          onPress={() => setChosen(label)}
+          style={chosen === label ? scaledStyles.chosenLabel : scaledStyles.unchosenLabel}
         >
-          {chosen === i ? (
+          {chosen === label ? (
             <View style={scaledStyles.dropShadowContainer}>
               <Text style={scaledStyles.textStyle}>{label}</Text>
             </View>
