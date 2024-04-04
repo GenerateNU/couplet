@@ -5,10 +5,10 @@ import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
 import bostonNeighborhoods from "../../utils/location";
 
-interface DropDownLocationProps {
+type DropDownLocationProps = {
   onLocationChange: (local: string) => void;
   selectedLocation: string;
-}
+};
 
 function DropDownLocation({ onLocationChange, selectedLocation }: DropDownLocationProps) {
   const [open, setOpen] = useState(false);

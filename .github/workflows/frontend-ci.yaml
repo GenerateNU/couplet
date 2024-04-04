@@ -7,11 +7,13 @@ on:
       - "main"
     paths:
       - "frontend/**"
+      - "openapi.yaml"
   pull_request:
     branches:
       - "main"
     paths:
       - "frontend/**"
+      - "openapi.yaml"
   workflow_dispatch:
 
 concurrency:

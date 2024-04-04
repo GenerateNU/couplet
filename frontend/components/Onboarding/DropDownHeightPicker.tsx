@@ -4,10 +4,10 @@ import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface DropDownCalendarProps {
+type DropDownCalendarProps = {
   onHeightChange: (foot: number, inch: number) => void;
   selectedHeight: { foot: number; inch: number };
-}
+};
 
 function DropDownHeightPicker({ onHeightChange, selectedHeight }: DropDownCalendarProps) {
   const [openFeet, setOpenFeet] = useState(false);

@@ -12,9 +12,9 @@ const INACTIVE_MATCHES = require("../../assets/navbarmatchesinactive.png");
 const ACTIVE_PROFILE = require("../../assets/navbarprofileactive.png");
 const INACTIVE_PROFILE = require("../../assets/navbarprofileinactive.png");
 
-interface NavbarProps {
+type NavbarProps = {
   activePage: string;
-}
+};
 
 export default function Navbar({ activePage }: NavbarProps) {
   return (
