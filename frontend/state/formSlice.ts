@@ -20,7 +20,7 @@ const formSlice = createSlice({
     smokeHabit: "",
     weedHabit: "",
     drugHabit: "",
-    passion : []
+    passion: []
   },
   reducers: {
     setName: (state, action) => {
@@ -71,7 +71,7 @@ const formSlice = createSlice({
     setDrugHabit: (state, action) => {
       state.drugHabit = action.payload;
     },
-    setPassion : (state, action) => {
+    setPassion: (state, action) => {
       state.passion = action.payload;
     }
   }
