@@ -32,7 +32,7 @@ export default function Login() {
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
   const handleGoogleSignIn = async () => {
-    router.push("/Home");
+    router.push("/AboutMe/AboutName");
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -52,7 +52,7 @@ export default function Login() {
         ]
       });
       setIsAppleLoggedIn(true);
-      router.push("/Home");
+      router.push("/AboutMe/AboutName");
     } catch (e) {
       setIsAppleLoggedIn(false);
     }
