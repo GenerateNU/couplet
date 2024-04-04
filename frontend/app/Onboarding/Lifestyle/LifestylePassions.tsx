@@ -157,7 +157,7 @@ const overrideStyles = {
     justifyContent: "space-between"
   },
   habitWindow: {
-    height: "46%"
+    height: "50%"
   },
   helperTextContainer: {
     marginTop: 8
