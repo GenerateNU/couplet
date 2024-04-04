@@ -27,7 +27,6 @@ function AboutBirthday() {
     setIsDropDownOpen(isOpen);
   };
   const onSubmit = (data: { birthday: Date }) => {
-    console.log(data);
     // Store it as a string to satisfy Redux's required serialization values
     dispatch(setBirthday(data.birthday.toISOString()));
     router.push("Onboarding/AboutMe/AboutGender");

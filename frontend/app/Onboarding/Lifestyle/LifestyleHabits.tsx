@@ -36,7 +36,6 @@ function LifestyleHabits() {
     weedHabit: string;
     drugHabit: string;
   }) => {
-    console.log(data);
     dispatch(setDrinkHabit(data.drinkHabit));
     dispatch(setSmokeHabit(data.smokeHabit));
     dispatch(setWeedHabit(data.weedHabit));

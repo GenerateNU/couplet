@@ -26,7 +26,6 @@ function AboutHeight() {
     }
   });
   const onSubmit = (data: { height: { foot: number; inch: number } }) => {
-    console.log(data);
     dispatch(setHeight(data.height));
     router.push("Onboarding/AboutMe/AboutLocation");
   };
