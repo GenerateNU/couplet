@@ -8,7 +8,7 @@ import OnboardingButton from "../../../components/Onboarding/OnboardingButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
-import { setPolitics } from "../../../state/formSlice";
+import { setPassion } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 import chunkArray from "../../../utils/chunkArray";
@@ -71,7 +71,7 @@ function LifestylePassions() {
     }
   });
   const onSubmit = (data: { passions: string[] }) => {
-    dispatch(setPolitics(data.passions));
+    dispatch(setPassion(data.passions));
     router.push("Onboarding/Profile/ProfileBio");
   };
   return (
