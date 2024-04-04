@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import PhotoPicker from "../../components/PhotoPicker";
-import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import PhotoPicker from "../../../components/PhotoPicker";
+import scaleStyleSheet from "../../../scaleStyles";
 
-const CAMERA_IMAGE = require("../../assets/profilecamera.png");
+const CAMERA_IMAGE = require("../../../assets/profilecamera.png");
 
 export default function ProfilePhotos() {
   const [images, setImages] = useState<string[]>(["", "", "", ""]);

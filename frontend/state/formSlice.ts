@@ -11,7 +11,15 @@ const formSlice = createSlice({
     looking: "",
     pronouns: "",
     height: { foot: 0, inch: 0 },
-    location: ""
+    location: "",
+    school : "",
+    job : "",
+    religion: "",
+    politics : "",
+    drinkHabit : "",
+    smokeHabit : "",
+    weedHabit : "",
+    drugHabit : "",
   },
   reducers: {
     setName: (state, action) => {
@@ -37,6 +45,30 @@ const formSlice = createSlice({
     },
     setLocation: (state, action) => {
       state.location = action.payload;
+    },
+    setSchool : (state, action) => {
+      state.school = action.payload;
+    },
+    setJob : (state, action) => {
+      state.job = action.payload;
+    },
+    setReligion : (state, action) => {
+      state.religion = action.payload;
+    },
+    setPolitics : (state, action) => {
+      state.politics = action.payload;
+    },
+    setDrinkHabit : (state, action) => {
+      state.drinkHabit = action.payload;
+    },
+    setSmokeHabit : (state, action) => {
+      state.smokeHabit = action.payload;
+    },
+    setWeedHabit : (state, action) => {
+      state.weedHabit = action.payload;
+    },
+    setDrugHabit : (state, action) => {
+      state.drugHabit = action.payload;
     }
   }
 });
@@ -49,7 +81,15 @@ export const {
   setLooking,
   setPronouns,
   setHeight,
-  setLocation
+  setLocation,
+  setSchool,
+  setJob,
+  setReligion,
+  setPolitics,
+  setDrinkHabit,
+  setDrugHabit,
+  setSmokeHabit,
+  setWeedHabit
 } = formSlice.actions;
 
 export default formSlice.reducer;

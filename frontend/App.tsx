@@ -1,7 +1,7 @@
 import * as AppleAuthentication from "expo-apple-authentication";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import AboutName from "./app/AboutMe/AboutName";
+import AboutName from "./app/Onboarding/AboutMe/AboutName";
 
 export default function App() {
   const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);

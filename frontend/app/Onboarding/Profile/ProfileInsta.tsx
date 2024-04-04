@@ -10,12 +10,12 @@ import {
   TextInput,
   View
 } from "react-native";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
-const AT_ICON = require("../../assets/3diconslmao.png");
+const AT_ICON = require("../../../assets/3diconslmao.png");
 
 export default function Profile() {
   const [instagram, setInstagram] = useState("");

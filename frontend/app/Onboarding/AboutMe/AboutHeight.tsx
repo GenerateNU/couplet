@@ -3,16 +3,16 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import DropDownHeightPicker from "../../components/Onboarding/DropDownHeightPicker";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
-import { setHeight } from "../../state/formSlice";
-import { useAppDispatch } from "../../state/hooks";
-import onboardingStyles from "../../styles/Onboarding/styles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import DropDownHeightPicker from "../../../components/Onboarding/DropDownHeightPicker";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
+import { setHeight } from "../../../state/formSlice";
+import { useAppDispatch } from "../../../state/hooks";
+import onboardingStyles from "../../../styles/Onboarding/styles";
 
-const heightPicture = require("../../assets/height.png");
+const heightPicture = require("../../../assets/height.png");
 
 function AboutHeight() {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ function AboutHeight() {
   const onSubmit = (data: { height: { foot: number; inch: number } }) => {
     console.log(data);
     dispatch(setHeight(data.height));
-    router.push("/AboutMe/AboutLocation");
+    router.push("Onboarding/AboutMe/AboutLocation");
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -45,19 +45,21 @@ function AboutHeight() {
         <View>
           <Image source={heightPicture} />
           <OnboardingTitle text="My height is..." />
-          <Controller
-            control={control}
-            name="height"
-            render={({ field: { onChange, value } }) => (
-              <DropDownHeightPicker
-                onHeightChange={(foot: number, inch: number) => {
-                  onChange({ foot, inch });
-                  handleHeightChange(foot, inch);
-                }}
-                selectedHeight={value}
-              />
-            )}
-          />
+          <View style={scaledStyles.inputWrapper}>
+            <Controller
+              control={control}
+              name="height"
+              render={({ field: { onChange, value } }) => (
+                <DropDownHeightPicker
+                  onHeightChange={(foot: number, inch: number) => {
+                    onChange({ foot, inch });
+                    handleHeightChange(foot, inch);
+                  }}
+                  selectedHeight={value}
+                />
+              )}
+            />
+          </View>
         </View>
         <View>
           <ContinueButton
