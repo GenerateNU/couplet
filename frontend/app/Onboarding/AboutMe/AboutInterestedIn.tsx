@@ -11,7 +11,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setGenderPreference } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
-import { onButtonClick }  from "../../../utils/onButtonClick";
+import { onButtonClick } from "../../../utils/onButtonClick";
 
 const aboutInterestedInPicture = require("../../../assets/interestedin.png");
 

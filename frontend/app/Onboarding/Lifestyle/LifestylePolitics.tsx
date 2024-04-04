@@ -12,7 +12,7 @@ import { setPolitics } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 import chunkArray from "../../../utils/chunkArray";
-import { onButtonClick }  from "../../../utils/onButtonClick";
+import { onButtonClick } from "../../../utils/onButtonClick";
 
 const POLITICS_IMAGE = require("../../../assets/OnboardingPolitics.png");
 
@@ -49,8 +49,10 @@ function LifestylePolitics() {
           <OnboardingTitle text="I believe in..." />
           <View style={scaledStyles.inputWrapper}>
             {listReligionsChunked.map((politicsRow, rowIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
               <View key={rowIndex} style={scaledStyles.buttonContainer}>
                 {politicsRow.map((title: string, index: React.Key | null | undefined) => (
+                  // eslint-disable-next-line react/no-array-index-key
                   <View key={index} style={scaledStyles.button}>
                     <Controller
                       control={control}
@@ -100,4 +102,3 @@ const overrideStyles = {
 };
 
 const scaledStyles = scaleStyleSheet({ ...onboardingStyles, ...overrideStyles });
-

@@ -15,6 +15,7 @@ import chunkArray from "../../../utils/chunkArray";
 import { onButtonClickArray } from "../../../utils/onButtonClick";
 
 const PASSIONS_IMAGE = require("../../../assets/OnboardingPassions.png");
+
 const listOfPassions = [
   "Acting",
   "Baking",
@@ -89,15 +90,15 @@ function LifestylePassions() {
           <Image source={PASSIONS_IMAGE} />
           <OnboardingTitle text="What are you passionate about?" />
           <View style={scaledStyles.helperTextContainer}>
-            <Text style={scaledStyles.textHelper}>
-              Select your top five interests!
-            </Text>
+            <Text style={scaledStyles.textHelper}>Select your top five interests!</Text>
           </View>
           <View style={scaledStyles.inputWrapper}>
             <ScrollView style={scaledStyles.habitWindow}>
               {listOfPassionsChunked.map((Row, rowIndex) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <View key={rowIndex} style={scaledStyles.buttonContainer}>
                   {Row.map((title: string, index: React.Key | null | undefined) => (
+                    // eslint-disable-next-line react/no-array-index-key
                     <View key={index} style={scaledStyles.button}>
                       <Controller
                         control={control}
@@ -158,8 +159,8 @@ const overrideStyles = {
   habitWindow: {
     height: "46%"
   },
-  helperTextContainer : {
-    marginTop : 8
+  helperTextContainer: {
+    marginTop: 8
   }
 };
 

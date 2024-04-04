@@ -11,7 +11,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setGender } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
-import { onButtonClick }  from "../../../utils/onButtonClick";
+import { onButtonClick } from "../../../utils/onButtonClick";
 
 const aboutGender = require("../../../assets/lightningBolt.png");
 
@@ -38,7 +38,7 @@ function AboutGender() {
           selectedCount={1}
         />
       </View>
-      
+
       <View style={scaledStyles.mainContainer}>
         <View>
           <Image source={aboutGender} />

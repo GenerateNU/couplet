@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import COLORS from "../../colors";
-import { scaleWidth } from "../../ratio";
 import scaleStyleSheet from "../../scaleStyles";
 
 interface OnboardingBarProps {
@@ -31,7 +30,7 @@ function OnboardingBar({ selectedCount }: OnboardingBarProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex : 1,
+    flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
     opacity: 1

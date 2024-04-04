@@ -9,9 +9,9 @@ type Props = {
 
 function OnboardingTitle({ text }: Props) {
   return (
-      <View style={scaledStyles.container}>
-        <Text style={scaledStyles.text}>{text}</Text>
-      </View>
+    <View style={scaledStyles.container}>
+      <Text style={scaledStyles.text}>{text}</Text>
+    </View>
   );
 }
 

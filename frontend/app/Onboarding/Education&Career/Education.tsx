@@ -68,7 +68,7 @@ function Education() {
                 />
               </View>
               <Text style={scaledStyles.textHelper}>
-                If you've graduated, write your alma mater!
+                If you`&apos;`ve graduated, write your alma mater!
               </Text>
             </View>
           </View>

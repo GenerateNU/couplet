@@ -12,7 +12,7 @@ import { setReligion } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 import chunkArray from "../../../utils/chunkArray";
-import { onButtonClick }  from "../../../utils/onButtonClick";
+import { onButtonClick } from "../../../utils/onButtonClick";
 
 const RELIGION_IMAGE = require("../../../assets/OnboardingReligion.png");
 
@@ -60,8 +60,10 @@ function LifestyleReligion() {
           <OnboardingTitle text="I believe in..." />
           <View style={scaledStyles.inputWrapper}>
             {listReligionsChunked.map((religionRow, rowIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
               <View key={rowIndex} style={scaledStyles.buttonContainer}>
                 {religionRow.map((religion: string, index: React.Key | null | undefined) => (
+                  // eslint-disable-next-line react/no-array-index-key
                   <View key={index} style={scaledStyles.button}>
                     <Controller
                       control={control}

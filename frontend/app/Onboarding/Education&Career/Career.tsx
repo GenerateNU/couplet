@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { Image, KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";

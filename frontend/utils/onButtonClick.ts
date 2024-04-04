@@ -14,10 +14,10 @@ export function onButtonClick(
 }
 
 export function onButtonClickArray(
-  value : string[],
-  buttonValue : string,
+  value: string[],
+  buttonValue: string,
   setSelectedButtons: Function,
-  onChange : Function
+  onChange: Function
 ) {
   // Check if the buttonValue is already in the array
   if (value.includes(buttonValue)) {

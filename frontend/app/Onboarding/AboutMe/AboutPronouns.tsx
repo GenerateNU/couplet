@@ -12,7 +12,7 @@ import { setPronouns } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 import chunkArray from "../../../utils/chunkArray";
-import { onButtonClick }  from "../../../utils/onButtonClick";
+import { onButtonClick } from "../../../utils/onButtonClick";
 import {
   PRONOUNS_HE_HIM,
   PRONOUNS_HE_THEY,
@@ -68,9 +68,11 @@ function AboutPronouns() {
           <OnboardingTitle text="My pronouns are..." />
           <View style={scaledStyles.inputWrapper}>
             {PRONOUNS_CHUNKED.map((pronounsRow, rowIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
               <View key={rowIndex} style={scaledStyles.buttonContainer}>
                 {pronounsRow.map(
                   (pronoun: { title: string }, index: React.Key | null | undefined) => (
+                    // eslint-disable-next-line react/no-array-index-key
                     <View key={index} style={scaledStyles.button}>
                       <Controller
                         control={control}

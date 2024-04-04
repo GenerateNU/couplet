@@ -14,7 +14,7 @@ const onboardingStyles = {
     fontWeight: "400",
     lineHeight: 12,
     letterSpacing: -0.12,
-    fontFamily: "DMSansMedium",
+    fontFamily: "DMSansMedium"
   },
   container: {
     flex: 1,
@@ -33,8 +33,8 @@ const onboardingStyles = {
   textContainer: {
     padding: 8
   },
-  textInputWrapper:{
-    marginBottom : 8
+  textInputWrapper: {
+    marginBottom: 8
   },
   textInput: {
     borderStyle: "solid",
@@ -45,8 +45,8 @@ const onboardingStyles = {
     padding: 8,
     fontFamily: "DMSansRegular"
   },
-  inputWrapper : {
-    marginTop : 16
+  inputWrapper: {
+    marginTop: 16
   }
 };
 

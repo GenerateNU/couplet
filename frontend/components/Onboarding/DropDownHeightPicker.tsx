@@ -51,11 +51,11 @@ function DropDownHeightPicker({ onHeightChange, selectedHeight }: DropDownCalend
 
 const styles = StyleSheet.create({
   dropDownContainer: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   dropdown: {
     flex: 1,
-    marginRight: 5,
+    marginRight: 5
   }
 });
 

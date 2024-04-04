@@ -8,10 +8,9 @@ import HabitSection from "../../../components/Onboarding/HabitSection";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
+import { setDrinkHabit, setDrugHabit, setSmokeHabit, setWeedHabit } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
-import { setDrinkHabit, setDrugHabit, setSmokeHabit, setWeedHabit } from "../../../state/formSlice";
-
 
 const HABITS_IMAGE = require("../../../assets/OnboardingHabits.png");
 
@@ -37,6 +36,7 @@ function LifestyleHabits() {
     weedHabit: string;
     drugHabit: string;
   }) => {
+    console.log(data);
     dispatch(setDrinkHabit(data.drinkHabit));
     dispatch(setSmokeHabit(data.smokeHabit));
     dispatch(setWeedHabit(data.weedHabit));
@@ -61,7 +61,7 @@ function LifestyleHabits() {
           <View style={scaledStyles.inputWrapper}>
             <ScrollView style={scaledStyles.habitWindow}>
               <HabitSection
-                title={"Do you drink?"}
+                title="Do you drink?"
                 options={genericHabits}
                 disableBar={false}
                 parentControl={control}
@@ -69,7 +69,7 @@ function LifestyleHabits() {
                 setHabit={setSelectDrinkHabit}
               />
               <HabitSection
-                title={"Do you smoke?"}
+                title="Do you smoke?"
                 options={genericHabits}
                 disableBar={false}
                 parentControl={control}
@@ -77,7 +77,7 @@ function LifestyleHabits() {
                 setHabit={setSelectSmokeHabit}
               />
               <HabitSection
-                title={"Do you smoke weed?"}
+                title="Do you smoke weed?"
                 options={genericHabits}
                 disableBar={false}
                 parentControl={control}
@@ -85,9 +85,9 @@ function LifestyleHabits() {
                 setHabit={setSelectWeedHabit}
               />
               <HabitSection
-                title={"Do you do drugs?"}
+                title="Do you do drugs?"
                 options={drugHabits}
-                disableBar={true}
+                disableBar
                 parentControl={control}
                 habit="drugHabit"
                 setHabit={setSelectDrugHabit}
