@@ -1,6 +1,6 @@
 import React from "react";
-import Login from "../components/Login/Login";
+import App from "../App";
 
 export default function index() {
-  return <Login />;
+  return <App />;
 }

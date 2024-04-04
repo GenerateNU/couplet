@@ -3,9 +3,9 @@ import { StyleSheet, View } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface OnboardingBarProps {
+type OnboardingBarProps = {
   selectedCount: number;
-}
+};
 
 function OnboardingBar({ selectedCount }: OnboardingBarProps) {
   return (

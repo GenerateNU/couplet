@@ -3,10 +3,10 @@ import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface ContinueBottonProps extends TouchableOpacityProps {
+type ContinueBottonProps = TouchableOpacityProps & {
   title: string;
   isDisabled: boolean;
-}
+};
 
 function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
   return (

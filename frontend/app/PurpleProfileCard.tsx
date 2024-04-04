@@ -2,16 +2,16 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-interface PurpleProfileCardProps {
+type PurpleProfileCardProps = {
   imageUrl: string;
   name: string;
   detailText: string;
   onPress: () => void;
-}
+};
 
 export default function PurpleProfileCard(props: PurpleProfileCardProps) {
   const { imageUrl, name, detailText, onPress } = props;
-  console.log(imageUrl); // Make this the source of the Image component when images are available
+  //console.log(imageUrl); // Make this the source of the Image component when images are available
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       {/* // eslint-disable-next-line global-require */}

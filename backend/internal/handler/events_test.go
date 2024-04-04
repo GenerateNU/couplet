@@ -365,20 +365,20 @@ func TestEventsIDPatch(t *testing.T) {
 	}
 
 	validTestCases := []struct {
-		input api.Event
-	}{{api.Event{
+		input api.EventsIDPatchReq
+	}{{api.EventsIDPatchReq{
 		Name:   api.NewOptString("The Events Company"),
 		Bio:    api.NewOptString("At The Events Company, we connect people through events"),
 		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 		OrgId:  api.NewOptUUID(uuid.New()),
 	}}}
 	invalidTestCases := []struct {
-		input api.Event
-	}{{api.Event{
+		input api.EventsIDPatchReq
+	}{{api.EventsIDPatchReq{
 		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
-	}}, {api.Event{
+	}}, {api.EventsIDPatchReq{
 		Name: api.NewOptString(len256),
-	}}, {api.Event{
+	}}, {api.EventsIDPatchReq{
 		Bio: api.NewOptString(len256),
 	}}}
 
