@@ -341,17 +341,17 @@ func TestOrgsIDPatch(t *testing.T) {
 	}
 
 	validTestCases := []struct {
-		input api.Org
-	}{{api.Org{
+		input api.OrgsIDPatchReq
+	}{{api.OrgsIDPatchReq{
 		Name:   api.NewOptString("The Orgs Company"),
 		Bio:    api.NewOptString("At The Orgs Company, we connect people through orgs"),
 		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 	}}}
 	invalidTestCases := []struct {
-		input api.Org
-	}{{api.Org{
+		input api.OrgsIDPatchReq
+	}{{api.OrgsIDPatchReq{
 		Name: api.NewOptString(len256),
-	}}, {api.Org{
+	}}, {api.OrgsIDPatchReq{
 		Bio: api.NewOptString(len256),
 	}}}
 

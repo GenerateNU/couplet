@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Button, Icon } from "react-native-paper";
-import getOrgById from "../../api/orgs";
-import type { components } from "../../api/schema";
+import { getEvents } from "../../api/events";
+import { getOrgById } from "../../api/orgs";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import OrgTag from "./OrgTag";
 
-type Event = components["schemas"]["Event"];
-type Org = components["schemas"]["Org"];
+type Event = Awaited<ReturnType<typeof getEvents>>[number];
+type Org = Awaited<ReturnType<typeof getOrgById>>;
 
 const IMAGE = require("../../assets/profile.png");
 
@@ -22,9 +22,7 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
 
   useEffect(() => {
     if (!event.orgId) return;
-    getOrgById(event.orgId)
-      .then((fetchedOrg) => setOrg(fetchedOrg))
-      .catch((e) => console.log(e));
+    getOrgById({ id: event.orgId }).then((fetchedOrg) => setOrg(fetchedOrg));
   }, [event]);
 
   return (
@@ -52,7 +50,6 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
           textColor={COLORS.primary}
           labelStyle={scaledStyles.buttonLabel}
           style={{ borderColor: COLORS.primary, borderWidth: 2 }}
-          onPress={() => console.log("View details")}
         >
           View details
         </Button>
@@ -63,7 +60,6 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
           textColor={COLORS.white}
           labelStyle={{ ...scaledStyles.buttonLabel, paddingHorizontal: 8, fontWeight: "700" }}
           contentStyle={{ flexDirection: "row-reverse" }}
-          onPress={() => console.log("Share event")}
         >
           Share event
         </Button>
