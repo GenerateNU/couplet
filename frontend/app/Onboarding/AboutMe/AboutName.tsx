@@ -3,15 +3,15 @@ import React from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { Image, KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
-import { setName } from "../../state/formSlice";
-import { useAppDispatch } from "../../state/hooks";
-import onboardingStyles from "../../styles/Onboarding/styles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
+import { setName } from "../../../state/formSlice";
+import { useAppDispatch } from "../../../state/hooks";
+import onboardingStyles from "../../../styles/Onboarding/styles";
 
-const aboutNamePicture = require("../../assets/aboutName.png");
+const aboutNamePicture = require("../../../assets/aboutName.png");
 
 function AboutName() {
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ function AboutName() {
   // On submit of the name form
   const onSubmit = (data: { name: string }) => {
     dispatch(setName(data.name));
-    router.push("/AboutMe/AboutBirthday");
+    router.push("Onboarding/AboutMe/AboutBirthday");
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
@@ -52,23 +52,25 @@ function AboutName() {
             <Image source={aboutNamePicture} />
             <OnboardingTitle text="My first name is..." />
             <View style={scaledStyles.inputWrapper}>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={scaledStyles.textContainer}
-                    placeholder="First Name"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-                name="name"
-              />
+              <View style={scaledStyles.textInputWrapper}>
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={scaledStyles.textInput}
+                      placeholder="First Name"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                  name="name"
+                />
+              </View>
+              <Text style={scaledStyles.textHelper}>
+                This is how it will permanently appear on your profile
+              </Text>
             </View>
-            <Text style={scaledStyles.textHelper}>
-              This is how it will permanently appear on your profile
-            </Text>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -87,19 +89,4 @@ function AboutName() {
 
 export default AboutName;
 
-const styles = {
-  textContainer: {
-    padding: 8
-  },
-  inputWrapper: {
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "grey",
-    marginBottom: 8
-  },
-  avoidContainer: {
-    flex: 1
-  }
-};
-
-const scaledStyles = scaleStyleSheet({ ...styles, ...onboardingStyles });
+const scaledStyles = scaleStyleSheet(onboardingStyles);

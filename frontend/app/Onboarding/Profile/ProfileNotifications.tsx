@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import React from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
-const NOTIFICATION_TOGGLE = require("../../assets/notification-toggle.png");
-const NOTIFICATION_ICON = require("../../assets/notification-icon.png");
+const NOTIFICATION_TOGGLE = require("../../../assets/notification-toggle.png");
+const NOTIFICATION_ICON = require("../../../assets/notification-icon.png");
 
 export default function ProfileNotifications() {
   function goToNextPage() {

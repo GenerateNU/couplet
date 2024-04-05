@@ -4,11 +4,11 @@ import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
 
-type DropDownCalendarProps = {
+interface DropDownCalendarProps {
   onDateChange: (day: number, month: number, year: number) => void;
   onDropDownOpen: (openDay: boolean, openMonth: boolean, openYear: boolean) => void;
   selectedDate: Date;
-};
+}
 
 function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDownCalendarProps) {
   const [openDay, setOpenDay] = useState(false);

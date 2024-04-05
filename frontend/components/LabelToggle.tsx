@@ -12,8 +12,8 @@ export default function LabelToggle({ labels, onChange }: LabelToggleProps) {
   const [chosen, setChosen] = useState<string>(labels[0]);
 
   useEffect(() => {
-    onChange(chosen)
-  }, [chosen, onChange])
+    onChange(chosen);
+  }, [chosen, onChange]);
 
   return (
     <View style={scaledStyles.container}>
