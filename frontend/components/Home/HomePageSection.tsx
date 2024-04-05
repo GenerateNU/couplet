@@ -1,18 +1,33 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import scaleStyleSheet from "../../scaleStyles";
 import HomeEventCard from "./HomeEventCard";
+
+const MemoizedHomeEventCard = React.memo(HomeEventCard);
 
 export default function HomePageSection({ title, events }: { title: string; events: any[] }) {
   return (
-    <View style={{ marginVertical: 10 }}>
-      <Text style={{ fontSize: 20, fontFamily: "DMSansRegular" }}>{title} </Text>
+    <View style={{ marginTop: 32 }}>
+      <Text style={scaledStyles.sectionTitle}>{`${title} >`} </Text>
       <View style={{ flexDirection: "row" }}>
         <ScrollView horizontal>
           {events.map((event) => (
-            <HomeEventCard key={event.id} id={event.id} name={event.name} />
+            <MemoizedHomeEventCard key={event.id} id={event.id} name={event.name} />
           ))}
         </ScrollView>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    fontFamily: "DMSansMedium",
+    letterSpacing: -0.2,
+    marginBottom: 8
+  }
+});
+
+const scaledStyles = scaleStyleSheet(styles);

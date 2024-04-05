@@ -19,6 +19,7 @@ export default function LabelToggle({ labels, onChange }: LabelToggleProps) {
     <View style={scaledStyles.container}>
       {labels.map((label, i) => (
         <TouchableOpacity
+          key={label}
           onPress={() => setChosen(label)}
           style={chosen === label ? scaledStyles.chosenLabel : scaledStyles.unchosenLabel}
         >

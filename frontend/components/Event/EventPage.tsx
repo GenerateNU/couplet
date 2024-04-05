@@ -19,7 +19,10 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
   const [event, setEvent] = useState<Event>();
 
   useEffect(() => {
-    getEventById({ id }).then((fetchedEvent) => setEvent(fetchedEvent));
+    getEventById({ id }).then((fetchedEvent) => {
+      console.log(fetchedEvent);
+      setEvent(fetchedEvent);
+    });
   }, [id]);
 
   const dummyImages: string[] = [
