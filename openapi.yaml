@@ -1584,6 +1584,65 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+  /users/reccomendation:
+    get:
+      summary: Find reccomendations of other users for a user
+      parameters:
+        - name: userId
+          in: query
+          description: ID of user to find reccomendations for
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved reccomendations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - firstName
+                    - lastName
+                    - age
+                    - bio
+                    - images
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    firstName:
+                      type: string
+                      minLength: 1
+                      example: Bob
+                    lastName:
+                      type: string
+                      minLength: 1
+                      example: Smith
+                    age:
+                      type: integer
+                      format: uint8
+                      minimum: 18
+                      example: 22
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: Hello! I'm excited to experience events!
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 4
+                      maxItems: 4
   /matches/{id}:
     get:
       summary: Get a user's matches

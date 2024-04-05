@@ -160,3 +160,10 @@ func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txE
 	tx.Commit()
 	return
 }
+ 
+// Get Reccomendations for a user
+
+func (c Controller) GetReccomendations(id user_id.UserID) (users []user.User, txErr error) {
+	txErr = c.database.Where("id != ?", id).Limit(10).Find(&users).Error
+	return
+}

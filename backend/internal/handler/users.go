@@ -204,3 +204,27 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 	}
 	return &res, nil
 }
+
+func (h Handler) UsersReccomendationGet(ctx context.Context, params api.UsersReccomendationGetParams) ([]api.UsersReccomendationGetOKItem, error) {
+	if h.logger != nil {
+		h.logger.Info(fmt.Sprintf("GET /users/%s/reccomendations", params.UserId))
+	}
+
+	users, txErr := h.controller.GetReccomendations(user_id.Wrap(params.UserId))
+	if txErr != nil {
+		return nil, errors.New("failed to get reccomendations")
+	}
+	res := []api.UsersReccomendationGetOKItem{}
+	for _, u := range users {
+		item := api.UsersReccomendationGetOKItem{
+			ID:        u.ID.Unwrap(),
+			FirstName: u.FirstName,
+			LastName:  u.LastName,
+			Age:       u.Age,
+			Bio:       u.Bio,
+			Images:    u.Images.Unwrap(),
+		}
+		res = append(res, item)
+	}
+	return res, nil
+}
