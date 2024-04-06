@@ -50,7 +50,6 @@ export type PillProps = {
   items: string[];
 };
 
-
 export type LifestyleProps = {
   relationshipType?: string;
   religion?: string;
@@ -59,4 +58,4 @@ export type LifestyleProps = {
   smokingFrequency?: string;
   drugFrequency?: string;
   cannabisFrequency?: string;
-}
+};
