@@ -9,7 +9,7 @@ import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import LabelToggle from "../LabelToggle";
 
-type Matches = paths["/matches/{id}"]["get"]["responses"][200]["content"]["application/json"]
+type Matches = paths["/matches/{id}"]["get"]["responses"][200]["content"]["application/json"];
 
 export default function MatchesScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
