@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Share, StyleSheet, Text, View } from "react-native";
 import { Button, Icon } from "react-native-paper";
 import { getEvents } from "../../api/events";
 import { getOrgById } from "../../api/orgs";
@@ -19,6 +19,26 @@ export type EventCardProps = {
 
 export default function EventCard({ handleReact, event }: EventCardProps) {
   const [org, setOrg] = useState<Org>();
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this event on Couplet! \n${event?.bio}`,
+        url: event?.externalLink
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
 
   useEffect(() => {
     if (!event.orgId) return;
@@ -60,6 +80,7 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
           textColor={COLORS.white}
           labelStyle={{ ...scaledStyles.buttonLabel, paddingHorizontal: 8, fontWeight: "700" }}
           contentStyle={{ flexDirection: "row-reverse" }}
+          onPress={onShare}
         >
           Share event
         </Button>
