@@ -1,6 +1,7 @@
-import type { components } from "../../api/schema";
 
-type Event = components["schemas"]["Event"];
+import { getEvents } from "../../api/events";
+
+type Event = Awaited<ReturnType<typeof getEvents>>[number];
 
 export type ImageWithCaptionProps = {
   image: string;
