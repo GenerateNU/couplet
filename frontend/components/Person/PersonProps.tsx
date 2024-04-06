@@ -1,4 +1,3 @@
-
 import { getEvents } from "../../api/events";
 
 type Event = Awaited<ReturnType<typeof getEvents>>[number];
