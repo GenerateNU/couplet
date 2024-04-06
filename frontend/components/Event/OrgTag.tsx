@@ -2,9 +2,9 @@ import React, { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-export interface OrgTagProps {
+export type OrgTagProps = {
   text: string;
-}
+};
 
 export default function OrgTag({ text }: OrgTagProps) {
   return (

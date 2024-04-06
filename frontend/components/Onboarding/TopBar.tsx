@@ -34,8 +34,6 @@ function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) 
 
 const styles = StyleSheet.create({
   container: {
-    width: 346,
-    height: 69,
     flexDirection: "column",
     justifyContent: "space-between"
   },

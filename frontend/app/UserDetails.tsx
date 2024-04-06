@@ -2,17 +2,17 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-interface UserDetailsProps {
+type UserDetailsProps = {
   onPress: () => void;
   profileImageSource: any; // Adjust the type as needed
   name: string;
   editDetailsText: string;
   chevronColor: string;
-}
+};
 
 export default function UserDetails(props: UserDetailsProps) {
   const { onPress, profileImageSource, name, editDetailsText, chevronColor } = props;
-  console.log(profileImageSource); // Make this the source of the Image component when images are available
+  //console.log(profileImageSource); // Make this the source of the Image component when images are available
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>

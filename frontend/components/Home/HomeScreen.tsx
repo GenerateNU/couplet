@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { getAllEvents } from "../../api/events";
-import type { components } from "../../api/schema";
+import { getEvents } from "../../api/events";
 import Header from "../Layout/Header";
 import LinkButton from "../Layout/LinkButton";
 import TagButton from "../Layout/TagButton";
 import HomePageSection from "./HomePageSection";
-
-type Event = components["schemas"]["Event"];
 
 const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
 
@@ -17,7 +14,7 @@ export default function HomeScreen() {
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    getAllEvents().then((fetchedEvents: any) => {
+    getEvents().then((fetchedEvents: any) => {
       setEvents(fetchedEvents || []);
     });
   }, []);

@@ -10,12 +10,12 @@ import {
   TextInput,
   View
 } from "react-native";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
-const CAPTIONS = require("../../assets/profilecaptions.png");
+const CAPTIONS = require("../../../assets/profilecaptions.png");
 
 export default function ProfileCaptions() {
   // Sample images for now, these are my local uris, replace if you want to test it out

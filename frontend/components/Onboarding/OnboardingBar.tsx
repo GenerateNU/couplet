@@ -1,17 +1,16 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import COLORS from "../../colors";
-import { scaleWidth } from "../../ratio";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface OnboardingBarProps {
+type OnboardingBarProps = {
   selectedCount: number;
-}
+};
 
 function OnboardingBar({ selectedCount }: OnboardingBarProps) {
   return (
     <View style={[scaledStyles.container, { justifyContent: "center" }]}>
-      <View style={{ flexDirection: "row", width: scaleWidth(346) }}>
+      <View style={{ flexDirection: "row" }}>
         {Array.from({ length: 4 }).map((_, index) => (
           <View
             key={index} // eslint-disable-line
@@ -31,8 +30,7 @@ function OnboardingBar({ selectedCount }: OnboardingBarProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 346,
-    height: 61,
+    flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
     opacity: 1
