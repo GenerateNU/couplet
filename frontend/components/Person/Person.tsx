@@ -27,8 +27,8 @@ export default function Person({
   marijuanaFrequency,
   instagram,
   mutualEvents,
-  images, 
-  isMatched, 
+  images,
+  isMatched
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";

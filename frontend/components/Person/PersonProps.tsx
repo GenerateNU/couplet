@@ -28,10 +28,10 @@ export type PersonProps = {
 
   bio: string;
   interests: string[];
-  
+
   // Habits
-  relationshipType?: string; 
-  religion?: string; 
+  relationshipType?: string;
+  religion?: string;
   politicalAffiliation?: string;
   alchoholFrequency?: string;
   smokingFrequency?: string;
@@ -39,9 +39,9 @@ export type PersonProps = {
   marijuanaFrequency?: string;
 
   instagram: string;
-  mutualEvents: Event[]; 
+  mutualEvents: Event[];
   images: ImageWithCaptionProps[];
-  isMatched: boolean; 
+  isMatched: boolean;
 };
 
 export type PillProps = {
