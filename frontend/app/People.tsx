@@ -20,8 +20,17 @@ export default function People() {
     },
     bio: "I am a person \ni am from earth. I have five feet and one eye. \nIf i had one wish in this entire world it would be to eat grapes and cheese for the rest of this short life that i have left to life. ",
     interests: ["swimming", "running", "sleeping", "coding"],
-    habits: ["Christianity", "Islam", "Liberal"],
+
+    relationshipType: "Long Term Relationship",
+    religion: "None",
+    politicalAffiliation: "Democrat",
+    alchoholFrequency: "Never",
+    smokingFrequency: "Never",
+    drugFrequency: "Never",
+    marijuanaFrequency: "Never",
+
     instagram: "instagram.com",
+    mutualEvents: [],
     images: [
       {
         image:
@@ -33,7 +42,8 @@ export default function People() {
           "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         caption: "This is a caption"
       }
-    ]
+    ], 
+    isMatched: false
   };
   return (
     // foreach ... add or...
@@ -49,10 +59,18 @@ export default function People() {
         work={person.work || ""}
         height={person.height || undefined}
         bio={person.bio}
-        habits={person.habits}
         interests={person.interests}
+        relationshipType={person.relationshipType}
+        religion={person.religion}
+        politicalAffiliation={person.politicalAffiliation}
+        alchoholFrequency={person.alchoholFrequency}
+        smokingFrequency={person.smokingFrequency}
+        drugFrequency={person.drugFrequency}
+        marijuanaFrequency={person.marijuanaFrequency}
         instagram={person.instagram}
+        mutualEvents={person.mutualEvents}
         images={person.images}
+        isMatched={person.isMatched}
       />
       {/* <Text style={{ fontFamily: "DMSansRegular" }}>People</Text> */}
 

@@ -18,9 +18,17 @@ export default function Person({
   height,
   bio,
   interests,
-  habits,
+  relationshipType,
+  religion,
+  politicalAffiliation,
+  alchoholFrequency,
+  smokingFrequency,
+  drugFrequency,
+  marijuanaFrequency,
   instagram,
-  images
+  mutualEvents,
+  images, 
+  isMatched, 
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
@@ -86,7 +94,6 @@ export default function Person({
           </View>
           <InfoChips items={interests} textColor="black" backgroundColor="lavender" />
           {/* PROBALY NEED TO CHANGE THIS>>>> */}
-          {habits && <InfoChips items={habits} textColor="white" backgroundColor="purple" />}
           <View>
             <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
 
