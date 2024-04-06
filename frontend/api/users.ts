@@ -76,7 +76,6 @@ export async function saveUser(
   }
   return data;
 }
-import client from "./client";
 
 export default async function getMatchesByUserId(uuid: string) {
   const { data, error } = await client.GET("/matches/{id}", {
@@ -88,7 +87,6 @@ export default async function getMatchesByUserId(uuid: string) {
   });
 
   if (error) {
-    console.error(error);
     throw new Error("Failed to get user matches by ID");
   }
 

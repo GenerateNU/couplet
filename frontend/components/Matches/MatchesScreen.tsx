@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type { components } from "../../api/schema";
+import type { paths } from "../../api/schema";
 import getMatchesByUserId from "../../api/users";
 import RECENT_NO_MATCHES from "../../assets/nomatches1.png";
 import ALL_NO_MATCHES from "../../assets/nomatches2.png";
@@ -9,13 +9,13 @@ import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import LabelToggle from "../LabelToggle";
 
-type User = components["schemas"]["User"];
+type Matches = paths["/matches/{id}"]["get"]["responses"][200]["content"]["application/json"]
 
 export default function MatchesScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [matches, setMatches] = useState<User[]>([]);
+  const [matches, setMatches] = useState<Matches>([]);
   const [matchFilter, setMatchFilter] = useState<string>("");
-  const [displayMatches, setDisplayMatches] = useState<User[]>([]);
+  const [displayMatches, setDisplayMatches] = useState<Matches>([]);
   const RECENT_NO_MATCHES_URI = Image.resolveAssetSource(RECENT_NO_MATCHES).uri;
   const ALL_NO_MATCHES_URI = Image.resolveAssetSource(ALL_NO_MATCHES).uri;
 
