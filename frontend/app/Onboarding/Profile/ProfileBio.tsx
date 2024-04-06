@@ -12,13 +12,13 @@ import {
   View
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import COLORS from "../../colors";
-import ContinueButton from "../../components/Onboarding/ContinueButton";
-import OnboardingTitle from "../../components/Onboarding/OnboardingTitle";
-import TopBar from "../../components/Onboarding/TopBar";
-import scaleStyleSheet from "../../scaleStyles";
+import COLORS from "../../../colors";
+import ContinueButton from "../../../components/Onboarding/ContinueButton";
+import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import TopBar from "../../../components/Onboarding/TopBar";
+import scaleStyleSheet from "../../../scaleStyles";
 
-const BIO_IMAGE = require("../../assets/profilebio.png");
+const BIO_IMAGE = require("../../../assets/profilebio.png");
 
 export default function ProfileBio() {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,7 +36,7 @@ export default function ProfileBio() {
 
   const onContinue = () => {
     // TODO: Save bio into form state
-    router.push("Onboarding/ProfilePhotos");
+    router.push("Onboarding/Profile/ProfilePhotos");
   };
 
   return (

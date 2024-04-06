@@ -143,7 +143,7 @@ func (h Handler) OrgsGet(ctx context.Context, params api.OrgsGetParams) ([]api.O
 
 // Partially updates an organization by its ID.
 // PATCH /orgs/{id}
-func (h Handler) OrgsIDPatch(ctx context.Context, req *api.Org, params api.OrgsIDPatchParams) (api.OrgsIDPatchRes, error) {
+func (h Handler) OrgsIDPatch(ctx context.Context, req *api.OrgsIDPatchReq, params api.OrgsIDPatchParams) (api.OrgsIDPatchRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PATCH /orgs/%s", params.ID))
 	}

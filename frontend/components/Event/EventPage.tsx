@@ -3,26 +3,23 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { IconButton } from "react-native-paper";
 import { getEventById } from "../../api/events";
-import type { components } from "../../api/schema";
 import scaleStyleSheet from "../../scaleStyles";
 import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 
-type Event = components["schemas"]["Event"];
+type Event = Awaited<ReturnType<typeof getEventById>>;
 
-interface EventPageProps {
+type EventPageProps = {
   id: string;
   handleReact: (like: boolean) => void;
-}
+};
 
 export default function EventPage({ id, handleReact }: EventPageProps) {
   const [event, setEvent] = useState<Event>();
 
   useEffect(() => {
-    getEventById(id)
-      .then((fetchedEvent) => setEvent(fetchedEvent))
-      .catch((e) => console.log(e));
+    getEventById({ id }).then((fetchedEvent) => setEvent(fetchedEvent));
   }, [id]);
 
   const dummyImages: string[] = [

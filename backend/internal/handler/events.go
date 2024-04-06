@@ -149,7 +149,7 @@ func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]a
 
 // Partially updates an organization by its ID.
 // PATCH /events/{id}
-func (h Handler) EventsIDPatch(ctx context.Context, req *api.Event, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
+func (h Handler) EventsIDPatch(ctx context.Context, req *api.EventsIDPatchReq, params api.EventsIDPatchParams) (api.EventsIDPatchRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PATCH /events/%s", params.ID))
 	}

@@ -3,11 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface ButtonProps {
+type ButtonProps = {
   title: string;
   onButtonClick: () => void;
   isDisabled: boolean;
-}
+};
 
 function OnboardingButton({ title, onButtonClick, isDisabled }: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);

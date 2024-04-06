@@ -7,9 +7,9 @@ import COLORS from "../colors";
 const REMOVE_BUTTON = require("../assets/removebutton.png");
 const ADD_BUTTON = require("../assets/addbutton.png");
 
-interface PhotoPickerProps {
+type PhotoPickerProps = {
   onPick: (imgs: string[]) => void;
-}
+};
 
 export default function PhotoPicker({ onPick }: PhotoPickerProps) {
   const [images, setImages] = useState<string[]>(["", "", "", ""]);
@@ -57,7 +57,7 @@ export default function PhotoPicker({ onPick }: PhotoPickerProps) {
     if (!Object.prototype.hasOwnProperty.call(passedImages, "length")) return;
 
     passedImages.forEach((img) => {
-      console.log("hi", img.fileName);
+      // console.log("hi", img.fileName);
       setImages((imgs) => [...imgs, img.uri]);
     });
 
