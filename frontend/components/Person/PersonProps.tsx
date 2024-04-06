@@ -29,16 +29,16 @@ export type PersonProps = {
   bio: string;
   interests: string[];
 
-  // Habits
+  // Lifestyle info
   relationshipType?: string;
   religion?: string;
   politicalAffiliation?: string;
   alchoholFrequency?: string;
   smokingFrequency?: string;
   drugFrequency?: string;
-  marijuanaFrequency?: string;
+  cannabisFrequency?: string;
 
-  instagram: string;
+  instagramUsername: string;
   mutualEvents: Event[];
   images: ImageWithCaptionProps[];
   isMatched: boolean;
@@ -49,3 +49,14 @@ export type PillProps = {
   backgroundColor: string;
   items: string[];
 };
+
+
+export type LifestyleProps = {
+  relationshipType?: string;
+  religion?: string;
+  politicalAffiliation?: string;
+  alchoholFrequency?: string;
+  smokingFrequency?: string;
+  drugFrequency?: string;
+  cannabisFrequency?: string;
+}

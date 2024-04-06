@@ -27,9 +27,9 @@ export default function People() {
     alchoholFrequency: "Never",
     smokingFrequency: "Never",
     drugFrequency: "Never",
-    marijuanaFrequency: "Never",
+    cannabisFrequency: "Never",
 
-    instagram: "instagram.com",
+    instagramUsername: "@john_doe",
     mutualEvents: [],
     images: [
       {
@@ -43,7 +43,7 @@ export default function People() {
         caption: "This is a caption"
       }
     ],
-    isMatched: false
+    isMatched: true
   };
   return (
     // foreach ... add or...
@@ -66,8 +66,8 @@ export default function People() {
         alchoholFrequency={person.alchoholFrequency}
         smokingFrequency={person.smokingFrequency}
         drugFrequency={person.drugFrequency}
-        marijuanaFrequency={person.marijuanaFrequency}
-        instagram={person.instagram}
+        cannabisFrequency={person.cannabisFrequency}
+        instagramUsername={person.instagramUsername}
         mutualEvents={person.mutualEvents}
         images={person.images}
         isMatched={person.isMatched}
