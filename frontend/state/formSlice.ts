@@ -6,30 +6,36 @@ interface Photo {
   caption: string;
 }
 
+interface Height {
+  foot: number;
+  inch: number;
+}
+
 const formSlice = createSlice({
   name: "form",
   initialState: {
-    name: "",
-    birthday: "",
-    gender: "",
-    genderPreference: "",
-    looking: "",
-    pronouns: "",
-    height: { foot: 0, inch: 0 },
-    location: "",
-    school: "",
-    job: "",
-    religion: "",
-    politics: "",
-    drinkHabit: "",
-    smokeHabit: "",
-    weedHabit: "",
-    drugHabit: "",
-    passion: [],
-    promptBio: "",
-    responseBio: "",
+    name: "" as string,
+    birthday: "" as string,
+    gender: "" as string,
+    genderPreference: "" as string,
+    looking: "" as string,
+    pronouns: "" as string,
+    height: { foot: 0, inch: 0 } as Height,
+    location: "" as string,
+    school: "" as string,
+    job: "" as string,
+    religion: "" as string,
+    politics: "" as string,
+    drinkHabit: "" as string,
+    smokeHabit: "" as string,
+    weedHabit: "" as string,
+    drugHabit: "" as string,
+    passion: [] as string[],
+    promptBio: "" as string,
+    responseBio: "" as string,
     photos: [] as Photo[],
-    instagram: ""
+    instagram: "" as string,
+    notifications: false as boolean
   },
   reducers: {
     setName: (state, action) => {
@@ -94,6 +100,9 @@ const formSlice = createSlice({
     },
     setInstagram: (state, action) => {
       state.instagram = action.payload;
+    },
+    setNotifications: (state, action) => {
+      state.notifications = action.payload;
     }
   }
 });
@@ -119,7 +128,8 @@ export const {
   setPromptBio,
   setResponseBio,
   setPhotos,
-  setInstagram
+  setInstagram,
+  setNotifications
 } = formSlice.actions;
 
 export default formSlice.reducer;

@@ -2,26 +2,52 @@ import { router } from "expo-router";
 import React from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createUser } from "../../../api/users";
 import COLORS from "../../../colors";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
+import { setNotifications } from "../../../state/formSlice";
+import { useAppDispatch, useAppSelector } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 
 const NOTIFICATION_TOGGLE = require("../../../assets/notificationToggle.png");
 
+interface userDataProps {
+  firstName: string;
+  lastName: string;
+  age: number;
+  bio: string;
+  images: string[];
+}
+
 function ProfileNotifications() {
-  function goToNextPage() {
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.form);
+  async function goToNextPage() {
+    const userData: userDataProps = {
+      firstName: userState.name,
+      lastName: "Get last name form auth", // TODO get last name from auth
+      age: 18, // TODO get age from auth
+      bio: userState.promptBio,
+      images: userState.photos.map((photo) => photo.filePath)
+    };
+    try {
+      const res = await createUser(userData);
+      console.log("Success!", res);
+    } catch (e) {
+      console.log("Uh Oh Stone", e);
+    }
     router.push("Onboarding/Profile/ProfileConfirm");
   }
-
-  const onAllowNotificationsPressed = () => {
-    goToNextPage();
+  const onAllowNotificationsPressed = async () => {
+    dispatch(setNotifications(true));
+    await goToNextPage();
   };
-
-  const onDisableNotificationsPressed = () => {
-    goToNextPage();
+  const onDisableNotificationsPressed = async () => {
+    dispatch(setNotifications(false));
+    await goToNextPage();
   };
   return (
     <SafeAreaView style={scaledStyles.container}>
