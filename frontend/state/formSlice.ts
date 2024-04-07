@@ -1,6 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 
+interface Photo {
+  filePath: string;
+  caption: string;
+}
+
 const formSlice = createSlice({
   name: "form",
   initialState: {
@@ -20,7 +25,11 @@ const formSlice = createSlice({
     smokeHabit: "",
     weedHabit: "",
     drugHabit: "",
-    passion: []
+    passion: [],
+    promptBio: "",
+    responseBio: "",
+    photos: [] as Photo[],
+    instagram: ""
   },
   reducers: {
     setName: (state, action) => {
@@ -73,6 +82,18 @@ const formSlice = createSlice({
     },
     setPassion: (state, action) => {
       state.passion = action.payload;
+    },
+    setPromptBio: (state, action) => {
+      state.promptBio = action.payload;
+    },
+    setResponseBio: (state, action) => {
+      state.responseBio = action.payload;
+    },
+    setPhotos: (state, action) => {
+      state.photos = action.payload;
+    },
+    setInstagram: (state, action) => {
+      state.instagram = action.payload;
     }
   }
 });
@@ -94,7 +115,11 @@ export const {
   setDrugHabit,
   setSmokeHabit,
   setWeedHabit,
-  setPassion
+  setPassion,
+  setPromptBio,
+  setResponseBio,
+  setPhotos,
+  setInstagram
 } = formSlice.actions;
 
 export default formSlice.reducer;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
+import { screenHeight } from "../../utils/dimensions";
 
 interface DropDownCalendarProps {
   onDateChange: (day: number, month: number, year: number) => void;
@@ -55,6 +56,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         containerStyle={scaledStyles.dropdown}
         onOpen={() => onDropDownOpen(true, openMonth, openYear)}
         onClose={() => onDropDownOpen(false, openMonth, openYear)}
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
       <DropDownPicker
         open={openMonth}
@@ -65,6 +67,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         containerStyle={scaledStyles.dropdown}
         onOpen={() => onDropDownOpen(openDay, true, openYear)}
         onClose={() => onDropDownOpen(openDay, false, openYear)}
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
       <DropDownPicker
         open={openYear}
@@ -76,6 +79,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         // Can remove this
         onOpen={() => onDropDownOpen(openDay, openMonth, true)}
         onClose={() => onDropDownOpen(openDay, openMonth, false)}
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
     </View>
   );

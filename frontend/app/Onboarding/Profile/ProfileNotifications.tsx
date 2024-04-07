@@ -1,89 +1,94 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../../../colors";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
+import onboardingStyles from "../../../styles/Onboarding/styles";
 
-const NOTIFICATION_TOGGLE = require("../../../assets/notification-toggle.png");
-const NOTIFICATION_ICON = require("../../../assets/notification-icon.png");
+const NOTIFICATION_TOGGLE = require("../../../assets/notificationToggle.png");
 
-export default function ProfileNotifications() {
+function ProfileNotifications() {
   function goToNextPage() {
-    // console.log("Go to next page");
-    router.push("Onboarding/ProfileConfirm");
+    router.push("Onboarding/Profile/ProfileConfirm");
   }
 
-  function onAllowNotifactionsPressed() {
-    // console.log("Notify me pressed");
+  const onAllowNotificationsPressed = () => {
     goToNextPage();
-  }
+  };
 
-  function onDisableNotificationsPressed() {
-    // console.log("Disable notificationspressed");
+  const onDisableNotificationsPressed = () => {
     goToNextPage();
-  }
-
+  };
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      <View style={scaledStyles.container}>
-        <View>
-          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={0} />
-        </View>
-        <View>
-          <Image
-            source={NOTIFICATION_TOGGLE}
-            style={{ height: 250, width: 250 }}
-            resizeMode="contain"
-          />
-          <View style={scaledStyles.titleMessage}>
-            <Image source={NOTIFICATION_ICON} style={scaledStyles.bellIcon} resizeMode="contain" />
-            <OnboardingTitle text="Turn on notifications" />
-          </View>
-          <Text style={scaledStyles.notificationMessage}> Know when you get a match! </Text>
-          <View>
+    <SafeAreaView style={scaledStyles.container}>
+      <View style={scaledStyles.TopUiContainer}>
+        <TopBar
+          onBackPress={() => {
+            router.back();
+          }}
+          text="About Me"
+          selectedCount={1}
+        />
+      </View>
+      <View style={scaledStyles.mainContainer}>
+        <View style={scaledStyles.notificationContainer}>
+          <OnboardingTitle text="Turn on notifications" />
+          <Text style={scaledStyles.textHelper}>Know when you get a match!</Text>
+          <Image source={NOTIFICATION_TOGGLE} />
+          <View style={scaledStyles.inputWrapper}>
             <ContinueButton
-              onPress={() => onAllowNotifactionsPressed()}
-              title="Notify Me"
+              title="Notify me"
               isDisabled={false}
+              onPress={onAllowNotificationsPressed}
             />
           </View>
-          <TouchableOpacity onPress={() => onDisableNotificationsPressed()} disabled={false}>
-            <Text style={scaledStyles.disableNotificationsButton}>Disable Notifications</Text>
-          </TouchableOpacity>
+          <View style={scaledStyles.textInputWrapper}>
+            <Text
+              style={scaledStyles.disableNotificationText}
+              onPress={onDisableNotificationsPressed}
+            >
+              Disable Notifications
+            </Text>
+          </View>
         </View>
-        <View />
-        <View />
       </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 30,
-    alignItems: "center",
-    justifyContent: "space-between"
-  },
-  titleMessage: {
-    flexDirection: "row"
-  },
-  bellIcon: {
-    marginTop: 15
-  },
-  notificationMessage: {
-    fontFamily: "DMSansRegular",
-    textAlign: "center",
-    marginBottom: 15
-  },
-  disableNotificationsButton: {
-    fontFamily: "DMSansMedium",
-    textAlign: "center",
-    marginTop: 15,
-    fontSize: 16
-  }
-});
+export default ProfileNotifications;
 
-const scaledStyles = scaleStyleSheet(styles);
+const overrideStyles = {
+  notificationContainer: {
+    alignItems: "center"
+  },
+  TopUiContainer: {
+    alignItems: "center",
+    flex: 0.45
+  },
+  textInputWrapper: {
+    marginTop: 8
+  },
+  disableNotificationText: {
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 20,
+    letterSpacing: -0.15,
+    fontFamily: "DMSansMedium",
+    color: COLORS.darkGray
+  },
+  textHelper: {
+    fontSize: 17,
+    fontWeight: "400",
+    lineHeight: 20,
+    letterSpacing: -0.12,
+    fontFamily: "DMSansMedium",
+    color: COLORS.darkGray
+  }
+};
+
+const scaledStyles = scaleStyleSheet({ ...onboardingStyles, ...overrideStyles });
