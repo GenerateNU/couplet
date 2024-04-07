@@ -11,17 +11,21 @@ import LabelToggle from "../LabelToggle";
 
 type Matches = paths["/matches/{id}"]["get"]["responses"][200]["content"]["application/json"];
 
+const SEVEN_DAYS = 604800000;
+
 export default function MatchesScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [matches, setMatches] = useState<Matches>([]);
-  const [matchFilter, setMatchFilter] = useState<string>("");
+  const [matchFilter, setMatchFilter] = useState<string>("Recent");
   const [displayMatches, setDisplayMatches] = useState<Matches>([]);
   const RECENT_NO_MATCHES_URI = Image.resolveAssetSource(RECENT_NO_MATCHES).uri;
   const ALL_NO_MATCHES_URI = Image.resolveAssetSource(ALL_NO_MATCHES).uri;
 
   useEffect(() => {
     const load = async () => {
-      const res = await getMatchesByUserId("381edf55-cfd3-4651-985d-fdafffbb3002");
+      // TODO: Change to own user id
+      const userId = "0f46ee58-5577-4b83-99b7-fff1b8de0e1f";
+      const res = await getMatchesByUserId(userId);
       setMatches([...res]);
     };
 
@@ -33,7 +37,9 @@ export default function MatchesScreen() {
     if (matchFilter === "All Matches") {
       setDisplayMatches(matches);
     } else if (matchFilter === "Recent") {
-      // There is no Match struct, so there is no updatedAt or createdAt
+      setDisplayMatches(
+        matches.filter((m) => Date.now().valueOf() - new Date(m.createdAt).valueOf() < SEVEN_DAYS)
+      );
     }
   }, [matchFilter, matches]);
 
@@ -43,7 +49,7 @@ export default function MatchesScreen() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, height: "100%", justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -55,32 +61,38 @@ export default function MatchesScreen() {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ flexDirection: "column", alignItems: "center" }}>
-          <View style={{ flexDirection: "column", alignSelf: "flex-start" }}>
-            <Text style={scaledStyles.headingTitle}>Matches</Text>
-            <LabelToggle labels={["Recent", "All Matches"]} onChange={setMatchFilter} />
-            {displayMatches.length > 0 ? (
-              <Text style={scaledStyles.headingText}>
-                {matchFilter === "Recent"
-                  ? "Your recent matches in the last week"
-                  : "All of your past matches"}
-              </Text>
-            ) : null}
-          </View>
+        <View style={scaledStyles.headingContainer}>
+          <Text style={scaledStyles.headingTitle}>Matches</Text>
+          <LabelToggle labels={["Recent", "All Matches"]} onChange={setMatchFilter} />
+          {displayMatches.length > 0 ? (
+            <Text style={scaledStyles.headingText}>
+              {matchFilter === "Recent"
+                ? "Your recent matches in the last week"
+                : "All of your past matches"}
+            </Text>
+          ) : null}
         </View>
 
         {displayMatches.length > 0 ? (
           <View style={scaledStyles.matchesDisplay}>
             {displayMatches.map((match) => (
-              <View style={scaledStyles.matchCard}>
+              <View key={match.id} style={scaledStyles.matchCard}>
                 {match.images ? (
                   <Image style={scaledStyles.matchPhoto} source={{ uri: match.images[0] }} />
                 ) : (
                   <View style={[scaledStyles.matchPhoto, { backgroundColor: COLORS.primary }]} />
                 )}
-                <Text style={scaledStyles.matchText}>
-                  {match.firstName} {match.age}
-                </Text>
+                <View style={scaledStyles.matchTextContainer}>
+                  <Text style={scaledStyles.matchNotViewedDot}>
+                    {!match.viewed ? "\u2B24" : null}{" "}
+                  </Text>
+                  <Text style={[scaledStyles.matchText, { fontFamily: "DMSansBold" }]}>
+                    {match.firstName}
+                  </Text>
+                  <Text style={[scaledStyles.matchText, { fontFamily: "DMSansMedium" }]}>
+                    {match.age}
+                  </Text>
+                </View>
               </View>
             ))}
           </View>
@@ -118,6 +130,10 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     margin: 24
+  },
+  headingContainer: {
+    flexDirection: "column",
+    alignSelf: "flex-start"
   },
   headingTitle: {
     fontSize: 32,
@@ -167,9 +183,18 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 8
   },
   matchText: {
-    margin: 8,
-    fontSize: 15,
-    fontFamily: "DMSansMedium"
+    marginVertical: 8,
+    marginHorizontal: 2,
+    fontSize: 15
+  },
+  matchNotViewedDot: {
+    color: COLORS.primary,
+    fontSize: 8
+  },
+  matchTextContainer: {
+    marginHorizontal: 8,
+    flexDirection: "row",
+    alignItems: "center"
   }
 });
 

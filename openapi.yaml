@@ -1607,16 +1607,27 @@ paths:
                   type: object
                   required:
                     - id
+                    - createdAt
+                    - updatedAt
                     - firstName
                     - lastName
                     - age
                     - bio
                     - images
+                    - viewed
                   properties:
                     id:
                       type: string
                       format: uuid
                       example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2018-03-20T09:12:28Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: "2018-03-20T09:12:28Z"
                     firstName:
                       type: string
                       minLength: 1
@@ -1643,6 +1654,8 @@ paths:
                         example: https://example.com/image.png
                       minItems: 4
                       maxItems: 4
+                    viewed:
+                      type: boolean
 components:
   responses:
     BadRequest:
