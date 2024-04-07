@@ -21,8 +21,6 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
   const [org, setOrg] = useState<Org>();
 
   useEffect(() => {
-    console.log("orgId", event);
-
     if (!event.orgId) return;
     getOrgById({ id: event.orgId })
       .then((fetchedOrg) => setOrg(fetchedOrg))

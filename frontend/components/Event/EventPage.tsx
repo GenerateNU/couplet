@@ -20,7 +20,6 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
 
   useEffect(() => {
     getEventById({ id }).then((fetchedEvent) => {
-      console.log(fetchedEvent);
       setEvent(fetchedEvent);
     });
   }, [id]);
