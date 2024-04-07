@@ -72,10 +72,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   featuredContainer: {
-    marginBottom: 20,
-    marginRight: 20,
-    flex: 1,
-    marginLeft: -24
+    marginRight: 48
   },
 
   likedContainer: {
