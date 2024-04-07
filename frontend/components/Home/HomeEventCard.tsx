@@ -9,25 +9,23 @@ import scaleStyleSheet from "../../scaleStyles";
 type HomeEventCardProps = {
   id: string;
   name: string;
+  image: string;
   // TODO: we need Location and Cost, but these aren't in the endpoint response yet
 };
 
-export default function HomeEventCard({ id, name }: HomeEventCardProps) {
+export default function HomeEventCard({ id, name, image }: HomeEventCardProps) {
   return (
     <TouchableOpacity
       onPress={() => router.push({ pathname: "Event", params: { collectionId: "", eventId: id } })}
     >
       <View style={styles.card}>
         <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/beautiful-winter-wonderland-in-the-boston-public-garden-boston-ma-wonderland-toby-mcguire.jpg"
-            }}
-            style={scaledStyles.image}
-          />
+          <Image source={{ uri: image }} style={scaledStyles.image} />
         </View>
-        <View>
-          <Text style={scaledStyles.titleText}>{name}</Text>
+        <View style={scaledStyles.textContainer}>
+          <Text style={scaledStyles.titleText} numberOfLines={2} ellipsizeMode="tail">
+            {name}
+          </Text>
           <View style={styles.row}>
             <Icon source="map-marker" size={20} color={COLORS.darkPurple} />
             <Text style={styles.text}>Frog Pond</Text>
@@ -44,9 +42,10 @@ export default function HomeEventCard({ id, name }: HomeEventCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    width: 175,
+    width: 166,
     marginRight: 10,
     paddingBottom: 5,
+    marginBottom: 10,
     backgroundColor: "#fff",
     borderRadius: 8,
     shadowColor: "#000000",
@@ -61,7 +60,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
   },
-  image: { width: 150, height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+  textContainer: {
+    height: 96
+  },
+  image: { width: 166, height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
   row: {
     flexDirection: "row",
     paddingHorizontal: 10,

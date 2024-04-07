@@ -3,8 +3,6 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import scaleStyleSheet from "../../scaleStyles";
 import HomeEventCard from "./HomeEventCard";
 
-const MemoizedHomeEventCard = React.memo(HomeEventCard);
-
 export default function HomePageSection({ title, events }: { title: string; events: any[] }) {
   return (
     <View style={{ marginTop: 32 }}>
@@ -12,7 +10,7 @@ export default function HomePageSection({ title, events }: { title: string; even
       <View style={{ flexDirection: "row" }}>
         <ScrollView horizontal>
           {events.map((event) => (
-            <MemoizedHomeEventCard key={event.id} id={event.id} name={event.name} />
+            <HomeEventCard key={event.id} id={event.id} name={event.name} image={event.images[0]} />
           ))}
         </ScrollView>
       </View>
