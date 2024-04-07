@@ -4,10 +4,10 @@ import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import HeaderScrollView from "react-native-header-scroll-view";
 import EventCardItem from "../Event/EventCardItem";
+import Reaction from "../Reaction/Reaction";
 import InfoChips from "./InfoChips";
 import Lifestyle from "./Lifestyle";
 import { PersonProps } from "./PersonProps";
-import Reaction from "../Reaction/Reaction";
 
 const INSTAGRAM_ICON = require("../../assets/instagram.png");
 
@@ -49,121 +49,122 @@ export default function Person({
 
   return (
     <>
-    <HeaderScrollView
-      headerContainerStyle={{}}
-      containerStyle={{
-        flex: 1
-      }}
-      title={
-        <>
-          <Text style={{ fontFamily: "DMSansBold", marginRight: 10 }}>{firstName} </Text>
-          <Text id="hi" style={{ fontFamily: "DMSansRegular" }}>
-            {age}
-          </Text>
-        </>
-      }
-    >
-      <Text
-        style={{
-          fontFamily: "DMSansRegular",
-          color: "gray",
-          fontSize: 14,
-          marginLeft: 20,
-          marginBottom: 10
+      <HeaderScrollView
+        headerContainerStyle={{}}
+        containerStyle={{
+          flex: 1
         }}
+        title={
+          <>
+            <Text style={{ fontFamily: "DMSansBold", marginRight: 10 }}>{firstName} </Text>
+            <Text id="hi" style={{ fontFamily: "DMSansRegular" }}>
+              {age}
+            </Text>
+          </>
+        }
       >
-        {pronouns}
-      </Text>
+        <Text
+          style={{
+            fontFamily: "DMSansRegular",
+            color: "gray",
+            fontSize: 14,
+            marginLeft: 20,
+            marginBottom: 10
+          }}
+        >
+          {pronouns}
+        </Text>
 
-      <View>
-        <View style={styles.infoContainer}>
-          <Image style={styles.imageStyle} source={{ uri: firstImage }} />
-          <View style={styles.basicInfoContainer}>
-            {location && (
-              <View style={styles.basicInfoRow}>
-                <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faHouse} />
-                <Text style={styles.basicInfoRowText}>{location}</Text>
-              </View>
-            )}
-            {school && (
-              <View style={styles.basicInfoRow}>
-                <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faGraduationCap} />
-                <Text style={styles.basicInfoRowText}>{school}</Text>
-              </View>
-            )}
-            {work && (
-              <View style={styles.basicInfoRow}>
-                <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faBriefcase} />
-                <Text style={styles.basicInfoRowText}>{work}</Text>
-              </View>
-            )}
-            {height && (
-              <View style={styles.basicInfoRow}>
-                <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faRuler} />
-                <Text style={styles.basicInfoRowText}>{heightText}</Text>
-              </View>
-            )}
-          </View>
-          <View style={styles.promptContainer}>
-            <Text style={{ fontFamily: "DMSansMedium", marginBottom: 5 }}>{promptQuestion}</Text>
-            <Text style={styles.textStyle}>{promptResponse}</Text>
-          </View>
-          <View style={styles.separator} />
-          <InfoChips items={interests} textColor="black" backgroundColor="lavender" />
-          <Lifestyle
-            relationshipType={relationshipType}
-            religion={religion}
-            politicalAffiliation={politicalAffiliation}
-            alchoholFrequency={alchoholFrequency}
-            smokingFrequency={smokingFrequency}
-            drugFrequency={drugFrequency}
-            cannabisFrequency={cannabisFrequency}
-          />
-
-          <View style={styles.separator} />
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 20 }}
-          >
-            <Text style={styles.textStyle}>Match to unlock their Instagram!</Text>
-            <View style={styles.instagramContainer}>
-              <Image source={INSTAGRAM_ICON} style={{ width: 30, height: 30, marginRight: 10 }} />
-              {isMatched && <Text style={{ fontFamily: "DMSansBold" }}>{instagramUsername}</Text>}
-              {!isMatched && (
-                <Image source={BLURRED_IG_USER} style={{ width: "80%", height: 30 }} />
+        <View>
+          <View style={styles.infoContainer}>
+            <Image style={styles.imageStyle} source={{ uri: firstImage }} />
+            <View style={styles.basicInfoContainer}>
+              {location && (
+                <View style={styles.basicInfoRow}>
+                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faHouse} />
+                  <Text style={styles.basicInfoRowText}>{location}</Text>
+                </View>
+              )}
+              {school && (
+                <View style={styles.basicInfoRow}>
+                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faGraduationCap} />
+                  <Text style={styles.basicInfoRowText}>{school}</Text>
+                </View>
+              )}
+              {work && (
+                <View style={styles.basicInfoRow}>
+                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faBriefcase} />
+                  <Text style={styles.basicInfoRowText}>{work}</Text>
+                </View>
+              )}
+              {height && (
+                <View style={styles.basicInfoRow}>
+                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faRuler} />
+                  <Text style={styles.basicInfoRowText}>{heightText}</Text>
+                </View>
               )}
             </View>
-          </View>
-          <View>
-            <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
-            <ScrollView horizontal>
-              {mutualEvents.map((event) => (
-                <View style={styles.mutualEventItemStyling}>
-                  <EventCardItem
-                    title={event.title}
-                    description={event.description}
-                    imageUrl={event.imageUrl}
-                  />
+            <View style={styles.promptContainer}>
+              <Text style={{ fontFamily: "DMSansMedium", marginBottom: 5 }}>{promptQuestion}</Text>
+              <Text style={styles.textStyle}>{promptResponse}</Text>
+            </View>
+            <View style={styles.separator} />
+            <InfoChips items={interests} textColor="black" backgroundColor="lavender" />
+            <Lifestyle
+              relationshipType={relationshipType}
+              religion={religion}
+              politicalAffiliation={politicalAffiliation}
+              alchoholFrequency={alchoholFrequency}
+              smokingFrequency={smokingFrequency}
+              drugFrequency={drugFrequency}
+              cannabisFrequency={cannabisFrequency}
+            />
+
+            <View style={styles.separator} />
+            <View
+              style={{ flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 20 }}
+            >
+              <Text style={styles.textStyle}>Match to unlock their Instagram!</Text>
+              <View style={styles.instagramContainer}>
+                <Image source={INSTAGRAM_ICON} style={{ width: 30, height: 30, marginRight: 10 }} />
+                {isMatched && <Text style={{ fontFamily: "DMSansBold" }}>{instagramUsername}</Text>}
+                {!isMatched && (
+                  <Image source={BLURRED_IG_USER} style={{ width: "80%", height: 30 }} />
+                )}
+              </View>
+            </View>
+            <View>
+              <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+              <ScrollView horizontal>
+                {mutualEvents.map((event) => (
+                  <View style={styles.mutualEventItemStyling}>
+                    <EventCardItem
+                      title={event.title}
+                      description={event.description}
+                      imageUrl={event.imageUrl}
+                    />
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
+            <View style={styles.separator} />
+            <View>
+              {images.slice(1).map((image) => (
+                <View style={{ marginBottom: 20 }}>
+                  <Image source={{ uri: image.image }} style={styles.imageStyle} />
+                  <Text style={{ ...styles.textStyle, marginTop: 5 }}>{image.caption}</Text>
                 </View>
               ))}
-            </ScrollView>
-          </View>
-          <View style={styles.separator} />
-          <View>
-            {images.slice(1).map((image) => (
-              <View style={{ marginBottom: 20 }}>
-                <Image source={{ uri: image.image }} style={styles.imageStyle} />
-                <Text style={{ ...styles.textStyle, marginTop: 5 }}>{image.caption}</Text>
-              </View>
-            ))}
+            </View>
           </View>
         </View>
-      </View>
-    </HeaderScrollView>
-    {!isMatched &&
-    <View style={styles.reactionContainer}>
-      <Reaction handleReact={handleReact} />
-   </View>}
-   </>
+      </HeaderScrollView>
+      {!isMatched && (
+        <View style={styles.reactionContainer}>
+          <Reaction handleReact={handleReact} />
+        </View>
+      )}
+    </>
   );
 }
 
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   mutualEventItemStyling: {
     marginRight: 10,
     marginTop: 10
-  }, 
+  },
   reactionContainer: {
     position: "absolute",
     width: "100%",
