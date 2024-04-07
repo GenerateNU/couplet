@@ -1,7 +1,3 @@
-import { getEvents } from "../../api/events";
-
-type Event = Awaited<ReturnType<typeof getEvents>>[number];
-
 export type ImageWithCaptionProps = {
   image: string;
   caption?: string;
@@ -10,6 +6,12 @@ export type ImageWithCaptionProps = {
 export type PersonHeightProps = {
   feet: number;
   inches: number;
+};
+
+export type EventCardItemProps = {
+  title: string;
+  description: string;
+  imageUrl: string;
 };
 
 export type PersonProps = {
@@ -26,7 +28,8 @@ export type PersonProps = {
   work?: string;
   height?: PersonHeightProps;
 
-  bio: string;
+  promptQuestion: string;
+  promptResponse: string;
   interests: string[];
 
   // Lifestyle info
@@ -39,9 +42,10 @@ export type PersonProps = {
   cannabisFrequency?: string;
 
   instagramUsername: string;
-  mutualEvents: Event[];
+  mutualEvents: EventCardItemProps[];
   images: ImageWithCaptionProps[];
   isMatched: boolean;
+  likesYou: boolean;
 };
 
 export type PillProps = {

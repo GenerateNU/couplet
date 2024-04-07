@@ -1,11 +1,12 @@
 import { faBriefcase, faGraduationCap, faHouse, faRuler } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import HeaderScrollView from "react-native-header-scroll-view";
 import InfoChips from "./InfoChips";
 import Lifestyle from "./Lifestyle";
 import { PersonProps } from "./PersonProps";
+import EventCardItem from "../Event/EventCardItem";
 
 const INSTAGRAM_ICON = require("../../assets/instagram.png");
 
@@ -21,7 +22,8 @@ export default function Person({
   school,
   work,
   height,
-  bio,
+  promptQuestion,
+  promptResponse,
   interests,
   relationshipType,
   religion,
@@ -33,7 +35,8 @@ export default function Person({
   instagramUsername,
   mutualEvents,
   images,
-  isMatched
+  isMatched, 
+  likesYou
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
@@ -66,8 +69,8 @@ export default function Person({
       </Text>
 
       <View>
-        <Image style={styles.imageStyle} source={{ uri: firstImage }} />
         <View style={styles.infoContainer}>
+          <Image style={styles.imageStyle} source={{ uri: firstImage }} />
           <View style={styles.basicInfoContainer}>
             {location && (
               <View style={styles.basicInfoRow}>
@@ -94,8 +97,9 @@ export default function Person({
               </View>
             )}
           </View>
-          <View style={styles.bioContainer}>
-            <Text style={styles.textStyle}>{bio}</Text>
+          <View style={styles.promptContainer}>
+            <Text style={{fontFamily: "DMSansMedium", marginBottom: 5}}>{promptQuestion}</Text>
+            <Text style={styles.textStyle}>{promptResponse}</Text>
           </View>
           <View style={styles.separator} />
           <InfoChips items={interests} textColor="black" backgroundColor="lavender" />
@@ -122,11 +126,34 @@ export default function Person({
               )}
             </View>
           </View>
-          {/* PROBALY NEED TO CHANGE THIS>>>> */}
           <View>
             <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
-            {/* REUSE THE ITEM */}
+            <ScrollView
+              horizontal
+            >
+              {mutualEvents.map((event) => (
+                <View style={styles.mutualEventItemStyling}>
+                  <EventCardItem
+                    title={event.title}
+                    description={event.description}
+                    imageUrl={event.imageUrl}/>
+                </View>
+              ))}
+
+            </ScrollView>
           </View>
+          <View style={styles.separator} />
+          <View>
+            {images.slice(1).map((image) => (
+              <View style={{marginBottom: 20}}>
+                <Image source={{ uri: image.image }} style={styles.imageStyle} />
+                <Text style={{...styles.textStyle, marginTop: 5}}>{image.caption}</Text>
+              </View>
+            ))}
+          </View>
+
+          
+
         </View>
       </View>
     </HeaderScrollView>
@@ -139,10 +166,10 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     borderRadius: 10,
-    width: "90%",
+    width: "100%",
     height: 350,
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   textStyle: {
     fontFamily: "DMSansRegular"
@@ -156,17 +183,19 @@ const styles = StyleSheet.create({
   basicInfoRow: {
     flexDirection: "row",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 5
   },
   basicInfoRowIcon: {
     marginRight: 5,
-    float: "left"
+    float: "left", 
+    color: "#6B5CBF"
   },
   basicInfoRowText: {
     fontFamily: "DMSansRegular",
     float: "right"
   },
-  bioContainer: {
+  promptContainer: {
     fontFamily: "DMSansRegular",
     marginTop: 20
   },
@@ -191,5 +220,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     display: "flex",
     alignItems: "center"
+  }, 
+  mutualEventItemStyling: 
+  {
+    marginRight: 10,
+    marginTop: 10, 
+
   }
 });

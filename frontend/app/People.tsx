@@ -18,7 +18,8 @@ export default function People() {
       feet: 5,
       inches: 11
     },
-    bio: "I am a person \ni am from earth. I have five feet and one eye. \nIf i had one wish in this entire world it would be to eat grapes and cheese for the rest of this short life that i have left to life. ",
+    promptQuestion: "What is your favorite food?",
+    promptResponse: "I am a person \ni am from earth. I have five feet and one eye. \nIf i had one wish in this entire world it would be to eat grapes and cheese for the rest of this short life that i have left to life. ",
     interests: ["swimming", "running", "sleeping", "coding"],
 
     relationshipType: "Long Term Relationship",
@@ -30,8 +31,50 @@ export default function People() {
     cannabisFrequency: "Never",
 
     instagramUsername: "@john_doe",
-    mutualEvents: [],
+    mutualEvents: [
+      {
+        title: "Event 1",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      },
+      {
+        title: "Event 2",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      },
+      {
+        title: "Event 1",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      },
+      {
+        title: "Event 2",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      },
+      {
+        title: "Event 1",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      },
+      {
+        title: "Event 2",
+        description: "This is a description",
+        imageUrl:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      }
+
+    ],
     images: [
+      {
+        image:
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      },
       {
         image:
           "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
@@ -43,7 +86,8 @@ export default function People() {
         caption: "This is a caption"
       }
     ],
-    isMatched: true
+    isMatched: true, 
+    likesYou: false
   };
   return (
     // foreach ... add or...
@@ -58,7 +102,8 @@ export default function People() {
         school={person.school || ""}
         work={person.work || ""}
         height={person.height || undefined}
-        bio={person.bio}
+        promptQuestion={person.promptQuestion}
+        promptResponse={person.promptResponse}
         interests={person.interests}
         relationshipType={person.relationshipType}
         religion={person.religion}
@@ -71,6 +116,7 @@ export default function People() {
         mutualEvents={person.mutualEvents}
         images={person.images}
         isMatched={person.isMatched}
+        likesYou={person.likesYou}
       />
       {/* <Text style={{ fontFamily: "DMSansRegular" }}>People</Text> */}
 
