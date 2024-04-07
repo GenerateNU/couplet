@@ -15,7 +15,7 @@ tasks:
     cmds:
       - echo $(./get_ip.sh):$PORT
       - REACT_APP_API=$(./get_ip.sh):$PORT npm run start
-  
+
   run-android:
     deps:
       - generate
