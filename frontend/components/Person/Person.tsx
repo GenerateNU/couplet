@@ -7,6 +7,7 @@ import EventCardItem from "../Event/EventCardItem";
 import InfoChips from "./InfoChips";
 import Lifestyle from "./Lifestyle";
 import { PersonProps } from "./PersonProps";
+import Reaction from "../Reaction/Reaction";
 
 const INSTAGRAM_ICON = require("../../assets/instagram.png");
 
@@ -41,7 +42,13 @@ export default function Person({
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
 
+  const handleReact = (reaction: boolean) => {
+    // TODO SEND PERSON SWIPE TO BACKEND
+    console.log(`Person ${id} reacted with ${reaction}`);
+  };
+
   return (
+    <>
     <HeaderScrollView
       headerContainerStyle={{}}
       containerStyle={{
@@ -152,6 +159,11 @@ export default function Person({
         </View>
       </View>
     </HeaderScrollView>
+    {!isMatched &&
+    <View style={styles.reactionContainer}>
+      <Reaction handleReact={handleReact} />
+   </View>}
+   </>
   );
 }
 
@@ -219,5 +231,10 @@ const styles = StyleSheet.create({
   mutualEventItemStyling: {
     marginRight: 10,
     marginTop: 10
+  }, 
+  reactionContainer: {
+    position: "absolute",
+    width: "100%",
+    bottom: 70
   }
 });

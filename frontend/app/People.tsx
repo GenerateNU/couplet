@@ -86,7 +86,7 @@ export default function People() {
         caption: "This is a caption"
       }
     ],
-    isMatched: true,
+    isMatched: false,
     likesYou: false
   };
   return (
