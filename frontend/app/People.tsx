@@ -19,7 +19,8 @@ export default function People() {
       inches: 11
     },
     promptQuestion: "What is your favorite food?",
-    promptResponse: "I am a person \ni am from earth. I have five feet and one eye. \nIf i had one wish in this entire world it would be to eat grapes and cheese for the rest of this short life that i have left to life. ",
+    promptResponse:
+      "I am a person \ni am from earth. I have five feet and one eye. \nIf i had one wish in this entire world it would be to eat grapes and cheese for the rest of this short life that i have left to life. ",
     interests: ["swimming", "running", "sleeping", "coding"],
 
     relationshipType: "Long Term Relationship",
@@ -68,12 +69,11 @@ export default function People() {
         imageUrl:
           "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
       }
-
     ],
     images: [
       {
         image:
-          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+          "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
       },
       {
         image:
@@ -86,7 +86,7 @@ export default function People() {
         caption: "This is a caption"
       }
     ],
-    isMatched: true, 
+    isMatched: true,
     likesYou: false
   };
   return (
