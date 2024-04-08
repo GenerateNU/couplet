@@ -22,7 +22,9 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
 
   useEffect(() => {
     if (!event.orgId) return;
-    getOrgById({ id: event.orgId }).then((fetchedOrg) => setOrg(fetchedOrg));
+    getOrgById({ id: event.orgId })
+      .then((fetchedOrg) => setOrg(fetchedOrg))
+      .catch((e) => console.error(e));
   }, [event]);
 
   return (
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   orgNameText: { marginLeft: 15, fontSize: 18, fontFamily: "DMSansMedium" },
-  orgHandleText: { marginLeft: 15, fontSize: 12, fontFamily: "DMSansRegular", weight: "400" },
+  orgHandleText: { marginLeft: 15, fontSize: 12, fontFamily: "DMSansRegular", fontWeight: "400" },
   tags: {
     flexDirection: "row",
     flexWrap: "wrap",
