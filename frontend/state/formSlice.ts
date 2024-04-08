@@ -14,6 +14,8 @@ interface Height {
 const formSlice = createSlice({
   name: "form",
   initialState: {
+    fullName: "" as string,
+    email: "" as string,
     name: "" as string,
     birthday: "" as string,
     gender: "" as string,
@@ -38,6 +40,14 @@ const formSlice = createSlice({
     notifications: false as boolean
   },
   reducers: {
+    setFullName: (state, action) => {
+      console.log(state.fullName)
+      state.fullName = action.payload
+    },
+    setEmail: (state, action) => {
+      console.log(state.email)
+      state.email = action.payload
+    },
     setName: (state, action) => {
       state.name = action.payload;
     },
@@ -108,6 +118,8 @@ const formSlice = createSlice({
 });
 
 export const {
+  setFullName,
+  setEmail,
   setName,
   setBirthday,
   setGenderPreference,

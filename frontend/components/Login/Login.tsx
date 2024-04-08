@@ -1,7 +1,8 @@
 /* eslint-disable */
 import * as AppleAuthentication from "expo-apple-authentication";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import {
   Image,
   ImageBackground,
@@ -17,6 +18,8 @@ import gradient from "../../assets/gradient.png";
 import logo from "../../assets/logo.png";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
+import { setEmail, setFullName } from "../../state/formSlice";
+import { useAppDispatch } from "../../state/hooks";
 
 // GoogleSignin.configure({
 //   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
@@ -25,36 +28,62 @@ import scaleStyleSheet from "../../scaleStyles";
 // });
 
 export default function Login() {
-  // eslint-disable-next-line no-unused-vars
-  const [isGoogleLoggedIn, setIsGoogleLoggedIn] = useState(false);
-  const [isAppleLoggedIn, setIsAppleLoggedIn] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
+  const dispatch = useAppDispatch();
+  const { handleSubmit, setValue } = useForm({
+    defaultValues: {
+      fullName: "",
+      email: ""
+    }
+  });
+  const onSubmit = (data: { fullName: string; email: string }) => {
+    console.log("Submitting:", data);
+    dispatch(setFullName(data.fullName));
+    dispatch(setEmail(data.email));
+    router.push("Onboarding/AboutMe/AboutName");
+  };
 
   const handleGoogleSignIn = async () => {
-    router.push("Onboarding/AboutMe/AboutName");
-    // try {
-    //   await GoogleSignin.hasPlayServices();
-    //   const userInfo = await GoogleSignin.signIn();
-    //   setIsGoogleLoggedIn(true);
-    // } catch (error) {
-    //   console.error(error);
-    //   setIsGoogleLoggedIn(false);
-    // }
+    try {
+      const empty = "";
+      setValue("fullName", empty);
+      setValue("email", empty);
+      onSubmit({ fullName: "", email: "" });
+      // await GoogleSignin.hasPlayServices();
+      // const userInfo = await GoogleSignin.signIn();
+      // const fullName = userInfo.user.name || userInfo.user.givenName || "";
+      // const email = userInfo.user.email;
+      // console.log(fullName);
+      // console.log(email);
+      // setValue("fullName", fullName);
+      // setValue("email", email);
+      // onSubmit({ fullName, email });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleAppleSignIn = async () => {
     try {
-      await AppleAuthentication.signInAsync({
+      const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL
         ]
       });
-      setIsAppleLoggedIn(true);
-      router.push("Onboarding/AboutMe/AboutName");
+
+      let fullName = "";
+      if (credential.fullName?.givenName && credential.fullName?.familyName) {
+        fullName = `${credential.fullName.givenName} ${credential.fullName.familyName}`;
+      }
+
+      const email = credential.email || "";
+
+      if (fullName) setValue("fullName", fullName);
+      if (email) setValue("email", email);
+
+      onSubmit({ fullName, email });
     } catch (e) {
-      setIsAppleLoggedIn(false);
+      handleSubmit(onSubmit);
     }
   };
 
