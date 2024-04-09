@@ -12,7 +12,7 @@ import (
 
 // Creates a new user.
 // POST /users
-func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.UsersPostRes, error) {
+func (h Handler) UsersPost(ctx context.Context, req *api.User) (api.UsersPostRes, error) {
 	if h.logger != nil {
 		h.logger.Info("POST /users")
 	}
@@ -22,6 +22,7 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 		LastName:  req.LastName,
 		Age:       req.Age,
 		Bio:       req.Bio,
+		Gender:    req.Gender, // Convert req.Gender to string
 		Images:    url_slice.Wrap(req.Images),
 	})
 	if valErr != nil {
@@ -34,12 +35,14 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 		return nil, errors.New("failed to create user")
 	}
 
-	res := api.UsersPostCreated{
+
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
+		Gender:		 u.Gender,
 		Images:    u.Images.Unwrap(),
 	}
 	return &res, nil
@@ -60,11 +63,12 @@ func (h Handler) UsersIDDelete(ctx context.Context, params api.UsersIDDeletePara
 		}, nil
 	}
 
-	res := api.UsersIDDeleteOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
+		Gender: 	 u.Gender,
 		Bio:       u.Bio,
 		Images:    u.Images.Unwrap(),
 	}
@@ -86,20 +90,21 @@ func (h Handler) UsersIDGet(ctx context.Context, params api.UsersIDGetParams) (a
 		}, nil
 	}
 
-	res := api.UsersIDGetOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
 		Images:    u.Images.Unwrap(),
+		Gender:		 u.Gender,
 	}
 	return &res, nil
 }
 
 // Gets multiple users.
 // GET /users
-func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api.UsersGetOKItem, error) {
+func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api.User, error) {
 	if h.logger != nil {
 		h.logger.Info("GET /users")
 	}
@@ -110,15 +115,16 @@ func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api
 	if txErr != nil {
 		return nil, errors.New("failed to get users")
 	}
-	res := []api.UsersGetOKItem{}
+	res := []api.User{}
 	for _, u := range users {
-		item := api.UsersGetOKItem{
+		item := api.User{
 			ID:        u.ID.Unwrap(),
 			FirstName: u.FirstName,
 			LastName:  u.LastName,
 			Age:       u.Age,
 			Bio:       u.Bio,
 			Images:    u.Images.Unwrap(),
+			Gender:		 u.Gender,
 		}
 		res = append(res, item)
 	}
@@ -127,24 +133,24 @@ func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api
 
 // Partially updates a user by its ID.
 // PATCH /users/{id}
-func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
+func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PATCH /users/%s", params.ID))
 	}
 
 	var reqUser user.User
 	reqUser.ID = user_id.Wrap(params.ID)
-	if req.FirstName.Set {
-		reqUser.FirstName = req.FirstName.Value
+	if req.FirstName != "" { // TODO fix 
+		reqUser.FirstName = req.FirstName
 	}
-	if req.LastName.Set {
-		reqUser.LastName = req.LastName.Value
+	if req.LastName!= "" { // TODO fix 
+		reqUser.LastName = req.LastName
 	}
-	if req.Age.Set {
-		reqUser.Age = req.Age.Value
+	if req.Age > 0 { // TODO fix 
+		reqUser.Age = req.Age
 	}
-	if req.Bio.Set {
-		reqUser.Bio = req.Bio.Value
+	if req.Bio!= "" { // TODO fix 
+		reqUser.Bio = req.Bio
 	}
 	reqUser.Images = url_slice.Wrap(req.Images)
 
@@ -159,12 +165,13 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, par
 		return nil, errors.New("failed to update user")
 	}
 
-	res := api.UsersIDPatchOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
+		Gender:		 u.Gender,
 		Images:    u.Images.Unwrap(),
 	}
 	return &res, nil
@@ -172,7 +179,7 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, par
 
 // Updates a user based on its ID.
 // PUT /users/{id}
-func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params api.UsersIDPutParams) (api.UsersIDPutRes, error) {
+func (h Handler) UsersIDPut(ctx context.Context, req *api.User, params api.UsersIDPutParams) (api.UsersIDPutRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PUT /users/%s", params.ID))
 	}
@@ -182,6 +189,7 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 		LastName:  req.LastName,
 		Age:       req.Age,
 		Bio:       req.Bio,
+		Gender:		 req.Gender,
 		Images:    url_slice.Wrap(req.Images),
 	})
 	if valErr != nil {
@@ -194,18 +202,19 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 		return nil, errors.New("failed to save user")
 	}
 
-	res := api.UsersIDPutOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
+		Gender:		 u.Gender,
 		Images:    u.Images.Unwrap(),
 	}
 	return &res, nil
 }
 
-func (h Handler) UsersReccomendationGet(ctx context.Context, params api.UsersReccomendationGetParams) ([]api.UsersReccomendationGetOKItem, error) {
+func (h Handler) UsersReccomendationGet(ctx context.Context, params api.UsersReccomendationGetParams) ([]api.User, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("GET /users/%s/reccomendations", params.UserId))
 	}
@@ -214,14 +223,15 @@ func (h Handler) UsersReccomendationGet(ctx context.Context, params api.UsersRec
 	if txErr != nil {
 		return nil, errors.New("failed to get reccomendations")
 	}
-	res := []api.UsersReccomendationGetOKItem{}
+	res := []api.User{}
 	for _, u := range users {
-		item := api.UsersReccomendationGetOKItem{
+		item := api.User{
 			ID:        u.ID.Unwrap(),
 			FirstName: u.FirstName,
 			LastName:  u.LastName,
 			Age:       u.Age,
 			Bio:       u.Bio,
+			Gender:		 u.Gender,
 			Images:    u.Images.Unwrap(),
 		}
 		res = append(res, item)

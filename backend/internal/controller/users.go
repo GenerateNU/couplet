@@ -164,6 +164,21 @@ func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txE
 // Get Reccomendations for a user
 
 func (c Controller) GetReccomendations(id user_id.UserID) (users []user.User, txErr error) {
-	txErr = c.database.Where("id != ?", id).Limit(10).Find(&users).Error
+	// txErr = c.database.Where("id != ?", id).Limit(10).Find(&users).Error
+	// TODO: Implement logic to get reccomendations
+
+	// Get the current user from the database
+	var currentUser user.User
+	txErr = c.database.First(&currentUser, id).Error
+
+	// Print the current User
+	fmt.Println(currentUser.FirstName)
+	fmt.Println(currentUser.Age)
+
+	lowerBound := currentUser.Age - 2
+	upperBound := currentUser.Age + 2
+
+	txErr = c.database.Where("id != ?", id).Where("age BETWEEN ? AND ?", lowerBound , upperBound).Limit(20).Find(&users).Error
+
 	return
 }

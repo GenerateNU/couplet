@@ -182,25 +182,41 @@ func main() {
 	// Generate users
 	fmt.Printf("generating %d user(s)...\n", *numUsers)
 	userIds := []uuid.UUID{}
+	genders := [3]api.UserGender{"Man", "Woman", "Other"}
+	interests := [3]api.PreferencesInterestedIn{"Men", "Women", "All"}
 	for i := uint(0); i < *numUsers; i++ {
 		// Define user
-		newUser := api.UsersPostReq{}
+		newUser := api.User{}
 		newUser.FirstName = fmt.Sprintf("user-%d", i)
 		newUser.LastName = "lastname"
 		newUser.Age = uint8(18 + rand.Intn(23))
 		newUser.Bio = "Hey everyone! I can't wait to go to an exciting event!"
+		newUser.Gender = genders[rand.Intn(2)]
+		
+
 		newUser.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
 			image := userImages[rand.Intn(len(userImages))]
 			newUser.Images = append(newUser.Images, image)
 		}
 
+		newUser.Preferences = api.OptPreferences{
+			Value: api.Preferences {
+				AgeMin: newUser.Age - 2,
+				AgeMax: newUser.Age + 3,
+				InterestedIn: interests[rand.Intn(2)],
+				Passions: []string{"music", "art", "food", "sports", "outdoors"},
+			},
+			Set: true,
+		}
+
+
 		// Create user
 		res, err := client.UsersPost(ctx, &newUser)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		resCreated, ok := res.(*api.UsersPostCreated)
+		resCreated, ok := res.(*api.User)
 		if !ok {
 			log.Fatalln("failed to create user")
 		}

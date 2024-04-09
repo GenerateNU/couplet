@@ -1128,45 +1128,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  required:
-                    - id
-                    - firstName
-                    - lastName
-                    - age
-                    - bio
-                    - images
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    firstName:
-                      type: string
-                      minLength: 1
-                      example: Bob
-                    lastName:
-                      type: string
-                      minLength: 1
-                      example: Smith
-                    age:
-                      type: integer
-                      format: uint8
-                      minimum: 18
-                      example: 22
-                    bio:
-                      type: string
-                      minLength: 1
-                      maxLength: 255
-                      example: Hello! I'm excited to experience events!
-                    images:
-                      type: array
-                      items:
-                        type: string
-                        format: uri
-                        example: https://example.com/image.png
-                      minItems: 4
-                      maxItems: 4
+                  $ref: "#/components/schemas/User"
     post:
       summary: Create a new user
       requestBody:
@@ -1175,85 +1137,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - firstName
-                - lastName
-                - age
-                - bio
-                - images
-              properties:
-                firstName:
-                  type: string
-                  minLength: 1
-                  example: Bob
-                lastName:
-                  type: string
-                  minLength: 1
-                  example: Smith
-                age:
-                  type: integer
-                  format: uint8
-                  minimum: 18
-                  example: 22
-                bio:
-                  type: string
-                  minLength: 1
-                  maxLength: 255
-                  example: Hello! I'm excited to experience events!
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                    example: https://example.com/image.png
-                  minItems: 4
-                  maxItems: 4
+              $ref: "#/components/schemas/User"
       responses:
         "201":
           description: Successfully created user
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                  - firstName
-                  - lastName
-                  - age
-                  - bio
-                  - images
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                  lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                  age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                  bio:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
-                    example: Hello! I'm excited to experience events!
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: uri
-                      example: https://example.com/image.png
-                    minItems: 4
-                    maxItems: 4
+                $ref: "#/components/schemas/User"
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/{id}:
@@ -1274,45 +1165,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                  - firstName
-                  - lastName
-                  - age
-                  - bio
-                  - images
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                  lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                  age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                  bio:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
-                    example: Hello! I'm excited to experience events!
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: uri
-                      example: https://example.com/image.png
-                    minItems: 4
-                    maxItems: 4
+                $ref: "#/components/schemas/User"
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -1332,45 +1185,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                  - firstName
-                  - lastName
-                  - age
-                  - bio
-                  - images
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                  lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                  age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                  bio:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
-                    example: Hello! I'm excited to experience events!
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: uri
-                      example: https://example.com/image.png
-                    minItems: 4
-                    maxItems: 4
+                $ref: "#/components/schemas/User"
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -1390,79 +1205,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                  minLength: 1
-                  example: Bob
-                lastName:
-                  type: string
-                  minLength: 1
-                  example: Smith
-                age:
-                  type: integer
-                  format: uint8
-                  minimum: 18
-                  example: 22
-                bio:
-                  type: string
-                  minLength: 1
-                  maxLength: 255
-                  example: Hello! I'm excited to experience events!
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                    example: https://example.com/image.png
-                  minItems: 4
-                  maxItems: 4
+              $ref: "#/components/schemas/User"
       responses:
         "200":
           description: Successfully updated user
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                  - firstName
-                  - lastName
-                  - age
-                  - bio
-                  - images
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                  lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                  age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                  bio:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
-                    example: Hello! I'm excited to experience events!
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: uri
-                      example: https://example.com/image.png
-                    minItems: 4
-                    maxItems: 4
+                $ref: "#/components/schemas/User"
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -1484,85 +1234,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - firstName
-                - lastName
-                - age
-                - bio
-                - images
-              properties:
-                firstName:
-                  type: string
-                  minLength: 1
-                  example: Bob
-                lastName:
-                  type: string
-                  minLength: 1
-                  example: Smith
-                age:
-                  type: integer
-                  format: uint8
-                  minimum: 18
-                  example: 22
-                bio:
-                  type: string
-                  minLength: 1
-                  maxLength: 255
-                  example: Hello! I'm excited to experience events!
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                    example: https://example.com/image.png
-                  minItems: 4
-                  maxItems: 4
+              $ref: "#/components/schemas/User"
       responses:
         "200":
           description: Successfully saved user
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                  - firstName
-                  - lastName
-                  - age
-                  - bio
-                  - images
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  firstName:
-                    type: string
-                    minLength: 1
-                    example: Bob
-                  lastName:
-                    type: string
-                    minLength: 1
-                    example: Smith
-                  age:
-                    type: integer
-                    format: uint8
-                    minimum: 18
-                    example: 22
-                  bio:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
-                    example: Hello! I'm excited to experience events!
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: uri
-                      example: https://example.com/image.png
-                    minItems: 4
-                    maxItems: 4
+                $ref: "#/components/schemas/User"
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/swipes:
@@ -1604,45 +1283,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  required:
-                    - id
-                    - firstName
-                    - lastName
-                    - age
-                    - bio
-                    - images
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                      example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    firstName:
-                      type: string
-                      minLength: 1
-                      example: Bob
-                    lastName:
-                      type: string
-                      minLength: 1
-                      example: Smith
-                    age:
-                      type: integer
-                      format: uint8
-                      minimum: 18
-                      example: 22
-                    bio:
-                      type: string
-                      minLength: 1
-                      maxLength: 255
-                      example: Hello! I'm excited to experience events!
-                    images:
-                      type: array
-                      items:
-                        type: string
-                        format: uri
-                        example: https://example.com/image.png
-                      minItems: 4
-                      maxItems: 4
+                  $ref: "#/components/schemas/User"
   /matches/{id}:
     get:
       summary: Get a user's matches
@@ -1729,6 +1370,83 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
   schemas:
+    Preferences:
+      type: object
+      required:
+        - ageMin
+        - ageMax
+        - interestedIn
+        - passions
+      properties:
+        ageMin:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 18
+        ageMax:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 30
+        interestedIn:
+          type: string
+          enum: ["Men", "Women", "All"]
+          example: "Men"
+        passions:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255
+          maxItems: 5
+          example: ["arts", "music"]
+    User:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - age
+        - bio
+        - gender
+        - images
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        preferences:
+          $ref: "#/components/schemas/Preferences"
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+        gender:
+          type: string
+          enum: ["Man", "Woman", "Other"]
+          example: "Man"
+        bio:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Hello! I'm excited to experience events!
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 4
+          maxItems: 4
     Address:
       type: object
       required:
