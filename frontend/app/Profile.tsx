@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import Navbar from "../components/Layout/Navbar";
 import CardWrapper from "../components/Profile/CardWrapper";
 import SettingsCard from "../components/Profile/SettingsCard";
@@ -11,7 +11,7 @@ import UserDetails from "./UserDetails";
 /* // eslint-disable global-require */
 export default function Profile() {
   return (
-    <View style={{ flex: 1, gap: 15 }}>
+    <SafeAreaView style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
         <UserDetails
           onPress={() => "Placeholder"}
@@ -48,7 +48,7 @@ export default function Profile() {
         </CardWrapper>
       </View>
       <Navbar activePage="Profile" />
-    </View>
+    </SafeAreaView>
   );
 }
 
