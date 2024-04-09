@@ -41,12 +41,12 @@ const formSlice = createSlice({
   },
   reducers: {
     setFullName: (state, action) => {
-      console.log(state.fullName)
-      state.fullName = action.payload
+      console.log(state.fullName);
+      state.fullName = action.payload;
     },
     setEmail: (state, action) => {
-      console.log(state.email)
-      state.email = action.payload
+      console.log(state.email);
+      state.email = action.payload;
     },
     setName: (state, action) => {
       state.name = action.payload;
