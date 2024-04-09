@@ -10,6 +10,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setName } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const aboutNamePicture = require("../../../assets/aboutName.png");
 
@@ -45,6 +46,7 @@ function AboutName() {
       </View>
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
+        keyboardVerticalOffset={screenHeight * (.1)}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={scaledStyles.mainContainer}>

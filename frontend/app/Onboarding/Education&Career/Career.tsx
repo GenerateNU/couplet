@@ -10,6 +10,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setJob } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const JOB = require("../../../assets/job.png");
 
@@ -46,6 +47,7 @@ function Career() {
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={screenHeight * (.1)}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

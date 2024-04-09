@@ -10,6 +10,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setInstagram } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const AT_ICON = require("../../../assets/instagramAt.png");
 
@@ -46,6 +47,7 @@ function ProfileInsta() {
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={screenHeight * (.2)}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

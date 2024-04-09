@@ -21,6 +21,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setPromptBio, setResponseBio } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const BIO_IMAGE = require("../../../assets/profilebio.png");
 
@@ -58,6 +59,7 @@ function ProfileBio() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={scaledStyles.avoidContainer}
+        keyboardVerticalOffset={screenHeight * (.4)}
       >
         <View style={scaledStyles.mainContainer}>
           <View>
