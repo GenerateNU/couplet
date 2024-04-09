@@ -200,16 +200,18 @@ func main() {
 			newUser.Images = append(newUser.Images, image)
 		}
 
-		newUser.Preferences = api.OptPreferences{
-			Value: api.Preferences {
-				AgeMin: newUser.Age - 2,
+		newUser.Preferences = api.Preferences{
+				AgeMin: newUser.Age,
 				AgeMax: newUser.Age + 3,
-				InterestedIn: interests[rand.Intn(2)],
+			  InterestedIn: interests[rand.Intn(2)],
 				Passions: []string{"music", "art", "food", "sports", "outdoors"},
-			},
-			Set: true,
 		}
 
+		// fmt.Println(newUser.Preferences.AgeMin)
+		// fmt.Println(newUser.Preferences.AgeMax)
+		// fmt.Println(newUser.Preferences.InterestedIn)
+		// fmt.Println(newUser.Preferences.Passions)
+		fmt.Println(&newUser.Preferences)
 
 		// Create user
 		res, err := client.UsersPost(ctx, &newUser)
