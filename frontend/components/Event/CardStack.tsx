@@ -28,7 +28,7 @@ export default function CardStack({ startingEventId }: CardStackProps) {
   );
 
   useEffect(() => {
-    getEvents().then((fetchedEvents: Event[]) => {
+    getEvents({ limit: 10, offset: 0 }).then((fetchedEvents: Event[]) => {
       setEvents(fetchedEvents || []);
       const index = fetchedEvents.findIndex((event: any) => event.id === startingEventId);
 
