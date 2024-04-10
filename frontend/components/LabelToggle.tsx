@@ -19,8 +19,7 @@ export default function LabelToggle({ labels, onChange }: LabelToggleProps) {
     <View style={scaledStyles.container}>
       {labels.map((label, i) => (
         <TouchableOpacity
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={label}
           onPress={() => setChosen(label)}
           style={chosen === label ? scaledStyles.chosenLabel : scaledStyles.unchosenLabel}
         >
