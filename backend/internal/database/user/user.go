@@ -4,6 +4,7 @@ import (
 	"couplet/internal/database/event_swipe"
 	"couplet/internal/database/url_slice"
 	"couplet/internal/database/user_id"
+	"couplet/internal/database/user_match"
 	"couplet/internal/database/user_swipe"
 	"time"
 
@@ -22,7 +23,7 @@ type User struct {
 	Images      url_slice.UrlSlice
 	UserSwipes  []user_swipe.UserSwipe
 	EventSwipes []event_swipe.EventSwipe
-	Matches     []*User `gorm:"many2many:user_matches"`
+	Matches     []user_match.UserMatch
 }
 
 // Automatically generates a random ID if unset before creating

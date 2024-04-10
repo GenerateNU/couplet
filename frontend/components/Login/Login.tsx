@@ -32,7 +32,7 @@ export default function Login() {
   const isSignedIn = isGoogleLoggedIn || isAppleLoggedIn;
 
   const handleGoogleSignIn = async () => {
-    router.push("Onboarding/AboutMe/AboutName");
+    router.push("Home");
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -115,13 +115,11 @@ const styles = StyleSheet.create({
   appleLogo: {
     width: 16,
     height: 20,
-    background: COLORS.black,
     marginRight: 8
   },
   googleLogo: {
     width: 16,
     height: 16,
-    background: COLORS.black,
     marginRight: 8
   },
   titleImageView: {
