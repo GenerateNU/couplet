@@ -67,7 +67,7 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 
 // RecommendationEventsGet implements api.Handler.
 func (h Handler) RecommendationEventsGet(ctx context.Context, params api.RecommendationEventsGetParams) ([]api.RecommendationEventsGetOKItem, error) {
-	events, err := h.controller.GetRandomEvents(params.Limit, params.Offset)
+	events, err := h.controller.GetRandomEvents(params)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,6 @@ func (h Handler) RecommendationEventsGet(ctx context.Context, params api.Recomme
 		})
 	}
 	return res, nil
-
 }
 
 // Gets an event by its ID.

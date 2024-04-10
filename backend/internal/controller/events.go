@@ -126,13 +126,30 @@ func (c Controller) PatchEvent(id event_id.EventID, params event.Event) (event.E
 	return event, nil
 }
 
-func (c Controller) GetRandomEvents(limit api.OptInt, offset api.OptInt) ([]event.Event, error) {
+func (c Controller) GetRandomEvents(params api.RecommendationEventsGetParams) ([]event.Event, error) {
 	var events []event.Event
 	tx := c.database.Begin()
-	result := tx.Order("random()").Offset(offset.Value).Limit(limit.Value).Find(&events)
+	query := tx.Order("random()")
+
+	// Apply filters based on query parameters
+	if params.Like.IsSet() && params.Like.Value {
+		query = query.Where("liked = ?", true)
+	}
+
+	if len(params.Tags) > 0 {
+		query = query.Where("tags IN (?)", params.Tags)
+	}
+
+	if params.Date.IsSet() {
+		query = query.Where("date >= ?", params.Date.Value)
+	}
+
+	result := query.Offset(params.Offset.Value).Limit(params.Limit.Value).Find(&events)
 	if result.Error != nil {
+		tx.Rollback()
 		return nil, result.Error
 	}
+
 	tx.Commit()
 	return events, nil
 }

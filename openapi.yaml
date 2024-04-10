@@ -786,26 +786,28 @@ paths:
             type: integer
             format: int
             default: 0
-        - name: likes 
+        - name: like
           in: query 
           required: false
-          description: Don't know yet
+          description: Filter events liked by the user
           schema:
             type: boolean
             deafult: false
         - name: tags
           in: query
           required: false
-          description: The tags for events 
-          schema
+          description: Filter events by the tags
+          schema:
+            type: array
+            items:
+              type: string
         - name: date
           in: query
           required: false
-          description: The upcoming date of events
+          description: Filter events by upcoming datae
           schema:
             type: string 
             format: date
-            deafult: 
       responses:
         '200':
           description: Successfully retrieved events
