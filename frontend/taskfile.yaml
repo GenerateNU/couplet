@@ -7,14 +7,8 @@ tasks:
       - generate
     summary: Runs the frontend mobile app
     cmds:
-      - npm run start
-  run-with-api:
-    deps:
-      - generate
-    summary: Runs the frontend mobile app
-    cmds:
-      - echo $(./get_ip.sh):$PORT
-      - REACT_APP_API=$(./get_ip.sh):$PORT npm run start
+      - echo http://$(./get_ip.sh):$PORT
+      - EXPO_PUBLIC_API=http://$(./get_ip.sh):$PORT npm run start
   run-android:
     deps:
       - generate
