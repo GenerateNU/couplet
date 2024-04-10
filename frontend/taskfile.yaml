@@ -7,8 +7,8 @@ tasks:
       - generate
     summary: Runs the frontend mobile app
     cmds:
-      - echo http://$(./get_ip.sh):$PORT
-      - EXPO_PUBLIC_API=http://$(./get_ip.sh):$PORT npm run start
+      - echo "Make sure your EXPO_PUBLIC_API is set in your frontend/.env file!"
+      - npm run start
   run-android:
     deps:
       - generate
@@ -64,3 +64,4 @@ tasks:
     summary: Run static analysis checks
     cmds:
       - npm run check
+...
