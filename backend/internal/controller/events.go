@@ -137,7 +137,7 @@ func (c Controller) GetRandomEvents(params api.RecommendationEventsGetParams) ([
 	}
 
 	if len(params.Tags) > 0 {
-		query = query.Where("tags IN (?)", params.Tags)
+		query = query.Where("event_tags.id IN (?)", params.Tags)
 	}
 
 	if params.Date.IsSet() {

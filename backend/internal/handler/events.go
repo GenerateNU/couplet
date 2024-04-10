@@ -8,6 +8,7 @@ import (
 	"couplet/internal/database/org_id"
 	"errors"
 	"fmt"
+	"net/url"
 
 	ht "github.com/ogen-go/ogen/http"
 )
@@ -73,10 +74,30 @@ func (h Handler) RecommendationEventsGet(ctx context.Context, params api.Recomme
 	}
 	var res []api.RecommendationEventsGetOKItem
 	for _, e := range events {
+
+		// Get Images
+		imagesUrl := []url.URL{}
+		if e.Images != nil {
+			for i := range e.Images {
+				imagesUrl = append(imagesUrl, url.URL{Path: e.Images[i].Url})
+			}
+		}
+
+		// Get Event Tags
+		eventTags := []string{}
+		if e.EventTags != nil {
+			for i := range e.EventTags {
+				eventTags = append(eventTags, e.EventTags[i].ID)
+			}
+		}
+		
 		res = append(res, api.RecommendationEventsGetOKItem{
 			ID:   e.ID.Unwrap(),
 			Name: e.Name,
 			Bio:  e.Bio,
+			Images: imagesUrl,
+			Tags: eventTags,
+			OrgId: api.NewOptUUID(e.OrgID.Unwrap()),
 		})
 	}
 	return res, nil
