@@ -168,8 +168,8 @@ export default function PeopleStack({ userId }: PeopleStackProps) {
   const handleReact = useCallback(
     (like: boolean) => {
       console.log("HELLO", like);
-      const userId = people[currentCardIndex].id;
-      const currentPersonId = userId;
+    //   const userId = people[currentCardIndex].id;
+    //   const currentPersonId = userId;
 
       // TODO - find event swipe function
       // personSwipe(userId, currentPersonId, like).then()
