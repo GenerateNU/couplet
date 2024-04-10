@@ -979,6 +979,10 @@ components:
           type: string
           minLength: 1
           example: The Big Event
+        date: 
+          type: string
+          format: date
+          example: "2024-01-01"
         bio:
           type: string
           minLength: 1
