@@ -2,7 +2,7 @@
 version: "3"
 
 tasks:
-  run-with-api:
+  run:
     deps:
       - generate
     summary: Runs the frontend mobile app
