@@ -211,7 +211,7 @@ func main() {
 		// fmt.Println(newUser.Preferences.AgeMax)
 		// fmt.Println(newUser.Preferences.InterestedIn)
 		// fmt.Println(newUser.Preferences.Passions)
-		fmt.Println(&newUser.Preferences)
+		fmt.Println(newUser.Preferences)
 
 		// Create user
 		res, err := client.UsersPost(ctx, &newUser)
