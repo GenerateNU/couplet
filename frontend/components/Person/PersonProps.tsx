@@ -46,6 +46,7 @@ export type PersonProps = {
   images: ImageWithCaptionProps[];
   isMatched: boolean;
   likesYou: boolean;
+  handleReact: (like: boolean) => void;
 };
 
 export type PillProps = {

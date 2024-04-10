@@ -37,15 +37,12 @@ export default function Person({
   mutualEvents,
   images,
   isMatched,
-  likesYou
+  likesYou, 
+  handleReact
 }: PersonProps) {
   const firstImage = images[0]?.image || "";
   const heightText = height ? `${height.feet}'${height.inches}"` : "";
 
-  const handleReact = (reaction: boolean) => {
-    // TODO SEND PERSON SWIPE TO BACKEND
-    console.log(`Person ${id} reacted with ${reaction}`);
-  };
 
   return (
     <>
