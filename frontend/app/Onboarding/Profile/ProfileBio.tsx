@@ -59,7 +59,7 @@ function ProfileBio() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={scaledStyles.avoidContainer}
-        keyboardVerticalOffset={screenHeight * (.4)}
+        keyboardVerticalOffset={screenHeight * 0.4}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

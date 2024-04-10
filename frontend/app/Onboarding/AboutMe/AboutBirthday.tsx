@@ -17,6 +17,14 @@ const aboutBirthdayPicture = require("../../../assets/calendarBirthday.png");
 function AboutBirthday() {
   const dispatch = useAppDispatch();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const enable = (day: number, month: number, year: number) => {
+    if (day !== 0 && month !== 0 && year !== 0) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
   const { control, handleSubmit } = useForm({
     defaultValues: {
       birthday: new Date()
@@ -27,6 +35,7 @@ function AboutBirthday() {
     setIsDropDownOpen(isOpen);
   };
   const onSubmit = (data: { birthday: Date }) => {
+    console.log(data);
     // Store it as a string to satisfy Redux's required serialization values
     dispatch(setBirthday(data.birthday.toISOString()));
     router.push("Onboarding/AboutMe/AboutGender");
@@ -50,11 +59,13 @@ function AboutBirthday() {
             <Controller
               control={control}
               name="birthday"
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <DropDownCalendar
-                  onDateChange={(day, month, year) => onChange(new Date(year, month - 1, day))}
+                  onDateChange={(day, month, year) => {
+                    onChange(new Date(year, month - 1, day));
+                    enable(day, month, year);
+                  }}
                   onDropDownOpen={handleDropDownOpen}
-                  selectedDate={value}
                 />
               )}
             />
@@ -68,7 +79,7 @@ function AboutBirthday() {
         <View>
           <ContinueButton
             title="Continue"
-            isDisabled={false}
+            isDisabled={isDisabled}
             onPress={() => {
               handleSubmit(onSubmit)();
             }}

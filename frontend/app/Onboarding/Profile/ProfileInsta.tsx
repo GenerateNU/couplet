@@ -47,7 +47,7 @@ function ProfileInsta() {
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={screenHeight * (.2)}
+        keyboardVerticalOffset={screenHeight * 0.2}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

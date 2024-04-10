@@ -46,7 +46,7 @@ function AboutName() {
       </View>
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
-        keyboardVerticalOffset={screenHeight * (.1)}
+        keyboardVerticalOffset={screenHeight * 0.1}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={scaledStyles.mainContainer}>

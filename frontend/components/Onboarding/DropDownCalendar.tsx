@@ -8,17 +8,16 @@ import { screenHeight } from "../../utils/dimensions";
 interface DropDownCalendarProps {
   onDateChange: (day: number, month: number, year: number) => void;
   onDropDownOpen: (openDay: boolean, openMonth: boolean, openYear: boolean) => void;
-  selectedDate: Date;
 }
 
-function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDownCalendarProps) {
+function DropDownCalendar({ onDateChange, onDropDownOpen }: DropDownCalendarProps) {
   const [openDay, setOpenDay] = useState(false);
   const [openMonth, setOpenMonth] = useState(false);
   const [openYear, setOpenYear] = useState(false);
 
-  const [day, setDay] = useState(selectedDate.getDate());
-  const [month, setMonth] = useState(selectedDate.getMonth() + 1); // JavaScript months are 0-indexed
-  const [year, setYear] = useState(selectedDate.getFullYear());
+  const [day, setDay] = useState(0);
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(0);
 
   const days = Array.from({ length: 31 }, (_, i) => ({ label: `${i + 1}`, value: i + 1 }));
   const months = [
@@ -57,6 +56,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         onOpen={() => onDropDownOpen(true, openMonth, openYear)}
         onClose={() => onDropDownOpen(false, openMonth, openYear)}
         dropDownContainerStyle={{ height: screenHeight * 0.15 }}
+        placeholder="Day"
       />
       <DropDownPicker
         open={openMonth}
@@ -64,10 +64,11 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         items={months}
         setOpen={setOpenMonth}
         setValue={setMonth}
-        containerStyle={scaledStyles.dropdown}
+        containerStyle={scaledStyles.monthDropDown}
         onOpen={() => onDropDownOpen(openDay, true, openYear)}
         onClose={() => onDropDownOpen(openDay, false, openYear)}
         dropDownContainerStyle={{ height: screenHeight * 0.15 }}
+        placeholder="Month"
       />
       <DropDownPicker
         open={openYear}
@@ -80,6 +81,7 @@ function DropDownCalendar({ onDateChange, onDropDownOpen, selectedDate }: DropDo
         onOpen={() => onDropDownOpen(openDay, openMonth, true)}
         onClose={() => onDropDownOpen(openDay, openMonth, false)}
         dropDownContainerStyle={{ height: screenHeight * 0.15 }}
+        placeholder="Year"
       />
     </View>
   );
@@ -91,6 +93,10 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     flex: 1,
+    marginRight: 5
+  },
+  monthDropDown: {
+    flex: 1.5,
     marginRight: 5
   }
 });

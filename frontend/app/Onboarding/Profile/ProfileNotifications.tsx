@@ -11,6 +11,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setNotifications } from "../../../state/formSlice";
 import { useAppDispatch, useAppSelector } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import calculateAge from "../../../utils/calculateAge";
 
 const NOTIFICATION_TOGGLE = require("../../../assets/notificationToggle.png");
 
@@ -28,16 +29,18 @@ function ProfileNotifications() {
   async function goToNextPage() {
     const userData: userDataProps = {
       firstName: userState.name,
-      lastName: "Get last name form auth", // TODO get last name from auth
-      age: 18, // TODO get age from auth
+      lastName: "GET LAST NAME FROM AUTH", // Weird bug, if this is empty will throw an error
+      age: calculateAge(new Date(userState.birthday)), // TODO get age from auth
       bio: userState.promptBio,
       images: userState.photos.map((photo) => photo.filePath)
     };
     try {
       const res = await createUser(userData);
-      console.log("Success!", res);
+      console.log(res);
     } catch (e) {
-      console.log("Uh Oh Stone", e);
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
     }
     router.push("Onboarding/Profile/ProfileConfirm");
   }

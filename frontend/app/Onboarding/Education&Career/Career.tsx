@@ -47,7 +47,7 @@ function Career() {
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={screenHeight * (.1)}
+        keyboardVerticalOffset={screenHeight * 0.1}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

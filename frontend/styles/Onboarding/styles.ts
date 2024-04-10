@@ -17,7 +17,7 @@ const onboardingStyles = {
     lineHeight: 12,
     letterSpacing: -0.12,
     fontFamily: "DMSansMedium",
-    color : COLORS.darkGray
+    color: COLORS.darkGray
   },
   container: {
     flex: 1,
