@@ -1,8 +1,10 @@
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { getEventById, getEvents } from "../api/events";
 import EventCollection from "../components/Event/EventCollection";
+import Navbar from "../components/Layout/Navbar";
+import scaleStyleSheet from "../scaleStyles";
 
 type Event = Awaited<ReturnType<typeof getEventById>>;
 
@@ -20,10 +22,15 @@ export default function Collection() {
   }, []);
 
   return (
-    <SafeAreaView>
-      <EventCollection name={collectionId || "This Weekend in Boston"} events={events} />
-    </SafeAreaView>
+    <View style={scaledStyles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <EventCollection name={collectionId || "This Weekend in Boston"} events={events} />
+      </SafeAreaView>
+      <Navbar activePage="Home" />
+    </View>
   );
 }
 
-// const styles = StyleSheet.create({});
+const styles = StyleSheet.create({ container: { flex: 1, justifyContent: "space-between" } });
+
+const scaledStyles = scaleStyleSheet(styles);
