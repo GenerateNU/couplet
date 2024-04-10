@@ -78,7 +78,7 @@ function ProfileCaptions() {
                   <View style={scaledStyles.textInputWrapper}>
                     <TextInput
                       style={scaledStyles.textInput}
-                      onSubmitEditing={(e) => onSubmitCaption(e.nativeEvent.text, i)}
+                      onChange={(e) => onSubmitCaption(e.nativeEvent.text, i-1)}
                       editable
                       placeholder="Caption"
                     />

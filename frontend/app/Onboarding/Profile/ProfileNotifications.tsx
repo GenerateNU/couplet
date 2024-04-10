@@ -30,13 +30,12 @@ function ProfileNotifications() {
     const userData: userDataProps = {
       firstName: userState.name,
       lastName: "GET LAST NAME FROM AUTH", // Weird bug, if this is empty will throw an error
-      age: calculateAge(new Date(userState.birthday)), // TODO get age from auth
+      age: calculateAge(new Date(userState.birthday)),
       bio: userState.promptBio,
       images: userState.photos.map((photo) => photo.filePath)
     };
     try {
-      const res = await createUser(userData);
-      console.log(res);
+      await createUser(userData);
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(e.message);
