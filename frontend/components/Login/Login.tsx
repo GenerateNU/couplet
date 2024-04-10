@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as AppleAuthentication from "expo-apple-authentication";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -33,7 +34,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
-    router.push("/Home");
+    router.push("Home");
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -55,7 +56,7 @@ export default function Login() {
       await SecureStore.setItemAsync("appleAuth", creds.user);
       router.push("Home");
       setIsAppleLoggedIn(true);
-      router.push("/Home");
+      router.push("Onboarding/AboutMe/AboutName");
     } catch (e) {
       setIsAppleLoggedIn(false);
     }

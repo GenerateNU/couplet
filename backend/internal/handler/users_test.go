@@ -346,8 +346,8 @@ func TestUsersIDPatch(t *testing.T) {
 	}
 
 	validTestCases := []struct {
-		input api.User
-	}{{api.User{
+		input api.UsersIDPatchReq
+	}{{api.UsersIDPatchReq{
 		FirstName: api.NewOptString("First"),
 		LastName:  api.NewOptString("Last"),
 		Age:       api.NewOptUint8(21),
@@ -355,16 +355,16 @@ func TestUsersIDPatch(t *testing.T) {
 		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
 	}}}
 	invalidTestCases := []struct {
-		input api.User
-	}{{api.User{
+		input api.UsersIDPatchReq
+	}{{api.UsersIDPatchReq{
 		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png")},
-	}}, {api.User{
+	}}, {api.UsersIDPatchReq{
 		FirstName: api.NewOptString(len256),
-	}}, {api.User{
+	}}, {api.UsersIDPatchReq{
 		LastName: api.NewOptString(len256),
-	}}, {api.User{
+	}}, {api.UsersIDPatchReq{
 		Age: api.NewOptUint8(5),
-	}}, {api.User{
+	}}, {api.UsersIDPatchReq{
 		Bio: api.NewOptString(len256),
 	}}}
 

@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { eventSwipe, getAllEvents } from "../../api/events";
-import type { components } from "../../api/schema";
+import { eventSwipe, getEvents } from "../../api/events";
 import EventPage from "./EventPage";
 
-type Event = components["schemas"]["Event"];
+type Event = Awaited<ReturnType<typeof getEvents>>[number];
 
 export type CardStackProps = {
   startingEventId: string;
@@ -29,14 +28,14 @@ export default function CardStack({ startingEventId }: CardStackProps) {
   );
 
   useEffect(() => {
-    getAllEvents().then((fetchedEvents: Event[]) => {
+    getEvents({ limit: 10, offset: 0 }).then((fetchedEvents: Event[]) => {
       setEvents(fetchedEvents || []);
       const index = fetchedEvents.findIndex((event: any) => event.id === startingEventId);
 
       if (index !== -1) {
         setCurrentCardIndex(index);
       } else {
-        console.log(`No event found with ID ${startingEventId}`);
+        // console.log(`No event found with ID ${startingEventId}`);
         setCurrentCardIndex(0);
       }
 

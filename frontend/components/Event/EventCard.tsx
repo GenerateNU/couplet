@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Share, StyleSheet, Text, View } from "react-native";
 import { Button, Icon } from "react-native-paper";
-import getOrgById from "../../api/orgs";
-import type { components } from "../../api/schema";
+import { getEvents } from "../../api/events";
+import { getOrgById } from "../../api/orgs";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 import OrgTag from "./OrgTag";
 
-type Event = components["schemas"]["Event"];
-type Org = components["schemas"]["Org"];
+type Event = Awaited<ReturnType<typeof getEvents>>[number];
+type Org = Awaited<ReturnType<typeof getOrgById>>;
 
 const IMAGE = require("../../assets/profile.png");
 
@@ -20,11 +20,31 @@ export type EventCardProps = {
 export default function EventCard({ handleReact, event }: EventCardProps) {
   const [org, setOrg] = useState<Org>();
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this event on Couplet! \n${event?.bio}`,
+        url: event?.externalLink
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
   useEffect(() => {
     if (!event.orgId) return;
-    getOrgById(event.orgId)
+    getOrgById({ id: event.orgId })
       .then((fetchedOrg) => setOrg(fetchedOrg))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, [event]);
 
   return (
@@ -52,7 +72,6 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
           textColor={COLORS.primary}
           labelStyle={scaledStyles.buttonLabel}
           style={{ borderColor: COLORS.primary, borderWidth: 2 }}
-          onPress={() => console.log("View details")}
         >
           View details
         </Button>
@@ -63,7 +82,7 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
           textColor={COLORS.white}
           labelStyle={{ ...scaledStyles.buttonLabel, paddingHorizontal: 8, fontWeight: "700" }}
           contentStyle={{ flexDirection: "row-reverse" }}
-          onPress={() => console.log("Share event")}
+          onPress={onShare}
         >
           Share event
         </Button>
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   orgNameText: { marginLeft: 15, fontSize: 18, fontFamily: "DMSansMedium" },
-  orgHandleText: { marginLeft: 15, fontSize: 12, fontFamily: "DMSansRegular", weight: "400" },
+  orgHandleText: { marginLeft: 15, fontSize: 12, fontFamily: "DMSansRegular", fontWeight: "400" },
   tags: {
     flexDirection: "row",
     flexWrap: "wrap",

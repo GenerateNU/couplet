@@ -9,29 +9,16 @@ type Props = {
 
 function OnboardingTitle({ text }: Props) {
   return (
-    <View style={scaledStyles.centeringContainer}>
-      <View style={scaledStyles.container}>
-        <Text style={scaledStyles.text}>{text}</Text>
-      </View>
+    <View style={scaledStyles.container}>
+      <Text style={scaledStyles.text}>{text}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  centeringContainer: {
-    alignItems: "center",
-    width: "100%"
-  },
-  container: {
-    width: 346,
-    height: 64,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    opacity: 1
-  },
   text: {
     fontFamily: "DMSansMedium",
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: "bold",
     lineHeight: 32,
     textAlign: "left",

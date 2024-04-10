@@ -23,10 +23,10 @@ function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) 
             Skip
           </Text>
         )}
-        <OnboardingBar selectedCount={selectedCount} />
       </View>
       <View style={scaledStyles.textBarContainer}>
         <Text style={scaledStyles.informationText}>{text}</Text>
+        <OnboardingBar selectedCount={selectedCount} />
       </View>
     </View>
   );
@@ -34,11 +34,6 @@ function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) 
 
 const styles = StyleSheet.create({
   container: {
-    width: 346,
-    height: 69,
-    top: 68,
-    left: 24,
-    position: "absolute",
     flexDirection: "column",
     justifyContent: "space-between"
   },
@@ -50,8 +45,7 @@ const styles = StyleSheet.create({
     fontFamily: "DMSansRegular",
     fontSize: 17,
     fontWeight: "500",
-    color: COLORS.primary,
-    marginTop: 10
+    color: COLORS.primary
   },
   textBarContainer: {
     paddingTop: 8,

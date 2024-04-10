@@ -127,7 +127,7 @@ func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api
 
 // Partially updates a user by its ID.
 // PATCH /users/{id}
-func (h Handler) UsersIDPatch(ctx context.Context, req *api.User, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
+func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PATCH /users/%s", params.ID))
 	}

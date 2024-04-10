@@ -5,9 +5,11 @@ import (
 	"couplet/internal/database/event_swipe"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
+	"couplet/internal/database/user_match"
 	"couplet/internal/database/user_swipe"
 	"errors"
 	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -93,13 +95,27 @@ func (c Controller) CreateUserSwipe(params user_swipe.UserSwipe) (us user_swipe.
 		var userTwo user.User
 		c.database.First(&userTwo, otherSwipe.OtherUserID)
 
-		txErr = c.database.Model(&userOne).Association("Matches").Append(&userTwo)
+		matchData := user_match.UserMatch{
+			UserID:    userOne.ID,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			MatchID:   userTwo.ID,
+		}
+
+		txErr = c.database.Model(&userOne).Association("Matches").Append(&matchData)
 		if txErr != nil {
 			tx.Rollback()
 			return
 		}
 
-		txErr = c.database.Model(&userTwo).Association("Matches").Append(&userOne)
+		matchData = user_match.UserMatch{
+			UserID:    userTwo.ID,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			MatchID:   userOne.ID,
+		}
+
+		txErr = c.database.Model(&userTwo).Association("Matches").Append(&matchData)
 		if txErr != nil {
 			tx.Rollback()
 			return
