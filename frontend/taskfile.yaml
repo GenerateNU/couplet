@@ -64,4 +64,3 @@ tasks:
     summary: Run static analysis checks
     cmds:
       - npm run check
-...
