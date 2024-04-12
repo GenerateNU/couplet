@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { PillProps } from "./PersonProps";
 import scaleStyleSheet from "../../scaleStyles";
+import { PillProps } from "./PersonProps";
 
 export default function InfoChips({ items, textColor, backgroundColor }: PillProps) {
   return (

@@ -10,8 +10,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { LifestyleProps } from "./PersonProps";
 import scaleStyleSheet from "../../scaleStyles";
+import { LifestyleProps } from "./PersonProps";
 
 export default function Lifestyle({
   relationshipType,
@@ -94,6 +94,5 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
-
 
 const scaledStyles = scaleStyleSheet(styles);

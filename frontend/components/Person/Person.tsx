@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import HeaderScrollView from "react-native-header-scroll-view";
+import scaleStyleSheet from "../../scaleStyles";
 import EventCardItem from "../Event/EventCardItem";
 import Reaction from "../Reaction/Reaction";
 import InfoChips from "./InfoChips";
 import Lifestyle from "./Lifestyle";
 import { PersonProps } from "./PersonProps";
-import scaleStyleSheet from "../../scaleStyles";
 
 const INSTAGRAM_ICON = require("../../assets/instagram.png");
 
