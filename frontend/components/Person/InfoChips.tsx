@@ -1,13 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { PillProps } from "./PersonProps";
+import scaleStyleSheet from "../../scaleStyles";
 
 export default function InfoChips({ items, textColor, backgroundColor }: PillProps) {
   return (
-    <View style={styles.container}>
+    <View style={scaledStyles.container}>
       {items.map((item) => (
-        <View style={{ ...styles.chipItemContainer, backgroundColor }}>
-          <Text style={{ ...styles.chipItemText, color: textColor }}>{item}</Text>
+        <View style={{ ...scaledStyles.chipItemContainer, backgroundColor }}>
+          <Text style={{ ...scaledStyles.chipItemText, color: textColor }}>{item}</Text>
         </View>
       ))}
     </View>
@@ -35,3 +36,5 @@ const styles = StyleSheet.create({
     fontSize: 13
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
