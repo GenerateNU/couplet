@@ -18,14 +18,14 @@ export default function UserDetails(props: UserDetailsProps) {
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.profileNameContainer}>
         {/* // eslint-disable-next-line global-require */}
-        <Image source={require("../assets/stockProPic.png")} style={styles.imageContainer} />
+        <Image source={require("../../assets/stockProPic.png")} style={styles.imageContainer} />
         <View style={styles.nameAndEditContainer}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.edit}>{editDetailsText}</Text>
         </View>
       </View>
       <View style={[styles.chevronContainer, { backgroundColor: chevronColor }]}>
-        <Text style={styles.chevron}>&gt;</Text>
+        {/* <Text style={styles.chevron}>&gt;</Text> */}
       </View>
     </TouchableOpacity>
   );
@@ -35,15 +35,10 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     width: 349,
-    padding: 16,
+    paddingVertical: 16,
     justifyContent: "space-between",
     alignContent: "center",
-    elevation: 5,
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     backgroundColor: "#FFF",
     flexDirection: "row"
   },
@@ -67,15 +62,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-start"
   },
   name: {
-    fontSize: 16,
+    fontSize: 24,
     fontFamily: "DMSansRegular",
     color: "#222",
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: 21
+    lineHeight: 32
   },
   edit: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: "DMSansRegular",
     color: "#222",
     fontStyle: "normal",
