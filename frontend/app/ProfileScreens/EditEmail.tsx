@@ -11,7 +11,7 @@ export default function EditEmail() {
       <View style={styles.container}>
         <TextInput
           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-          onChangeText={(text) => console.log(text)}
+          onChangeText={(text) => "PlaceHolder"}
           value="EmailDummy"
         />
       </View>

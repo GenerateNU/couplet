@@ -1,13 +1,12 @@
 /* eslint-disable */
-import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router } from "expo-router";
+import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import Navbar from "../components/Layout/Navbar";
 import CardWrapper from "../components/Profile/CardWrapper";
 import PurpleProfileCard from "../components/Profile/PurpleProfileCard";
 import SettingsCard from "../components/Profile/SettingsCard";
 import UserDetails from "../components/Profile/UserDetails";
-import { getUserById, getUsers } from "../api/users";
 
 /* // eslint-disable global-require */
 export default function Profile() {

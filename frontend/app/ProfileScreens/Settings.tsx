@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const ToggleSwitch = ({ text }: { text: string }) => {
+function ToggleSwitch({ text }: { text: string }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
@@ -17,20 +17,17 @@ const ToggleSwitch = ({ text }: { text: string }) => {
       />
     </View>
   );
-};
+}
 
 export default function Settings() {
   const router = useRouter();
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-
   return (
     <SafeAreaView>
       <Text onPress={() => router.back()} style={styles.title}>{`< Settings`}</Text>
       <View style={styles.container}>
         <Text style={styles.text1}>Pause Profile</Text>
         <ToggleSwitch text="Pausing your profile will temporarily stop showing your account to others. You can still see your current matches." />
-        <View style={styles.line}></View>
+        <View style={styles.line} />
         <Text style={styles.text1}>NotificationSettings</Text>
         <ToggleSwitch text="New likes" />
         <ToggleSwitch text="New matches" />
