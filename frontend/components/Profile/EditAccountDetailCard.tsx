@@ -5,17 +5,19 @@ import { useFonts } from "expo-font";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function SettingsCard({
-  text,
-  img,
+export default function EditAccountDetailCard({
+  description,
+  fieldInfo,
   onPress,
+  editable,
   last = false,
   ...props
 }: {
-  text: string;
-  img: any;
+  description: string;
+  fieldInfo: string;
   last?: boolean;
-  onPress: () => void;
+  editable?: boolean;
+  onPress?: () => void;
 }) {
   const [fontsLoaded] = useFonts({
     DMSansRegular
@@ -25,44 +27,49 @@ export default function SettingsCard({
     return null;
   }
 
+  const ContainerComponent: React.ElementType = editable ? TouchableOpacity : View;
+
   return (
-    <TouchableOpacity onPress={onPress}>
+    <ContainerComponent onPress={editable ? onPress : undefined}>
       <View style={{ ...styles.container, borderBottomWidth: last ? 0 : 0.5 }}>
-        <Image source={img} style={styles.imageStyle} />
-        <Text style={styles.mainText}>{text}</Text>
+        <View style={styles.container2}>
+          <Text style={styles.lightText}>{description}</Text>
+          <Text style={styles.mainText}>{fieldInfo}</Text>
+        </View>
         {/* // es-lint-disable-next-line */}
-        <Image source={require("../../assets/Vector.png")} style={styles.arrow} />
+        {editable && <Image source={require("../../assets/editPencil.png")} style={styles.arrow} />}
       </View>
-    </TouchableOpacity>
+    </ContainerComponent>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
     width: "100%",
-    alignSelf: "center",
     backgroundColor: "#ffffff",
     borderBottomColor: "#CDCDCD",
     flexDirection: "row"
   },
-  imageStyle: {
-    width: 38,
-    height: 39,
-    alignSelf: "center"
+  container2: {
+    paddingVertical: 15,
+    flexDirection: "column"
   },
-  mainText: {
-    verticalAlign: "middle",
-    margin: "auto",
-    alignSelf: "center",
-    padding: 10,
+  lightText: {
+    color: "#8A8A8A",
     fontFamily: "DMSansRegular",
     fontWeight: "400",
     fontSize: 17
   },
+  mainText: {
+    verticalAlign: "middle",
+    fontFamily: "DMSansRegular",
+    fontWeight: "400",
+    fontSize: 17,
+    paddingTop: 5
+  },
   arrow: {
-    width: 8,
-    height: 15,
+    width: 18,
+    height: 18,
     alignSelf: "center",
     right: 20,
     position: "absolute"
