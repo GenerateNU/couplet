@@ -1,7 +1,8 @@
 /* eslint-disable */
-
 import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
 import { useFonts } from "expo-font";
+import { router } from "expo-router";
+import * as SecureStorage from "expo-secure-store";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -24,6 +25,11 @@ export default function SettingsCard({
   if (!fontsLoaded) {
     return null;
   }
+
+  const handleLogout = async () => {
+    await SecureStorage.deleteItemAsync("appleAuth");
+    router.push("/");
+  };
 
   return (
     <TouchableOpacity onPress={onPress}>

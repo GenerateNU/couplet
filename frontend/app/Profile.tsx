@@ -8,7 +8,11 @@ import PurpleProfileCard from "../components/Profile/PurpleProfileCard";
 import SettingsCard from "../components/Profile/SettingsCard";
 import UserDetails from "../components/Profile/UserDetails";
 
-/* // eslint-disable global-require */
+import GEAR from "../assets/gear.png";
+import HELP from "../assets/help.png";
+import INFO from "../assets/info.png";
+import LOGOUT from "../assets/lougout.png";
+
 export default function Profile() {
   return (
     <SafeAreaView style={{ flex: 1, gap: 15 }}>
