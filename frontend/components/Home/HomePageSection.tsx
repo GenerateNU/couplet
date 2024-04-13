@@ -1,12 +1,23 @@
+import { router } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import scaleStyleSheet from "../../scaleStyles";
 import HomeEventCard from "./HomeEventCard";
 
 export default function HomePageSection({ title, events }: { title: string; events: any[] }) {
   return (
     <View style={{ marginTop: 32 }}>
-      <Text style={scaledStyles.sectionTitle}>{`${title} >`} </Text>
+      <TouchableOpacity
+        onPress={() =>
+          router.push({
+            pathname: "Collection",
+            params: { collectionId: "" }
+          })
+        }
+      >
+        <Text style={scaledStyles.sectionTitle}>{`${title} >`} </Text>
+      </TouchableOpacity>
       <View style={{ flexDirection: "row" }}>
         <ScrollView horizontal>
           {events.map((event) => (

@@ -6,6 +6,7 @@ import (
 	"couplet/internal/database/event_swipe"
 	"couplet/internal/database/org"
 	"couplet/internal/database/user"
+	"couplet/internal/database/user_match"
 	"couplet/internal/database/user_swipe"
 	"errors"
 	"fmt"
@@ -73,7 +74,7 @@ func Migrate(db *gorm.DB) error {
 		}
 	}
 	// Add new models here to ensure they are migrated on startup
-	allModels := []interface{}{&user.User{}, &org.OrgTag{}, &org.Org{}, &event.EventTag{}, &event.Event{}, &event_swipe.EventSwipe{}, &user_swipe.UserSwipe{}}
+	allModels := []interface{}{&user.User{}, &org.OrgTag{}, &org.Org{}, &event.EventTag{}, &event.Event{}, &event_swipe.EventSwipe{}, &user_swipe.UserSwipe{}, &user_match.UserMatch{}}
 	return db.Debug().AutoMigrate(allModels...)
 }
 

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Navbar from "../components/Layout/Navbar";
@@ -8,7 +6,11 @@ import SettingsCard from "../components/Profile/SettingsCard";
 import PurpleProfileCard from "./PurpleProfileCard";
 import UserDetails from "./UserDetails";
 
-/* // eslint-disable global-require */
+import GEAR from "../assets/gear.png";
+import HELP from "../assets/help.png";
+import INFO from "../assets/info.png";
+import LOGOUT from "../assets/lougout.png";
+
 export default function Profile() {
   return (
     <View style={{ flex: 1, gap: 15 }}>
@@ -38,13 +40,13 @@ export default function Profile() {
       <View style={{ width: "100%" }}>
         <CardWrapper>
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Settings" img={require("../assets/gear.png")} />
+          <SettingsCard text="Settings" img={GEAR} />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Help and Support" img={require("../assets/help.png")} />
+          <SettingsCard text="Help and Support" img={HELP} />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="About Couplet" img={require("../assets/info.png")} />
+          <SettingsCard text="About Couplet" img={INFO} />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Log Out" img={require("../assets/lougout.png")} last />
+          <SettingsCard text="Log Out" img={LOGOUT} last />
         </CardWrapper>
       </View>
       <Navbar activePage="Profile" />

@@ -29,7 +29,7 @@ function ProfileNotifications() {
   async function goToNextPage() {
     const userData: userDataProps = {
       firstName: userState.name,
-      lastName: "GET LAST NAME FROM AUTH", // Weird bug, if this is empty will throw an error
+      lastName: "GET LAST NAME FROM AUTH",
       age: calculateAge(new Date(userState.birthday)),
       bio: userState.promptBio,
       images: userState.photos.map((photo) => photo.filePath)

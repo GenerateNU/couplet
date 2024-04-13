@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { IconButton } from "react-native-paper";
 import { getEventById } from "../../api/events";
 import scaleStyleSheet from "../../scaleStyles";
 import Reaction from "../Reaction/Reaction";
@@ -27,15 +26,7 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
   return (
     <View>
       <View style={scaledStyles.eventContentContainer}>
-        <IconButton
-          icon="arrow-left-drop-circle"
-          style={{ marginLeft: -10 }}
-          size={24}
-          onPress={() => router.push("/Home")}
-        />
-        <Text style={{ fontSize: 32, marginBottom: 10, fontFamily: "DMSansMedium" }}>
-          {event?.name}
-        </Text>
+        <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={scaledStyles.eventImageContainer}>
             <EventImageCarousel images={event?.images || []} />
@@ -51,12 +42,18 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
 }
 const styles = StyleSheet.create({
   eventContentContainer: {
-    paddingHorizontal: 20,
-    height: "100%",
-    width: "100%"
+    paddingHorizontal: 20
   },
   eventImageContainer: {
     marginBottom: 10
+  },
+  title: {
+    fontFamily: "DMSansMedium",
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 32,
+    marginTop: 16,
+    marginBottom: 16
   },
   reactionContainer: {
     position: "absolute",
