@@ -1,12 +1,13 @@
 /* eslint-disable */
 import { router } from "expo-router";
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, View } from "react-native";
 import Navbar from "../components/Layout/Navbar";
 import CardWrapper from "../components/Profile/CardWrapper";
 import PurpleProfileCard from "../components/Profile/PurpleProfileCard";
 import SettingsCard from "../components/Profile/SettingsCard";
 import UserDetails from "../components/Profile/UserDetails";
+import * as SecureStorage from "expo-secure-store";
 
 import GEAR from "../assets/gear.png";
 import HELP from "../assets/help.png";
@@ -14,6 +15,10 @@ import INFO from "../assets/info.png";
 import LOGOUT from "../assets/lougout.png";
 
 export default function Profile() {
+  const handleLogout = async () => {
+    await SecureStorage.deleteItemAsync("appleAuth");
+    router.push("/");
+  };
   return (
     <SafeAreaView style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
@@ -63,9 +68,10 @@ export default function Profile() {
           <SettingsCard
             text="Settings"
             img={require("../assets/redSettings.png")}
-            last
             onPress={() => router.push("ProfileScreens/Settings")}
+            last
           />
+          <Button title="Logout" onPress={handleLogout} color="red" />
         </CardWrapper>
       </View>
       <Navbar activePage="Profile" />
