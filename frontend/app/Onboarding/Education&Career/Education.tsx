@@ -10,6 +10,7 @@ import scaleStyleSheet from "../../../scaleStyles";
 import { setSchool } from "../../../state/formSlice";
 import { useAppDispatch } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const SCHOOL = require("../../../assets/school.png");
 
@@ -46,6 +47,7 @@ function Education() {
       <KeyboardAvoidingView
         style={scaledStyles.avoidContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={screenHeight * 0.1}
       >
         <View style={scaledStyles.mainContainer}>
           <View>

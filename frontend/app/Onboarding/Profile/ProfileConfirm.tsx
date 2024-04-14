@@ -1,65 +1,87 @@
-import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import gradient from "../../../assets/gradient.png";
+import logo from "../../../assets/logo.png";
 import COLORS from "../../../colors";
 import scaleStyleSheet from "../../../scaleStyles";
 
 export default function ProfileConfirm() {
   return (
-    <LinearGradient
-      colors={[COLORS.primary, "orange", COLORS.primary]}
-      style={styles.linearGradient}
-      end={{ x: 0, y: 0 }}
-      start={{ x: 1, y: 1 }}
-    >
-      <View style={scaledStyles.container}>
-        <View style={{ flexDirection: "column", alignItems: "center" }}>
-          <Text style={styles.welcomeHeader}>Welcome to Couplet</Text>
-          <Text style={styles.welcomeText}>Like 5 Events you want to go to</Text>
-          <TouchableOpacity
-            onPress={() => {
-              router.push("Profile");
-            }}
-            disabled={false}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Let&apos;s Get Started</Text>
-          </TouchableOpacity>
+    <ImageBackground source={gradient} style={{ flex: 1 }} resizeMode="cover">
+      <SafeAreaView style={scaledStyles.outerView}>
+        <View>
+          <View style={scaledStyles.titleImageView}>
+            <Text style={scaledStyles.coupletText}>Your profile is set.</Text>
+            <Text style={scaledStyles.helperText}>Now onto the fun part, lets get you a date!</Text>
+            <Image style={scaledStyles.coupletLogo} source={logo} />
+          </View>
+          {/* Buttons */}
+          <View>
+            <TouchableOpacity
+              style={scaledStyles.button}
+              onPress={() => {
+                router.push("/Home");
+              }}
+            >
+              <Text style={scaledStyles.helperText}>Let&apos;s check out some events</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </LinearGradient>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
+  outerView: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    flex: 1
   },
-  welcomeHeader: {
+  coupletLogo: {
+    shadowColor: COLORS.white,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 10,
+    shadowOpacity: 0.5
+  },
+  titleImageView: {
+    alignItems: "center",
+    marginBottom: 20
+  },
+  coupletText: {
     fontFamily: "DMSansBold",
-    textAlign: "center",
-    fontSize: 24,
-    marginBottom: 10
+    fontSize: 32,
+    color: COLORS.white,
+    shadowColor: COLORS.white,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 25,
+    shadowOpacity: 1
   },
-  welcomeText: {
-    fontFamily: "DMSansRegular",
-    textAlign: "center",
-    fontSize: 16,
-    marginBottom: 10
+  helperText: {
+    fontSize: 17,
+    fontWeight: "400",
+    lineHeight: 30,
+    letterSpacing: -0.12,
+    fontFamily: "DMSansMedium",
+    color: COLORS.white
   },
   button: {
     width: 330,
     height: 41,
-    paddingVertical: 10,
     borderRadius: 65,
     borderWidth: 1,
-    borderColor: COLORS.white,
-    backgroundColor: COLORS.white,
-    shadowColor: "#000",
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 2
@@ -69,21 +91,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     justifyContent: "center",
     alignItems: "center"
-  },
-  buttonText: {
-    fontFamily: "DMSansMedium",
-    fontSize: 16,
-    fontWeight: "500",
-    lineHeight: 21,
-    textAlign: "left",
-    color: COLORS.primary,
-    height: 21
-  },
-  linearGradient: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-    width: "100%"
   }
 });
 

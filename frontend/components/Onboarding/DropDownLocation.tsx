@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
+import { screenHeight } from "../../utils/dimensions";
 import bostonNeighborhoods from "../../utils/location";
 
 interface DropDownLocationProps {
@@ -31,6 +32,7 @@ function DropDownLocation({ onLocationChange, selectedLocation }: DropDownLocati
         setOpen={setOpen}
         setValue={setValue}
         placeholder="Select a neighborhood"
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
     </View>
   );

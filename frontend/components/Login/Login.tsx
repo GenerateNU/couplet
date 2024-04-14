@@ -53,6 +53,7 @@ export default function Login() {
           AppleAuthentication.AppleAuthenticationScope.EMAIL
         ]
       });
+
       await SecureStore.setItemAsync("appleAuth", creds.user);
       router.push("Home");
       setIsAppleLoggedIn(true);
