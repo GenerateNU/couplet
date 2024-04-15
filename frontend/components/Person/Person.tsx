@@ -1,20 +1,13 @@
-import { faBriefcase, faGraduationCap, faHouse, faRuler } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import HeaderScrollView from "react-native-header-scroll-view";
-import type { paths } from "../../api/schema"
-import EventCardItem from "../Event/EventCardItem";
-import Reaction from "../Reaction/Reaction";
-import InfoChips from "./InfoChips";
-import Lifestyle from "./Lifestyle";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import type { paths } from "../../api/schema";
 import { getUserById } from "../../api/users";
 
 const INSTAGRAM_ICON = require("../../assets/instagram.png");
 
 const BLURRED_IG_USER = require("../../assets/blurredIgUser.png");
 
-type User = paths["/users/{id}"]["get"]["responses"]["200"]["content"]["application/json"]
+type User = paths["/users/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
 interface PersonProps {
   id: string;
@@ -23,12 +16,7 @@ interface PersonProps {
   handleReact?: (like: boolean) => void;
 }
 
-export default function Person({
-  id,
-  isMatched,
-  likesYou,
-  handleReact
-}: PersonProps) {
+export default function Person({ id, isMatched, likesYou, handleReact }: PersonProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<User | null>(null);
 
@@ -40,16 +28,16 @@ export default function Person({
         // pronouns, location, school, work, height, bioQuestion, interests, relationshipType,
         // religion, politicalAffiliation, alcoholFrequency, smokingFrequency, drugFrequency, cannabisFrequency,
         // instagramUsername, mutualEvents, and captions
-        const res = await getUserById({id})
+        const res = await getUserById({ id });
         setProfile(res);
       } catch (error) {
-        throw new Error(String(error))
+        throw new Error(String(error));
       }
       setIsLoading(false);
-    }
+    };
 
     load();
-  }, [id])
+  }, [id]);
 
   // const heightText = height ? `${height.feet}'${height.inches}"` : "";
 
@@ -61,7 +49,7 @@ export default function Person({
     );
   }
 
-  const userNotFound = <Text>User not found :(</Text>
+  const userNotFound = <Text>User not found :(</Text>;
 
   return userNotFound;
 
@@ -185,8 +173,8 @@ export default function Person({
 }
 
 Person.defaultProps = {
-  handleReact: () => {},
-}
+  handleReact: () => {}
+};
 
 const styles = StyleSheet.create({
   headerStyle: {

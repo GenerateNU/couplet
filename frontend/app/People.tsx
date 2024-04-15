@@ -7,7 +7,7 @@ export default function People() {
   return (
     // TODO: GET THE ID
     <View style={{ flex: 1, justifyContent: "space-between" }}>
-      <PeopleStack/>
+      <PeopleStack />
       <Navbar activePage="" />
     </View>
   );
