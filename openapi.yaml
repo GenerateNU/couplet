@@ -13,42 +13,79 @@ paths:
       parameters:
         - name: limit
           in: query
-          required: true
           description: The number of events to return
           schema:
             type: integer
-            format: int
+            format: uint8
             minimum: 1
             default: 10
             example: 20
         - name: offset
           in: query
-          required: true
           description: The number of events to skip
           schema:
             type: integer
-            format: int
+            format: uint32
             default: 0
             example: 13
       responses:
-        '200':
+        "200":
           description: Successfully retrieved events
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - properties:
-                        id:
-                          type: string
-                          format: uuid
-                          example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    - $ref: '#/components/schemas/Event'
-                    - required:
-                        - id
-                        - name
-                        - bio
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - bio
+                    # TODO - address
+                    - images
+                    # TODO - externalLink
+                    - tags
+                    - orgId
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    name:
+                      type: string
+                      minLength: 1
+                      example: The Big Event
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: Come to the Big Event and have a good time!
+                    address:
+                      $ref: "#/components/schemas/Address"
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 4
+                      maxItems: 4
+                    externalLink:
+                      type: string
+                      format: uri
+                      example: https://example.com
+                    tags:
+                      type: array
+                      maxItems: 5
+                      items:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        example: arts
+                    orgId:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
     post:
       summary: Create a new event
       requestBody:
@@ -57,29 +94,107 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/Event"
-                - required:
-                    - name
-                    - bio
-                    - orgId
+              type: object
+              required:
+                - name
+                - bio
+                # TODO - address
+                - images
+                # TODO - externalLink
+                - tags
+                - orgId
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Big Event
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Come to the Big Event and have a good time!
+                address:
+                  $ref: "#/components/schemas/Address"
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
+                externalLink:
+                  type: string
+                  format: uri
+                  example: https://example.com
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: arts
+                orgId:
+                  type: string
+                  format: uuid
+                  example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
         "201":
           description: Successfully created event
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Event"
-                  - required:
-                      - id
-                      - name
-                      - bio
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
         "400":
           $ref: "#/components/responses/BadRequest"
   /events/{id}:
@@ -100,17 +215,56 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Event"
-                  - required:
-                      - id
-                      - name
-                      - bio
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -125,24 +279,63 @@ paths:
             format: uuid
             example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
-        '200':
+        "200":
           description: Successfully retrieved event
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
-                  - required:
-                      - id
-                      - name
-                      - bio
-        '404':
-          $ref: '#/components/responses/NotFound'
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       summary: Partially update an event by its ID
       parameters:
@@ -160,28 +353,103 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Event'
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Big Event
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Come to the Big Event and have a good time!
+                address:
+                  $ref: "#/components/schemas/Address"
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
+                externalLink:
+                  type: string
+                  format: uri
+                  example: https://example.com
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: arts
+                orgId:
+                  type: string
+                  format: uuid
+                  example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
-        '200':
+        "200":
           description: Successfully updated event
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
-                  - required:
-                      - id
-                      - name
-                      - bio
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update an event by its ID if it exists, else create it
       parameters:
@@ -199,46 +467,164 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/Event'
-                - required:
-                    - name
-                    - bio
+              type: object
+              required:
+                - name
+                - bio
+                # TODO - address
+                - images
+                # TODO - externalLink
+                - tags
+                - orgId
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Big Event
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Come to the Big Event and have a good time!
+                address:
+                  $ref: "#/components/schemas/Address"
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
+                externalLink:
+                  type: string
+                  format: uri
+                  example: https://example.com
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: arts
+                orgId:
+                  type: string
+                  format: uuid
+                  example: 5e91507e-5630-4efd-9fd4-799178870b10
       responses:
-        '200':
-          description: Successfully updated event
+        "200":
+          description: Successfully saved event
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
-                  - required:
-                      - id
-                      - name
-                      - bio
-        '201':
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+        "201":
           description: Successfully created event
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: '#/components/schemas/Event'
-                  - required:
-                      - id
-                      - name
-                      - bio
-        '400':
-          $ref: '#/components/responses/BadRequest'
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  # TODO - address
+                  - images
+                  # TODO - externalLink
+                  - tags
+                  - orgId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Big Event
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Come to the Big Event and have a good time!
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
+                  externalLink:
+                    type: string
+                    format: uri
+                    example: https://example.com
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: arts
+                  orgId:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /events/swipes:
     post:
       summary: Create a swipe between a user and an event
@@ -293,18 +679,43 @@ paths:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - properties:
-                        id:
-                          type: string
-                          format: uuid
-                          example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    - $ref: "#/components/schemas/Org"
-                    - required:
-                        - id
-                        - name
-                        - bio
-                        - tags
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - bio
+                    - images
+                    - tags
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    name:
+                      type: string
+                      minLength: 1
+                      example: The Events Company
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: We connect people through events
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 1
+                      maxItems: 4
+                    tags:
+                      type: array
+                      maxItems: 5
+                      items:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        example: nonprofit
     post:
       summary: Create a new organization
       requestBody:
@@ -313,29 +724,81 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/Org"
-                - required:
-                    - name
-                    - bio
+              type: object
+              required:
+                - name
+                - bio
+                - images
+                - tags
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Events Company
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: We connect people through events
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 1
+                  maxItems: 4
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: nonprofit
       responses:
         "201":
           description: Successfully created organization
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  - images
+                  - tags
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Events Company
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: We connect people through events
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 1
+                    maxItems: 4
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: nonprofit
         "400":
           $ref: "#/components/responses/BadRequest"
   /orgs/{id}:
@@ -356,18 +819,43 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  - images
+                  - tags
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Events Company
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: We connect people through events
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 1
+                    maxItems: 4
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: nonprofit
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -387,18 +875,43 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  - images
+                  - tags
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Events Company
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: We connect people through events
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 1
+                    maxItems: 4
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: nonprofit
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -418,25 +931,76 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Org"
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Events Company
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: We connect people through events
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 1
+                  maxItems: 4
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: nonprofit
       responses:
         "200":
           description: Successfully updated organization
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  - images
+                  - tags
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Events Company
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: We connect people through events
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 1
+                    maxItems: 4
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: nonprofit
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -458,47 +1022,81 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/Org"
-                - required:
-                    - name
-                    - bio
-                    - tags
+              type: object
+              required:
+                - name
+                - bio
+                - images
+                - tags
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: The Events Company
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: We connect people through events
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 1
+                  maxItems: 4
+                tags:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: nonprofit
       responses:
         "200":
-          description: Successfully updated organization
+          description: Successfully saved organization
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
-        "201":
-          description: Successfully created organization
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/Org"
-                  - required:
-                      - id
-                      - name
-                      - bio
-                      - tags
+                type: object
+                required:
+                  - id
+                  - name
+                  - bio
+                  - images
+                  - tags
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  name:
+                    type: string
+                    minLength: 1
+                    example: The Events Company
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: We connect people through events
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 1
+                    maxItems: 4
+                  tags:
+                    type: array
+                    maxItems: 5
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: nonprofit
         "400":
           $ref: "#/components/responses/BadRequest"
   /users:
@@ -530,18 +1128,45 @@ paths:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - properties:
-                        id:
-                          type: string
-                          format: uuid
-                          example: 5e91507e-5630-4efd-9fd4-799178870b10
-                    - $ref: "#/components/schemas/User"
-                    - required:
-                        - id
-                        - firstName
-                        - lastName
-                        - age
+                  type: object
+                  required:
+                    - id
+                    - firstName
+                    - lastName
+                    - age
+                    - bio
+                    - images
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    firstName:
+                      type: string
+                      minLength: 1
+                      example: Bob
+                    lastName:
+                      type: string
+                      minLength: 1
+                      example: Smith
+                    age:
+                      type: integer
+                      format: uint8
+                      minimum: 18
+                      example: 22
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: Hello! I'm excited to experience events!
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 4
+                      maxItems: 4
     post:
       summary: Create a new user
       requestBody:
@@ -550,30 +1175,85 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/User"
-                - required:
-                    - firstName
-                    - lastName
-                    - age
+              type: object
+              required:
+                - firstName
+                - lastName
+                - age
+                - bio
+                - images
+              properties:
+                firstName:
+                  type: string
+                  minLength: 1
+                  example: Bob
+                lastName:
+                  type: string
+                  minLength: 1
+                  example: Smith
+                age:
+                  type: integer
+                  format: uint8
+                  minimum: 18
+                  example: 22
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Hello! I'm excited to experience events!
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
       responses:
         "201":
           description: Successfully created user
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                type: object
+                required:
+                  - id
+                  - firstName
+                  - lastName
+                  - age
+                  - bio
+                  - images
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  firstName:
+                    type: string
+                    minLength: 1
+                    example: Bob
+                  lastName:
+                    type: string
+                    minLength: 1
+                    example: Smith
+                  age:
+                    type: integer
+                    format: uint8
+                    minimum: 18
+                    example: 22
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Hello! I'm excited to experience events!
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/{id}:
@@ -594,18 +1274,45 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                type: object
+                required:
+                  - id
+                  - firstName
+                  - lastName
+                  - age
+                  - bio
+                  - images
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  firstName:
+                    type: string
+                    minLength: 1
+                    example: Bob
+                  lastName:
+                    type: string
+                    minLength: 1
+                    example: Smith
+                  age:
+                    type: integer
+                    format: uint8
+                    minimum: 18
+                    example: 22
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Hello! I'm excited to experience events!
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
         "404":
           $ref: "#/components/responses/NotFound"
     get:
@@ -625,18 +1332,45 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                type: object
+                required:
+                  - id
+                  - firstName
+                  - lastName
+                  - age
+                  - bio
+                  - images
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  firstName:
+                    type: string
+                    minLength: 1
+                    example: Bob
+                  lastName:
+                    type: string
+                    minLength: 1
+                    example: Smith
+                  age:
+                    type: integer
+                    format: uint8
+                    minimum: 18
+                    example: 22
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Hello! I'm excited to experience events!
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
@@ -656,25 +1390,79 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  minLength: 1
+                  example: Bob
+                lastName:
+                  type: string
+                  minLength: 1
+                  example: Smith
+                age:
+                  type: integer
+                  format: uint8
+                  minimum: 18
+                  example: 22
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Hello! I'm excited to experience events!
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
       responses:
         "200":
           description: Successfully updated user
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                type: object
+                required:
+                  - id
+                  - firstName
+                  - lastName
+                  - age
+                  - bio
+                  - images
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  firstName:
+                    type: string
+                    minLength: 1
+                    example: Bob
+                  lastName:
+                    type: string
+                    minLength: 1
+                    example: Smith
+                  age:
+                    type: integer
+                    format: uint8
+                    minimum: 18
+                    example: 22
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Hello! I'm excited to experience events!
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -696,47 +1484,85 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/User"
-                - required:
-                    - firstName
-                    - lastName
-                    - age
+              type: object
+              required:
+                - firstName
+                - lastName
+                - age
+                - bio
+                - images
+              properties:
+                firstName:
+                  type: string
+                  minLength: 1
+                  example: Bob
+                lastName:
+                  type: string
+                  minLength: 1
+                  example: Smith
+                age:
+                  type: integer
+                  format: uint8
+                  minimum: 18
+                  example: 22
+                bio:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: Hello! I'm excited to experience events!
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                    example: https://example.com/image.png
+                  minItems: 4
+                  maxItems: 4
       responses:
         "200":
-          description: Successfully updated user
+          description: Successfully saved user
           content:
             application/json:
               schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
-        "201":
-          description: Successfully created user
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 5e91507e-5630-4efd-9fd4-799178870b10
-                  - $ref: "#/components/schemas/User"
-                  - required:
-                      - id
-                      - firstName
-                      - lastName
-                      - age
+                type: object
+                required:
+                  - id
+                  - firstName
+                  - lastName
+                  - age
+                  - bio
+                  - images
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 5e91507e-5630-4efd-9fd4-799178870b10
+                  firstName:
+                    type: string
+                    minLength: 1
+                    example: Bob
+                  lastName:
+                    type: string
+                    minLength: 1
+                    example: Smith
+                  age:
+                    type: integer
+                    format: uint8
+                    minimum: 18
+                    example: 22
+                  bio:
+                    type: string
+                    minLength: 1
+                    maxLength: 255
+                    example: Hello! I'm excited to experience events!
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                      example: https://example.com/image.png
+                    minItems: 4
+                    maxItems: 4
         "400":
           $ref: "#/components/responses/BadRequest"
   /users/swipes:
@@ -758,6 +1584,7 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+
   /recommendation/events:
     get:
       summary: "Get recommended events for a user"
@@ -858,6 +1685,21 @@ paths:
       responses:
         '200':
           description: Successfully retrieved user recommendations
+  /matches/{id}:
+    get:
+      summary: Get a user's matches
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to get matches of
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5e91507e-5630-4efd-9fd4-799178870b10
+      responses:
+        "200":
+          description: Successfully retrieved matches
           content:
             application/json:
               schema:
@@ -873,8 +1715,58 @@ paths:
                             type: string
                             format: uuid
                           description: IDs of the events that both users have in common
-
-
+                  type: object
+                  required:
+                    - id
+                    - createdAt
+                    - updatedAt
+                    - firstName
+                    - lastName
+                    - age
+                    - bio
+                    - images
+                    - viewed
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2018-03-20T09:12:28Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: "2018-03-20T09:12:28Z"
+                    firstName:
+                      type: string
+                      minLength: 1
+                      example: Bob
+                    lastName:
+                      type: string
+                      minLength: 1
+                      example: Smith
+                    age:
+                      type: integer
+                      format: uint8
+                      minimum: 18
+                      example: 22
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: Hello! I'm excited to experience events!
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 4
+                      maxItems: 4
+                    viewed:
+                      type: boolean
 components:
   responses:
     BadRequest:
@@ -1096,4 +1988,3 @@ components:
         liked:
           type: boolean
           example: true
-...

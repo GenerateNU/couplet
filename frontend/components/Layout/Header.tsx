@@ -1,39 +1,33 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import scaleStyleSheet from "../../scaleStyles";
 
 export default function Header() {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "center",
-        padding: 20
-      }}
-    >
-      <Text
-        style={{
-          color: "black",
-          justifyContent: "center",
-          textAlign: "left",
-          width: "100%",
-          fontSize: 20,
-          fontFamily: "DMSansRegular"
-        }}
-      >
-        Couplet
-      </Text>
+    <View style={scaledStyles.header}>
+      <Text style={scaledStyles.text}>Couplet</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "white",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingTop: 16,
+    paddingBottom: 12
+  },
+  text: {
+    color: "black",
+    justifyContent: "center",
+    textAlign: "left",
+    width: "100%",
+    fontSize: 32,
+    fontFamily: "DMSansMedium",
+    fontWeight: "700"
+  }
+});
+
+const scaledStyles = scaleStyleSheet(styles);

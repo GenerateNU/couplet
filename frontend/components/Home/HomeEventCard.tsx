@@ -1,92 +1,81 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
-
-const PIN = require("../../assets/pin.png");
-const COIN = require("../../assets/coin.png");
+import { Image, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Icon } from "react-native-paper";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
 type HomeEventCardProps = {
   id: string;
   name: string;
+  image: string;
   // TODO: we need Location and Cost, but these aren't in the endpoint response yet
 };
 
-export default function HomeEventCard({ id, name }: HomeEventCardProps) {
-  const router = useRouter();
-
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-
+export default function HomeEventCard({ id, name, image }: HomeEventCardProps) {
   return (
-    <Pressable
-      onPress={() => {
-        router.push("Event");
-        router.setParams({ eventId: id });
-      }}
+    <TouchableOpacity
+      onPress={() => router.push({ pathname: "Event", params: { collectionId: "", eventId: id } })}
     >
-      <View
-        style={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "black",
-          borderRadius: 10,
-          marginRight: 10
-        }}
-      >
-        {/* <Image source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} style={{width: 150, height: 150}} /> */}
-        <View
-          style={{
-            width: "100%",
-            height: 150,
-            backgroundColor: "rgb(200,200,200)",
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10
-          }}
-        />
-        <View>
-          <Text
-            style={{ textAlign: "center", padding: 10, fontSize: 14, fontFamily: "DMSansRegular" }}
-          >
+      <View style={styles.card}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={scaledStyles.image} />
+        </View>
+        <View style={scaledStyles.textContainer}>
+          <Text style={scaledStyles.titleText} numberOfLines={2} ellipsizeMode="tail">
             {name}
           </Text>
-          <View style={{ flexDirection: "row", padding: 10, borderRadius: 20, paddingTop: 0 }}>
-            <Image source={PIN} style={{ width: 20, height: 20 }} />
-            <Text
-              style={{
-                textAlign: "center",
-                justifyContent: "center",
-                verticalAlign: "middle",
-                marginTop: 2,
-                fontFamily: "DMSansRegular"
-              }}
-            >
-              Frog Pond
-              {/* TODO - replace with actual location */}
-            </Text>
-            <Image source={COIN} style={{ width: 20, height: 20, marginLeft: 10 }} />
-            <Text
-              style={{
-                textAlign: "center",
-                justifyContent: "center",
-                verticalAlign: "middle",
-                marginTop: 2,
-                marginHorizontal: 2,
-                fontFamily: "DMSansRegular"
-              }}
-            >
-              $$
-              {/* TODO - replace with actual cost */}
-            </Text>
-            <View />
+          <View style={styles.row}>
+            <Icon source="map-marker" size={20} color={COLORS.darkPurple} />
+            <Text style={styles.text}>Frog Pond</Text>
+          </View>
+          <View style={styles.row}>
+            <Icon source="currency-usd" size={20} color={COLORS.darkPurple} />
+            <Text style={styles.text}>$5</Text>
           </View>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    width: 166,
+    marginRight: 10,
+    paddingBottom: 5,
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4
+  },
+  imageContainer: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "rgb(200,200,200)",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+  },
+  textContainer: {
+    height: 96
+  },
+  image: { width: 166, height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+  row: {
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    borderRadius: 20
+  },
+  titleText: { padding: 10, fontSize: 15, fontWeight: "500", fontFamily: "DMSansMedium" },
+  text: {
+    marginTop: 2,
+    fontFamily: "DMSansRegular",
+    fontSize: 12,
+    fontWeight: "400"
+  }
+});
+
+const scaledStyles = scaleStyleSheet(styles);

@@ -4,125 +4,160 @@ import (
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
-	"time"
+	"errors"
+	"fmt"
 
-	"github.com/google/uuid"
+	"gorm.io/gorm/clause"
 )
 
-// Gets all the users in the database based on the limit and offset
-func (c Controller) GetUsers(limit uint8, offset uint32) ([]user.User, error) {
-	var users []user.User
-	err := c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
-	if err != nil {
-		return nil, err
+// Creates a new user in the database
+func (c Controller) CreateUser(params user.User) (u user.User, valErr error, txErr error) {
+	u = params
+	var timestampErr error
+	if u.UpdatedAt.Before(u.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
 	}
-	return users, nil
-}
-
-// Creates a new user.
-func (c Controller) CreateUser(firstName string, lastName string, age uint8, images []user.UserImage) (user.User, error) {
-	u := user.User{
-		ID:        user_id.Wrap(uuid.New()),
-		FirstName: firstName,
-		LastName:  lastName,
-		Age:       age,
-		Images:    images,
+	var firstNameLengthErr error
+	if len(u.FirstName) < 1 || 255 < len(u.FirstName) {
+		firstNameLengthErr = fmt.Errorf("invalid first name length of %d, must be in range [1,255]", len(u.FirstName))
+	}
+	var lastNameLengthErr error
+	if len(u.LastName) < 1 || 255 < len(u.LastName) {
+		lastNameLengthErr = fmt.Errorf("invalid last name length of %d, must be in range [1,255]", len(u.LastName))
+	}
+	var ageLimitErr error
+	if u.Age < 18 {
+		ageLimitErr = fmt.Errorf("invalid age of %d, must be 18 or greater", u.Age)
+	}
+	var bioLengthErr error
+	if len(u.Bio) < 1 || 255 < len(u.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(u.Bio))
+	}
+	var imageCountErr error
+	if len(u.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(u.Images))
+	}
+	valErr = errors.Join(timestampErr, firstNameLengthErr, lastNameLengthErr, ageLimitErr, bioLengthErr, imageCountErr)
+	if valErr != nil {
+		return
 	}
 
 	tx := c.database.Begin()
-
-	result := tx.Create(&u)
-
-	if result.Error != nil {
+	txErr = tx.Create(&u).Error
+	if txErr != nil {
 		tx.Rollback()
-		return user.User{}, result.Error
+		return
 	}
-
 	tx.Commit()
-	return u, nil
-}
-
-func (c Controller) SaveUser(updatedUser user.User, id user_id.UserID) (*user.User, error) {
-	var user user.User
-
-	tx := c.database.Begin()
-	err := tx.First(&user, "id = ?", id).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	userUpdates := make(map[string]interface{})
-
-	userUpdates["UpdatedAt"] = time.Now()
-	userUpdates["Images"] = updatedUser.Images
-
-	if updatedUser.FirstName != "" {
-		userUpdates["FirstName"] = updatedUser.FirstName
-	}
-
-	if updatedUser.LastName != "" {
-		userUpdates["LastName"] = updatedUser.LastName
-	}
-
-	if updatedUser.Age > 0 {
-		userUpdates["Age"] = updatedUser.Age
-	}
-
-	if err := tx.Model(&user).Updates(userUpdates).Error; err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	tx.Commit()
-	return &user, nil
-}
-
-// Gets a user from the database by their ID
-func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
-	txErr = c.database.First(&u, id).Error
 	return
 }
 
 // Deletes a user from the database by its ID
 func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
-	// TODO: Do this in one transaction
+	u.ID = id
+
 	tx := c.database.Begin()
-
-	u, txErr = c.GetUser(id)
+	txErr = tx.Clauses(clause.Returning{}).Delete(&u).Error
 	if txErr != nil {
 		tx.Rollback()
 		return
 	}
-
-	txErr = tx.Delete(&u).Error
-	if txErr != nil {
-		tx.Rollback()
-		return
-	}
-
 	tx.Commit()
 	return
 }
 
-// Updates a user in the database
-func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
-	// TODO: Write tests
-	u = params
-	valErr = u.Validate()
+// Gets a user from the database by its ID
+func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
+	txErr = c.database.First(&u, id).Error
+	return
+}
 
-	tx := c.database.Begin()
+// Gets several users from the database with pagination
+func (c Controller) GetUsers(limit uint8, offset uint32) (users []user.User, txErr error) {
+	txErr = c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
+	return
+}
+
+// Creates a new user or updates an existing user in the database
+func (c Controller) SaveUser(params user.User) (u user.User, valErr error, txErr error) {
+	u = params
+	var timestampErr error
+	if u.UpdatedAt.Before(u.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
+	}
+	var firstNameLengthErr error
+	if len(u.FirstName) < 1 || 255 < len(u.FirstName) {
+		firstNameLengthErr = fmt.Errorf("invalid first name length of %d, must be in range [1,255]", len(u.FirstName))
+	}
+	var lastNameLengthErr error
+	if len(u.LastName) < 1 || 255 < len(u.LastName) {
+		lastNameLengthErr = fmt.Errorf("invalid last name length of %d, must be in range [1,255]", len(u.LastName))
+	}
+	var ageLimitErr error
+	if u.Age < 18 {
+		ageLimitErr = fmt.Errorf("invalid age of %d, must be 18 or greater", u.Age)
+	}
+	var bioLengthErr error
+	if len(u.Bio) < 1 || 255 < len(u.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(u.Bio))
+	}
+	var imageCountErr error
+	if len(u.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(u.Images))
+	}
+	valErr = errors.Join(timestampErr, firstNameLengthErr, lastNameLengthErr, ageLimitErr, bioLengthErr, imageCountErr)
 	if valErr != nil {
-		tx.Rollback()
 		return
 	}
 
-	txErr = tx.Updates(&u).Error
+	tx := c.database.Begin()
+	txErr = tx.Save(&u).Error
 	if txErr != nil {
 		tx.Rollback()
 		return
 	}
+	tx.Commit()
+	return
+}
 
+// Update one or many fields of an existing user in the database
+func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
+	u = params
+	var timestampErr error
+	if u.UpdatedAt.Before(u.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
+	}
+	var firstNameLengthErr error
+	if 255 < len(u.FirstName) {
+		firstNameLengthErr = fmt.Errorf("invalid first name length of %d, must be in range [1,255]", len(u.FirstName))
+	}
+	var lastNameLengthErr error
+	if 255 < len(u.LastName) {
+		lastNameLengthErr = fmt.Errorf("invalid last name length of %d, must be in range [1,255]", len(u.LastName))
+	}
+	var ageLimitErr error
+	if u.Age != 0 && u.Age < 18 {
+		ageLimitErr = fmt.Errorf("invalid age of %d, must be 18 or greater", u.Age)
+	}
+	var bioLengthErr error
+	if 255 < len(u.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(u.Bio))
+	}
+	var imageCountErr error
+	if len(u.Images) != 0 && len(u.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(u.Images))
+	}
+	valErr = errors.Join(timestampErr, firstNameLengthErr, lastNameLengthErr, ageLimitErr, bioLengthErr, imageCountErr)
+	if valErr != nil {
+		return
+	}
+
+	tx := c.database.Begin()
+	txErr = tx.Clauses(clause.Returning{}).Updates(&u).Error
+	if txErr != nil {
+		tx.Rollback()
+		return
+	}
 	tx.Commit()
 	return
 }

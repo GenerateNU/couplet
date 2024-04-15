@@ -39,6 +39,7 @@ export default function Event() {
   );
 }
 
+
 const styles = StyleSheet.create({
   buttonContainer: {
     transform: [{ translateY: -50 }]
@@ -47,3 +48,4 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -50 }]
   }
 });
+

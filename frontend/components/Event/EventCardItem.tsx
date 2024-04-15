@@ -1,5 +1,3 @@
-import { DMSans_400Regular as DMSansRegular } from "@expo-google-fonts/dm-sans";
-import { useFonts } from "expo-font";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -10,14 +8,6 @@ type EventCardItemProps = {
 };
 
 export function EventCardItem({ title, description, imageUrl }: EventCardItemProps) {
-  const [fontsLoaded] = useFonts({
-    DMSansRegular
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <View style={styles.cardContainer}>
       <Image source={{ uri: imageUrl }} style={styles.cardImage} />

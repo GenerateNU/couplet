@@ -4,126 +4,194 @@ import (
 	"couplet/internal/api"
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
+	"couplet/internal/database/org_id"
+	"errors"
 	"fmt"
+
+	"gorm.io/gorm/clause"
 )
 
 // Creates a new event in the database
-func (c Controller) CreateEvent(params event.Event) (e event.Event, err error) {
+func (c Controller) CreateEvent(params event.Event) (e event.Event, valErr error, txErr error) {
 	e = params
+	var timestampErr error
+	if e.UpdatedAt.Before(e.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
+	}
+	var nameLengthErr error
+	if len(e.Name) < 1 || 255 < len(e.Name) {
+		nameLengthErr = fmt.Errorf("invalid name length of %d, must be in range [1,255]", len(e.Name))
+	}
+	var bioLengthErr error
+	if len(e.Bio) < 1 || 255 < len(e.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(e.Bio))
+	}
+	var imageCountErr error
+	if len(e.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(e.Images))
+	}
+
+	var tagsCountErr error
+	var tagsLengthErr error
+	var tagsTimestampErr error
+	if 5 < len(e.EventTags) {
+		tagsCountErr = fmt.Errorf("invalid tag count of %d, must be in range [0,5]", len(e.EventTags))
+	}
+	for _, t := range e.EventTags {
+		if len(t.ID) < 1 || 255 < len(t.ID) {
+			tagsLengthErr = fmt.Errorf("invalid ID length of %d, must be in range [1,255]", len(t.ID))
+		}
+		if t.UpdatedAt.Before(t.CreatedAt) {
+			tagsTimestampErr = fmt.Errorf("invalid timestamps")
+		}
+	}
+	tagsErr := errors.Join(tagsCountErr, tagsLengthErr, tagsTimestampErr)
+
+	var orgIdErr error
+	if (e.OrgID == org_id.OrgID{}) {
+		orgIdErr = fmt.Errorf("invalid org ID")
+	}
+	valErr = errors.Join(timestampErr, nameLengthErr, bioLengthErr, imageCountErr, tagsErr, orgIdErr)
+	if valErr != nil {
+		return
+	}
 
 	tx := c.database.Begin()
-
-	res := tx.Create(&e)
-	if res.RowsAffected < 1 {
+	txErr = tx.Create(&e).Error
+	if txErr != nil {
 		tx.Rollback()
-		err = fmt.Errorf("no event created")
 		return
 	}
-	if res.Error != nil {
-		tx.Rollback()
-		err = res.Error
-		return
-	}
-
 	tx.Commit()
 	return
 }
 
 // Deletes an event from the database by its ID
-func (c Controller) DeleteEvent(id event_id.EventID) (event.Event, error) {
+func (c Controller) DeleteEvent(id event_id.EventID) (e event.Event, txErr error) {
+	e.ID = id
+
 	tx := c.database.Begin()
-	event := event.Event{}
-	if err := tx.Where("id = ?", id.String()).First(&event).Error; err != nil {
+	txErr = tx.Clauses(clause.Returning{}).Preload("EventTags").Delete(&e).Error
+	if txErr != nil {
 		tx.Rollback()
-		return event, fmt.Errorf("event with id=%s cannot be deleted because it doesn't exist", id)
+		return
 	}
-
-	res := tx.Delete(&event)
-
-	if res.Error != nil {
-		tx.Rollback()
-		return event, res.Error
-	}
-
 	tx.Commit()
-	return event, nil
+	return
 }
 
-// GET (/events/:id) a single event by their id
-func (c Controller) GetEvent(id event_id.EventID) (event.Event, error) {
-	event := event.Event{}
-
-	tx := c.database.Begin()
-	if err := tx.Where("id = ?", id).First(&event).Error; err != nil {
-		tx.Rollback()
-		return event, err
-	}
-
-	tx.Commit()
-	return event, nil
+// Gets an event from the database by its ID
+func (c Controller) GetEvent(id event_id.EventID) (e event.Event, txErr error) {
+	txErr = c.database.Preload("EventTags").First(&e, id).Error
+	return
 }
 
-// GET (/events) all events with pagination
-func (c Controller) GetEvents(Limit int, Offset int) ([]event.Event, error) {
-	events := []event.Event{}
-
-	tx := c.database.Begin()
-	if err := tx.Limit(Limit).Offset(Offset).Find(&events).Error; err != nil {
-		return events, err
-	}
-
-	tx.Commit()
-	return events, nil
+// Gets several events from the database with pagination
+func (c Controller) GetEvents(limit uint8, offset uint32) (events []event.Event, txErr error) {
+	txErr = c.database.Limit(int(limit)).Offset(int(offset)).Preload("EventTags").Find(&events).Error
+	return
 }
 
-// PUT (/events/:id) to completely update an existing event, returning the created object if successful
-func (c Controller) PutEvent(id event_id.EventID, params event.Event) (event.Event, error) {
-	event := event.Event{}
+// Creates a new event or updates an existing event in the database
+func (c Controller) SaveEvent(params event.Event) (e event.Event, valErr error, txErr error) {
+	e = params
+	var timestampErr error
+	if e.UpdatedAt.Before(e.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
+	}
+	var nameLengthErr error
+	if len(e.Name) < 1 || 255 < len(e.Name) {
+		nameLengthErr = fmt.Errorf("invalid name length of %d, must be in range [1,255]", len(e.Name))
+	}
+	var bioLengthErr error
+	if len(e.Bio) < 1 || 255 < len(e.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(e.Bio))
+	}
+	var imageCountErr error
+	if len(e.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(e.Images))
+	}
+	var tagsCountErr error
+	var tagsLengthErr error
+	var tagsTimestampErr error
+	if 5 < len(e.EventTags) {
+		tagsCountErr = fmt.Errorf("invalid tag count of %d, must be in range [0,5]", len(e.EventTags))
+	}
+	for _, t := range e.EventTags {
+		if len(t.ID) < 1 || 255 < len(t.ID) {
+			tagsLengthErr = fmt.Errorf("invalid ID length of %d, must be in range [1,255]", len(t.ID))
+		}
+		if t.UpdatedAt.Before(t.CreatedAt) {
+			tagsTimestampErr = fmt.Errorf("invalid timestamps")
+		}
+	}
+	tagsErr := errors.Join(tagsCountErr, tagsLengthErr, tagsTimestampErr)
+	var orgIdErr error
+	if (e.OrgID == org_id.OrgID{}) {
+		orgIdErr = fmt.Errorf("invalid org ID")
+	}
+	valErr = errors.Join(timestampErr, nameLengthErr, bioLengthErr, imageCountErr, tagsErr, orgIdErr)
+	if valErr != nil {
+		return
+	}
 
 	tx := c.database.Begin()
-	if err := tx.Where("id = ?", id).First(&event).Error; err != nil {
-		return event, err
-	}
-
-	event.Name = params.Name
-	event.Bio = params.Bio
-	event.OrgID = params.OrgID
-	event.Images = params.Images
-
-	if err := tx.Save(&event).Error; err != nil {
+	txErr = tx.Save(&e).Error
+	if txErr != nil {
 		tx.Rollback()
-		return event, err
+		return
 	}
-
 	tx.Commit()
-	return event, nil
+	return
 }
 
-// PATCH (/events/:id) to partially update one or many fields of an existing event, returning the created object if successful
-func (c Controller) PatchEvent(id event_id.EventID, params event.Event) (event.Event, error) {
-	event := event.Event{}
+// Update one or many fields of an existing event in the database
+func (c Controller) UpdateEvent(params event.Event) (e event.Event, valErr error, txErr error) {
+	e = params
+	var timestampErr error
+	if e.UpdatedAt.Before(e.CreatedAt) {
+		timestampErr = fmt.Errorf("invalid timestamps")
+	}
+	var nameLengthErr error
+	if 255 < len(e.Name) {
+		nameLengthErr = fmt.Errorf("invalid name length of %d, must be in range [1,255]", len(e.Name))
+	}
+	var bioLengthErr error
+	if 255 < len(e.Bio) {
+		bioLengthErr = fmt.Errorf("invalid bio length of %d, must be in range [1,255]", len(e.Bio))
+	}
+	var imageCountErr error
+	if len(e.Images) != 0 && len(e.Images) != 4 {
+		imageCountErr = fmt.Errorf("invalid image count of %d, must be 4", len(e.Images))
+	}
+	var tagsCountErr error
+	var tagsLengthErr error
+	var tagsTimestampErr error
+	if 5 < len(e.EventTags) {
+		tagsCountErr = fmt.Errorf("invalid tag count of %d, must be in range [0,5]", len(e.EventTags))
+	}
+	for _, t := range e.EventTags {
+		if len(t.ID) < 1 || 255 < len(t.ID) {
+			tagsLengthErr = fmt.Errorf("invalid ID length of %d, must be in range [1,255]", len(t.ID))
+		}
+		if t.UpdatedAt.Before(t.CreatedAt) {
+			tagsTimestampErr = fmt.Errorf("invalid timestamps")
+		}
+	}
+	tagsErr := errors.Join(tagsCountErr, tagsLengthErr, tagsTimestampErr)
+	valErr = errors.Join(timestampErr, nameLengthErr, bioLengthErr, imageCountErr, tagsErr)
+	if valErr != nil {
+		return
+	}
 
 	tx := c.database.Begin()
-	if err := tx.Where("id = ?", id).First(&event).Error; err != nil {
-		return event, err
-	}
-	event.Images = params.Images
-	if params.Name != "" {
-		event.Name = params.Name
-	}
-	if params.Bio != "" {
-		event.Bio = params.Bio
-	}
-	if params.OrgID.String() != "" {
-		event.OrgID = params.OrgID
-	}
-	if err := tx.Save(&event).Error; err != nil {
+	txErr = tx.Clauses(clause.Returning{}).Updates(&e).Error
+	if txErr != nil {
 		tx.Rollback()
-		return event, err
+		return
 	}
-
 	tx.Commit()
-	return event, nil
+	return
 }
 
 func (c Controller) GetRandomEvents(params api.RecommendationEventsGetParams) ([]event.Event, error) {
