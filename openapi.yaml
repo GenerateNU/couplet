@@ -1584,6 +1584,151 @@ paths:
                 $ref: "#/components/schemas/UserSwipe"
         "400":
           $ref: "#/components/responses/BadRequest"
+
+  /recommendation/events:
+    get:
+      summary: "Get recommended events for a user"
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: The ID of the user for whom to get event recommendations
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          required: false
+          description: Limit the number of event recommendations
+          schema:
+            type: integer
+            format: int
+            minimum: 1
+            default: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of events to skip
+          schema:
+            type: integer
+            format: int
+            default: 0
+        - name: like
+          in: query
+          required: false
+          description: Filter events liked by the user
+          schema:
+            type: boolean
+            deafult: false
+        - name: tags
+          in: query
+          required: false
+          description: Filter events by the tags
+          schema:
+            type: array
+            items:
+              type: string
+        - name: date
+          in: query
+          required: false
+          description: Filter events by upcoming datae
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successfully retrieved events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    - $ref: '#/components/schemas/Event'
+                    - required:
+                        - id
+                        - name
+                        - bio
+  /recommendations/users:
+    get:
+      summary: Get user recommendations for a user
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: The ID of the user for whom to get user recommendations
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          required: false
+          description: The number of users to return
+          schema:
+            type: integer
+            format: int
+            minimum: 1
+            default: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of users to skip
+          schema:
+            type: integer
+            format: int
+            default: 0
+      responses:
+        '200':
+          description: Successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - firstName
+                    - lastName
+                    - age
+                    - bio
+                    - images
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: 5e91507e-5630-4efd-9fd4-799178870b10
+                    firstName:
+                      type: string
+                      minLength: 1
+                      example: Bob
+                    lastName:
+                      type: string
+                      minLength: 1
+                      example: Smith
+                    age:
+                      type: integer
+                      format: uint8
+                      minimum: 18
+                      example: 22
+                    bio:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      example: Hello! I'm excited to experience events!
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        format: uri
+                        example: https://example.com/image.png
+                      minItems: 4
+                      maxItems: 4
   /matches/{id}:
     get:
       summary: Get a user's matches
@@ -1604,6 +1749,16 @@ paths:
               schema:
                 type: array
                 items:
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+                    - type: object
+                      properties:
+                        commonEvents:
+                          type: array
+                          items:
+                            type: string
+                            format: uuid
+                          description: IDs of the events that both users have
                   type: object
                   required:
                     - id
@@ -1753,6 +1908,94 @@ components:
           type: string
           minLength: 1
           example: Internal server error
+    Event:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: The Big Event
+        date:
+          type: string
+          format: date
+          example: "2024-01-01"
+        bio:
+          type: string
+          minLength: 1
+          example: Come to the Big Event and have the best night of your life!
+        address:
+          $ref: "#/components/schemas/Address"
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+          maxItems: 5
+        externalLink:
+          type: string
+          format: uri
+          example: https://example.com
+        tags:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255
+            example: arts
+        orgId:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+    Org:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: The Events Company
+        bio:
+          type: string
+          minLength: 1
+          example: At The Events Company, we connect people through events
+        image:
+          type: string
+          format: uri
+          example: https://example.com/image.png
+        tags:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255
+            example: nonprofit
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 1
+          maxItems: 5
     EventSwipe:
       type: object
       required:

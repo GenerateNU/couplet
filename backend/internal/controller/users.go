@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"couplet/internal/database/event_id"
 	"couplet/internal/database/user"
 	"couplet/internal/database/user_id"
 	"errors"
@@ -159,4 +160,37 @@ func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txE
 	}
 	tx.Commit()
 	return
+}
+
+// Get Recommended Users
+func (c Controller) GetRecommendationsUser(id user_id.UserID, limit int, offset int) ([]user.User, error) {
+	// Return recommendedUsers
+	var recommendedUsers []user.User
+
+	// Get Current User
+	var currentUser user.User
+	err := c.database.Where("id = ?", id).Preload("EventSwipes").First(&currentUser).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Collect event IDs that the current user liked
+	var likedEventIDs []event_id.EventID
+	for _, eventSwipe := range currentUser.EventSwipes {
+		if eventSwipe.Liked {
+			likedEventIDs = append(likedEventIDs, eventSwipe.EventID)
+		}
+	}
+
+	// Return all the Users that liked the same event as the current user
+	if err := c.database.Order("random()").Where("id != ?", currentUser.ID).
+		Joins("JOIN event_swipes ON users.id = event_swipes.user_id").
+		Where("event_swipes.liked = ?", true).
+		Where("event_swipes.event_id IN (?)", likedEventIDs).
+		Limit(int(limit)).Offset(int(offset)).
+		Find(&recommendedUsers).Error; err != nil {
+		return nil, err
+	}
+
+	return recommendedUsers, nil
 }

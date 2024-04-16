@@ -14,15 +14,15 @@ func (h Handler) MatchesIDGet(ctx context.Context, params api.MatchesIDGetParams
 	res := []api.MatchesIDGetOKItem{}
 	for _, m := range userMatches {
 		item := api.MatchesIDGetOKItem{
-			ID:        m.ID.Unwrap(),
-			CreatedAt: m.CreatedAt,
-			UpdatedAt: m.UpdatedAt,
-			FirstName: m.FirstName,
-			LastName:  m.LastName,
-			Age:       m.Age,
-			Bio:       m.Bio,
-			Images:    m.Images,
-			Viewed:    m.Viewed,
+			// ID:        m.ID.Unwrap(),
+			// CreatedAt: m.CreatedAt,
+			// UpdatedAt: m.UpdatedAt,
+			FirstName: api.NewOptString(m.FirstName),
+			LastName:  api.NewOptString(m.LastName),
+			Age:       api.NewOptUint8(m.Age),
+			// Bio:       m.Bio,
+			Images: m.Images,
+			// Viewed:    m.Viewed,
 		}
 		res = append(res, item)
 	}
