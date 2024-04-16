@@ -1591,20 +1591,20 @@ paths:
       parameters:
         - name: userId
           in: query
-          required : true
-          description : The ID of the user for whom to get event recommendations
-          schema :
-            type : string
-            format : uuid
-        - name : limit
+          required: true
+          description: The ID of the user for whom to get event recommendations
+          schema:
+            type: string
+            format: uuid
+        - name: limit
           in: query
-          required : false
-          description : Limit the number of event recommendations
-          schema :
-            type : integer
-            format : int
-            minimum : 1
-            default : 10
+          required: false
+          description: Limit the number of event recommendations
+          schema:
+            type: integer
+            format: int
+            minimum: 1
+            default: 10
         - name: offset
           in: query
           required: false
@@ -1633,7 +1633,7 @@ paths:
           required: false
           description: Filter events by upcoming datae
           schema:
-            type: string 
+            type: string
             format: date
       responses:
         '200':
@@ -1758,7 +1758,7 @@ paths:
                           items:
                             type: string
                             format: uuid
-                          description: IDs of the events that both users have in common
+                          description: IDs of the events that both users have
                   type: object
                   required:
                     - id
@@ -1915,7 +1915,7 @@ components:
           type: string
           minLength: 1
           example: The Big Event
-        date: 
+        date:
           type: string
           format: date
           example: "2024-01-01"
