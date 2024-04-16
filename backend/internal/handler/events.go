@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"net/url"
 
-	ht "github.com/ogen-go/ogen/http"
 
 )
 

@@ -33,12 +33,11 @@ export default function Event() {
         </Button>
       </View>
       <View style={styles.cardContainer}>
-        <CardStack />
+        <CardStack startingEventId="" />
       </View>
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -48,4 +47,3 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -50 }]
   }
 });
-
