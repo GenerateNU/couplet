@@ -8,11 +8,6 @@ import (
 	"couplet/internal/database/user_id"
 	"errors"
 	"fmt"
-
-	"net/url"
-
-	"github.com/google/uuid"
-
 )
 
 // Creates a new user.
@@ -220,24 +215,18 @@ func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.Recomme
 		return nil, errors.New("Failed to get Recommended Users")
 	}
 
-
 	res := []api.RecommendationsUsersGetOKItem{}
 	for _, u := range users {
-		imagesUrl := []url.URL{}
-		if u.Images != nil {
-			for i := range u.Images {
-				imagesUrl = append(imagesUrl, url.URL{Path: u.Images[i].Url})
-			}
-		}
-
 		item := api.RecommendationsUsersGetOKItem{
-			FirstName: api.NewOptString(u.FirstName),
-			LastName:  api.NewOptString(u.LastName),
-			Age:       api.NewOptUint8(u.Age),
-			Images:    imagesUrl,
+			ID:        u.ID.Unwrap(),
+			FirstName: u.FirstName,
+			LastName:  u.LastName,
+			Age:       u.Age,
+			Bio:       u.Bio,
+			Images:    u.Images,
 		}
 		res = append(res, item)
 	}
-	
+
 	return res, nil
 }
