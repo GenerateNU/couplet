@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import HeaderScrollView from "react-native-header-scroll-view";
+import scaleStyleSheet from "../../scaleStyles";
 import EventCardItem from "../Event/EventCardItem";
 import Reaction from "../Reaction/Reaction";
 import InfoChips from "./InfoChips";
@@ -72,39 +73,39 @@ export default function Person({
         </Text>
 
         <View>
-          <View style={styles.infoContainer}>
-            <Image style={styles.imageStyle} source={{ uri: firstImage }} />
-            <View style={styles.basicInfoContainer}>
+          <View style={scaledStyles.infoContainer}>
+            <Image style={scaledStyles.imageStyle} source={{ uri: firstImage }} />
+            <View style={scaledStyles.basicInfoContainer}>
               {location && (
-                <View style={styles.basicInfoRow}>
-                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faHouse} />
-                  <Text style={styles.basicInfoRowText}>{location}</Text>
+                <View style={scaledStyles.basicInfoRow}>
+                  <FontAwesomeIcon style={scaledStyles.basicInfoRowIcon} icon={faHouse} />
+                  <Text style={scaledStyles.basicInfoRowText}>{location}</Text>
                 </View>
               )}
               {school && (
-                <View style={styles.basicInfoRow}>
-                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faGraduationCap} />
-                  <Text style={styles.basicInfoRowText}>{school}</Text>
+                <View style={scaledStyles.basicInfoRow}>
+                  <FontAwesomeIcon style={scaledStyles.basicInfoRowIcon} icon={faGraduationCap} />
+                  <Text style={scaledStyles.basicInfoRowText}>{school}</Text>
                 </View>
               )}
               {work && (
-                <View style={styles.basicInfoRow}>
-                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faBriefcase} />
-                  <Text style={styles.basicInfoRowText}>{work}</Text>
+                <View style={scaledStyles.basicInfoRow}>
+                  <FontAwesomeIcon style={scaledStyles.basicInfoRowIcon} icon={faBriefcase} />
+                  <Text style={scaledStyles.basicInfoRowText}>{work}</Text>
                 </View>
               )}
               {height && (
-                <View style={styles.basicInfoRow}>
-                  <FontAwesomeIcon style={styles.basicInfoRowIcon} icon={faRuler} />
-                  <Text style={styles.basicInfoRowText}>{heightText}</Text>
+                <View style={scaledStyles.basicInfoRow}>
+                  <FontAwesomeIcon style={scaledStyles.basicInfoRowIcon} icon={faRuler} />
+                  <Text style={scaledStyles.basicInfoRowText}>{heightText}</Text>
                 </View>
               )}
             </View>
-            <View style={styles.promptContainer}>
+            <View style={scaledStyles.promptContainer}>
               <Text style={{ fontFamily: "DMSansMedium", marginBottom: 5 }}>{promptQuestion}</Text>
-              <Text style={styles.textStyle}>{promptResponse}</Text>
+              <Text style={scaledStyles.textStyle}>{promptResponse}</Text>
             </View>
-            <View style={styles.separator} />
+            <View style={scaledStyles.separator} />
             <InfoChips items={interests} textColor="black" backgroundColor="lavender" />
             <Lifestyle
               relationshipType={relationshipType}
@@ -116,12 +117,12 @@ export default function Person({
               cannabisFrequency={cannabisFrequency}
             />
 
-            <View style={styles.separator} />
+            <View style={scaledStyles.separator} />
             <View
               style={{ flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 20 }}
             >
-              <Text style={styles.textStyle}>Match to unlock their Instagram!</Text>
-              <View style={styles.instagramContainer}>
+              <Text style={scaledStyles.textStyle}>Match to unlock their Instagram!</Text>
+              <View style={scaledStyles.instagramContainer}>
                 <Image source={INSTAGRAM_ICON} style={{ width: 30, height: 30, marginRight: 10 }} />
                 {isMatched && <Text style={{ fontFamily: "DMSansBold" }}>{instagramUsername}</Text>}
                 {!isMatched && (
@@ -130,10 +131,10 @@ export default function Person({
               </View>
             </View>
             <View>
-              <Text style={styles.textStyle}>For our first date, let&apos;s go to...</Text>
+              <Text style={scaledStyles.textStyle}>For our first date, let&apos;s go to...</Text>
               <ScrollView horizontal>
                 {mutualEvents.map((event) => (
-                  <View style={styles.mutualEventItemStyling}>
+                  <View style={scaledStyles.mutualEventItemStyling}>
                     <EventCardItem
                       title={event.title}
                       description={event.description}
@@ -143,12 +144,12 @@ export default function Person({
                 ))}
               </ScrollView>
             </View>
-            <View style={styles.separator} />
+            <View style={scaledStyles.separator} />
             <View>
               {images.slice(1).map((image) => (
                 <View style={{ marginBottom: 20 }}>
-                  <Image source={{ uri: image.image }} style={styles.imageStyle} />
-                  <Text style={{ ...styles.textStyle, marginTop: 5 }}>{image.caption}</Text>
+                  <Image source={{ uri: image.image }} style={scaledStyles.imageStyle} />
+                  <Text style={{ ...scaledStyles.textStyle, marginTop: 5 }}>{image.caption}</Text>
                 </View>
               ))}
             </View>
@@ -156,7 +157,7 @@ export default function Person({
         </View>
       </HeaderScrollView>
       {!isMatched && (
-        <View style={styles.reactionContainer}>
+        <View style={scaledStyles.reactionContainer}>
           <Reaction handleReact={handleReact} />
         </View>
       )}
@@ -235,3 +236,5 @@ const styles = StyleSheet.create({
     bottom: 70
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);
