@@ -1614,7 +1614,7 @@ paths:
             format: int
             default: 0
         - name: like
-          in: query 
+          in: query
           required: false
           description: Filter events liked by the user
           schema:
