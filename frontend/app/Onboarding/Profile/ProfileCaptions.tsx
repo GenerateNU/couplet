@@ -1,41 +1,41 @@
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View
-} from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { Image, ScrollView, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../../../colors";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
+import { setPhotos } from "../../../state/formSlice";
+import { useAppDispatch, useAppSelector } from "../../../state/hooks";
+import onboardingStyles from "../../../styles/Onboarding/styles";
 
 const CAPTIONS = require("../../../assets/profilecaptions.png");
 
-export default function ProfileCaptions() {
-  // Sample images for now, these are my local uris, replace if you want to test it out
-  const images: string[] = [
-    "file:///var/mobile/Containers/Data/Application/4A88A83D-ED82-43E2-8200-765E6547AA82/Library/Caches/ExponentExperienceData/@anonymous/myApp-da088f0a-c6dd-4e77-aa0f-f562e3466c64/ImagePicker/2BCF4800-CA67-438A-8239-B942084C6EF3.jpg",
-    "file:///var/mobile/Containers/Data/Application/4A88A83D-ED82-43E2-8200-765E6547AA82/Library/Caches/ExponentExperienceData/@anonymous/myApp-da088f0a-c6dd-4e77-aa0f-f562e3466c64/ImagePicker/F81D349A-DCE2-43E3-91A5-8DCE8FAB8178.jpg",
-    "file:///var/mobile/Containers/Data/Application/4A88A83D-ED82-43E2-8200-765E6547AA82/Library/Caches/ExponentExperienceData/@anonymous/myApp-da088f0a-c6dd-4e77-aa0f-f562e3466c64/ImagePicker/F1A713BF-0B8E-4CD4-8C09-9E2FED574AAE.jpg",
-    "file:///var/mobile/Containers/Data/Application/4A88A83D-ED82-43E2-8200-765E6547AA82/Library/Caches/ExponentExperienceData/@anonymous/myApp-da088f0a-c6dd-4e77-aa0f-f562e3466c64/ImagePicker/A912B59B-02CD-4F93-815F-6286379F61DA.jpg"
-  ];
-  const [captions, setCaptions] = useState(["", "", "", ""]);
+function ProfileCaptions() {
+  const dispatch = useAppDispatch();
+  const photos = useAppSelector((state) => state.form.photos);
+  const images: string[] = useMemo(() => photos.map((photo) => photo.filePath), [photos]);
+  const [captions, setCaptions] = useState(["", "", ""]);
   const [continueDisabled, setContinueDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     const captionCount = captions.filter((cap) => cap !== "").length;
-    setContinueDisabled(captionCount !== 4);
+    setContinueDisabled(captionCount !== 3);
   }, [captions]);
 
   const onContinue = () => {
-    // TODO: Save captions into form state
-    router.push("Onboarding/ProfileInsta");
+    // Create a copy of the photos state
+    const photosState = [...photos];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < photosState.length; i++) {
+      if (i !== 0) {
+        photosState[i] = { ...photosState[i], caption: captions[i] };
+      }
+    }
+    dispatch(setPhotos(photosState));
+    router.push("Onboarding/Profile/ProfileInsta");
   };
 
   const onSubmitCaption = (text: string, index: number) => {
@@ -43,70 +43,97 @@ export default function ProfileCaptions() {
     newCaptions[index] = text;
     setCaptions(newCaptions);
   };
-
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      {/* Does not work very well, weird delay */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ height: "100%" }}
-      >
-        <ScrollView contentContainerStyle={scaledStyles.scrollContainer}>
-          <View style={{ marginTop: 25 }}>
-            <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
+    <SafeAreaView style={scaledStyles.container}>
+      <View style={scaledStyles.TopUiContainer}>
+        <TopBar
+          onBackPress={() => {
+            router.back();
+          }}
+          text="Profile"
+          selectedCount={4}
+        />
+      </View>
+      <ScrollView contentContainerStyle={scaledStyles.mainContainer}>
+        <View>
+          <Image source={CAPTIONS} />
+          <View style={scaledStyles.headingContainer}>
+            <OnboardingTitle text="Captions speak louder than words." />
           </View>
-          <ScrollView>
-            {/* Spacer */}
-            <View style={{ height: 100 }} />
-            <Image source={CAPTIONS} />
-            <OnboardingTitle text="Add a caption" />
+          <View style={scaledStyles.headingContainer}>
+            <Text style={scaledStyles.textHelper}> Add one to your photos! </Text>
+          </View>
+          <View style={scaledStyles.inputWrapper}>
             {images.map((img, i) => (
-              <View>
+              // eslint-disable-next-line react/no-array-index-key
+              <View style={scaledStyles.imageContainer} key={i}>
                 <Image source={{ uri: img }} style={scaledStyles.imageStyle} />
-                <TextInput
-                  style={scaledStyles.captionStyle}
-                  onSubmitEditing={(e) => onSubmitCaption(e.nativeEvent.text, i)}
-                  editable
-                  placeholder="Caption"
-                />
+                {i === 0 ? (
+                  <View style={scaledStyles.pillWrapper}>
+                    <View style={scaledStyles.pill}>
+                      <Text style={scaledStyles.pillText}>Your top photo</Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={scaledStyles.textInputWrapper}>
+                    <TextInput
+                      style={scaledStyles.textInput}
+                      onChange={(e) => onSubmitCaption(e.nativeEvent.text, i - 1)}
+                      editable
+                      placeholder="Caption"
+                    />
+                  </View>
+                )}
               </View>
             ))}
-          </ScrollView>
-          <View style={{ marginBottom: 25 }}>
-            <ContinueButton title="Continue" isDisabled={continueDisabled} onPress={onContinue} />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+        <View>
+          <ContinueButton title="Continue" isDisabled={continueDisabled} onPress={onContinue} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  scrollContainer: {
+export default ProfileCaptions;
+
+const overrideStyles = {
+  TopUiContainer: {
     alignItems: "center"
   },
+  mainContainer: {
+    paddingTop: "20%",
+    marginLeft: 20,
+    marginRight: 20
+  },
+  headingContainer: {
+    marginTop: 8
+  },
   imageStyle: {
-    height: 200,
+    marginBottom: 8,
+    height: 400,
     width: "100%",
-    alignSelf: "center",
     borderRadius: 5
   },
-  captionStyle: {
-    width: "100%",
-    height: 30,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#9EA3A2",
-    color: "#000000",
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 10,
-    marginBottom: 20,
-    fontFamily: "DMSansRegular"
+  pillWrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "10%"
+  },
+  pill: {
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    borderRadius: 25,
+    backgroundColor: COLORS.primary,
+    position: "absolute"
+  },
+  pillText: {
+    fontFamily: "DMSansMedium",
+    color: COLORS.white,
+    fontWeight: 400
   }
-});
+};
 
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet({ ...onboardingStyles, ...overrideStyles });

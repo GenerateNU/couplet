@@ -1,20 +1,24 @@
 /* eslint-disable */
-
+import { router } from "expo-router";
+import * as SecureStorage from "expo-secure-store";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, View } from "react-native";
 import Navbar from "../components/Layout/Navbar";
 import CardWrapper from "../components/Profile/CardWrapper";
+import PurpleProfileCard from "../components/Profile/PurpleProfileCard";
 import SettingsCard from "../components/Profile/SettingsCard";
-import PurpleProfileCard from "./PurpleProfileCard";
-import UserDetails from "./UserDetails";
+import UserDetails from "../components/Profile/UserDetails";
 
-/* // eslint-disable global-require */
 export default function Profile() {
+  const handleLogout = async () => {
+    await SecureStorage.deleteItemAsync("appleAuth");
+    router.push("/");
+  };
   return (
-    <View style={{ flex: 1, gap: 15 }}>
+    <SafeAreaView style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
         <UserDetails
-          onPress={() => "Placeholder"}
+          onPress={() => router.push("ProfileScreens/AccountDetails")}
           profileImageSource={undefined}
           name="TiffanyA"
           editDetailsText="Edit Account Details"
@@ -23,32 +27,50 @@ export default function Profile() {
       </View>
       <View style={styles.purpleCardsContainer}>
         <PurpleProfileCard
-          imageUrl="../assets/ProfilePurple.png"
-          name="My Profile"
-          detailText="View and make changes to your profile"
-          onPress={() => "Placeholder"}
+          imageUrl={require("../assets/pencil.png")}
+          name="Profile"
+          detailText="View or change your profile"
+          onPress={() => router.push("ProfileScreens/AccountDetails")}
         />
         <PurpleProfileCard
-          imageUrl="../assets/ProfilePurple.png"
-          name="My Preferences"
+          imageUrl={require("../assets/magnifyingGlass.png")}
+          name="Preferences"
           detailText="Manage what you are looking for"
-          onPress={() => "Placeholder"}
+          onPress={() => router.push("ProfileScreens/AccountDetails")}
         />
       </View>
       <View style={{ width: "100%" }}>
         <CardWrapper>
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Settings" img={require("../assets/gear.png")} />
+          <SettingsCard
+            text="Account Details"
+            img={require("../assets/redProfile.png")}
+            onPress={() => router.push("ProfileScreens/AccountDetails")}
+          />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Help and Support" img={require("../assets/help.png")} />
+          <SettingsCard
+            text="About Couplet"
+            img={require("../assets/redAbout.png")}
+            onPress={() => router.push("ProfileScreens/AboutCouplet")}
+          />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="About Couplet" img={require("../assets/info.png")} />
+          <SettingsCard
+            text="Help & Support"
+            img={require("../assets/redHelp.png")}
+            onPress={() => router.push("ProfileScreens/HelpAndSupport")}
+          />
           {/* //eslint-disable-next-line global-require */}
-          <SettingsCard text="Log Out" img={require("../assets/lougout.png")} last />
+          <SettingsCard
+            text="Settings"
+            img={require("../assets/redSettings.png")}
+            onPress={() => router.push("ProfileScreens/Settings")}
+            last
+          />
+          <Button title="Logout" onPress={handleLogout} color="red" />
         </CardWrapper>
       </View>
       <Navbar activePage="Profile" />
-    </View>
+    </SafeAreaView>
   );
 }
 

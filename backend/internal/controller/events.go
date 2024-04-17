@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"couplet/internal/api"
 	"couplet/internal/database/event"
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
@@ -194,4 +195,32 @@ func (c Controller) UpdateEvent(params event.Event) (e event.Event, valErr error
 	}
 	tx.Commit()
 	return
+}
+
+func (c Controller) GetRandomEvents(params api.RecommendationEventsGetParams) ([]event.Event, error) {
+	var events []event.Event
+	tx := c.database.Begin()
+	query := tx.Order("random()")
+
+	// Apply filters based on query parameters
+	if params.Like.IsSet() && params.Like.Value {
+		query = query.Where("liked = ?", true)
+	}
+
+	if len(params.Tags) > 0 {
+		query = query.Where("event_tags.id IN (?)", params.Tags)
+	}
+
+	if params.Date.IsSet() {
+		query = query.Where("date >= ?", params.Date.Value)
+	}
+
+	result := query.Offset(params.Offset.Value).Limit(params.Limit.Value).Find(&events)
+	if result.Error != nil {
+		tx.Rollback()
+		return nil, result.Error
+	}
+
+	tx.Commit()
+	return events, nil
 }

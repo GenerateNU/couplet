@@ -219,7 +219,6 @@ export default function PeopleStack({ userId }: PeopleStackProps) {
         handleReact={handleReact}
         likesYou={person.likesYou}
       />
-      {/* <Text style={{ fontFamily: "DMSansRegular" }}>People</Text> */}
 
       <Navbar activePage="" />
     </View>

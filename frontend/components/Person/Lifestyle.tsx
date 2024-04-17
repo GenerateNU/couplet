@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import scaleStyleSheet from "../../scaleStyles";
 import { LifestyleProps } from "./PersonProps";
 
 export default function Lifestyle({
@@ -22,46 +23,46 @@ export default function Lifestyle({
   cannabisFrequency
 }: LifestyleProps) {
   return (
-    <View style={styles.container}>
+    <View style={scaledStyles.container}>
       {relationshipType && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faUserGroup} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faUserGroup} />
           <Text>{relationshipType}</Text>
         </View>
       )}
       {religion && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faBookOpen} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faBookOpen} />
           <Text>{religion}</Text>
         </View>
       )}
       {politicalAffiliation && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faScaleBalanced} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faScaleBalanced} />
           <Text>{politicalAffiliation}</Text>
         </View>
       )}
       {alchoholFrequency && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faWineGlass} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faWineGlass} />
           <Text>{alchoholFrequency}</Text>
         </View>
       )}
       {smokingFrequency && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faSmoking} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faSmoking} />
           <Text>{smokingFrequency}</Text>
         </View>
       )}
       {drugFrequency && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faCapsules} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faCapsules} />
           <Text>{drugFrequency}</Text>
         </View>
       )}
       {cannabisFrequency && (
-        <View style={styles.lifestyleItemRow}>
-          <FontAwesomeIcon style={styles.iconStyle} icon={faCannabis} />
+        <View style={scaledStyles.lifestyleItemRow}>
+          <FontAwesomeIcon style={scaledStyles.iconStyle} icon={faCannabis} />
           <Text>{cannabisFrequency}</Text>
         </View>
       )}
@@ -93,3 +94,5 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);

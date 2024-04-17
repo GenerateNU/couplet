@@ -74,16 +74,6 @@ const styles = StyleSheet.create({
   featuredContainer: {
     marginRight: 48
   },
-
-  likedContainer: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "flex-start"
-  },
-  likedEvent: {
-    width: "50%"
-  },
   image: {
     borderRadius: 50,
     borderWidth: 1,

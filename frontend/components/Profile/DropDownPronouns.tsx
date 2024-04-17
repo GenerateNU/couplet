@@ -3,24 +3,23 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
-import { screenHeight } from "../../utils/dimensions";
-import bostonNeighborhoods from "../../utils/location";
+import { pronouns } from "../../utils/pronouns";
 
-interface DropDownLocationProps {
-  onLocationChange: (local: string) => void;
-  selectedLocation: string;
+interface DropDownPronounProps {
+  onPronounChange: (local: string) => void;
+  selectedPronoun: string;
 }
 
-function DropDownLocation({ onLocationChange, selectedLocation }: DropDownLocationProps) {
+function DropDownPronoun({ onPronounChange, selectedPronoun }: DropDownPronounProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedLocation);
-  const items = bostonNeighborhoods.map((neighborhood) => ({
+  const [value, setValue] = useState(selectedPronoun);
+  const items = pronouns.map((neighborhood) => ({
     label: neighborhood,
     value: neighborhood
   }));
 
   useEffect(() => {
-    onLocationChange(value);
+    onPronounChange(value);
   }, [value]);
 
   return (
@@ -32,7 +31,6 @@ function DropDownLocation({ onLocationChange, selectedLocation }: DropDownLocati
         setOpen={setOpen}
         setValue={setValue}
         placeholder="Select a neighborhood"
-        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
     </View>
   );
@@ -46,4 +44,4 @@ const styles = StyleSheet.create({
 
 const scaledStyles = scaleStyleSheet(styles);
 
-export default DropDownLocation;
+export default DropDownPronoun;

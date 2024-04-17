@@ -1,120 +1,136 @@
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   View
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../../colors";
 import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
+import PromptDropDown from "../../../components/Onboarding/PromptDropDown";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
+import { setPromptBio, setResponseBio } from "../../../state/formSlice";
+import { useAppDispatch } from "../../../state/hooks";
+import onboardingStyles from "../../../styles/Onboarding/styles";
+import { screenHeight } from "../../../utils/dimensions";
 
 const BIO_IMAGE = require("../../../assets/profilebio.png");
 
-export default function ProfileBio() {
-  const [open, setOpen] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState(null);
-  const [options, setOptions] = useState([
-    { label: "An ideal date", value: 0 },
-    { label: "My perfect day consists of", value: 1 },
-    { label: "On weekends you can find me", value: 2 },
-    { label: "What I'm looking for on this app", value: 3 },
-    { label: "One thing you should know about me", value: 4 }
-  ]);
-  const [response, setResponse] = useState<string>("");
-  const [inputStyle, setInputStyle] = useState(scaledStyles.unfocusedResponse);
+function ProfileBio() {
+  const dispatch = useAppDispatch();
+  const [isPromptSelected, setIsPromptSelected] = useState(false);
+  const handlePromptChange = (prompt: string) => {
+    setIsPromptSelected(!!prompt);
+  };
   const inputRef = useRef(null);
-
-  const onContinue = () => {
-    // TODO: Save bio into form state
+  // Use Form from React-Hook-Form
+  const { control, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      prompt: "",
+      response: ""
+    }
+  });
+  const responseStatus = useWatch({
+    control,
+    name: "response",
+    defaultValue: ""
+  });
+  // On submit of the name form
+  const onSubmit = (data: { prompt: string; response: string }) => {
+    dispatch(setPromptBio(data.prompt));
+    dispatch(setResponseBio(data.response));
     router.push("Onboarding/Profile/ProfilePhotos");
   };
-
   return (
-    <SafeAreaView style={{ height: "100%" }}>
+    <SafeAreaView style={scaledStyles.container}>
+      <View style={scaledStyles.TopUiContainer}>
+        <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={4} />
+      </View>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={scaledStyles.container}
+        style={scaledStyles.avoidContainer}
+        keyboardVerticalOffset={screenHeight * 0.4}
       >
-        <View>
-          <TopBar onBackPress={() => router.back()} text="Profile" selectedCount={5} />
-        </View>
-        <View>
-          <Image source={BIO_IMAGE} />
-          <OnboardingTitle text="What's your bio?" />
-          <DropDownPicker
-            style={scaledStyles.promptBox}
-            placeholder="Select a prompt"
-            open={open}
-            value={prompt}
-            items={options}
-            setOpen={setOpen}
-            setValue={setPrompt}
-            setItems={setOptions}
-          />
-          <TextInput
-            ref={inputRef}
-            onFocus={() => setInputStyle(scaledStyles.focusedResponse)}
-            onBlur={() => setInputStyle(scaledStyles.unfocusedResponse)}
-            onSubmitEditing={() => Keyboard.dismiss()}
-            blurOnSubmit
-            multiline
-            maxLength={250}
-            style={inputStyle}
-            onChangeText={setResponse}
-            value={response}
-            placeholder="Your response here"
-          />
-          <Text style={scaledStyles.charCount}>{response.length}/250</Text>
-        </View>
-        <View />
-        <View>
-          <ContinueButton
-            title="Continue"
-            isDisabled={prompt === null || response === ""}
-            onPress={onContinue}
-          />
+        <View style={scaledStyles.mainContainer}>
+          <View>
+            <Image source={BIO_IMAGE} />
+            <OnboardingTitle text="What does your bio say?" />
+            <View style={scaledStyles.inputWrapper}>
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <PromptDropDown
+                    onPromptChange={(prompt: string) => {
+                      onChange(prompt);
+                      handlePromptChange(prompt);
+                    }}
+                    selectedPrompt={value}
+                  />
+                )}
+                name="prompt"
+              />
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    ref={inputRef}
+                    onSubmitEditing={() => Keyboard.dismiss()}
+                    blurOnSubmit
+                    multiline
+                    maxLength={250}
+                    style={scaledStyles.responseBox}
+                    onChangeText={(val) => {
+                      setValue("response", val);
+                      onChange(val);
+                    }}
+                    value={value}
+                    placeholder="Your response here"
+                  />
+                )}
+                name="response"
+              />
+              <Text style={scaledStyles.charCount}>{responseStatus.length}/250</Text>
+            </View>
+          </View>
         </View>
       </KeyboardAvoidingView>
+      <View>
+        <ContinueButton
+          title="Continue"
+          isDisabled={!isPromptSelected || !responseStatus}
+          onPress={() => {
+            handleSubmit(onSubmit)();
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
 
+export default ProfileBio;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: 30
-  },
   charCount: {
-    textAlign: "right"
+    textAlign: "right",
+    marginTop: 5
   },
-  promptBox: {
-    marginBottom: 10,
-    borderRadius: 10
-  },
-  focusedResponse: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 10
-  },
-  unfocusedResponse: {
+  responseBox: {
     padding: 10,
     borderWidth: 1,
     borderColor: COLORS.darkGray,
-    borderRadius: 10
+    borderRadius: 10,
+    height: "40%"
   }
 });
 
-const scaledStyles = scaleStyleSheet(styles);
+const scaledStyles = scaleStyleSheet({ ...onboardingStyles, ...styles });

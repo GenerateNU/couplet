@@ -204,3 +204,29 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 	}
 	return &res, nil
 }
+
+// RecommendationsUsersGet implements api.Handler.
+func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.RecommendationsUsersGetOKItem, error) {
+	limit := params.Limit.Value   // default value makes this safe
+	offset := params.Offset.Value // default value makes this safe
+	users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
+
+	if err != nil {
+		return nil, errors.New("Failed to get Recommended Users")
+	}
+
+	res := []api.RecommendationsUsersGetOKItem{}
+	for _, u := range users {
+		item := api.RecommendationsUsersGetOKItem{
+			ID:        u.ID.Unwrap(),
+			FirstName: u.FirstName,
+			LastName:  u.LastName,
+			Age:       u.Age,
+			Bio:       u.Bio,
+			Images:    u.Images,
+		}
+		res = append(res, item)
+	}
+
+	return res, nil
+}

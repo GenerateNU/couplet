@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
+import { screenHeight } from "../../utils/dimensions";
 
 interface DropDownCalendarProps {
   onHeightChange: (foot: number, inch: number) => void;
@@ -35,6 +36,7 @@ function DropDownHeightPicker({ onHeightChange, selectedHeight }: DropDownCalend
         setValue={setFoot}
         placeholder="Feet"
         containerStyle={scaledStyles.dropdown}
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
       <DropDownPicker
         open={openInches}
@@ -44,6 +46,7 @@ function DropDownHeightPicker({ onHeightChange, selectedHeight }: DropDownCalend
         setValue={setInch}
         placeholder="Inches"
         containerStyle={scaledStyles.dropdown}
+        dropDownContainerStyle={{ height: screenHeight * 0.15 }}
       />
     </View>
   );

@@ -1,3 +1,5 @@
+import COLORS from "../../colors";
+
 const onboardingStyles = {
   TopUiContainer: {
     alignItems: "center",
@@ -14,7 +16,8 @@ const onboardingStyles = {
     fontWeight: "400",
     lineHeight: 12,
     letterSpacing: -0.12,
-    fontFamily: "DMSansMedium"
+    fontFamily: "DMSansMedium",
+    color: COLORS.darkGray
   },
   container: {
     flex: 1,
