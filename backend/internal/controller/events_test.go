@@ -74,8 +74,8 @@ func TestCreateEvent(t *testing.T) {
 
 	for _, v := range validTestCases {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, v.input.Images, v.input.OrgID).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, v.input.Images, v.input.MinPrice, v.input.MaxPrice, v.input.ExternalLink, v.input.Address, v.input.OrgID).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
@@ -116,8 +116,8 @@ func TestDeleteEvent(t *testing.T) {
 		OrgID:  org_id.Wrap(uuid.New()),
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.OrgID).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.MinPrice, validEvent.MaxPrice, validEvent.ExternalLink, validEvent.Address, validEvent.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	created, valErr, txErr := c.CreateEvent(validEvent)
@@ -157,8 +157,8 @@ func TestGetEvent(t *testing.T) {
 		OrgID:     org_id.Wrap(uuid.New()),
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.OrgID).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.MinPrice, validEvent.MaxPrice, validEvent.ExternalLink, validEvent.Address, validEvent.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 		WithArgs(validEvent.EventTags[0].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[1].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[2].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[3].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[4].ID, sqlmock.AnyArg(), sqlmock.AnyArg()).
@@ -228,8 +228,8 @@ func TestGetEvents(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.OrgID).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.MinPrice, validEvent.MaxPrice, validEvent.ExternalLink, validEvent.Address, validEvent.OrgID).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 			WithArgs(validEvent.EventTags[0].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[1].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[2].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[3].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[4].ID, sqlmock.AnyArg(), sqlmock.AnyArg()).
@@ -263,10 +263,12 @@ func TestSaveEvent(t *testing.T) {
 	validTestCases := []struct {
 		input event.Event
 	}{{event.Event{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgID:  org_id.Wrap(uuid.New()),
+		Name:     "The Events Company",
+		Bio:      "At The Events Company, we connect people through events",
+		Images:   url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgID:    org_id.Wrap(uuid.New()),
+		MinPrice: 20,
+		MaxPrice: 50,
 	}}}
 	invalidTestCases := []struct {
 		input event.Event
@@ -314,8 +316,8 @@ func TestSaveEvent(t *testing.T) {
 
 	for _, v := range validTestCases {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, v.input.Images, v.input.OrgID).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, v.input.Images, v.input.MinPrice, v.input.MaxPrice, v.input.ExternalLink, v.input.Address, v.input.OrgID).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
@@ -350,8 +352,8 @@ func TestUpdateEvent(t *testing.T) {
 		OrgID:     org_id.Wrap(uuid.New()),
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.OrgID).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, validEvent.Images, validEvent.MinPrice, validEvent.MaxPrice, validEvent.ExternalLink, validEvent.Address, validEvent.OrgID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 		WithArgs(validEvent.EventTags[0].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[1].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[2].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[3].ID, sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.EventTags[4].ID, sqlmock.AnyArg(), sqlmock.AnyArg()).

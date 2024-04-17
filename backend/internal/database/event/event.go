@@ -12,14 +12,18 @@ import (
 )
 
 type Event struct {
-	ID        event_id.EventID `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Name      string
-	Bio       string
-	Images    url_slice.UrlSlice
-	EventTags []EventTag `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags"`
-	OrgID     org_id.OrgID
+	ID           event_id.EventID `gorm:"primaryKey"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	Name         string
+	Bio          string
+	Images       url_slice.UrlSlice
+	MinPrice     uint8
+	MaxPrice     uint8
+	ExternalLink string
+	Address      string
+	EventTags    []EventTag `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags"`
+	OrgID        org_id.OrgID
 }
 
 // Automatically generates a random ID if unset before creating

@@ -45,12 +45,15 @@ func (c Controller) CreateEvent(params event.Event) (e event.Event, valErr error
 		}
 	}
 	tagsErr := errors.Join(tagsCountErr, tagsLengthErr, tagsTimestampErr)
-
+	var addressLengthError error
+	if len(e.Address) < 1 || 255 < len(e.Address) {
+		nameLengthErr = fmt.Errorf("invalid name length of %d, must be in range [1,255]", len(e.Address))
+	}
 	var orgIdErr error
 	if (e.OrgID == org_id.OrgID{}) {
 		orgIdErr = fmt.Errorf("invalid org ID")
 	}
-	valErr = errors.Join(timestampErr, nameLengthErr, bioLengthErr, imageCountErr, tagsErr, orgIdErr)
+	valErr = errors.Join(timestampErr, nameLengthErr, bioLengthErr, imageCountErr, tagsErr, addressLengthError, orgIdErr)
 	if valErr != nil {
 		return
 	}
