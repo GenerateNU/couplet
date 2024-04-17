@@ -97,7 +97,7 @@ func main() {
 	numUserSwipes := flag.Uint("userSwipes", 0, "the number of user swipes to generate")
 	flag.Parse()
 
-	// Create client
+	// Create client 
 	ctx := context.Background()
 	client, err := api.NewClient(fmt.Sprintf("http://localhost:%d", config.Port))
 	if err != nil {
@@ -127,7 +127,7 @@ func main() {
 			}
 		}
 
-		// Create org
+		// Create org 
 		res, err := client.OrgsPost(ctx, &newOrg)
 		if err != nil {
 			log.Fatalln(err)
@@ -138,6 +138,7 @@ func main() {
 		}
 		orgIds = append(orgIds, resCreated.ID)
 	}
+
 	fmt.Printf("\tgenerated %d org(s)\n", len(orgIds))
 
 	// Generate events
@@ -157,6 +158,7 @@ func main() {
 		if rand.Intn(2) == 0 {
 			newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
 		}
+
 		newEvent.Tags = []string{}
 		for j := 0; j < rand.Intn(5); j++ {
 			tag := eventTags[rand.Intn(len(eventTags))]
@@ -192,8 +194,8 @@ func main() {
 		newUser.Age = uint8(18 + rand.Intn(23))
 		newUser.Bio = "Hey everyone! I can't wait to go to an exciting event!"
 		newUser.Gender = genders[rand.Intn(2)]
+		newUser.ID = uuid.New()
 		
-
 		newUser.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
 			image := userImages[rand.Intn(len(userImages))]
@@ -204,7 +206,7 @@ func main() {
 				AgeMin: newUser.Age,
 				AgeMax: newUser.Age + 3,
 			  InterestedIn: interests[rand.Intn(2)],
-				Passions: []string{"music", "art", "food", "sports", "outdoors"},
+				// Passions: []string{"music", "art", "food", "sports", "outdoors"},
 		}
 
 		// fmt.Println(newUser.Preferences.AgeMin)
@@ -212,6 +214,7 @@ func main() {
 		// fmt.Println(newUser.Preferences.InterestedIn)
 		// fmt.Println(newUser.Preferences.Passions)
 		fmt.Println(newUser.Preferences)
+		fmt.Println(&newUser)
 
 		// Create user
 		res, err := client.UsersPost(ctx, &newUser)
