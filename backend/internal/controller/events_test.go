@@ -23,10 +23,14 @@ func TestCreateEvent(t *testing.T) {
 	validTestCases := []struct {
 		input event.Event
 	}{{event.Event{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgID:  org_id.Wrap(uuid.New()),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}}}
 	invalidTestCases := []struct {
 		input event.Event
@@ -110,10 +114,14 @@ func TestDeleteEvent(t *testing.T) {
 	assert.NotNil(t, txErr)
 
 	validEvent := event.Event{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgID:  org_id.Wrap(uuid.New()),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
@@ -127,7 +135,7 @@ func TestDeleteEvent(t *testing.T) {
 
 	mock.ExpectBegin()
 	mock.ExpectQuery(regexp.QuoteMeta(`DELETE FROM "events" WHERE "events"."id" = $1 RETURNING *`)).
-		WithArgs(created.ID).WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "images", "org_id"}).AddRow(created.ID, created.CreatedAt, created.UpdatedAt, created.Name, created.Bio, created.Images, created.OrgID))
+		WithArgs(created.ID).WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "images", "min_price", "max_price", "external_link", "address", "org_id"}).AddRow(created.ID, created.CreatedAt, created.UpdatedAt, created.Name, created.Bio, created.Images, created.MinPrice, created.MaxPrice, created.ExternalLink, created.Address, created.OrgID))
 	mock.ExpectCommit()
 	deleted, txErr := c.DeleteEvent(created.ID)
 	assert.Nil(t, txErr)
@@ -150,11 +158,15 @@ func TestGetEvent(t *testing.T) {
 	assert.NotNil(t, txErr)
 
 	validEvent := event.Event{
-		Name:      "The Events Company",
-		Bio:       "At The Events Company, we connect people through events",
-		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		EventTags: []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
-		OrgID:     org_id.Wrap(uuid.New()),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		EventTags:    []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
@@ -172,7 +184,7 @@ func TestGetEvent(t *testing.T) {
 	require.Nil(t, txErr)
 
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events" WHERE "events"."id" = $1 ORDER BY "events"."id" LIMIT 1`)).
-		WithArgs(created.ID).WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "images", "org_id"}).AddRow(created.ID, created.CreatedAt, created.UpdatedAt, created.Name, created.Bio, created.Images, created.OrgID))
+		WithArgs(created.ID).WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "name", "bio", "images", "min_price", "max_price", "external_link", "address", "org_id"}).AddRow(created.ID, created.CreatedAt, created.UpdatedAt, created.Name, created.Bio, created.Images, created.MinPrice, created.MaxPrice, created.ExternalLink, created.Address, created.OrgID))
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "events2tags" WHERE "events2tags"."event_id" = $1`)).WithArgs(created.ID).WillReturnRows(sqlmock.NewRows([]string{"event_id", "event_tag_id", "created_at", "updated_at"}).
 		AddRow(created.ID, created.EventTags[0].ID, created.EventTags[0].CreatedAt, created.EventTags[0].UpdatedAt).
 		AddRow(created.ID, created.EventTags[1].ID, created.EventTags[1].CreatedAt, created.EventTags[1].UpdatedAt).
@@ -219,11 +231,15 @@ func TestGetEvents(t *testing.T) {
 	require.Nil(t, err)
 
 	validEvent := event.Event{
-		Name:      "The Events Company",
-		Bio:       "At The Events Company, we connect people through events",
-		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		EventTags: []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
-		OrgID:     org_id.Wrap(uuid.New()),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		EventTags:    []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}
 
 	for i := 0; i < 10; i++ {
@@ -263,12 +279,14 @@ func TestSaveEvent(t *testing.T) {
 	validTestCases := []struct {
 		input event.Event
 	}{{event.Event{
-		Name:     "The Events Company",
-		Bio:      "At The Events Company, we connect people through events",
-		Images:   url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgID:    org_id.Wrap(uuid.New()),
-		MinPrice: 20,
-		MaxPrice: 50,
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}}}
 	invalidTestCases := []struct {
 		input event.Event
@@ -345,11 +363,15 @@ func TestUpdateEvent(t *testing.T) {
 	require.Nil(t, err)
 
 	validEvent := event.Event{
-		Name:      "The Events Company",
-		Bio:       "At The Events Company, we connect people through events",
-		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		EventTags: []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
-		OrgID:     org_id.Wrap(uuid.New()),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		EventTags:    []event.EventTag{{ID: "tag1"}, {ID: "tag2"}, {ID: "tag3"}, {ID: "tag4"}, {ID: "tag5"}},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
@@ -374,11 +396,15 @@ func TestUpdateEvent(t *testing.T) {
 	validTestCases := []struct {
 		input event.Event
 	}{{event.Event{
-		ID:     created.ID,
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgID:  org_id.Wrap(uuid.New()),
+		ID:           created.ID,
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgID:        org_id.Wrap(uuid.New()),
+		MinPrice:     0,
+		MaxPrice:     30,
+		ExternalLink: "https://example.com",
+		Address:      "1234 Example St",
 	}}}
 	invalidTestCases := []struct {
 		input event.Event

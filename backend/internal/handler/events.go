@@ -84,12 +84,16 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 		tags = append(tags, eventTag.ID)
 	}
 	res := api.EventsIDDeleteOK{
-		ID:     e.ID.Unwrap(),
-		Name:   e.Name,
-		Bio:    e.Bio,
-		Images: e.Images.Unwrap(),
-		Tags:   tags,
-		OrgId:  e.OrgID.Unwrap(),
+		ID:           e.ID.Unwrap(),
+		Name:         e.Name,
+		Bio:          e.Bio,
+		Images:       e.Images.Unwrap(),
+		Tags:         tags,
+		OrgId:        e.OrgID.Unwrap(),
+		Address:      e.Address,
+		MinPrice:     e.MinPrice,
+		MaxPrice:     api.NewOptUint8(e.MaxPrice),
+		ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
 	}
 	return &res, nil
 }
