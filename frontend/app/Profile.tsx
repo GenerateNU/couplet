@@ -36,7 +36,7 @@ export default function Profile() {
           imageUrl={require("../assets/magnifyingGlass.png")}
           name="Preferences"
           detailText="Manage what you are looking for"
-          onPress={() => router.push("ProfileScreens/AccountDetails")}
+          onPress={() => router.push("ProfileScreens/AccountPreferences")}
         />
       </View>
       <View style={{ width: "100%" }}>
