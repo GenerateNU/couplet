@@ -7,6 +7,7 @@ import (
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
 	"couplet/internal/database/url_slice"
+	"couplet/internal/util"
 	"errors"
 	"fmt"
 )
@@ -24,11 +25,15 @@ func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.Ev
 	}
 
 	e, valErr, txErr := h.controller.CreateEvent(event.Event{
-		Name:      req.Name,
-		Bio:       req.Bio,
-		Images:    url_slice.Wrap(req.Images),
-		EventTags: eventTags,
-		OrgID:     org_id.Wrap(req.OrgId),
+		Name:         req.Name,
+		Bio:          req.Bio,
+		Address:      req.Address,
+		Images:       url_slice.Wrap(req.Images),
+		MinPrice:     req.MinPrice,
+		MaxPrice:     req.MaxPrice.Value,
+		ExternalLink: req.ExternalLink.Value.String(),
+		EventTags:    eventTags,
+		OrgID:        org_id.Wrap(req.OrgId),
 	})
 	if valErr != nil {
 		return &api.Error{
@@ -45,12 +50,16 @@ func (h Handler) EventsPost(ctx context.Context, req *api.EventsPostReq) (api.Ev
 		tags = append(tags, eventTag.ID)
 	}
 	res := api.EventsPostCreated{
-		ID:     e.ID.Unwrap(),
-		Name:   e.Name,
-		Bio:    e.Bio,
-		Images: e.Images.Unwrap(),
-		Tags:   tags,
-		OrgId:  e.OrgID.Unwrap(),
+		ID:           e.ID.Unwrap(),
+		Name:         e.Name,
+		Bio:          e.Bio,
+		Images:       e.Images.Unwrap(),
+		Address:      e.Address,
+		Tags:         tags,
+		OrgId:        e.OrgID.Unwrap(),
+		MinPrice:     e.MinPrice,
+		MaxPrice:     api.NewOptUint8(e.MaxPrice),
+		ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
 	}
 	return &res, nil
 }
@@ -75,12 +84,16 @@ func (h Handler) EventsIDDelete(ctx context.Context, params api.EventsIDDeletePa
 		tags = append(tags, eventTag.ID)
 	}
 	res := api.EventsIDDeleteOK{
-		ID:     e.ID.Unwrap(),
-		Name:   e.Name,
-		Bio:    e.Bio,
-		Images: e.Images.Unwrap(),
-		Tags:   tags,
-		OrgId:  e.OrgID.Unwrap(),
+		ID:           e.ID.Unwrap(),
+		Name:         e.Name,
+		Bio:          e.Bio,
+		Images:       e.Images.Unwrap(),
+		Tags:         tags,
+		OrgId:        e.OrgID.Unwrap(),
+		Address:      e.Address,
+		MinPrice:     e.MinPrice,
+		MaxPrice:     api.NewOptUint8(e.MaxPrice),
+		ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
 	}
 	return &res, nil
 }
@@ -134,12 +147,16 @@ func (h Handler) EventsIDGet(ctx context.Context, params api.EventsIDGetParams) 
 		tags = append(tags, eventTag.ID)
 	}
 	res := api.EventsIDGetOK{
-		ID:     e.ID.Unwrap(),
-		Name:   e.Name,
-		Bio:    e.Bio,
-		Images: e.Images.Unwrap(),
-		Tags:   tags,
-		OrgId:  e.OrgID.Unwrap(),
+		ID:           e.ID.Unwrap(),
+		Name:         e.Name,
+		Bio:          e.Bio,
+		Address:      e.Address,
+		ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
+		MinPrice:     e.MinPrice,
+		MaxPrice:     api.NewOptUint8(e.MaxPrice),
+		Images:       e.Images.Unwrap(),
+		Tags:         tags,
+		OrgId:        e.OrgID.Unwrap(),
 	}
 	return &res, nil
 }
@@ -164,12 +181,16 @@ func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]a
 			tags = append(tags, eventTag.ID)
 		}
 		item := api.EventsGetOKItem{
-			ID:     e.ID.Unwrap(),
-			Name:   e.Name,
-			Bio:    e.Bio,
-			Images: e.Images.Unwrap(),
-			Tags:   tags,
-			OrgId:  e.OrgID.Unwrap(),
+			ID:           e.ID.Unwrap(),
+			Name:         e.Name,
+			Bio:          e.Bio,
+			Address:      e.Address,
+			ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
+			MinPrice:     e.MinPrice,
+			MaxPrice:     api.NewOptUint8(e.MaxPrice),
+			Images:       e.Images.Unwrap(),
+			Tags:         tags,
+			OrgId:        e.OrgID.Unwrap(),
 		}
 		res = append(res, item)
 	}
@@ -240,11 +261,15 @@ func (h Handler) EventsIDPut(ctx context.Context, req *api.EventsIDPutReq, param
 	}
 
 	e, valErr, txErr := h.controller.SaveEvent(event.Event{
-		Name:      req.Name,
-		Bio:       req.Bio,
-		Images:    url_slice.Wrap(req.Images),
-		EventTags: eventTags,
-		OrgID:     org_id.Wrap(req.OrgId),
+		Name:         req.Name,
+		Bio:          req.Bio,
+		Images:       url_slice.Wrap(req.Images),
+		EventTags:    eventTags,
+		OrgID:        org_id.Wrap(req.OrgId),
+		MinPrice:     req.MinPrice,
+		MaxPrice:     req.MaxPrice.Value,
+		ExternalLink: req.ExternalLink.Value.String(),
+		Address:      req.Address,
 	})
 	if valErr != nil {
 		return &api.Error{
@@ -261,12 +286,16 @@ func (h Handler) EventsIDPut(ctx context.Context, req *api.EventsIDPutReq, param
 		tags = append(tags, eventTag.ID)
 	}
 	res := api.EventsIDPutOK{
-		ID:     e.ID.Unwrap(),
-		Name:   e.Name,
-		Bio:    e.Bio,
-		Images: e.Images.Unwrap(),
-		Tags:   tags,
-		OrgId:  e.OrgID.Unwrap(),
+		ID:           e.ID.Unwrap(),
+		Name:         e.Name,
+		Bio:          e.Bio,
+		Images:       e.Images.Unwrap(),
+		Tags:         tags,
+		OrgId:        e.OrgID.Unwrap(),
+		MinPrice:     e.MinPrice,
+		MaxPrice:     api.NewOptUint8(e.MaxPrice),
+		ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
+		Address:      e.Address,
 	}
 	return &res, nil
 }

@@ -27,10 +27,8 @@ var (
 		util.MustParseUrl("https://ids.si.edu/ids/deliveryService?id=https://www.si.edu/sites/default/files/newsdesk/building/aib-03_print.jpg&max_w=600"),
 		util.MustParseUrl("https://images.adsttc.com/media/images/5ffe/5a97/63c0/174c/f800/00ee/newsletter/1.jpg?1610504845")}
 	orgTags        = []string{"nonprofit", "family-owned", "international", "museum", "university", "eco-friendly", "start-up"}
-	eventAddresses = []api.Address{{Line1: "360 Huntington Ave", ZipCode: "02115", City: "Boston", State: "MA", Country: "US"},
-		{Line1: "465 Huntington Ave", ZipCode: "02115", City: "Boston", State: "MA", Country: "US"},
-		{Line1: "25 Harbor Shore Dr", ZipCode: "02210", City: "Boston", State: "MA", Country: "US"}}
-	eventImages = []url.URL{util.MustParseUrl("https://d1nn9x4fgzyvn4.cloudfront.net/styles/scaled_562_wide/s3/2023-08/0289_4x3.jpg?itok=g1xziFrq"),
+	eventAddresses = []string{"Frog Pond", "Museum of Fine Arts", "Boston Children's Museum", "Boston Common", "Fenway Park", "New England Aquarium"}
+	eventImages    = []url.URL{util.MustParseUrl("https://d1nn9x4fgzyvn4.cloudfront.net/styles/scaled_562_wide/s3/2023-08/0289_4x3.jpg?itok=g1xziFrq"),
 		util.MustParseUrl("https://umanitoba.ca/art/sites/art/files/styles/21x9_1100w/public/2020-08/exhibitions-events.jpg?itok=ih_87Wlz"),
 		util.MustParseUrl("https://www.freemanarts.org/de/cache/content/30/hr_Events_Tickets_Hero_2022.png"),
 		util.MustParseUrl("https://365thingsinhouston.com/wp-content/uploads/2024/01/top-things-to-do-this-week-in-houston-january-1-7-2024-tina-turner-musical-2.jpg"),
@@ -148,12 +146,14 @@ func main() {
 		newEvent := api.EventsPostReq{}
 		newEvent.Name = fmt.Sprintf("event-%d", i)
 		newEvent.Bio = fmt.Sprintf("Come to %s and have the best night of your life!", newEvent.Name)
-		newEvent.Address = api.NewOptAddress(eventAddresses[rand.Intn(len(eventAddresses))])
+		newEvent.Address = eventAddresses[rand.Intn(len(eventAddresses))]
 		newEvent.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
 			image := eventImages[rand.Intn(len(eventImages))]
 			newEvent.Images = append(newEvent.Images, image)
 		}
+		newEvent.MinPrice = uint8(10 + rand.Intn(50))
+		newEvent.MaxPrice = api.NewOptUint8(newEvent.MinPrice + uint8(10+rand.Intn(50)))
 		if rand.Intn(2) == 0 {
 			newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
 		}

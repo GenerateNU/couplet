@@ -22,39 +22,63 @@ func TestEventsPost(t *testing.T) {
 	validTestCases := []struct {
 		input api.EventsPostReq
 	}{{api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}}
 	invalidTestCases := []struct {
 		input api.EventsPostReq
 	}{{api.EventsPostReq{
-		Name:   "",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.New(),
+		Name:         "",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}, {api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}, {api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}, {api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		Tags:   []string{"tag1", "tag2", "tag3", "tag4", "tag5", "tag6"},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		Tags:         []string{"tag1", "tag2", "tag3", "tag4", "tag5", "tag6"},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}, {api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.UUID{},
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.UUID{},
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}}
 
 	db, mock := database.NewMockDB()
@@ -68,8 +92,8 @@ func TestEventsPost(t *testing.T) {
 
 	for _, v := range validTestCases {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, url_slice.Wrap(v.input.Images), v.input.OrgId).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, url_slice.Wrap(v.input.Images), v.input.MinPrice, v.input.MaxPrice.Value, v.input.ExternalLink.Value.String(), v.input.Address, v.input.OrgId).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
@@ -107,14 +131,18 @@ func TestEventsIDDelete(t *testing.T) {
 	assert.Nil(t, err)
 
 	validEvent := api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.OrgId).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.MinPrice, validEvent.MaxPrice.Value, validEvent.ExternalLink.Value.String(), validEvent.Address, validEvent.OrgId).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	createRes, err := h.EventsPost(context.Background(), &validEvent)
@@ -149,15 +177,19 @@ func TestEventsIDGet(t *testing.T) {
 	assert.Nil(t, err)
 
 	validEvent := api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		Tags:   []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		Tags:         []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.OrgId).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.MinPrice, validEvent.MaxPrice.Value, validEvent.ExternalLink.Value.String(), validEvent.Address, validEvent.OrgId).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 		WithArgs(validEvent.Tags[0], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[1], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[2], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[3], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[4], sqlmock.AnyArg(), sqlmock.AnyArg()).
@@ -220,17 +252,21 @@ func TestEventsGet(t *testing.T) {
 	require.NotNil(t, h)
 
 	validEvent := api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		Tags:   []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		Tags:         []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}
 
 	for i := 0; i < 10; i++ {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.OrgId).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.MinPrice, validEvent.MaxPrice.Value, validEvent.ExternalLink.Value.String(), validEvent.Address, validEvent.OrgId).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 			WithArgs(validEvent.Tags[0], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[1], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[2], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[3], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[4], sqlmock.AnyArg(), sqlmock.AnyArg()).
@@ -263,10 +299,14 @@ func TestEventsIDPut(t *testing.T) {
 	validTestCases := []struct {
 		input api.EventsIDPutReq
 	}{{api.EventsIDPutReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}}}
 	invalidTestCases := []struct {
 		input api.EventsIDPutReq
@@ -309,8 +349,8 @@ func TestEventsIDPut(t *testing.T) {
 
 	for _, v := range validTestCases {
 		mock.ExpectBegin()
-		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, url_slice.Wrap(v.input.Images), v.input.OrgId).
+		mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), v.input.Name, v.input.Bio, url_slice.Wrap(v.input.Images), v.input.MinPrice, v.input.MaxPrice.Value, v.input.ExternalLink.Value.String(), v.input.Address, v.input.OrgId).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
@@ -339,15 +379,19 @@ func TestEventsIDPatch(t *testing.T) {
 	require.NotNil(t, h)
 
 	validEvent := api.EventsPostReq{
-		Name:   "The Events Company",
-		Bio:    "At The Events Company, we connect people through events",
-		Images: url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-		Tags:   []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
-		OrgId:  uuid.New(),
+		Name:         "The Events Company",
+		Bio:          "At The Events Company, we connect people through events",
+		Images:       url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
+		Tags:         []string{"tag1", "tag2", "tag3", "tag4", "tag5"},
+		OrgId:        uuid.New(),
+		MinPrice:     0,
+		MaxPrice:     api.NewOptUint8(30),
+		ExternalLink: api.NewOptURI(util.MustParseUrl("https://example.com")),
+		Address:      "1234 Example St",
 	}
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7)`)).
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.OrgId).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "events" ("id","created_at","updated_at","name","bio","images","min_price","max_price","external_link","address","org_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`)).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Name, validEvent.Bio, url_slice.Wrap(validEvent.Images), validEvent.MinPrice, validEvent.MaxPrice.Value, validEvent.ExternalLink.Value.String(), validEvent.Address, validEvent.OrgId).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "event_tags" ("id","created_at","updated_at") VALUES ($1,$2,$3),($4,$5,$6),($7,$8,$9),($10,$11,$12),($13,$14,$15) ON CONFLICT DO NOTHING`)).
 		WithArgs(validEvent.Tags[0], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[1], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[2], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[3], sqlmock.AnyArg(), sqlmock.AnyArg(), validEvent.Tags[4], sqlmock.AnyArg(), sqlmock.AnyArg()).
