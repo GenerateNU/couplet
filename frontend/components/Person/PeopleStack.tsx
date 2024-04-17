@@ -22,7 +22,6 @@ export default function PeopleStack({ userId }: PeopleStackProps) {
   const [person, setPerson] = useState<PersonProps>(people[currentCardIndex]);
   const [isLoading, setIsLoading] = useState(true);
 
-
   const handleReact = useCallback(
     (like: boolean) => {
       console.log("HELLO", like);
@@ -97,15 +96,15 @@ export default function PeopleStack({ userId }: PeopleStackProps) {
           likesYou: false,
           handleReact: () => {}
         };
-        setPeople((prevPeople) => [...prevPeople, newPerson]); 
+        setPeople((prevPeople) => [...prevPeople, newPerson]);
       });
     });
   }, [userId]);
 
   useEffect(() => {
     if (people.length > 0) {
-        setPerson(people[currentCardIndex]);
-        setIsLoading(false)
+      setPerson(people[currentCardIndex]);
+      setIsLoading(false);
     }
   }, [people, currentCardIndex, person]);
 
