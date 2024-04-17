@@ -2,10 +2,13 @@ import { router } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { getEventById } from "../../api/events";
 import scaleStyleSheet from "../../scaleStyles";
 import HomeEventCard from "./HomeEventCard";
 
-export default function HomePageSection({ title, events }: { title: string; events: any[] }) {
+type Event = Awaited<ReturnType<typeof getEventById>>;
+
+export default function HomePageSection({ title, events }: { title: string; events: Event[] }) {
   return (
     <View style={{ marginTop: 32 }}>
       <TouchableOpacity
@@ -21,7 +24,7 @@ export default function HomePageSection({ title, events }: { title: string; even
       <View style={{ flexDirection: "row" }}>
         <ScrollView horizontal>
           {events.map((event) => (
-            <HomeEventCard key={event.id} id={event.id} name={event.name} image={event.images[0]} />
+            <HomeEventCard key={event.id} event={event} />
           ))}
         </ScrollView>
       </View>

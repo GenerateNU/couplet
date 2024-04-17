@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   eventImageContainer: {
-    marginBottom: 10
+    //  marginBottom: 10
   },
   title: {
     fontFamily: "DMSansMedium",
@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   reactionContainer: {
-    position: "absolute",
-    width: "100%",
-    bottom: 0
+    // position: "absolute",
+    // width: "100%",
+    // bottom: 100
   },
   viewShare: {
     flexDirection: "row",

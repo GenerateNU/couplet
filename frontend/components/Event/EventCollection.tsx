@@ -25,12 +25,7 @@ export default function EventCollection({ name, events }: EventCollectionProps) 
         <View style={scaledStyles.likedContainer}>
           {events.map((event) => (
             <View style={scaledStyles.likedEvent} key={event.id}>
-              <HomeEventCard
-                key={event.id}
-                id={event.id}
-                name={event.name}
-                image={event.images[0]}
-              />
+              <HomeEventCard key={event.id} event={event} />
             </View>
           ))}
         </View>
