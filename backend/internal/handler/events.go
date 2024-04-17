@@ -181,12 +181,16 @@ func (h Handler) EventsGet(ctx context.Context, params api.EventsGetParams) ([]a
 			tags = append(tags, eventTag.ID)
 		}
 		item := api.EventsGetOKItem{
-			ID:     e.ID.Unwrap(),
-			Name:   e.Name,
-			Bio:    e.Bio,
-			Images: e.Images.Unwrap(),
-			Tags:   tags,
-			OrgId:  e.OrgID.Unwrap(),
+			ID:           e.ID.Unwrap(),
+			Name:         e.Name,
+			Bio:          e.Bio,
+			Address:      e.Address,
+			ExternalLink: api.NewOptURI(util.MustParseUrl(e.ExternalLink)),
+			MinPrice:     e.MinPrice,
+			MaxPrice:     api.NewOptUint8(e.MaxPrice),
+			Images:       e.Images.Unwrap(),
+			Tags:         tags,
+			OrgId:        e.OrgID.Unwrap(),
 		}
 		res = append(res, item)
 	}
