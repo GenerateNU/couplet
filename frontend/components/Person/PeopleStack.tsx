@@ -14,8 +14,6 @@ export type PeopleStackProps = {
 };
 
 export default function PeopleStack({ userId }: PeopleStackProps) {
-
-
   const [people, setPeople] = useState<PersonProps[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [person, setPerson] = useState<PersonProps>(people[currentCardIndex]);
