@@ -25,27 +25,30 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
 
   return (
     <View>
-      <View style={scaledStyles.eventContentContainer}>
-        <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={scaledStyles.eventImageContainer}>
-            <EventImageCarousel images={event?.images || []} />
-          </View>
-          <View>{event && <EventCard event={event} handleReact={handleReact} />}</View>
-        </ScrollView>
-      </View>
-      <View style={scaledStyles.reactionContainer}>
-        <Reaction handleReact={handleReact} />
+      <View>
+        <View style={scaledStyles.eventContentContainer}>
+          <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={scaledStyles.eventImageContainer}>
+              <EventImageCarousel images={event?.images || []} />
+            </View>
+            <View>{event && <EventCard event={event} handleReact={handleReact} />}</View>
+          </ScrollView>
+        </View>
+        <View style={scaledStyles.reactionContainer}>
+          <Reaction handleReact={handleReact} />
+        </View>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   eventContentContainer: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    height: "100%"
   },
   eventImageContainer: {
-    //  marginBottom: 10
+    marginBottom: 10
   },
   title: {
     fontFamily: "DMSansMedium",
@@ -56,9 +59,9 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   reactionContainer: {
-    // position: "absolute",
-    // width: "100%",
-    // bottom: 100
+    position: "absolute",
+    width: "100%",
+    bottom: 0
   },
   viewShare: {
     flexDirection: "row",
