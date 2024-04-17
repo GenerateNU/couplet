@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import scaleStyleSheet from "../../scaleStyles";
-import { genders } from "../../utils/genders";
+import genders from "../../utils/genders";
 
 interface DropDownGenderProps {
   onGenderChange: (local: string) => void;
@@ -43,4 +43,3 @@ const styles = StyleSheet.create({
 });
 
 const scaledStyles = scaleStyleSheet(styles);
-

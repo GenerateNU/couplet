@@ -8,7 +8,10 @@ export default function EditPreferredRelationship() {
   const router = useRouter();
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< Edit Preferred Relationship`}</Text>
+      <Text
+        onPress={() => router.back()}
+        style={styles.title}
+      >{`< Edit Preferred Relationship`}</Text>
       <View style={styles.container}>
         <DropDownRelationship onGenderChange={() => "placeHolder"} selectedPronoun="men" />
       </View>

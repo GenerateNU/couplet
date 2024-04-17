@@ -1,5 +1,3 @@
-export const genders = [
-    "men",
-    "women",
-    "other",
-]
+const genders = ["men", "women", "other"];
+
+export default genders;
