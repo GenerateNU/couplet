@@ -8,9 +8,7 @@ type User = Awaited<ReturnType<typeof getUsers>>[number];
 type Event = Awaited<ReturnType<typeof getEvents>>[number];
 
 export default function ViewProfile() {
-  const userState = useAppSelector((state) => {
-    return state.form;
-  });
+  const userState = useAppSelector((state) => state.form);
   const events: EventCardItemProps[] = [];
   getEvents({ limit: 4, offset: 0 }).then((fetchedEvents: Event[]) => {
     fetchedEvents.forEach((fetchedEvent: Event) => {
@@ -31,9 +29,7 @@ export default function ViewProfile() {
     interests: userState.passion,
     instagramUsername: userState.instagram,
     mutualEvents: events,
-    images: userState.photos.map((photo) => {
-      return { image: photo.filePath, caption: photo.caption };
-    }),
+    images: userState.photos.map((photo) => ({ image: photo.filePath, caption: photo.caption })),
     isMatched: true,
     likesYou: false,
     handleReact: () => {}

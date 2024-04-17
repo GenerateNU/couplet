@@ -35,8 +35,8 @@ function ProfileNotifications() {
       images: userState.photos.map((photo) => photo.filePath)
     };
     try {
-     const user = await createUser(userData);
-     dispatch(setId(user.id));
+      const user = await createUser(userData);
+      dispatch(setId(user.id));
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(e.message);
