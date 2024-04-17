@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { router } from "expo-router";
 import scaleStyleSheet from "../../scaleStyles";
-
 
 import { getEvents } from "../../api/events";
 import Person from "../../components/Person/Person";
@@ -58,10 +57,13 @@ export default function ViewProfile() {
   };
 
   return (
-    <View style={{
-    flex: 1 }}>
+    <View
+      style={{
+        flex: 1
+      }}
+    >
       <Text onPress={() => router.back()} style={scaledStyles.title}>{`< My Profile`}</Text>
-      <Person 
+      <Person
         id={user.id}
         firstName={user.firstName}
         lastName={user.lastName}
@@ -99,6 +101,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 40
   }
-}); 
+});
 
 const scaledStyles = scaleStyleSheet(styles);
