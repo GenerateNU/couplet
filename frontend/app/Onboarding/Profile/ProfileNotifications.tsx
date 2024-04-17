@@ -8,7 +8,7 @@ import ContinueButton from "../../../components/Onboarding/ContinueButton";
 import OnboardingTitle from "../../../components/Onboarding/OnboardingTitle";
 import TopBar from "../../../components/Onboarding/TopBar";
 import scaleStyleSheet from "../../../scaleStyles";
-import { setNotifications } from "../../../state/formSlice";
+import { setId, setNotifications } from "../../../state/formSlice";
 import { useAppDispatch, useAppSelector } from "../../../state/hooks";
 import onboardingStyles from "../../../styles/Onboarding/styles";
 import calculateAge from "../../../utils/calculateAge";
@@ -35,11 +35,13 @@ function ProfileNotifications() {
       images: userState.photos.map((photo) => photo.filePath)
     };
     try {
-      await createUser(userData);
+     const user = await createUser(userData);
+     dispatch(setId(user.id));
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(e.message);
       }
+      console.log(e);
     }
     router.push("Onboarding/Profile/ProfileConfirm");
   }
