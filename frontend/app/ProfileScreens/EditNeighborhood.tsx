@@ -1,16 +1,22 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DropDownLocation from "../../components/Onboarding/DropDownLocation";
+import { useAppSelector } from "../../state/hooks";
 
 export default function EditNeighborhood() {
   const router = useRouter();
+  const user = useAppSelector((state) => state.form);
+
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< Edit Neighborhood`}</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.title}>{`< Edit Neighborhood`}</Text>
+      </TouchableOpacity>
+
       <View style={styles.container}>
-        <DropDownLocation onLocationChange={() => "placeHolder"} selectedLocation="Allston" />
+        <DropDownLocation onLocationChange={() => "placeHolder"} selectedLocation={user.location} />
       </View>
     </SafeAreaView>
   );

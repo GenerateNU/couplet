@@ -4,7 +4,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type UserDetailsProps = {
   onPress: () => void;
-  profileImageSource: any; // Adjust the type as needed
+  profileImageSource: {
+    uri: string;
+  } | null;
   name: string;
   editDetailsText: string;
   chevronColor: string;
@@ -12,13 +14,12 @@ type UserDetailsProps = {
 
 export default function UserDetails(props: UserDetailsProps) {
   const { onPress, profileImageSource, name, editDetailsText, chevronColor } = props;
-  //console.log(profileImageSource); // Make this the source of the Image component when images are available
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.profileNameContainer}>
         {/* // eslint-disable-next-line global-require */}
-        <Image source={require("../../assets/stockProPic.png")} style={styles.imageContainer} />
+        {profileImageSource && <Image source={profileImageSource} style={styles.imageContainer} />}
         <View style={styles.nameAndEditContainer}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.edit}>{editDetailsText}</Text>

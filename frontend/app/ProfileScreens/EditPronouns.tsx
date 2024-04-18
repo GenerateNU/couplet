@@ -1,16 +1,21 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DropDownPronoun from "../../components/Profile/DropDownPronouns";
+import { useAppSelector } from "../../state/hooks";
 
 export default function EditPronouns() {
   const router = useRouter();
+  const user = useAppSelector((state) => state.form);
+
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< Edit Pronouns`}</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.title}>{`< Edit Pronouns`}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
-        <DropDownPronoun onPronounChange={() => "placeHolder"} selectedPronoun="She/Her" />
+        <DropDownPronoun onPronounChange={() => "placeHolder"} selectedPronoun={user.pronouns} />
       </View>
     </SafeAreaView>
   );

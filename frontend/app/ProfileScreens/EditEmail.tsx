@@ -1,13 +1,15 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditEmail() {
   const router = useRouter();
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< Edit Email`}</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.title}>{`< Edit Email`}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
         <TextInput
           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
