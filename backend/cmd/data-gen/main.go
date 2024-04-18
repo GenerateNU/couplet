@@ -221,7 +221,7 @@ func main() {
 			newUser.Images = append(newUser.Images, image)
 		}
 		newUser.Preference = api.Preference{
-				AgeMin: min(newUser.Age-2,18),
+				AgeMin: max(newUser.Age-2,18),
 				AgeMax: newUser.Age + 2,
 			  InterestedIn: interests[rand.Intn(2)],
 				// Passions: []string{"music", "art", "food", "sports", "outdoors"},
