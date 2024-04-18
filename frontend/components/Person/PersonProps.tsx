@@ -16,7 +16,7 @@ export type EventCardItemProps = {
 
 export type PersonProps = {
   // Person info
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   age: number;

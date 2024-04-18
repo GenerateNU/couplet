@@ -14,6 +14,7 @@ interface Height {
 const formSlice = createSlice({
   name: "form",
   initialState: {
+    id: "" as string,
     fullName: "" as string,
     email: "" as string,
     name: "" as string,
@@ -113,6 +114,9 @@ const formSlice = createSlice({
     },
     setNotifications: (state, action) => {
       state.notifications = action.payload;
+    },
+    setId: (state, action) => {
+      state.id = action.payload;
     }
   }
 });
@@ -141,7 +145,8 @@ export const {
   setResponseBio,
   setPhotos,
   setInstagram,
-  setNotifications
+  setNotifications,
+  setId
 } = formSlice.actions;
 
 export default formSlice.reducer;

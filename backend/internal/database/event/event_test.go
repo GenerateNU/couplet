@@ -19,6 +19,7 @@ func TestEventBeforeCreate(t *testing.T) {
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
 		Name:      "The Events Company",
+		Address:   "1234 Main St",
 		Bio:       "At The Events Company, we connect people through events",
 		Images:    url_slice.UrlSlice{},
 		OrgID:     org_id.Wrap(uuid.New()),

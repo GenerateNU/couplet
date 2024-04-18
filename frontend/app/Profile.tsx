@@ -37,7 +37,7 @@ function Profile() {
           imageUrl={require("../assets/pencil.png")}
           name="Profile"
           detailText="View or change your profile"
-          onPress={() => router.push("ProfileScreens/AccountDetails")}
+          onPress={() => router.push("ProfileScreens/ViewProfile")}
         />
         <PurpleProfileCard
           imageUrl={require("../assets/magnifyingGlass.png")}

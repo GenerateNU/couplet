@@ -6,8 +6,9 @@ import { PillProps } from "./PersonProps";
 export default function InfoChips({ items, textColor, backgroundColor }: PillProps) {
   return (
     <View style={scaledStyles.container}>
-      {items.map((item) => (
-        <View style={{ ...scaledStyles.chipItemContainer, backgroundColor }}>
+      {items.map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <View key={index} style={{ ...scaledStyles.chipItemContainer, backgroundColor }}>
           <Text style={{ ...scaledStyles.chipItemText, color: textColor }}>{item}</Text>
         </View>
       ))}

@@ -32,7 +32,7 @@ export default function Navbar({ activePage }: NavbarProps) {
       }}
     >
       <NavButton route="Home" icon={activePage === "Home" ? ACTIVE_HOME : INACTIVE_HOME} />
-      <NavButton route="Favorites" icon={activePage === "Likes" ? ACTIVE_LIKES : INACTIVE_LIKES} />
+      <NavButton route="People" icon={activePage === "Likes" ? ACTIVE_LIKES : INACTIVE_LIKES} />
       <NavButton
         route="Matches"
         icon={activePage === "Matches" ? ACTIVE_MATCHES : INACTIVE_MATCHES}
