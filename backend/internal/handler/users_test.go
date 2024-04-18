@@ -1,5 +1,23 @@
 package handler_test
 
+// import (
+// 	"context"
+// 	"couplet/internal/api"
+// 	"couplet/internal/controller"
+// 	"couplet/internal/database"
+// 	"couplet/internal/database/url_slice"
+// 	"couplet/internal/handler"
+// 	"couplet/internal/util"
+// 	"regexp"
+
+// 	"testing"
+
+// 	"github.com/DATA-DOG/go-sqlmock"
+// 	"github.com/google/uuid"
+// 	"github.com/stretchr/testify/assert"
+// 	"github.com/stretchr/testify/require"
+// )
+
 // func TestUsersPost(t *testing.T) {
 // 	validTestCases := []struct {
 // 		input api.UsersPostReq
@@ -30,7 +48,7 @@ package handler_test
 // 		Age:       5,
 // 		Bio:       "Hey everyone! I can't wait to go to an exciting event!",
 // 		Images:    url_slice.UrlSlice{util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png"), util.MustParseUrl("https://example.com/image.png")},
-// 	}}, {api.UsersPostReq{
+// 	}}, {api.User{
 // 		FirstName: "First",
 // 		LastName:  "Last",
 // 		Age:       21,

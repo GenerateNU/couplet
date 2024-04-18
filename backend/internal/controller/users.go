@@ -60,11 +60,15 @@ func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 	tx := c.database.Begin()
 	txErr = tx.Clauses(clause.Returning{}).Delete(&u).Error
 	if txErr != nil {
+	txErr = tx.Clauses(clause.Returning{}).Delete(&u).Error
+	if txErr != nil {
 		tx.Rollback()
 		return
 	}
 	tx.Commit()
 	return
+}
+return
 }
 
 // Gets a user from the database by its ID
@@ -72,8 +76,6 @@ func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
 	txErr = c.database.First(&u, id).Error
 	return
 }
-
-// Gets several users from the database with pagination
 func (c Controller) GetUsers(limit uint8, offset uint32) (users []user.User, txErr error) {
 	txErr = c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
 	return
@@ -122,8 +124,10 @@ func (c Controller) SaveUser(params user.User) (u user.User, valErr error, txErr
 }
 
 // Update one or many fields of an existing user in the database
+// Update one or many fields of an existing user in the database
 func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
 	u = params
+
 	var timestampErr error
 	if u.UpdatedAt.Before(u.CreatedAt) {
 		timestampErr = fmt.Errorf("invalid timestamps")

@@ -34,6 +34,7 @@ var (
 		util.MustParseUrl("https://ids.si.edu/ids/deliveryService?id=https://www.si.edu/sites/default/files/newsdesk/building/aib-03_print.jpg&max_w=600"),
 		util.MustParseUrl("https://images.adsttc.com/media/images/5ffe/5a97/63c0/174c/f800/00ee/newsletter/1.jpg?1610504845")}
 	orgTags        = []string{"nonprofit", "family-owned", "international", "museum", "university", "eco-friendly", "start-up"}
+	eventNames        = []string{"Concert", "Art Show", "Festival", "Museum Exhibit", "Comedy Show", "Theater Performance", "Sports Game", "Aquarium Tour", "Zoo Visit", "Park Picnic"}
 	eventAddresses = []string{"Frog Pond", "Museum of Fine Arts", "Boston Children's Museum", "Boston Common", "Fenway Park", "New England Aquarium"}
 	eventImages    = []url.URL{util.MustParseUrl("https://d1nn9x4fgzyvn4.cloudfront.net/styles/scaled_562_wide/s3/2023-08/0289_4x3.jpg?itok=g1xziFrq"),
 		util.MustParseUrl("https://umanitoba.ca/art/sites/art/files/styles/21x9_1100w/public/2020-08/exhibitions-events.jpg?itok=ih_87Wlz"),
@@ -51,6 +52,7 @@ var (
 		util.MustParseUrl("https://www.upmenu.com/wp-content/uploads/2021/07/3-restaurant-event-ideas-example-food-tastings.jpg"),
 		util.MustParseUrl("https://www.buzztime.com/business/wp-content/uploads/2019/08/shutterstock_365582531.jpg")}
 	eventExternalLink = util.MustParseUrl("https://www.google.com/")
+	orgNames 				= []string{"Boston Symphony Orchestra", "Museum of Fine Arts", "Boston Children's Museum", "New England Aquarium", "Boston Red Sox", "Boston Ballet", "Boston Pops", "Boston Lyric Opera"}
 	eventTags         = []string{"indoors", "outdoors", "art", "music", "food", "active", "limited-time", "showcase", "performance"}
 	userImages        = []url.URL{util.MustParseUrl("https://static01.nyt.com/images/2015/08/10/fashion/10TELLER1/10TELLER1-superJumbo.jpg"),
 		util.MustParseUrl("https://hollywoodlife.com/wp-content/uploads/2015/10/terry-crews-bio-photo.jpg?quality=100"),
@@ -115,8 +117,15 @@ func main() {
 	for i := uint(0); i < *numOrgs; i++ {
 		// Define org
 		newOrg := api.OrgsPostReq{}
-		newOrg.Name = fmt.Sprintf("org-%d", i)
+		newOrg.Name = orgNames[rand.Intn(len(orgNames))]
 		newOrg.Bio = fmt.Sprintf("At %s, we connect people through events", newOrg.Name)
+		newOrg.Images = []url.URL{}
+		for j := 0; j < 1+rand.Intn(3); j++ {
+			image := orgImages[rand.Intn(len(orgImages))]
+			if !slices.Contains(newOrg.Images, image) {
+				newOrg.Images = append(newOrg.Images, image)
+			}
+		}
 		newOrg.Images = []url.URL{}
 		for j := 0; j < 1+rand.Intn(3); j++ {
 			image := orgImages[rand.Intn(len(orgImages))]
@@ -151,14 +160,20 @@ func main() {
 	for i := uint(0); i < *numEvents; i++ {
 		// Define event
 		newEvent := api.EventsPostReq{}
-		newEvent.Name = fmt.Sprintf("event-%d", i)
+		newEvent.Name = eventNames[rand.Intn(len(eventNames))]
 		newEvent.Bio = fmt.Sprintf("Come to %s and have the best night of your life!", newEvent.Name)
+		newEvent.Address = eventAddresses[rand.Intn(len(eventAddresses))]
 		newEvent.Address = eventAddresses[rand.Intn(len(eventAddresses))]
 		newEvent.Images = []url.URL{}
 		for j := 0; j < 4; j++ {
+		for j := 0; j < 4; j++ {
 			image := eventImages[rand.Intn(len(eventImages))]
 			newEvent.Images = append(newEvent.Images, image)
+			newEvent.Images = append(newEvent.Images, image)
 		}
+		newEvent.MinPrice = uint8(10 + rand.Intn(50))
+		newEvent.MaxPrice = api.NewOptUint8(newEvent.MinPrice + uint8(10+rand.Intn(50)))
+		newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
 		newEvent.MinPrice = uint8(10 + rand.Intn(50))
 		newEvent.MaxPrice = api.NewOptUint8(newEvent.MinPrice + uint8(10+rand.Intn(50)))
 		newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
@@ -214,6 +229,7 @@ func main() {
 		newUser.InstagramUsername = "@couplet"
 		
 		newUser.Images = []url.URL{}
+		for j := 0; j < 4; j++ {
 		for j := 0; j < 4; j++ {
 			image := userImages[rand.Intn(len(userImages))]
 			newUser.Images = append(newUser.Images, image)
@@ -320,4 +336,6 @@ func main() {
 		userSwipes = append(userSwipes, pair)
 	}
 	fmt.Printf("\tgenerated %d user swipe(s)\n", len(userSwipes))
+}
+}
 }

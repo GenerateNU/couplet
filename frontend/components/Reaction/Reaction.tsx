@@ -1,5 +1,6 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import scaleStyleSheet from "../../scaleStyles";
 import ReactionButton from "./ReactionButton";
 
 export type ReactionProps = {
@@ -8,6 +9,7 @@ export type ReactionProps = {
 
 function Reaction({ handleReact }: ReactionProps) {
   return (
+<<<<<<< HEAD
     <View
       style={{
         flexDirection: "row",
@@ -16,6 +18,9 @@ function Reaction({ handleReact }: ReactionProps) {
         paddingVertical: 10
       }}
     >
+=======
+    <View style={scaledStyles.container}>
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       <ReactionButton like={false} icon="window-close" handleReact={handleReact} />
       <ReactionButton like icon="heart" handleReact={handleReact} />
     </View>
@@ -23,3 +28,12 @@ function Reaction({ handleReact }: ReactionProps) {
 }
 
 export default Reaction;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 20
+  }
+});
+const scaledStyles = scaleStyleSheet(styles);

@@ -30,7 +30,11 @@ export default function DropDownGender({ onGenderChange, selectedPronoun }: Drop
         items={items}
         setOpen={setOpen}
         setValue={setValue}
+<<<<<<< HEAD
         placeholder="Select a neighborhood"
+=======
+        placeholder="Select preferred gender"
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       />
     </View>
   );

@@ -52,7 +52,11 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
       <View style={scaledStyles.detail}>
         <Icon source="map-marker" size={24} color={COLORS.darkPurple} />
         <Text style={{ fontSize: 18, marginRight: 24, fontFamily: "DMSansRegular" }}>
+<<<<<<< HEAD
           Frog Pond
+=======
+          {event.address}
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
         </Text>
       </View>
       <View style={scaledStyles.detail}>
@@ -62,7 +66,13 @@ export default function EventCard({ handleReact, event }: EventCardProps) {
 
       <View style={scaledStyles.detail}>
         <Icon source="currency-usd" size={24} color={COLORS.darkPurple} />
+<<<<<<< HEAD
         <Text style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}>30</Text>
+=======
+        <Text style={{ fontSize: 18, marginRight: 20, fontFamily: "DMSansRegular" }}>
+          {event.minPrice}
+        </Text>
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       </View>
       <Text style={scaledStyles.eventBio}>{event?.bio}</Text>
       <View style={scaledStyles.viewShare}>
