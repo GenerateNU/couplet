@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, Switch, Text, View } from "react-native";
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function ToggleSwitch({ text }: { text: string }) {
@@ -23,7 +23,9 @@ export default function Settings() {
   const router = useRouter();
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< Settings`}</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.title}>{`< Settings`}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
         <Text style={styles.text1}>Pause Profile</Text>
         <ToggleSwitch text="Pausing your profile will temporarily stop showing your account to others. You can still see your current matches." />

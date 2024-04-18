@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { Linking, StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HelpAndSupport() {
@@ -12,7 +12,9 @@ export default function HelpAndSupport() {
 
   return (
     <SafeAreaView>
-      <Text onPress={() => router.back()} style={styles.title}>{`< About Couplet`}</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.title}>{`< Help and Suppport`}</Text>
+      </TouchableOpacity>
       <View style={styles.container}>
         <Text style={styles.text1}>Contact Support</Text>
         <Text style={styles.text2}>
