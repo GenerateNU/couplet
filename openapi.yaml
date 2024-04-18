@@ -1600,13 +1600,14 @@ components:
     User:
       type: object
       required:
+        - id
         - firstName
         - lastName
         - age
         - bio
         - gender
         - images
-        - preferences
+        - preference
         - pronouns
         - location
         - school
@@ -1617,9 +1618,9 @@ components:
         - relationshipType
         - religion
         - politicalAffiliation
-        - alchoholFrequency
+        - alcoholFrequency
         - smokingFrequency
-        - drugFrequency
+        - drugsFrequency
         - cannabisFrequency
         - instagramUsername
       properties:
@@ -1697,13 +1698,218 @@ components:
         politicalAffiliation:
           type: string
           example: Democrat
-        alchoholFrequency:
+        alcoholFrequency:
           type: string
           example: Rarely
         smokingFrequency:
           type: string
           example: Never
-        drugFrequency:
+        drugsFrequency:
+          type: string
+          example: Never
+        cannabisFrequency:
+          type: string
+          example: Never
+        instagramUsername:
+          type: string
+          minLength: 1
+          example: bobsmith
+    UserNoId:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - age
+        - bio
+        - gender
+        - images
+        - preference
+        - pronouns
+        - location
+        - school
+        - work
+        - height
+        - promptQuestion
+        - promptResponse
+        - relationshipType
+        - religion
+        - politicalAffiliation
+        - alcoholFrequency
+        - smokingFrequency
+        - drugsFrequency
+        - cannabisFrequency
+        - instagramUsername
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        preference:
+          $ref: "#/components/schemas/Preference"
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+        gender:
+          type: string
+          enum: ["Man", "Woman", "Other"]
+          example: Man
+        bio:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Hello! I’m excited to experience events!
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 4
+          maxItems: 4
+        pronouns:
+          type: string
+          minLength: 1
+          example: He/Him
+        location:
+          type: string
+          minLength: 1
+          example: Roxbury
+        school:
+          type: string
+          minLength: 1
+          example: Northeastern University
+        work:
+          type: string
+          minLength: 1
+          example: Software Engineer at Couplet
+        height:
+          type: integer
+          format: uint8
+          minimum: 48
+          example: 72
+        promptQuestion:
+          type: string
+          minLength: 1
+          example: What's your Fortnite event?
+        promptResponse:
+          type: string
+          minLength: 1
+          example: I'm a big fan of the Travis Scott Event
+        relationshipType:
+          type: string
+          example: Monogamy
+        religion:
+          type: string
+          example: Atheist
+        politicalAffiliation:
+          type: string
+          example: Democrat
+        alcoholFrequency:
+          type: string
+          example: Rarely
+        smokingFrequency:
+          type: string
+          example: Never
+        drugsFrequency:
+          type: string
+          example: Never
+        cannabisFrequency:
+          type: string
+          example: Never
+        instagramUsername:
+          type: string
+          minLength: 1
+          example: bobsmith
+    UserNoRequired:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 5e91507e-5630-4efd-9fd4-799178870b10
+        firstName:
+          type: string
+          minLength: 1
+          example: Bob
+        lastName:
+          type: string
+          minLength: 1
+          example: Smith
+        preference:
+          $ref: "#/components/schemas/Preference"
+        age:
+          type: integer
+          format: uint8
+          minimum: 18
+          example: 22
+        gender:
+          type: string
+          enum: ["Man", "Woman", "Other"]
+          example: Man
+        bio:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Hello! I’m excited to experience events!
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: https://example.com/image.png
+          minItems: 4
+          maxItems: 4
+        pronouns:
+          type: string
+          minLength: 1
+          example: He/Him
+        location:
+          type: string
+          minLength: 1
+          example: Roxbury
+        school:
+          type: string
+          minLength: 1
+          example: Northeastern University
+        work:
+          type: string
+          minLength: 1
+          example: Software Engineer at Couplet
+        height:
+          type: integer
+          format: uint8
+          minimum: 48
+          example: 72
+        promptQuestion:
+          type: string
+          minLength: 1
+          example: What's your Fortnite event?
+        promptResponse:
+          type: string
+          minLength: 1
+          example: I'm a big fan of the Travis Scott Event
+        relationshipType:
+          type: string
+          example: Monogamy
+        religion:
+          type: string
+          example: Atheist
+        politicalAffiliation:
+          type: string
+          example: Democrat
+        alcoholFrequency:
+          type: string
+          example: Rarely
+        smokingFrequency:
+          type: string
+          example: Never
+        drugsFrequency:
           type: string
           example: Never
         cannabisFrequency:

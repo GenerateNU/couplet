@@ -161,9 +161,7 @@ func main() {
 		}
 		newEvent.MinPrice = uint8(10 + rand.Intn(50))
 		newEvent.MaxPrice = api.NewOptUint8(newEvent.MinPrice + uint8(10+rand.Intn(50)))
-		if rand.Intn(2) == 0 {
-			newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
-		}
+		newEvent.ExternalLink = api.NewOptURI(eventExternalLink)
 		newEvent.Tags = []string{}
 		for j := 0; j < rand.Intn(5); j++ {
 			tag := eventTags[rand.Intn(len(eventTags))]
@@ -196,14 +194,14 @@ func main() {
 		newUser := api.UserNoId{}
 		newUser.FirstName = fmt.Sprintf("user-%d", i)
 		newUser.LastName = "lastname"
-		newUser.Age = uint8(18 + rand.Intn(23))
+		newUser.Age = uint8(18 + rand.Intn(10))
 		newUser.Bio = "Hey everyone! I can't wait to go to an exciting event!"
 		newUser.Gender = genders[rand.Intn(2)]
 		newUser.Pronouns = pronouns[rand.Intn(len(pronouns))]
 		newUser.Location = locations[rand.Intn(len(locations))]
 		newUser.School = schools[rand.Intn(len(schools))]
 		newUser.Work = work[rand.Intn(len(work))]
-		newUser.Height = 58
+		newUser.Height = uint8(58 + rand.Intn(20))
 		newUser.PromptQuestion = "What's your favorite Fortnite Event?"
 		newUser.PromptResponse = "I loved the Travis Scott Event! Travvyyyy <333333333"
 		newUser.RelationshipType = relationshipTypes[rand.Intn(len(relationshipTypes))]

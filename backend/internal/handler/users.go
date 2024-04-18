@@ -313,7 +313,24 @@ func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.Recomme
 			LastName:  u.LastName,
 			Age:       u.Age,
 			Bio:       u.Bio,
-			Images:    u.Images,
+			Images:    u.Images.Unwrap(),
+			Gender:		 api.UserGender(u.Gender),
+			Pronouns: u.Pronouns,
+			Location: u.Location,
+			Work: u.Work,
+			School: u.School,
+			Height: u.Height,	
+			PromptQuestion: u.PromptQuestion,
+			PromptResponse: u.PromptResponse,
+			RelationshipType: u.RelationshipType,
+			Religion: u.Religion,
+			PoliticalAffiliation: u.PoliticalAffiliation,
+			AlcoholFrequency: u.AlcoholFrequency,
+			SmokingFrequency: u.SmokingFrequency,
+			DrugsFrequency: u.DrugsFrequency,
+			CannabisFrequency: u.CannabisFrequency,
+			InstagramUsername: u.InstagramUsername,		
+
 		}
 		res = append(res, item)
 	}
