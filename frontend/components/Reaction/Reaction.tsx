@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20
-    // paddingVertical: 10
   }
 });
 const scaledStyles = scaleStyleSheet(styles);
