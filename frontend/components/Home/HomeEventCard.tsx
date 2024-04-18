@@ -3,36 +3,38 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from "react-native-paper";
+import { getEventById } from "../../api/events";
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
+type Event = Awaited<ReturnType<typeof getEventById>>;
+
 type HomeEventCardProps = {
-  id: string;
-  name: string;
-  image: string;
-  // TODO: we need Location and Cost, but these aren't in the endpoint response yet
+  event: Event;
 };
 
-export default function HomeEventCard({ id, name, image }: HomeEventCardProps) {
+export default function HomeEventCard({ event }: HomeEventCardProps) {
   return (
     <TouchableOpacity
-      onPress={() => router.push({ pathname: "Event", params: { collectionId: "", eventId: id } })}
+      onPress={() =>
+        router.push({ pathname: "Event", params: { collectionId: "", eventId: event.id } })
+      }
     >
       <View style={styles.card}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={scaledStyles.image} />
+          <Image source={{ uri: event.images[0] }} style={scaledStyles.image} />
         </View>
         <View style={scaledStyles.textContainer}>
           <Text style={scaledStyles.titleText} numberOfLines={2} ellipsizeMode="tail">
-            {name}
+            {event.name}
           </Text>
           <View style={styles.row}>
             <Icon source="map-marker" size={20} color={COLORS.darkPurple} />
-            <Text style={styles.text}>Frog Pond</Text>
+            <Text style={styles.text}>{event.address}</Text>
           </View>
           <View style={styles.row}>
             <Icon source="currency-usd" size={20} color={COLORS.darkPurple} />
-            <Text style={styles.text}>$5</Text>
+            <Text style={styles.text}>${event.minPrice}</Text>
           </View>
         </View>
       </View>
@@ -66,12 +68,14 @@ const styles = StyleSheet.create({
   image: { width: 166, height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
   row: {
     flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 10,
     borderRadius: 20
   },
   titleText: { padding: 10, fontSize: 15, fontWeight: "500", fontFamily: "DMSansMedium" },
   text: {
     marginTop: 2,
+    marginLeft: 2,
     fontFamily: "DMSansRegular",
     fontSize: 12,
     fontWeight: "400"

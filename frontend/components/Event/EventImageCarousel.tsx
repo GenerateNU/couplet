@@ -7,14 +7,14 @@ export type EventImageCarouselProps = {
 };
 
 function EventImageCarousel({ images }: EventImageCarouselProps) {
-  const { width } = Dimensions.get("window");
+  const { height, width } = Dimensions.get("window");
 
   return (
     <View>
       <Carousel
         loop
         width={width}
-        height={width}
+        height={height / 2.5}
         autoPlay
         data={images}
         autoPlayInterval={3000}
@@ -25,7 +25,7 @@ function EventImageCarousel({ images }: EventImageCarouselProps) {
               justifyContent: "center"
             }}
           >
-            <Image source={{ uri: images[index], height: width }} />
+            <Image source={{ uri: images[index], width, height: height / 2.5 }} />
           </View>
         )}
       />

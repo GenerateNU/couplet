@@ -16,7 +16,7 @@ export default function Collection() {
   }>();
 
   useEffect(() => {
-    getEvents({ limit: 10, offset: 10 }).then((event) => {
+    getEvents({ limit: 20, offset: 0 }).then((event) => {
       setEvents(event);
     });
   }, []);
