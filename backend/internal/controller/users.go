@@ -13,6 +13,7 @@ import (
 // Creates a new user in the database
 func (c Controller) CreateUser(params user.User) (u user.User, valErr error, txErr error) {
 	u = params
+	fmt.Print(u)
 	var timestampErr error
 	if u.UpdatedAt.Before(u.CreatedAt) {
 		timestampErr = fmt.Errorf("invalid timestamps")
@@ -187,6 +188,7 @@ func (c Controller) GetRecommendationsUser(id user_id.UserID, limit int, offset 
 		Joins("JOIN event_swipes ON users.id = event_swipes.user_id").
 		Where("event_swipes.liked = ?", true).
 		Where("event_swipes.event_id IN (?)", likedEventIDs).
+		Where("age BETWEEN ? AND ?", currentUser.Preference.AgeMin, currentUser.Preference.AgeMax).
 		Limit(int(limit)).Offset(int(offset)).
 		Find(&recommendedUsers).Error; err != nil {
 		return nil, err

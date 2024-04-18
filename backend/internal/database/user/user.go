@@ -49,6 +49,14 @@ type User struct {
 	Matches     []*User `gorm:"many2many:user_matches"`
 }
 
+type PassionTag struct {
+	ID        string `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Users    []User `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:users2tags"`
+}
+
+
 // Automatically generates a random ID if unset before creating
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	if (u.ID == user_id.UserID{}) {

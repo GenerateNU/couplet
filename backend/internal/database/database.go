@@ -61,6 +61,8 @@ func Migrate(db *gorm.DB) error {
 	if !db.Migrator().HasTable(&user.User{}) {
 		if db.Migrator().CreateTable(&user.User{}) != nil {
 			return errors.New("failed to create user database table")
+		} else {
+			fmt.Print("Created user database table")
 		}
 	}
 	if !db.Migrator().HasTable(&org.Org{}) {
