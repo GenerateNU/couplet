@@ -1,56 +1,74 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import BackButton from './BackButton'; 
-import OnboardingBar from './OnboardingBar'; 
-import COLORS from '../../colors'; 
-import scaleStyleSheet from '../../scaleStyles';
+import { router } from "expo-router";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
+import BackButton from "./BackButton";
+import OnboardingBar from "./OnboardingBar";
 
 type TopBarProps = {
   onBackPress: () => void;
   text: string;
   selectedCount: number;
+  skipToRoute?: string; // optional
 };
 
-function TopBar({ onBackPress, text, selectedCount }: TopBarProps) {
+function TopBar({ onBackPress, text, selectedCount, skipToRoute }: TopBarProps) {
   return (
     <View style={scaledStyles.container}>
-      <BackButton onPress={onBackPress} />
+      <View style={scaledStyles.topContainer}>
+        <BackButton onPress={onBackPress} />
+        {skipToRoute && (
+          <Text style={scaledStyles.skipText} onPress={() => router.push(skipToRoute)}>
+            Skip
+          </Text>
+        )}
+      </View>
       <View style={scaledStyles.textBarContainer}>
         <Text style={scaledStyles.informationText}>{text}</Text>
         <OnboardingBar selectedCount={selectedCount} />
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    width: 346,
-    height: 69,
-    top: 68,
-    left: 24,
-    position: 'absolute',
-    flexDirection: 'column', 
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    justifyContent: "space-between"
+  },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  skipText: {
+    fontFamily: "DMSansRegular",
+    fontSize: 17,
+    fontWeight: "500",
+    color: COLORS.primary
   },
   textBarContainer: {
     paddingTop: 8,
-    width: 346, 
-    height: 21, 
-    justifyContent: 'flex-end',
+    width: 346,
+    height: 21,
+    justifyContent: "flex-end"
   },
   informationText: {
     height: 18,
     fontFamily: "DMSansMedium",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     lineHeight: 18.23,
-    textAlign: 'center',
+    textAlign: "center",
     color: COLORS.darkGray,
-    marginBottom: 2,
-  },
+    marginBottom: 2
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);
 
 export default TopBar;
+
+TopBar.defaultProps = {
+  skipToRoute: ""
+};

@@ -1,61 +1,57 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import COLORS from '../../colors';
-import scaleStyleSheet from '../../scaleStyles';
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import COLORS from "../../colors";
+import scaleStyleSheet from "../../scaleStyles";
 
-interface ButtonProps {
+type ButtonProps = {
   title: string;
-  onButtonClick: () => void; 
-}
+  onButtonClick: () => void;
+  isDisabled: boolean;
+};
 
-function OnboardingButton({title, onButtonClick}: ButtonProps) {
+function OnboardingButton({ title, onButtonClick, isDisabled }: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    onButtonClick(); 
+    onButtonClick();
     setIsPressed(!isPressed);
   };
-
   return (
-    <View style={scaledStyles.buttonContainer}>
+    <View>
       <TouchableOpacity
         onPress={handlePress}
         style={[scaledStyles.button, isPressed ? scaledStyles.buttonPressed : null]}
+        disabled={isDisabled}
       >
         <Text style={scaledStyles.text}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    position: 'absolute',
-    top: 402,
-    left: 236,
-  },
   text: {
-    fontFamily: 'DMSansMedium', 
+    fontFamily: "DMSansRegular",
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     lineHeight: 15.62,
-    textAlign: 'center',
+    textAlign: "center",
     paddingHorizontal: 8
   },
   button: {
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 36,
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 100,
     borderWidth: 1,
     borderColor: COLORS.secondary,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white
   },
   buttonPressed: {
-    backgroundColor: COLORS.secondary,
-  },
+    backgroundColor: COLORS.secondary
+  }
 });
 
 const scaledStyles = scaleStyleSheet(styles);

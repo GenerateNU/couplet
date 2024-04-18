@@ -3,12 +3,12 @@ import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 
 import COLORS from "../../colors";
 import scaleStyleSheet from "../../scaleStyles";
 
-interface ContinueBottonProps extends TouchableOpacityProps {
+type ContinueBottonProps = TouchableOpacityProps & {
   title: string;
   isDisabled: boolean;
-}
+};
 
-function ContinueButton({title, isDisabled, onPress}: ContinueBottonProps) {
+function ContinueButton({ title, isDisabled, onPress }: ContinueBottonProps) {
   return (
     <View style={scaledStyles.centeringContainer}>
       <TouchableOpacity
@@ -23,7 +23,7 @@ function ContinueButton({title, isDisabled, onPress}: ContinueBottonProps) {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeringContainer: {
@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   button: {
     width: 330,
     height: 41,
-    paddingVertical: 10,
-    paddingHorizontal: 130,
     borderRadius: 65,
     borderWidth: 1,
     borderColor: COLORS.disabled,
@@ -60,9 +58,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     lineHeight: 21,
-    textAlign: "left",
+    textAlign: "center",
     color: COLORS.white,
-    width: 70,
+    width: 100,
     height: 21
   }
 });

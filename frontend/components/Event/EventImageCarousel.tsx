@@ -17,6 +17,7 @@ function EventImageCarousel({ images }: EventImageCarouselProps) {
         height={width}
         autoPlay
         data={images}
+        autoPlayInterval={3000}
         scrollAnimationDuration={1000}
         renderItem={({ index }) => (
           <View

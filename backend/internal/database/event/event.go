@@ -3,25 +3,27 @@ package event
 import (
 	"couplet/internal/database/event_id"
 	"couplet/internal/database/org_id"
+	"couplet/internal/database/url_slice"
 
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-var validate = validator.New(validator.WithRequiredStructEnabled())
-
 type Event struct {
-	ID        event_id.EventID `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time    `validate:"gtefield=CreatedAt"`
-	Name      string       `validate:"required,min=1,max=255"`
-	Bio       string       `validate:"required,min=1,max=255"`
-	Images    []EventImage `validate:"max=5"`
-	EventTags []EventTag   `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags" validate:"max=5"`
-	OrgID     org_id.OrgID `validate:"required"`
+	ID           event_id.EventID `gorm:"primaryKey"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	Name         string
+	Bio          string
+	Images       url_slice.UrlSlice
+	MinPrice     uint8
+	MaxPrice     uint8
+	ExternalLink string
+	Address      string
+	EventTags    []EventTag `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags"`
+	OrgID        org_id.OrgID
 }
 
 // Automatically generates a random ID if unset before creating
@@ -32,12 +34,9 @@ func (e *Event) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// Automatically rolls back transactions that save invalid data to the database
-func (e *Event) BeforeSave(tx *gorm.DB) error {
-	return e.Validate()
-}
-
-// Ensures the event and its fields are valid
-func (e Event) Validate() error {
-	return validate.Struct(e)
+type EventTag struct {
+	ID        string `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Events    []Event `gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE;many2many:events2tags"`
 }

@@ -1,77 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { getAllEvents } from "../../api/events";
-import type { components } from "../../api/schema";
+import React, { useCallback, useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { getEventById, getEvents } from "../../api/events";
+import scaleStyleSheet from "../../scaleStyles";
+import LabelToggle from "../LabelToggle";
 import Header from "../Layout/Header";
-import LinkButton from "../Layout/LinkButton";
-import TagButton from "../Layout/TagButton";
+import FeaturedEventCard from "./FeaturedEventCard";
 import HomePageSection from "./HomePageSection";
+import NoLikedEvents from "./NoLikedEvents";
 
-type Event = components["schemas"]["Event"];
+type Event = Awaited<ReturnType<typeof getEventById>>;
 
-const DUMMY_IMAGE = require("../../assets/blankProfile.jpg");
+const toggles = ["All Events", "Liked Events"];
+const sections = [
+  "This Weekend in Boston",
+  "Food & Drink",
+  "Arts & Culture",
+  "Nightlife",
+  "Live Music & Concerts",
+  "Nature & Outdoors"
+];
 
 export default function HomeScreen() {
-  const [filter, setFilter] = useState(0);
+  const [filter, setFilter] = useState(toggles[0]);
   const [events, setEvents] = useState<Event[]>([]);
+  const [featuredEvent, setFeaturedEvent] = useState<Event>();
 
-  useEffect(() => {
-    getAllEvents().then((fetchedEvents: any) => {
-      setEvents(fetchedEvents || []);
-    });
+  const setFilterLikedEvents = useCallback((newFilter: string) => {
+    setFilter(newFilter);
   }, []);
 
+  useEffect(() => {
+    if (!events.length) {
+      // only fetch events if they haven't been fetched yet
+      getEvents({ limit: 10, offset: 0 })
+        .then((fetchedEvents: any) => {
+          setEvents(fetchedEvents || []);
+          setFeaturedEvent(fetchedEvents[0]);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, [events]);
+
   return (
-    <ScrollView stickyHeaderIndices={[0]} style={styles.scrollView}>
-      {/* Header View */}
-      <View>
-        <Header />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            paddingBottom: 10
-          }}
-        >
-          <TagButton text="All Events" selected={filter === 0} onPress={() => setFilter(0)} />
-          <TagButton text="Liked Events" selected={filter === 1} onPress={() => setFilter(1)} />
-        </View>
+    <ScrollView stickyHeaderIndices={[0]} style={scaledStyles.scrollView}>
+      <Header />
+      <View style={scaledStyles.toggleContainer}>
+        <LabelToggle labels={toggles} onChange={setFilterLikedEvents} />
       </View>
-
-      {/* Match Container View */}
-      <View style={styles.matchContainer}>
-        <View style={styles.imageContainer}>
-          <Image source={DUMMY_IMAGE} style={styles.image} />
-          <Image source={DUMMY_IMAGE} style={styles.image} />
-          <Image source={DUMMY_IMAGE} style={styles.image} />
-          <Image source={DUMMY_IMAGE} style={styles.image} />
-        </View>
-        <Text style={{ fontFamily: "DMSansRegular" }}>Need Someone to Go With?</Text>
-        <View style={styles.buttonContainer}>
-          <LinkButton text="Match Now" />
-        </View>
-      </View>
-
-      {/* Pintrestesque Section Views */}
-      {filter === 0 ? (
-        <View style={styles.sectionContainer}>
-          <HomePageSection title="This weekend in Boston" events={events} />
-          <HomePageSection title="Live music and concerts" events={events} />
-          <HomePageSection title="Other events" events={events} />
-        </View>
+      {filter === "Liked Events" ? (
+        <NoLikedEvents onClick={setFilterLikedEvents} />
       ) : (
-        // Eventually replace this with a different event browsing screen
-        <View style={styles.sectionContainer}>
-          <HomePageSection
-            title="This weekend in Boston"
-            events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))}
-          />
-          <HomePageSection
-            title="Live music and concerts"
-            events={[1, 2, 3].map((n) => ({ id: n }))}
-          />
-          <HomePageSection title="Other events" events={[1, 2, 3, 4, 5].map((n) => ({ id: n }))} />
+        <View style={scaledStyles.sectionContainer}>
+          {featuredEvent && (
+            <View style={scaledStyles.featuredContainer}>
+              <FeaturedEventCard event={featuredEvent} />
+            </View>
+          )}
+          {sections.map((section) => (
+            <HomePageSection key={section} title={section} events={events} />
+          ))}
         </View>
       )}
     </ScrollView>
@@ -79,19 +66,15 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  matchContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    borderStyle: "solid",
-    borderWidth: 1,
-    flex: 1,
-    backgroundColor: "grey",
-    padding: 20,
-    margin: 10
+  toggleContainer: {
+    display: "flex",
+    flexDirection: "row",
+    paddingBottom: 16
+  },
+  featuredContainer: {
+    marginRight: 48
   },
   image: {
-    height: 50,
-    width: 50,
     borderRadius: 50,
     borderWidth: 1,
     paddingBottom: 30
@@ -100,18 +83,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 10
   },
-  buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 10
-  },
-  sectionContainer: {
-    margin: 10
-  },
-  scrollableSection: {
-    marginVertical: 20
-  },
   scrollView: {
-    marginBottom: 40
+    marginBottom: 40,
+    paddingLeft: 24
+  },
+  noMatchesImage: {
+    width: 300,
+    height: 300
   }
 });
+
+const scaledStyles = scaleStyleSheet(styles);

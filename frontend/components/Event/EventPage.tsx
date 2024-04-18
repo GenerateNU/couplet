@@ -1,48 +1,76 @@
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { getEventById } from "../../api/events";
+import scaleStyleSheet from "../../scaleStyles";
 import Reaction from "../Reaction/Reaction";
 import EventCard from "./EventCard";
 import EventImageCarousel from "./EventImageCarousel";
 
-interface EventPageProps {
+type Event = Awaited<ReturnType<typeof getEventById>>;
+
+type EventPageProps = {
   id: string;
   handleReact: (like: boolean) => void;
-}
+};
 
-function EventPage({ id, handleReact }: EventPageProps) {
-  const dummyImages: string[] = [
-    "https://marvel-b1-cdn.bc0a.com/f00000000283318/home.dartmouth.edu/sites/home/files/styles/max_width_720px/public/2023-12/20220127_around_campus_eb_157.jpg?itok=bJJ9L7nZ",
-    "https://www.lawnstarter.com/blog/wp-content/uploads/2022/12/iStock-1423384637-2-feature-image-1.jpg",
-    "https://www.flightonice.com/wp-content/uploads/2022/10/e4d4996c-da07-403e-a1c9-17696615d7ea_750x422.jpg",
-    "https://www.novaparks.com/sites/default/files/styles/scale_1440/public/2024-01/IceSkating202312190151_NP.jpg?itok=a6ScPTLd"
-  ];
+export default function EventPage({ id, handleReact }: EventPageProps) {
+  const [event, setEvent] = useState<Event>();
+
+  useEffect(() => {
+    getEventById({ id }).then((fetchedEvent) => {
+      setEvent(fetchedEvent);
+    });
+  }, [id]);
 
   return (
-    <View style={styles.EventPageContainer}>
-      <ScrollView>
-        <View style={styles.EventImageContainer}>
-          <EventImageCarousel images={dummyImages} />
-        </View>
-        <View>
-          <EventCard id={id} handleReact={handleReact} />
-        </View>
-      </ScrollView>
-      <View style={styles.reactionContainer}>
+    <View>
+      <View style={scaledStyles.eventContentContainer}>
+        <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={scaledStyles.eventImageContainer}>
+            <EventImageCarousel images={event?.images || []} />
+          </View>
+          <View>{event && <EventCard event={event} handleReact={handleReact} />}</View>
+        </ScrollView>
+      </View>
+      <View style={scaledStyles.reactionContainer}>
         <Reaction handleReact={handleReact} />
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  EventPageContainer: {
-    height: "100%",
-    width: "100%"
+  eventContentContainer: {
+    paddingHorizontal: 20
   },
-  EventImageContainer: {},
+  eventImageContainer: {
+    marginBottom: 10
+  },
+  title: {
+    fontFamily: "DMSansMedium",
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 32,
+    marginTop: 16,
+    marginBottom: 16
+  },
   reactionContainer: {
     position: "absolute",
     width: "100%",
     bottom: 0
+  },
+  viewShare: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 10,
+    paddingBottom: 50
+  },
+  buttonLabel: {
+    fontFamily: "DMSansMedium",
+    fontSize: 16,
+    paddingHorizontal: 16
   }
 });
-export default EventPage;
+
+const scaledStyles = scaleStyleSheet(styles);
