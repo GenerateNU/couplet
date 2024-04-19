@@ -1,5 +1,7 @@
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { paths } from "../../api/schema";
 import getMatchesByUserId from "../../api/users";
@@ -77,22 +79,24 @@ export default function MatchesScreen() {
           <View style={scaledStyles.matchesDisplay}>
             {displayMatches.map((match) => (
               <View key={match.id} style={scaledStyles.matchCard}>
-                {match.images ? (
-                  <Image style={scaledStyles.matchPhoto} source={{ uri: match.images[0] }} />
-                ) : (
-                  <View style={[scaledStyles.matchPhoto, { backgroundColor: COLORS.primary }]} />
-                )}
-                <View style={scaledStyles.matchTextContainer}>
-                  <Text style={scaledStyles.matchNotViewedDot}>
-                    {!match.viewed ? "\u2B24" : null}{" "}
-                  </Text>
-                  <Text style={[scaledStyles.matchText, { fontFamily: "DMSansBold" }]}>
-                    {match.firstName}
-                  </Text>
-                  <Text style={[scaledStyles.matchText, { fontFamily: "DMSansMedium" }]}>
-                    {match.age}
-                  </Text>
-                </View>
+                <TouchableOpacity onPress={() => router.push("ProfileScreens/ViewProfile")}>
+                  {match.images ? (
+                    <Image style={scaledStyles.matchPhoto} source={{ uri: match.images[0] }} />
+                  ) : (
+                    <View style={[scaledStyles.matchPhoto, { backgroundColor: COLORS.primary }]} />
+                  )}
+                  <View style={scaledStyles.matchTextContainer}>
+                    <Text style={scaledStyles.matchNotViewedDot}>
+                      {!match.viewed ? "\u2B24" : null}{" "}
+                    </Text>
+                    <Text style={[scaledStyles.matchText, { fontFamily: "DMSansBold" }]}>
+                      {match.firstName}
+                    </Text>
+                    <Text style={[scaledStyles.matchText, { fontFamily: "DMSansMedium" }]}>
+                      {match.age}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             ))}
           </View>
