@@ -241,13 +241,6 @@ func main() {
 				// Passions: []string{"music", "art", "food", "sports", "outdoors"},
 		}
 
-		// fmt.Println(newUser.Preferences.AgeMin)
-		// fmt.Println(newUser.Preferences.AgeMax)
-		// fmt.Println(newUser.Preferences.InterestedIn)
-		// fmt.Println(newUser.Preferences.Passions)
-		fmt.Println(newUser.Preference)
-		fmt.Println(&newUser)
-
 		// Create user
 		res, err := client.UsersPost(ctx, &newUser)
 		if err != nil {

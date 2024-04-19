@@ -16,11 +16,7 @@ export default function Collection() {
   }>();
 
   useEffect(() => {
-<<<<<<< HEAD
-    getEvents({ limit: 10, offset: 10 }).then((event) => {
-=======
     getEvents({ limit: 20, offset: 0 }).then((event) => {
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       setEvents(event);
     });
   }, []);

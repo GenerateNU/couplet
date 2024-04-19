@@ -22,8 +22,6 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UserNoId) (api.UsersPos
 		InterestedIn: string(req.Preference.InterestedIn),
 	}
 
-	fmt.Println(req)
-
 	u, valErr, txErr := h.controller.CreateUser(user.User{
 		FirstName: req.FirstName,
 		LastName:  req.LastName,

@@ -8,14 +8,6 @@ import CardWrapper from "../components/Profile/CardWrapper";
 import PurpleProfileCard from "../components/Profile/PurpleProfileCard";
 import SettingsCard from "../components/Profile/SettingsCard";
 import UserDetails from "../components/Profile/UserDetails";
-<<<<<<< HEAD
-
-export default function Profile() {
-  const handleLogout = async () => {
-    await SecureStorage.deleteItemAsync("appleAuth");
-    router.push("/");
-  };
-=======
 import { useAppSelector } from "../state/hooks";
 
 function Profile() {
@@ -29,19 +21,13 @@ function Profile() {
   const profileImageSource =
     user.photos && user.photos.length > 0 ? { uri: user.photos[0].filePath } : null;
 
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
   return (
     <SafeAreaView style={{ flex: 1, gap: 15 }}>
       <View style={{ alignSelf: "center" }}>
         <UserDetails
           onPress={() => router.push("ProfileScreens/AccountDetails")}
-<<<<<<< HEAD
-          profileImageSource={undefined}
-          name="TiffanyA"
-=======
           profileImageSource={profileImageSource}
           name={"Hi " + user.name + "!"}
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
           editDetailsText="Edit Account Details"
           chevronColor=""
         />
@@ -105,8 +91,5 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   }
 });
-<<<<<<< HEAD
-=======
 
 export default Profile;
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
