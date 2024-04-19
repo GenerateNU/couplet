@@ -29,7 +29,7 @@ export default function ViewProfile() {
     firstName: userState.name,
     lastName: "No Last Name",
     age: calculateAge(new Date(userState.birthday)),
-    pronouns: "they/them",
+    pronouns: userState.pronouns,
     location: userState.location,
     school: userState.school,
     work: userState.job,

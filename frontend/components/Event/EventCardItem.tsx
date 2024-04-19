@@ -11,8 +11,12 @@ export function EventCardItem({ title, description, imageUrl }: EventCardItemPro
   return (
     <View style={styles.cardContainer}>
       <Image source={{ uri: imageUrl }} style={styles.cardImage} />
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.cardDescription}>{description}</Text>
+      <Text style={styles.cardTitle} numberOfLines={1}>
+        {title}
+      </Text>
+      <Text style={styles.cardDescription} numberOfLines={3}>
+        {description}
+      </Text>
     </View>
   );
 }
@@ -32,7 +36,9 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: "100%",
-    aspectRatio: 0.93
+    aspectRatio: 0.93,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10
   },
   cardTitle: {
     marginTop: 6,
@@ -44,7 +50,8 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     paddingLeft: 6,
-    fontFamily: "DMSansRegular"
+    fontFamily: "DMSansRegular",
+    padding: 10
   }
 });
 
