@@ -49,7 +49,8 @@ export default function Person({
       <HeaderScrollView
         headerContainerStyle={{}}
         containerStyle={{
-          flex: 1
+          flex: 1,
+          paddingBottom: 50
         }}
         title={
           <>

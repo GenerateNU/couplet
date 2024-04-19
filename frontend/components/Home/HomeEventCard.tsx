@@ -25,12 +25,14 @@ export default function HomeEventCard({ event }: HomeEventCardProps) {
           <Image source={{ uri: event.images[0] }} style={scaledStyles.image} />
         </View>
         <View style={scaledStyles.textContainer}>
-          <Text style={scaledStyles.titleText} numberOfLines={2} ellipsizeMode="tail">
-            {event.name}
+          <Text style={styles.titleText} numberOfLines={1}>
+            {event.name.length < 20 ? event.name : `${event.name.substring(0, 17)}...`}
           </Text>
           <View style={styles.row}>
             <Icon source="map-marker" size={20} color={COLORS.darkPurple} />
-            <Text style={styles.text}>{event.address}</Text>
+            <Text style={styles.text} numberOfLines={1}>
+              {event.address.length < 20 ? event.address : `${event.address.substring(0, 17)}...`}
+            </Text>
           </View>
           <View style={styles.row}>
             <Icon source="currency-usd" size={20} color={COLORS.darkPurple} />
