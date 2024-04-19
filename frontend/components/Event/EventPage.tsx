@@ -13,17 +13,10 @@ type EventPageProps = {
   id: string;
   handleReact: (like: boolean) => void;
 };
-<<<<<<< HEAD
 
 export default function EventPage({ id, handleReact }: EventPageProps) {
   const [event, setEvent] = useState<Event>();
 
-=======
-
-export default function EventPage({ id, handleReact }: EventPageProps) {
-  const [event, setEvent] = useState<Event>();
-
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
   useEffect(() => {
     getEventById({ id }).then((fetchedEvent) => {
       setEvent(fetchedEvent);
@@ -32,19 +25,6 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
 
   return (
     <View>
-<<<<<<< HEAD
-      <View style={scaledStyles.eventContentContainer}>
-        <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={scaledStyles.eventImageContainer}>
-            <EventImageCarousel images={event?.images || []} />
-          </View>
-          <View>{event && <EventCard event={event} handleReact={handleReact} />}</View>
-        </ScrollView>
-      </View>
-      <View style={scaledStyles.reactionContainer}>
-        <Reaction handleReact={handleReact} />
-=======
       <View>
         <View style={scaledStyles.eventContentContainer}>
           <Text onPress={() => router.back()} style={scaledStyles.title}>{`< ${event?.name}`}</Text>
@@ -58,19 +38,14 @@ export default function EventPage({ id, handleReact }: EventPageProps) {
         <View style={scaledStyles.reactionContainer}>
           <Reaction handleReact={handleReact} />
         </View>
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   eventContentContainer: {
-<<<<<<< HEAD
-    paddingHorizontal: 20
-=======
     paddingHorizontal: 20,
     height: "100%"
->>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
   },
   eventImageContainer: {
     marginBottom: 10
