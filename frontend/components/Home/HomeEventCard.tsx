@@ -26,12 +26,12 @@ export default function HomeEventCard({ event }: HomeEventCardProps) {
         </View>
         <View style={scaledStyles.textContainer}>
           <Text style={styles.titleText} numberOfLines={1}>
-            {event.name.length < 20 ? event.name : `${event.name.substring(0, 17)  }...`}
+            {event.name.length < 20 ? event.name : `${event.name.substring(0, 17)}...`}
           </Text>
           <View style={styles.row}>
             <Icon source="map-marker" size={20} color={COLORS.darkPurple} />
             <Text style={styles.text} numberOfLines={1}>
-              {event.address.length < 20 ? event.address : `${event.address.substring(0, 17)  }...`}
+              {event.address.length < 20 ? event.address : `${event.address.substring(0, 17)}...`}
             </Text>
           </View>
           <View style={styles.row}>
