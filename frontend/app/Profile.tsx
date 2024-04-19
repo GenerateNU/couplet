@@ -39,6 +39,7 @@ function Profile() {
           detailText="View or change your profile"
           onPress={() => router.push("ProfileScreens/ViewProfile")}
         />
+        {/* //eslint-disable-next-line global-require */}
         <PurpleProfileCard
           imageUrl={require("../assets/magnifyingGlass.png")}
           name="Preferences"
