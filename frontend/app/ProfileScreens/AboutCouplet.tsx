@@ -1,15 +1,23 @@
 import { useRouter } from "expo-router";
 import React from "react";
+<<<<<<< HEAD
+import { StyleSheet, Text, View } from "react-native";
+=======
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AboutCouplet() {
   const router = useRouter();
   return (
     <SafeAreaView>
+<<<<<<< HEAD
+      <Text onPress={() => router.back()} style={styles.title}>{`< About Couplet`}</Text>
+=======
       <TouchableOpacity onPress={() => router.back()}>
         <Text style={styles.title}>{`< About Couplet`}</Text>
       </TouchableOpacity>
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       <View style={styles.container}>
         <Text style={styles.text1}>Who we are</Text>
         <Text style={styles.text2}>{mainText1}</Text>

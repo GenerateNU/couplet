@@ -12,9 +12,14 @@ import (
 
 // Creates a new user.
 // POST /users
-func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.UsersPostRes, error) {
+func (h Handler) UsersPost(ctx context.Context, req *api.UserNoId) (api.UsersPostRes, error) {
 	if h.logger != nil {
 		h.logger.Info("POST /users")
+	}
+	pref := user.Preference{
+		AgeMin:       req.Preference.AgeMin,
+		AgeMax:       req.Preference.AgeMax,
+		InterestedIn: string(req.Preference.InterestedIn),
 	}
 
 	u, valErr, txErr := h.controller.CreateUser(user.User{
@@ -22,6 +27,23 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 		LastName:  req.LastName,
 		Age:       req.Age,
 		Bio:       req.Bio,
+		Gender:		 api.UserGender(req.Gender),
+		Pronouns: req.Pronouns,
+		Preference: pref,
+		Location: req.Location,
+		Work: req.Work,
+		School: req.School,
+		Height: req.Height,	
+		PromptQuestion: req.PromptQuestion,
+		PromptResponse: req.PromptResponse,
+		RelationshipType: req.RelationshipType,
+		Religion: req.Religion,
+		PoliticalAffiliation: req.PoliticalAffiliation,
+		AlcoholFrequency: req.AlcoholFrequency,
+		SmokingFrequency: req.SmokingFrequency,
+		DrugsFrequency: req.DrugsFrequency,
+		CannabisFrequency: req.CannabisFrequency,
+		InstagramUsername: req.InstagramUsername,		
 		Images:    url_slice.Wrap(req.Images),
 	})
 	if valErr != nil {
@@ -34,12 +56,29 @@ func (h Handler) UsersPost(ctx context.Context, req *api.UsersPostReq) (api.User
 		return nil, errors.New("failed to create user")
 	}
 
-	res := api.UsersPostCreated{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
+		Gender:		 api.UserGender(req.Gender),
+		Pronouns: req.Pronouns,
+		Location: req.Location,
+		Preference: req.Preference,
+		Work: req.Work,
+		School: req.School,
+		Height: req.Height,	
+		PromptQuestion: req.PromptQuestion,
+		PromptResponse: req.PromptResponse,
+		RelationshipType: req.RelationshipType,
+		Religion: req.Religion,
+		PoliticalAffiliation: req.PoliticalAffiliation,
+		AlcoholFrequency: req.AlcoholFrequency,
+		SmokingFrequency: req.SmokingFrequency,
+		DrugsFrequency: req.DrugsFrequency,
+		CannabisFrequency: req.CannabisFrequency,
+		InstagramUsername: req.InstagramUsername,		
 		Images:    u.Images.Unwrap(),
 	}
 	return &res, nil
@@ -60,7 +99,7 @@ func (h Handler) UsersIDDelete(ctx context.Context, params api.UsersIDDeletePara
 		}, nil
 	}
 
-	res := api.UsersIDDeleteOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
@@ -86,12 +125,36 @@ func (h Handler) UsersIDGet(ctx context.Context, params api.UsersIDGetParams) (a
 		}, nil
 	}
 
-	res := api.UsersIDGetOK{
+	pref := api.Preference{
+		AgeMin:       u.Preference.AgeMin,
+		AgeMax:       u.Preference.AgeMax,
+		InterestedIn: api.PreferenceInterestedIn(u.Preference.InterestedIn),
+	}
+
+
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Age:       u.Age,
 		Bio:       u.Bio,
+		Gender:		 api.UserGender(u.Gender),
+		Pronouns: u.Pronouns,
+		Location: u.Location,
+		Preference: pref,
+		Work: u.Work,
+		School: u.School,
+		Height: u.Height,	
+		PromptQuestion: u.PromptQuestion,
+		PromptResponse: u.PromptResponse,
+		RelationshipType: u.RelationshipType,
+		Religion: u.Religion,
+		PoliticalAffiliation: u.PoliticalAffiliation,
+		AlcoholFrequency: u.AlcoholFrequency,
+		SmokingFrequency: u.SmokingFrequency,
+		DrugsFrequency: u.DrugsFrequency,
+		CannabisFrequency: u.CannabisFrequency,
+		InstagramUsername: u.InstagramUsername,		
 		Images:    u.Images.Unwrap(),
 	}
 	return &res, nil
@@ -99,7 +162,7 @@ func (h Handler) UsersIDGet(ctx context.Context, params api.UsersIDGetParams) (a
 
 // Gets multiple users.
 // GET /users
-func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api.UsersGetOKItem, error) {
+func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api.User, error) {
 	if h.logger != nil {
 		h.logger.Info("GET /users")
 	}
@@ -110,15 +173,40 @@ func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api
 	if txErr != nil {
 		return nil, errors.New("failed to get users")
 	}
-	res := []api.UsersGetOKItem{}
+	res := []api.User{}
+	
+
+
 	for _, u := range users {
-		item := api.UsersGetOKItem{
+		pref := api.Preference{
+			AgeMin:       u.Preference.AgeMin,
+			AgeMax:       u.Preference.AgeMax,
+			InterestedIn: api.PreferenceInterestedIn(u.Preference.InterestedIn),
+		}
+		item := api.User{
 			ID:        u.ID.Unwrap(),
 			FirstName: u.FirstName,
 			LastName:  u.LastName,
 			Age:       u.Age,
 			Bio:       u.Bio,
 			Images:    u.Images.Unwrap(),
+			Gender:		 api.UserGender(u.Gender),
+			Pronouns: u.Pronouns,
+			Location: u.Location,
+			Preference: pref,
+			Work: u.Work,
+			School: u.School,
+			Height: u.Height,	
+			PromptQuestion: u.PromptQuestion,
+			PromptResponse: u.PromptResponse,
+			RelationshipType: u.RelationshipType,
+			Religion: u.Religion,
+			PoliticalAffiliation: u.PoliticalAffiliation,
+			AlcoholFrequency: u.AlcoholFrequency,
+			SmokingFrequency: u.SmokingFrequency,
+			DrugsFrequency: u.DrugsFrequency,
+			CannabisFrequency: u.CannabisFrequency,
+			InstagramUsername: u.InstagramUsername,		
 		}
 		res = append(res, item)
 	}
@@ -127,7 +215,7 @@ func (h Handler) UsersGet(ctx context.Context, params api.UsersGetParams) ([]api
 
 // Partially updates a user by its ID.
 // PATCH /users/{id}
-func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
+func (h Handler) UsersIDPatch(ctx context.Context, req *api.UserNoRequired, params api.UsersIDPatchParams) (api.UsersIDPatchRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PATCH /users/%s", params.ID))
 	}
@@ -159,7 +247,7 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, par
 		return nil, errors.New("failed to update user")
 	}
 
-	res := api.UsersIDPatchOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
@@ -172,7 +260,7 @@ func (h Handler) UsersIDPatch(ctx context.Context, req *api.UsersIDPatchReq, par
 
 // Updates a user based on its ID.
 // PUT /users/{id}
-func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params api.UsersIDPutParams) (api.UsersIDPutRes, error) {
+func (h Handler) UsersIDPut(ctx context.Context, req *api.User, params api.UsersIDPutParams) (api.UsersIDPutRes, error) {
 	if h.logger != nil {
 		h.logger.Info(fmt.Sprintf("PUT /users/%s", params.ID))
 	}
@@ -194,7 +282,7 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 		return nil, errors.New("failed to save user")
 	}
 
-	res := api.UsersIDPutOK{
+	res := api.User{
 		ID:        u.ID.Unwrap(),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
@@ -206,7 +294,7 @@ func (h Handler) UsersIDPut(ctx context.Context, req *api.UsersIDPutReq, params 
 }
 
 // RecommendationsUsersGet implements api.Handler.
-func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.RecommendationsUsersGetOKItem, error) {
+func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.RecommendationsUsersGetParams) ([]api.User, error) {
 	limit := params.Limit.Value   // default value makes this safe
 	offset := params.Offset.Value // default value makes this safe
 	users, err := h.controller.GetRecommendationsUser(user_id.Wrap(params.UserId), limit, offset)
@@ -215,15 +303,32 @@ func (h Handler) RecommendationsUsersGet(ctx context.Context, params api.Recomme
 		return nil, errors.New("Failed to get Recommended Users")
 	}
 
-	res := []api.RecommendationsUsersGetOKItem{}
+	res := []api.User{}
 	for _, u := range users {
-		item := api.RecommendationsUsersGetOKItem{
+		item := api.User{
 			ID:        u.ID.Unwrap(),
 			FirstName: u.FirstName,
 			LastName:  u.LastName,
 			Age:       u.Age,
 			Bio:       u.Bio,
-			Images:    u.Images,
+			Images:    u.Images.Unwrap(),
+			Gender:		 api.UserGender(u.Gender),
+			Pronouns: u.Pronouns,
+			Location: u.Location,
+			Work: u.Work,
+			School: u.School,
+			Height: u.Height,	
+			PromptQuestion: u.PromptQuestion,
+			PromptResponse: u.PromptResponse,
+			RelationshipType: u.RelationshipType,
+			Religion: u.Religion,
+			PoliticalAffiliation: u.PoliticalAffiliation,
+			AlcoholFrequency: u.AlcoholFrequency,
+			SmokingFrequency: u.SmokingFrequency,
+			DrugsFrequency: u.DrugsFrequency,
+			CannabisFrequency: u.CannabisFrequency,
+			InstagramUsername: u.InstagramUsername,		
+
 		}
 		res = append(res, item)
 	}

@@ -1,5 +1,21 @@
 import { useRouter } from "expo-router";
 import React from "react";
+<<<<<<< HEAD
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import DropDownRelationship from "../../components/Profile/DropDownRelationship";
+
+export default function EditPreferredRelationship() {
+  const router = useRouter();
+  return (
+    <SafeAreaView>
+      <Text
+        onPress={() => router.back()}
+        style={styles.title}
+      >{`< Edit Preferred Relationship`}</Text>
+      <View style={styles.container}>
+        <DropDownRelationship onGenderChange={() => "placeHolder"} selectedPronoun="men" />
+=======
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DropDownRelationship from "../../components/Profile/DropDownRelationship";
@@ -16,6 +32,7 @@ export default function EditPreferredRelationship() {
       </TouchableOpacity>
       <View style={styles.container}>
         <DropDownRelationship onGenderChange={() => "placeHolder"} selectedPronoun={user.looking} />
+>>>>>>> 526f5b11fbcdbafa24ca570f8948715853d839bb
       </View>
     </SafeAreaView>
   );

@@ -11,6 +11,10 @@ export default function Event() {
   // TODO: I think we need a notion of collectionId, which can be how we separate events into HomePageSections (rows)
   // We probably want to pass collectionId to the CardStack so it can fetch that collection's items
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView>
       <CardStack startingEventId={eventId || ""} />

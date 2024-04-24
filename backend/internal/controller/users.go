@@ -13,6 +13,7 @@ import (
 // Creates a new user in the database
 func (c Controller) CreateUser(params user.User) (u user.User, valErr error, txErr error) {
 	u = params
+	fmt.Print(u)
 	var timestampErr error
 	if u.UpdatedAt.Before(u.CreatedAt) {
 		timestampErr = fmt.Errorf("invalid timestamps")
@@ -59,11 +60,15 @@ func (c Controller) DeleteUser(id user_id.UserID) (u user.User, txErr error) {
 	tx := c.database.Begin()
 	txErr = tx.Clauses(clause.Returning{}).Delete(&u).Error
 	if txErr != nil {
+	txErr = tx.Clauses(clause.Returning{}).Delete(&u).Error
+	if txErr != nil {
 		tx.Rollback()
 		return
 	}
 	tx.Commit()
 	return
+}
+return
 }
 
 // Gets a user from the database by its ID
@@ -71,8 +76,6 @@ func (c Controller) GetUser(id user_id.UserID) (u user.User, txErr error) {
 	txErr = c.database.First(&u, id).Error
 	return
 }
-
-// Gets several users from the database with pagination
 func (c Controller) GetUsers(limit uint8, offset uint32) (users []user.User, txErr error) {
 	txErr = c.database.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
 	return
@@ -121,8 +124,10 @@ func (c Controller) SaveUser(params user.User) (u user.User, valErr error, txErr
 }
 
 // Update one or many fields of an existing user in the database
+// Update one or many fields of an existing user in the database
 func (c Controller) UpdateUser(params user.User) (u user.User, valErr error, txErr error) {
 	u = params
+
 	var timestampErr error
 	if u.UpdatedAt.Before(u.CreatedAt) {
 		timestampErr = fmt.Errorf("invalid timestamps")
@@ -181,12 +186,24 @@ func (c Controller) GetRecommendationsUser(id user_id.UserID, limit int, offset 
 			likedEventIDs = append(likedEventIDs, eventSwipe.EventID)
 		}
 	}
+	fmt.Println("Got the liked event IDs")
+
+	interest := currentUser.Preference.InterestedIn  
+	genderToLookFor := ""
+	if interest == "Women" {
+		genderToLookFor = "Woman"
+	} else if interest == "Men" {
+		genderToLookFor = "Man"
+	}
+
 
 	// Return all the Users that liked the same event as the current user
-	if err := c.database.Order("random()").Where("id != ?", currentUser.ID).
+	if err := c.database.Order("random()").Where("users.id != ?", currentUser.ID).
 		Joins("JOIN event_swipes ON users.id = event_swipes.user_id").
 		Where("event_swipes.liked = ?", true).
 		Where("event_swipes.event_id IN (?)", likedEventIDs).
+		Where("users.age BETWEEN ? AND ?", currentUser.Preference.AgeMin, currentUser.Preference.AgeMax).
+		Where("users.gender = ?", genderToLookFor).
 		Limit(int(limit)).Offset(int(offset)).
 		Find(&recommendedUsers).Error; err != nil {
 		return nil, err
